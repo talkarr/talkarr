@@ -1,0 +1,22 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "incremental": true,
+        "baseUrl": ".",
+        "paths": {
+            "@backend/*": [
+                "*"
+            ]
+        }
+    },
+    "include": [
+        "**/*.ts"
+    ]
+}
