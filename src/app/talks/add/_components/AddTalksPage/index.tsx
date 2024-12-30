@@ -67,6 +67,13 @@ const AddTalksPage: FC = () => {
 
     useEffect(() => {
         if (debouncedSearch) {
+            const searchParams = new URLSearchParams();
+            searchParams.set('search', debouncedSearch);
+            window.history.replaceState(
+                {},
+                '',
+                `${window.location.pathname}?${searchParams.toString()}`,
+            );
             handleSearch(debouncedSearch);
         }
     }, [debouncedSearch, handleSearch]);
@@ -89,14 +96,6 @@ const AddTalksPage: FC = () => {
                         value={search}
                         onChange={e => {
                             setSearch(e.target.value);
-
-                            const searchParams = new URLSearchParams();
-                            searchParams.set('search', e.target.value);
-                            window.history.replaceState(
-                                {},
-                                '',
-                                `${window.location.pathname}?${searchParams.toString()}`,
-                            );
                         }}
                     />
                 </form>

@@ -11,7 +11,9 @@ import moment from 'moment';
 import searchItemCss from './searchitem.module.css';
 
 import type { SuccessData } from '@backend/types';
+import CustomBadge from '@components/CustomBadge';
 import ImageFallback from '@components/ImageFallback';
+import type { BadgeProps } from '@mui/material';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -20,6 +22,7 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
 
 export interface SearchItemProps {
     item: SuccessData<'/search', 'get'>['events'][0];
@@ -44,10 +47,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
         alignItems: 'flex-start',
     },
 
-    '& .MuiCardHeader-title': {
-        ...theme.typography.h3,
-    },
-
     '& .MuiCardHeader-subheader': {
         ...theme.typography.subtitle1,
     },
@@ -65,6 +64,36 @@ const SearchItem: FC<SearchItemProps> = ({ item }) => {
         const year = moment(item.date).format('YYYY');
 
         return `${item.title} (${year})`;
+    }, [item]);
+
+    const badges = useMemo(() => {
+        const badgesArray: {
+            text: string;
+            color: BadgeProps['color'];
+            type: string;
+        }[] = [];
+
+        if (item.conference_title) {
+            badgesArray.push({
+                text: item.conference_title,
+                color: 'primary',
+                type: 'Conference',
+            });
+        }
+
+        if (item.persons.length > 0) {
+            for (const person of item.persons) {
+                if (person) {
+                    badgesArray.push({
+                        text: person,
+                        color: 'secondary',
+                        type: 'Person',
+                    });
+                }
+            }
+        }
+
+        return badgesArray;
     }, [item]);
 
     return (
@@ -118,7 +147,26 @@ const SearchItem: FC<SearchItemProps> = ({ item }) => {
                     </div>
                 </CardMedia>
                 <Box display="flex" flexDirection="column" mb={1}>
-                    <CardHeader title={title} subheader={item.subtitle} />
+                    <CardHeader
+                        title={
+                            <Box display="flex" gap={2} flexWrap="wrap">
+                                <Typography variant="h3" minWidth="fit-content">
+                                    {title}
+                                </Typography>
+                                <Box display="flex" gap={1} flexWrap="wrap">
+                                    {badges.map((badge, index) => (
+                                        <CustomBadge
+                                            key={index}
+                                            badgeContent={badge.text}
+                                            color={badge.color}
+                                            title={badge.type}
+                                        />
+                                    ))}
+                                </Box>
+                            </Box>
+                        }
+                        subheader={item.subtitle}
+                    />
                     <CardContent style={{ marginBottom: 4 }}>
                         <Markdown skipHtml className={searchItemCss.markdown}>
                             {item.description || ''}

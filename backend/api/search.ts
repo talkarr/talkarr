@@ -36,7 +36,5 @@ export const handleSearchEventsRequest = async (
 
     const json = await results.json();
 
-    console.log(json);
-
     res.json({ success: true, data: json });
 };
