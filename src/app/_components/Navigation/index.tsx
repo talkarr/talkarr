@@ -17,10 +17,6 @@ import type SvgIcon from '@mui/material/SvgIcon/SvgIcon';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-export interface DividerItem {
-    divider: true;
-}
-
 export type SimpleNavigationItem = Pick<NavigationItemType, 'title' | 'path'>;
 
 export interface NavigationItemType {
@@ -30,11 +26,9 @@ export interface NavigationItemType {
     path: string | { href: string; as: string };
 }
 
-export type CommonItemType = DividerItem | NavigationItemType;
+export type SplitNavigationItems = SimpleNavigationItem[][];
 
-export type SplitNavigationItems = NavigationItemType[][];
-
-const navigationItems: CommonItemType[] = [
+const navigationItems: NavigationItemType[] = [
     {
         title: 'Talks',
         Icon: TalksIcon,
@@ -49,9 +43,6 @@ const navigationItems: CommonItemType[] = [
                 path: '/talks/import',
             },
         ],
-    },
-    {
-        divider: true,
     },
     {
         title: 'Settings',
@@ -107,7 +98,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                 </Box>
                 {splitItemsByDivider.map((items, index, { length }) => (
                     <Fragment key={`navigation-item-list-${index}`}>
-                        <List>
+                        <List disablePadding>
                             {items.map((item, itemIndex) => (
                                 <NavigationItem
                                     item={item}

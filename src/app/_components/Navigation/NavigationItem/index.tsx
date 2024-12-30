@@ -20,10 +20,9 @@ import ListItemText from '@mui/material/ListItemText';
 const StyledListItem = styled(ListItem, {
     shouldForwardProp: prop => prop !== 'highlighted',
 })<{ highlighted?: boolean }>(({ theme, highlighted }) => ({
-    // add border to the left of the selected item
-    borderLeft: highlighted
-        ? `4px solid ${theme.palette.primary.main}`
-        : '4px solid transparent',
+    boxShadow: highlighted
+        ? `inset 4px 0 0 ${theme.palette.primary.main}`
+        : undefined,
 }));
 
 export interface NavigationItemProps {
@@ -73,7 +72,7 @@ const NavigationItem: FC<NavigationItemProps> = ({
 
     const selected = pathname === href;
     const subitemSelected = subItemHrefs.includes(pathname);
-    const highlighted = selected || subitemSelected;
+    const highlighted = selected || subitemSelected || isSubitem;
 
     const inner = (
         <>
