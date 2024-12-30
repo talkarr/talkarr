@@ -8,6 +8,8 @@ import Markdown from 'react-markdown';
 
 import moment from 'moment';
 
+import { longDateFormat } from '@/constants';
+
 import searchItemCss from './searchitem.module.css';
 
 import type { SuccessData } from '@backend/types';
@@ -93,6 +95,34 @@ const SearchItem: FC<SearchItemProps> = ({ item }) => {
             }
         }
 
+        if (item.original_language) {
+            badgesArray.push({
+                text: item.original_language.toUpperCase(),
+                color: 'info',
+                type: 'Language',
+            });
+        }
+
+        if (item.tags.length > 0) {
+            for (const tag of item.tags) {
+                if (tag) {
+                    badgesArray.push({
+                        text: tag,
+                        color: 'success',
+                        type: 'Tags',
+                    });
+                }
+            }
+        }
+
+        if (item.release_date) {
+            badgesArray.push({
+                text: moment(item.release_date).format(longDateFormat),
+                color: 'warning',
+                type: 'Release Date',
+            });
+        }
+
         return badgesArray;
     }, [item]);
 
@@ -153,16 +183,23 @@ const SearchItem: FC<SearchItemProps> = ({ item }) => {
                                 <Typography variant="h3" minWidth="fit-content">
                                     {title}
                                 </Typography>
-                                <Box display="flex" gap={1} flexWrap="wrap">
-                                    {badges.map((badge, index) => (
-                                        <CustomBadge
-                                            key={index}
-                                            badgeContent={badge.text}
-                                            color={badge.color}
-                                            title={badge.type}
-                                        />
-                                    ))}
-                                </Box>
+                                {badges.length ? (
+                                    <Box
+                                        display="flex"
+                                        gap={1}
+                                        flexWrap="wrap"
+                                        mb={1}
+                                    >
+                                        {badges.map((badge, index) => (
+                                            <CustomBadge
+                                                key={index}
+                                                badgeContent={badge.text}
+                                                color={badge.color}
+                                                title={badge.type}
+                                            />
+                                        ))}
+                                    </Box>
+                                ) : null}
                             </Box>
                         }
                         subheader={item.subtitle}

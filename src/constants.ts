@@ -21,3 +21,8 @@ export const searchExamples = [
 
 export const getSearchExample = (): string =>
     searchExamples[Math.floor(Math.random() * searchExamples.length)];
+
+// european style
+export const longDateTimeFormat = 'DD.MM.yyyy HH:mm';
+
+export const longDateFormat = 'DD.MM.yyyy';

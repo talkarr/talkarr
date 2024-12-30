@@ -20,6 +20,7 @@ const ImageFallback: FC<ImageFallbackProps> = ({ width, height }) => {
                 width: width || '100%',
                 height: height || '100%',
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundColor: 'grey.200',
@@ -28,8 +29,11 @@ const ImageFallback: FC<ImageFallbackProps> = ({ width, height }) => {
                 }),
             }}
         >
-            <Typography variant="h5" fontWeight="normal">
+            <Typography variant="h4" fontWeight="normal">
                 No Image available
+            </Typography>
+            <Typography variant="body1" fontWeight="normal">
+                Please try again later
             </Typography>
         </Box>
     );
