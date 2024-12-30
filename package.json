@@ -7,6 +7,7 @@
       "build:next": "next build",
       "build": "npm run build:next",
       "start": "ts-node src/index.ts",
+      "start:prod": "prisma migrate deploy && npm run start",
       "lint": "next lint",
       "typecheck:web": "tsc --noEmit",
       "typecheck:backend": "tsc --noEmit --project backend/tsconfig.json",
@@ -17,6 +18,12 @@
       "typeorm": "typeorm-ts-node-commonjs"
    },
    "dependencies": {
+      "@emotion/cache": "^11.14.0",
+      "@emotion/react": "^11.14.0",
+      "@emotion/styled": "^11.14.0",
+      "@mui/icons-material": "^6.3.0",
+      "@mui/material": "^6.3.0",
+      "@mui/material-nextjs": "^6.3.0",
       "@prisma/client": "6.1.0",
       "express": "^4.21.2",
       "next": "15.1.3",

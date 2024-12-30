@@ -10,11 +10,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Media {
-  internalId String   @id @default(cuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+model Conference {
+  acronym     String
+  title       String
+  slug        String
+  description String
+
+  updated_at   DateTime
+  aspect_ratio String
+
+  // urls
+  logo_url     String
+  url          String
+  schedule_url String
+}
+
+model Person {
+  name String @id
+}
+
+model Tag {
+  name String @id
+}
+
+model Event {
+  internal_id String @id @default(cuid())
 
   // media.ccc.de specific fields
-  uuid String?
+  // datetimes
+  guid         String
+  date         DateTime
+  release_date DateTime
+  updated_at   DateTime
+  slug         String
+
+  // meta
+  title             String
+  subtitle          String
+  description       String
+  thumb_url         String
+  poster_url        String
+  original_language String
+  frontend_link     String
+
+  // relations
+  persons Person[]
+  tags    Tag[]
 }
