@@ -1,0 +1,20 @@
+site_name: talkarr
+repo_url: https://github.com/talkarr/talkarr
+theme:
+  logo: assets/logo.svg
+  favicon: assets/favicon.ico
+  name: material
+  palette:
+    primary: "deep-purple"
+    accent: "blue-grey"
+  features:
+    - navigation.tabs
+    - navigation.prev_next
+    - navigation.top
+    - search
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences

@@ -1,5 +1,6 @@
 import path from 'path';
 import * as winston from 'winston';
+
 import 'winston-daily-rotate-file';
 
 const hformat = winston.format.printf(
@@ -11,7 +12,7 @@ const hformat = winston.format.printf(
             msg += JSON.stringify(metadata);
         }
         return msg;
-    }
+    },
 );
 
 const log = winston.createLogger({
@@ -19,7 +20,7 @@ const log = winston.createLogger({
     format: winston.format.combine(
         winston.format.splat(),
         winston.format.timestamp(),
-        hformat
+        hformat,
     ),
     transports: [
         new winston.transports.Console({
@@ -27,10 +28,10 @@ const log = winston.createLogger({
                 winston.format.colorize(),
                 winston.format.splat(),
                 winston.format.timestamp(),
-                hformat
+                hformat,
             ),
         }),
-        /*new winston.transports.DailyRotateFile({
+        /* new winston.transports.DailyRotateFile({
             filename: path.join(__dirname, '../logs/talkarr-%DATE%.log'),
             datePattern: 'YYYY-MM-DD',
             zippedArchive: true,
@@ -38,7 +39,7 @@ const log = winston.createLogger({
             maxFiles: '7d',
             createSymlink: true,
             symlinkName: 'talkarr.log',
-        }),*/
+        }), */
         new winston.transports.DailyRotateFile({
             filename: process.env.CONFIG_DIRECTORY
                 ? `${process.env.CONFIG_DIRECTORY}/logs/.machinelogs-%DATE%.json`
@@ -52,7 +53,7 @@ const log = winston.createLogger({
             format: winston.format.combine(
                 winston.format.splat(),
                 winston.format.timestamp(),
-                winston.format.json()
+                winston.format.json(),
             ),
         }),
     ],

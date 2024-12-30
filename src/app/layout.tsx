@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 
 import type { FC, PropsWithChildren } from 'react';
 
+import { pageName } from '@/constants';
+import { ApiStoreProvider } from '@/providers/apiStoreProvider';
 import theme from '@/theme';
 
 import '@/app/globals.css';
@@ -22,7 +24,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: 'Talkarr',
+    title: {
+        absolute: pageName,
+        template: `%s | ${pageName}`,
+    },
     description: 'Download and manage your personal collection of chaos talks.',
 };
 
@@ -32,7 +37,9 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => (
             <AppRouterCacheProvider>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
-                    <Navigation>{children}</Navigation>
+                    <ApiStoreProvider>
+                        <Navigation>{children}</Navigation>
+                    </ApiStoreProvider>
                 </ThemeProvider>
             </AppRouterCacheProvider>
         </body>

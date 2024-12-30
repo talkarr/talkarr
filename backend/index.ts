@@ -1,8 +1,12 @@
 import next from 'next';
 
+import cookieParser from 'cookie-parser';
 import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
+import fs from 'fs';
+import swaggerUi from 'swagger-ui-express';
 
+import api from '@backend/api';
 import log from '@backend/log';
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -13,6 +17,21 @@ const handle = app.getRequestHandler();
 app.prepare()
     .then(async () => {
         const server = express();
+
+        // server.enable('trust proxy');
+
+        server.use(cookieParser());
+        server.use(express.json());
+        server.use(express.urlencoded({ extended: true }));
+
+        server.use('/api', api);
+
+        const apiDocs = fs.readFileSync('./backend.json', 'utf-8');
+        server.use(
+            '/api-docs',
+            swaggerUi.serve,
+            swaggerUi.setup(JSON.parse(apiDocs)),
+        );
 
         server.all('*', (req, res) => handle(req, res));
         server.use(

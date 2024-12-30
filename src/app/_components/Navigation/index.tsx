@@ -1,40 +1,34 @@
 import type { FC, PropsWithChildren } from 'react';
 import { Fragment } from 'react';
 
+import { pageName } from '@/constants';
+
 import Logo from '@components/Logo';
 import NavigationItem from '@components/Navigation/NavigationItem';
+import NavigationSearch from '@components/Navigation/NavigationSearch';
 import TalksIcon from '@mui/icons-material/RecordVoiceOverRounded';
-import SearchIcon from '@mui/icons-material/SearchRounded';
 import SettingsIcon from '@mui/icons-material/SettingsRounded';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import type SvgIcon from '@mui/material/SvgIcon/SvgIcon';
-import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 
 export interface DividerItem {
     divider: true;
 }
 
-export interface NavigationItemBase {
+export type SimpleNavigationItem = Pick<NavigationItemType, 'title' | 'path'>;
+
+export interface NavigationItemType {
     title: string;
     Icon: typeof SvgIcon;
-    subitems?: CommonItemType[];
-}
-
-export interface NavigationItemPath extends NavigationItemBase {
+    subitems?: SimpleNavigationItem[];
     path: string | { href: string; as: string };
 }
-
-export interface NavigationItemClick extends NavigationItemBase {
-    onClick: () => void;
-}
-
-export type NavigationItemType = NavigationItemPath | NavigationItemClick;
 
 export type CommonItemType = DividerItem | NavigationItemType;
 
@@ -45,6 +39,16 @@ const navigationItems: CommonItemType[] = [
         title: 'Talks',
         Icon: TalksIcon,
         path: '/',
+        subitems: [
+            {
+                title: 'Add Talk',
+                path: '/talks/add',
+            },
+            {
+                title: 'Import Talks',
+                path: '/talks/import',
+            },
+        ],
     },
     {
         divider: true,
@@ -88,8 +92,18 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                 }}
                 anchor="left"
             >
-                <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+                <Box
+                    sx={{
+                        p: 2,
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                    }}
+                >
                     <Logo />
+                    <Typography variant="h3" component="h1" fontWeight="bold">
+                        {pageName}
+                    </Typography>
                 </Box>
                 {splitItemsByDivider.map((items, index, { length }) => (
                     <Fragment key={`navigation-item-list-${index}`}>
@@ -117,23 +131,20 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                     }}
                 >
                     <Toolbar>
-                        <Box display="flex" alignItems="flex-end" gap={1}>
-                            <SearchIcon />
-                            <TextField
-                                size="small"
-                                label="Search"
-                                variant="standard"
-                            />
-                        </Box>
+                        <NavigationSearch />
                     </Toolbar>
                 </AppBar>
-                <Container
+                <Box
                     sx={{
                         marginTop: `${appbarHeight}px`,
+                        marginLeft: `${drawerWidth}px`,
+                        paddingX: 4,
+                        paddingY: 2,
+                        width: `calc(100% - ${drawerWidth}px)`,
                     }}
                 >
                     {children}
-                </Container>
+                </Box>
             </Box>
         </Box>
     );

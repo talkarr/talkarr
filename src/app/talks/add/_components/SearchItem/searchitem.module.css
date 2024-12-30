@@ -1,0 +1,7 @@
+.markdown {
+    max-height: 100%;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+}

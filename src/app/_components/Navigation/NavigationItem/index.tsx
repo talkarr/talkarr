@@ -5,23 +5,39 @@ import { usePathname } from 'next/navigation';
 
 import type { FC } from 'react';
 
-import type { NavigationItemType } from '@components/Navigation';
+import type {
+    NavigationItemType,
+    SimpleNavigationItem,
+} from '@components/Navigation';
+import { styled } from '@mui/material';
 import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
+const StyledListItem = styled(ListItem, {
+    shouldForwardProp: prop => prop !== 'highlighted',
+})<{ highlighted?: boolean }>(({ theme, highlighted }) => ({
+    // add border to the left of the selected item
+    borderLeft: highlighted
+        ? `4px solid ${theme.palette.primary.main}`
+        : '4px solid transparent',
+}));
+
 export interface NavigationItemProps {
-    item: NavigationItemType;
+    item: SimpleNavigationItem | NavigationItemType;
     index: number;
     itemIndex: number;
+    isSubitem?: boolean;
 }
 
 const NavigationItem: FC<NavigationItemProps> = ({
     item,
     index,
     itemIndex,
+    isSubitem,
 }) => {
     const pathname = usePathname();
 
@@ -46,42 +62,77 @@ const NavigationItem: FC<NavigationItemProps> = ({
                 : undefined
             : undefined;
 
+    const subItemHrefs =
+        'subitems' in item && item.subitems
+            ? item.subitems.map(subitem =>
+                  typeof subitem.path === 'object'
+                      ? subitem.path.href
+                      : subitem.path,
+              )
+            : [];
+
+    const selected = pathname === href;
+    const subitemSelected = subItemHrefs.includes(pathname);
+    const highlighted = selected || subitemSelected;
+
     const inner = (
-        <ListItemButton
-            onClick={'onClick' in item ? item.onClick : undefined}
-            selected={pathname === href}
-        >
-            <ListItemIcon>
-                <item.Icon />
-            </ListItemIcon>
-            <ListItemText primary={item.title} />
-        </ListItemButton>
+        <>
+            <ListItemButton
+                selected={selected}
+                sx={{
+                    paddingLeft: isSubitem ? 4 : undefined,
+                }}
+            >
+                {'Icon' in item && item.Icon ? (
+                    <ListItemIcon>
+                        <item.Icon />
+                    </ListItemIcon>
+                ) : null}
+                <ListItemText primary={item.title} />
+            </ListItemButton>
+        </>
     );
 
-    if (href) {
-        return (
-            <Link
-                key={`navigation-item-list-${index}-${itemIndex}`}
-                href={href}
-                as={as}
-            >
-                <ListItem disablePadding>{inner}</ListItem>
-            </Link>
-        );
-    }
-
-    if ('onClick' in item) {
-        return (
-            <ListItem
-                disablePadding
-                key={`navigation-item-list-${index}-${itemIndex}`}
-            >
+    const component = href ? (
+        <Link
+            key={`navigation-item-list-${index}-${itemIndex}`}
+            href={href}
+            as={as}
+        >
+            <StyledListItem highlighted={highlighted} disablePadding>
                 {inner}
-            </ListItem>
-        );
-    }
+            </StyledListItem>
+        </Link>
+    ) : (
+        <StyledListItem
+            key={`navigation-item-list-${index}-${itemIndex}`}
+            highlighted={highlighted}
+            disablePadding
+        >
+            {inner}
+        </StyledListItem>
+    );
 
-    return null;
+    return (
+        <>
+            {component}
+            {(selected || subitemSelected) &&
+            'subitems' in item &&
+            item.subitems?.length ? (
+                <List disablePadding>
+                    {item.subitems.map((subitem, subitemIndex) => (
+                        <NavigationItem
+                            key={`navigation-item-list-${index}-${itemIndex}-subitem-${subitemIndex}`}
+                            item={subitem}
+                            index={index}
+                            itemIndex={subitemIndex}
+                            isSubitem
+                        />
+                    ))}
+                </List>
+            ) : null}
+        </>
+    );
 };
 
 export default NavigationItem;

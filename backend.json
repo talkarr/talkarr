@@ -1,0 +1,363 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Talkarr",
+        "description": "Talkarr",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3232"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "SuccessResponse": {
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true,
+                        "enum": [
+                            true
+                        ]
+                    }
+                },
+                "required": [
+                    "success"
+                ]
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": false,
+                        "enum": [
+                            false
+                        ]
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "success",
+                    "error"
+                ]
+            },
+            "Persons": {
+                "type": "array",
+                "items": {
+                    "type": "string",
+                    "example": "Person name"
+                }
+            },
+            "Tags": {
+                "type": "array",
+                "items": {
+                    "type": "string",
+                    "example": "Tag name"
+                }
+            },
+            "Recording": {
+                "type": "object",
+                "properties": {
+                    "size": {
+                        "type": "integer",
+                        "example": 0,
+                        "nullable": true
+                    },
+                    "length": {
+                        "type": "integer",
+                        "example": 0,
+                        "nullable": true
+                    },
+                    "mime_type": {
+                        "type": "string",
+                        "example": "video/mp4"
+                    },
+                    "language": {
+                        "type": "string",
+                        "example": "eng"
+                    },
+                    "filename": {
+                        "type": "string",
+                        "example": "recording.mp4"
+                    },
+                    "high_quality": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "width": {
+                        "type": "integer",
+                        "example": 0,
+                        "nullable": true
+                    },
+                    "height": {
+                        "type": "integer",
+                        "example": 0,
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "recording_url": {
+                        "type": "string",
+                        "example": "https://cdn.example.com/recording.mp4"
+                    },
+                    "url": {
+                        "type": "string",
+                        "example": "https://api.example.com"
+                    },
+                    "event_url": {
+                        "type": "string",
+                        "example": "https://example.com/event"
+                    },
+                    "conference_url": {
+                        "type": "string",
+                        "example": "https://conference.example.com"
+                    }
+                },
+                "required": [
+                    "size",
+                    "length",
+                    "mime_type",
+                    "language",
+                    "filename",
+                    "high_quality",
+                    "width",
+                    "height",
+                    "updated_at",
+                    "recording_url",
+                    "url",
+                    "event_url",
+                    "conference_url"
+                ]
+            },
+            "Recordings": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/Recording"
+                }
+            },
+            "Event": {
+                "type": "object",
+                "properties": {
+                    "guid": {
+                        "type": "string",
+                        "example": "c7b3b1b0-7b3b-4b3b-8b3b-3b3b3b3b3b3b"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Event title"
+                    },
+                    "subtitle": {
+                        "type": "string",
+                        "example": "Event subtitle"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "event-slug"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Event description"
+                    },
+                    "link": {
+                        "type": "string",
+                        "example": "https://example.com"
+                    },
+                    "original_language": {
+                        "type": "string",
+                        "example": "eng"
+                    },
+                    "persons": {
+                        "$ref": "#/components/schemas/Persons"
+                    },
+                    "tags": {
+                        "$ref": "#/components/schemas/Tags"
+                    },
+                    "view_count": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "promoted": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "release_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "length": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "duration": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "thumb_url": {
+                        "type": "string",
+                        "example": "https://example.com/thumb.jpg"
+                    },
+                    "poster_url": {
+                        "type": "string",
+                        "example": "https://example.com/poster.jpg"
+                    },
+                    "timeline_url": {
+                        "type": "string",
+                        "example": "https://example.com/timeline.jpg"
+                    },
+                    "thumbnails_url": {
+                        "type": "string",
+                        "example": "https://example.com/thumbnails.vtt"
+                    },
+                    "frontend_link": {
+                        "type": "string",
+                        "example": "https://example.com"
+                    },
+                    "url": {
+                        "type": "string",
+                        "example": "https://api.example.com"
+                    },
+                    "conference_title": {
+                        "type": "string",
+                        "example": "Conference title"
+                    },
+                    "conference_url": {
+                        "type": "string",
+                        "example": "https://conference.example.com"
+                    },
+                    "recordings": {
+                        "$ref": "#/components/schemas/Recordings"
+                    }
+                },
+                "required": [
+                    "guid",
+                    "title",
+                    "subtitle",
+                    "slug",
+                    "description",
+                    "link",
+                    "original_language",
+                    "persons",
+                    "tags",
+                    "view_count",
+                    "promoted",
+                    "date",
+                    "release_date",
+                    "updated_at",
+                    "length",
+                    "duration",
+                    "thumb_url",
+                    "poster_url",
+                    "timeline_url",
+                    "thumbnails_url",
+                    "frontend_link",
+                    "url",
+                    "conference_title",
+                    "conference_url",
+                    "recordings"
+                ]
+            }
+        }
+    },
+    "paths": {
+        "/search": {
+            "get": {
+                "description": "Search for events",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "events": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/Event"
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "events"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Missing query"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        }
+    }
+}
