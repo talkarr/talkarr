@@ -7,7 +7,11 @@ export const pageBorderColor = '#ffffff';
 export const pageName = 'Talkarr';
 
 // === Paths ===
-export const addTalksPath = '/talks/add';
+export const homePageLink = '/';
+export const addTalksPageLink = '/talks/add';
+export const importTalksPageLink = '/talks/import';
+export const settingsPageLink = '/settings';
+export const mediaManagementSettingsPageLink = '/settings/mediamanagement';
 
 // === API ===
 export const apiBaseUrl = `http://${process.env.HOST || 'localhost'}:${process.env.PORT || 3232}`;

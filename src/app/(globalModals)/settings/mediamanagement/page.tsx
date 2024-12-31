@@ -1,6 +1,4 @@
-import type { Metadata } from 'next';
-
-import type { FC } from 'react';
+import type { Metadata, NextPage } from 'next';
 
 import { getConfig } from '@/app/_api/settings/mediamanagement';
 import AddFolderButton from '@/app/(globalModals)/settings/mediamanagement/_components/AddFolderButton';
@@ -18,7 +16,7 @@ export const metadata: Metadata = {
     title: 'Mediamanagement Settings',
 };
 
-const Page: FC = async () => {
+const Page: NextPage = async () => {
     const config = await getConfig();
 
     const data = config?.success ? config.data : null;

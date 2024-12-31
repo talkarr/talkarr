@@ -1,7 +1,5 @@
-import type { Metadata } from 'next';
+import type { Metadata, NextPage } from 'next';
 import Link from 'next/link';
-
-import type { FC } from 'react';
 
 import { settings } from '@components/Navigation';
 import Box from '@mui/material/Box';
@@ -11,7 +9,7 @@ export const metadata: Metadata = {
     title: 'Settings',
 };
 
-const Page: FC = () => (
+const Page: NextPage = () => (
     <Box>
         {settings.map(item => {
             const href =

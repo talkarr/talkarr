@@ -1,5 +1,5 @@
-import type { FC } from 'react';
+import type { NextPage } from 'next';
 
-const Page: FC = () => <div>Import talks from c3 Fahrplan</div>;
+const Page: NextPage = () => <div>Import talks from c3 Fahrplan</div>;
 
 export default Page;

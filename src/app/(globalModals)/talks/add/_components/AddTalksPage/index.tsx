@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import type { FC } from 'react';
 import React, { useRef, useState } from 'react';
 
@@ -12,11 +14,18 @@ import SearchItem, {
 
 import useSearchExample from '@/hooks/useSearchExample';
 
+import { mediaManagementSettingsPageLink } from '@/constants';
+
 import type { ExtractSuccessData } from '@backend/types';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-const AddTalksPage: FC = () => {
+export interface AddTalksPageProps {
+    hasRootFolder: boolean;
+}
+
+const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder }) => {
     const randomExample = useSearchExample();
 
     const searchRef = useRef<AddTalksSearchRef>(null);
@@ -29,6 +38,27 @@ const AddTalksPage: FC = () => {
     const [searchEmpty, setSearchEmpty] = useState<boolean>(true);
 
     const noResults = results && !loading && results.events.length === 0;
+
+    if (!hasRootFolder) {
+        return (
+            <Box
+                mt={4}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                gap={2}
+            >
+                <Typography variant="h3" fontWeight="normal" textAlign="center">
+                    You do not have a root folder set up yet!
+                </Typography>
+                <Link href={mediaManagementSettingsPageLink}>
+                    <Button variant="contained" color="primary">
+                        Take me to the settings page
+                    </Button>
+                </Link>
+            </Box>
+        );
+    }
 
     return (
         <Box>

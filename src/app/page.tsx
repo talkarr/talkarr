@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import type { FC } from 'react';
 
-import { addTalksPath } from '@/constants';
+import { addTalksPageLink, mediaManagementSettingsPageLink } from '@/constants';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -21,9 +21,14 @@ const Home: FC = () => (
                 <Typography variant="h3" fontWeight="normal" textAlign="center">
                     You do not have any media yet!
                 </Typography>
-                <Link href={addTalksPath}>
+                <Link href={addTalksPageLink}>
                     <Button variant="contained" color="primary">
                         Go add some media!
+                    </Button>
+                </Link>
+                <Link href={mediaManagementSettingsPageLink}>
+                    <Button variant="contained" color="secondary">
+                        Go to media management settings
                     </Button>
                 </Link>
             </Box>

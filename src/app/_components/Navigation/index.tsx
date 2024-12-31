@@ -1,7 +1,14 @@
 import type { FC, PropsWithChildren } from 'react';
 import { Fragment } from 'react';
 
-import { pageName } from '@/constants';
+import {
+    addTalksPageLink,
+    homePageLink,
+    importTalksPageLink,
+    mediaManagementSettingsPageLink,
+    pageName,
+    settingsPageLink,
+} from '@/constants';
 
 import Logo from '@components/Logo';
 import NavigationItem from '@components/Navigation/NavigationItem';
@@ -31,7 +38,7 @@ export type SplitNavigationItems = SimpleNavigationItem[][];
 export const settings: (SimpleNavigationItem & { description: string })[] = [
     {
         title: 'Media Management',
-        path: '/settings/mediamanagement',
+        path: mediaManagementSettingsPageLink,
         description: 'Naming and management of media files.',
     },
 ];
@@ -40,22 +47,22 @@ const navigationItems: NavigationItemType[] = [
     {
         title: 'Talks',
         Icon: TalksIcon,
-        path: '/',
+        path: homePageLink,
         subitems: [
             {
                 title: 'Add Talk',
-                path: '/talks/add',
+                path: addTalksPageLink,
             },
             {
                 title: 'Import Talks',
-                path: '/talks/import',
+                path: importTalksPageLink,
             },
         ],
     },
     {
         title: 'Settings',
         Icon: SettingsIcon,
-        path: '/settings',
+        path: settingsPageLink,
         subitems: settings,
     },
 ];

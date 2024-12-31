@@ -1,7 +1,6 @@
-import type { Metadata } from 'next';
+import type { Metadata, NextPage } from 'next';
 
-import type { FC } from 'react';
-
+import { getConfig } from '@/app/_api/settings/mediamanagement';
 import AddTalksPage from '@/app/(globalModals)/talks/add/_components/AddTalksPage';
 
 interface PageProps {
@@ -17,6 +16,12 @@ export const generateMetadata = async ({
     };
 };
 
-const Page: FC<PageProps> = () => <AddTalksPage />;
+const Page: NextPage<PageProps> = async () => {
+    const config = await getConfig();
+
+    const data = config?.success ? config.data : null;
+
+    return <AddTalksPage hasRootFolder={!!data?.folders.length} />;
+};
 
 export default Page;

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import type { FC } from 'react';
 import React, { useState } from 'react';
 
-import { addTalksPath } from '@/constants';
+import { addTalksPageLink } from '@/constants';
 
 import SearchIcon from '@mui/icons-material/SearchRounded';
 import Box from '@mui/material/Box';
@@ -21,7 +21,7 @@ const NavigationSearch: FC = () => {
         const searchParams = new URLSearchParams();
         searchParams.set('search', search);
 
-        router.push(`${addTalksPath}?${searchParams.toString()}`);
+        router.push(`${addTalksPageLink}?${searchParams.toString()}`);
     };
 
     return (
