@@ -312,6 +312,45 @@ export interface components {
         };
         Persons: string[];
         Tags: string[];
+        Conference: {
+            /** @example Conf */
+            acronym: string;
+            /** @example 16:9 */
+            aspect_ratio: string;
+            /**
+             * Format: date-time
+             * @example 2022-01-01T00:00:00Z
+             */
+            updated_at: string;
+            /** @example Conference title */
+            title: string;
+            /**
+             * @description Can be empty string
+             * @example https://example.com/schedule
+             */
+            schedule_url: string;
+            /** @example conf-slug */
+            slug: string;
+            /**
+             * Format: date-time
+             * @example 2022-01-01T00:00:00Z
+             */
+            event_last_released_at: string;
+            /** @example https://example.com */
+            link: string;
+            /** @example Conference description */
+            description: string;
+            /** @example https://example.com */
+            webgen_location: string;
+            /** @example https://example.com/logo.jpg */
+            logo_url: string;
+            /** @example https://example.com/images.vtt */
+            images_url: string;
+            /** @example https://example.com/recordings.vtt */
+            recordings_url: string;
+            /** @example https://api.example.com */
+            url: string;
+        };
         Recording: {
             /** @example 0 */
             size: number | null;
@@ -342,6 +381,7 @@ export interface components {
             event_url: string;
             /** @example https://conference.example.com */
             conference_url: string;
+            conference_data?: components["schemas"]["Conference"];
         };
         Recordings: components["schemas"]["Recording"][];
         Event: {
@@ -400,6 +440,7 @@ export interface components {
             conference_title: string;
             /** @example https://conference.example.com */
             conference_url: string;
+            conference_data?: components["schemas"]["Conference"];
             recordings: components["schemas"]["Recordings"];
         };
         GenericServerError: {

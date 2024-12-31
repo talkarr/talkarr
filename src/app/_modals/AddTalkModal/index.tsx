@@ -29,7 +29,7 @@ const AddTalkModal: FC = () => {
     }, [addTalkModal]);
 
     return (
-        <BaseModal open={open} onClose={close} title={title} moreWidth>
+        <BaseModal open={open} onClose={close} title={title} moreWidth divider>
             <Box
                 display="flex"
                 flexDirection="row"
@@ -43,9 +43,58 @@ const AddTalkModal: FC = () => {
                     />
                 </Box>
                 <Box flex={1}>
-                    <Typography variant="body1">
+                    <Typography variant="body2" mb={1}>
                         {addTalkModal?.description}
                     </Typography>
+                    <Box>
+                        <Typography variant="body1" fontWeight="bold">
+                            Date:
+                        </Typography>
+                        <Typography variant="body1">
+                            {moment(addTalkModal?.date).format('MMMM D, YYYY')}
+                        </Typography>
+                        <Typography variant="body1" fontWeight="bold">
+                            Conference:
+                        </Typography>
+                        <Typography variant="body1">
+                            {addTalkModal?.conference_title}{' '}
+                            {addTalkModal?.conference_data?.link ? (
+                                <>
+                                    (
+                                    <a
+                                        href={
+                                            addTalkModal?.conference_data?.link
+                                        }
+                                        target="_blank"
+                                    >
+                                        {addTalkModal?.conference_data?.link}
+                                    </a>
+                                    )
+                                </>
+                            ) : null}
+                        </Typography>
+                        <Typography variant="body1" fontWeight="bold">
+                            {addTalkModal?.persons?.length === 1
+                                ? 'Speaker'
+                                : 'Speakers'}
+                            :
+                        </Typography>
+                        <Typography variant="body1">
+                            {addTalkModal?.persons.join(', ')}
+                        </Typography>
+                        <Typography variant="body1" fontWeight="bold">
+                            Original language:
+                        </Typography>
+                        <Typography variant="body1">
+                            {addTalkModal?.original_language}
+                        </Typography>
+                        <Typography variant="body1" fontWeight="bold">
+                            Tags:
+                        </Typography>
+                        <Typography variant="body1">
+                            {addTalkModal?.tags.join(', ')}
+                        </Typography>
+                    </Box>
                 </Box>
             </Box>
         </BaseModal>

@@ -23,6 +23,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
+import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 
 export interface SearchItemProps {
@@ -55,6 +56,15 @@ const StyledCard = styled(Card)(({ theme }) => ({
     },
 }));
 
+export const SearchItemSkeleton: FC = () => (
+    <Skeleton
+        variant="rectangular"
+        height={searchItemMinHeight}
+        sx={{ borderRadius: 4 }}
+        animation="wave"
+    />
+);
+
 const SearchItem: FC<SearchItemProps> = ({ item }) => {
     const openAddTalkModal = useUiStore(state => state.openAddTalkModal);
 
@@ -69,13 +79,17 @@ const SearchItem: FC<SearchItemProps> = ({ item }) => {
             text: string;
             color: BadgeProps['color'];
             type: string;
+            imageUrl?: string;
         }[] = [];
 
         if (item.conference_title) {
+            const logoUrl = item.conference_data?.logo_url;
+
             badgesArray.push({
                 text: item.conference_title,
                 color: 'primary',
                 type: 'Conference',
+                imageUrl: logoUrl,
             });
         }
 
@@ -111,11 +125,11 @@ const SearchItem: FC<SearchItemProps> = ({ item }) => {
             }
         }
 
-        if (item.release_date) {
+        if (item.date) {
             badgesArray.push({
-                text: moment(item.release_date).format(longDateFormat),
+                text: moment(item.date).format(longDateFormat),
                 color: 'warning',
-                type: 'Release Date',
+                type: 'Date',
             });
         }
 
@@ -146,6 +160,7 @@ const SearchItem: FC<SearchItemProps> = ({ item }) => {
                                             <CustomBadge
                                                 key={index}
                                                 badgeContent={badge.text}
+                                                imageUrl={badge.imageUrl}
                                                 color={badge.color}
                                                 title={badge.type}
                                             />

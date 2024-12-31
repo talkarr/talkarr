@@ -60,6 +60,86 @@
                     "example": "Tag name"
                 }
             },
+            "Conference": {
+                "type": "object",
+                "properties": {
+                    "acronym": {
+                        "type": "string",
+                        "example": "Conf"
+                    },
+                    "aspect_ratio": {
+                        "type": "string",
+                        "example": "16:9"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Conference title"
+                    },
+                    "schedule_url": {
+                        "type": "string",
+                        "example": "https://example.com/schedule",
+                        "description": "Can be empty string"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "conf-slug"
+                    },
+                    "event_last_released_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "link": {
+                        "type": "string",
+                        "example": "https://example.com"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Conference description"
+                    },
+                    "webgen_location": {
+                        "type": "string",
+                        "example": "https://example.com"
+                    },
+                    "logo_url": {
+                        "type": "string",
+                        "example": "https://example.com/logo.jpg"
+                    },
+                    "images_url": {
+                        "type": "string",
+                        "example": "https://example.com/images.vtt"
+                    },
+                    "recordings_url": {
+                        "type": "string",
+                        "example": "https://example.com/recordings.vtt"
+                    },
+                    "url": {
+                        "type": "string",
+                        "example": "https://api.example.com"
+                    }
+                },
+                "required": [
+                    "acronym",
+                    "aspect_ratio",
+                    "updated_at",
+                    "title",
+                    "schedule_url",
+                    "slug",
+                    "event_last_released_at",
+                    "link",
+                    "description",
+                    "webgen_location",
+                    "logo_url",
+                    "images_url",
+                    "recordings_url",
+                    "url"
+                ]
+            },
             "Recording": {
                 "type": "object",
                 "properties": {
@@ -119,6 +199,9 @@
                     "conference_url": {
                         "type": "string",
                         "example": "https://conference.example.com"
+                    },
+                    "conference_data": {
+                        "$ref": "#/components/schemas/Conference"
                     }
                 },
                 "required": [
@@ -242,6 +325,9 @@
                     "conference_url": {
                         "type": "string",
                         "example": "https://conference.example.com"
+                    },
+                    "conference_data": {
+                        "$ref": "#/components/schemas/Conference"
                     },
                     "recordings": {
                         "$ref": "#/components/schemas/Recordings"

@@ -10,6 +10,7 @@ import theme from '@/theme';
 
 import '@/app/globals.css';
 import Navigation from '@components/Navigation';
+import NotistackProvider from '@components/NotistackProvider';
 import { ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
@@ -40,7 +41,9 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => (
                     <CssBaseline />
                     <ApiStoreProvider>
                         <UiStoreProvider>
-                            <Navigation>{children}</Navigation>
+                            <NotistackProvider>
+                                <Navigation>{children}</Navigation>
+                            </NotistackProvider>
                         </UiStoreProvider>
                     </ApiStoreProvider>
                 </ThemeProvider>

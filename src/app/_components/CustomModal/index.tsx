@@ -4,6 +4,7 @@ import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
@@ -21,6 +22,7 @@ export interface ModalProps {
     title?: string;
     testID?: string;
     closeButtonDisabled?: boolean;
+    divider?: boolean;
 }
 
 const StyledModal = styled(Modal)(({ theme, open }) => ({
@@ -90,6 +92,7 @@ const BaseModal: FC<ModalProps> = ({
     title,
     testID,
     closeButtonDisabled,
+    divider,
 }) => {
     const handleClose = (
         _event: never,
@@ -154,6 +157,7 @@ const BaseModal: FC<ModalProps> = ({
                                 </Typography>
                             ) : null}
                         </Box>
+                        {divider ? <Divider /> : null}
                         <Box p={1} data-testid={testID}>
                             {children}
                         </Box>

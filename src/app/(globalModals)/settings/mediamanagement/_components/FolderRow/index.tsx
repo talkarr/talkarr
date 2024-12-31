@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 
+import { enqueueSnackbar } from 'notistack';
 import prettyBytes from 'pretty-bytes';
 
 import { removeFolder } from '@/app/_api/settings/mediamanagement';
@@ -35,11 +36,19 @@ const FolderRow: FC<FolderRowProps> = ({ folder, freeSpace }) => {
                 if (response) {
                     if (response.success) {
                         router.refresh();
+                        enqueueSnackbar('Folder deleted', {
+                            variant: 'success',
+                        });
                     } else {
-                        alert(`Failed to delete folder: ${response.error}`);
+                        enqueueSnackbar(
+                            `Failed to delete folder: ${response.error}`,
+                            { variant: 'error' },
+                        );
                     }
                 } else {
-                    alert('Failed to delete folder');
+                    enqueueSnackbar('Failed to delete folder', {
+                        variant: 'error',
+                    });
                 }
             },
         });
