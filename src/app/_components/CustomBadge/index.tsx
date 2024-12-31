@@ -35,7 +35,9 @@ const CustomBadge: FC<Omit<BadgeProps, 'children'>> = ({
             height="fit-content"
             {...rest}
         >
-            <Typography variant="body1" noWrap>{badgeContent}</Typography>
+            <Typography variant="body1" noWrap>
+                {badgeContent}
+            </Typography>
         </Box>
     );
 };

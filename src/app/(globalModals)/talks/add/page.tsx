@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import type { FC } from 'react';
 
-import AddTalksPage from '@/app/talks/add/_components/AddTalksPage';
+import AddTalksPage from '@/app/(globalModals)/talks/add/_components/AddTalksPage';
 
 interface PageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

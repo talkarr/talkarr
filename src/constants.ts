@@ -1,9 +1,9 @@
 // === Colors ===
-export const pagePrimaryColor = '#a87efd';
-export const pageSecondaryColor = '#190b2f';
+export const pagePrimaryColor = '#9b69ff';
+export const pageSecondaryColor = '#390a96';
 export const pageBackgroundColor = '#181a1b';
 export const pagePaperColor = '#242526';
-export const pageBorderColor = '#4d4954';
+export const pageBorderColor = '#ffffff';
 export const pageName = 'Talkarr';
 
 // === Paths ===

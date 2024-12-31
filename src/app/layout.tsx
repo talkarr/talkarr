@@ -5,6 +5,7 @@ import type { FC, PropsWithChildren } from 'react';
 
 import { pageName } from '@/constants';
 import { ApiStoreProvider } from '@/providers/apiStoreProvider';
+import { UiStoreProvider } from '@/providers/uiStoreProvider';
 import theme from '@/theme';
 
 import '@/app/globals.css';
@@ -38,7 +39,9 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => (
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
                     <ApiStoreProvider>
-                        <Navigation>{children}</Navigation>
+                        <UiStoreProvider>
+                            <Navigation>{children}</Navigation>
+                        </UiStoreProvider>
                     </ApiStoreProvider>
                 </ThemeProvider>
             </AppRouterCacheProvider>

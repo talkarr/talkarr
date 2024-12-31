@@ -8,6 +8,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import api from '@backend/api';
 import log from '@backend/log';
+import { loadSettings } from '@backend/settings';
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -17,6 +18,8 @@ const handle = app.getRequestHandler();
 app.prepare()
     .then(async () => {
         const server = express();
+
+        await loadSettings();
 
         // server.enable('trust proxy');
 

@@ -13,7 +13,7 @@ datasource db {
 model Conference {
   acronym     String
   title       String
-  slug        String
+  slug        String @id
   description String
 
   updated_at   DateTime
@@ -26,11 +26,15 @@ model Conference {
 }
 
 model Person {
-  name String @id
+  name             String @id
+  event            Event  @relation(fields: [eventInternal_id], references: [internal_id])
+  eventInternal_id String
 }
 
 model Tag {
-  name String @id
+  name             String @id
+  event            Event  @relation(fields: [eventInternal_id], references: [internal_id])
+  eventInternal_id String
 }
 
 model Event {
@@ -56,4 +60,9 @@ model Event {
   // relations
   persons Person[]
   tags    Tag[]
+}
+
+model Settings {
+  key   String @id
+  value String
 }

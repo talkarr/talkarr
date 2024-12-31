@@ -13,7 +13,7 @@ import Paper from '@mui/material/Paper';
 
 export interface CustomTextFieldProps extends InputBaseProps {}
 
-const CustomTextField: FC<CustomTextFieldProps> = ({
+const SearchTextField: FC<CustomTextFieldProps> = ({
     value,
     onChange,
     ...rest
@@ -71,4 +71,4 @@ const CustomTextField: FC<CustomTextFieldProps> = ({
     );
 };
 
-export default CustomTextField;
+export default SearchTextField;

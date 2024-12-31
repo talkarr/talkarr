@@ -2,6 +2,7 @@ import express from 'express';
 import expressWinston from 'express-winston';
 
 import { handleSearchEventsRequest } from '@backend/api/search';
+import settingsRouter from '@backend/api/settings';
 import log from '@backend/log';
 
 const router = express.Router();
@@ -22,5 +23,7 @@ router.get('/healthz', (_req, res) => {
 });
 
 router.get('/search', handleSearchEventsRequest);
+
+router.use('/settings', settingsRouter);
 
 export default router;

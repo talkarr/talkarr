@@ -82,7 +82,9 @@ export type RequestParams<
     M extends Method = 'get',
 > = paths[T][M] extends { parameters: { query: object } }
     ? paths[T][M]['parameters']['query']
-    : never;
+    : paths[T][M] extends { parameters?: { query?: object } }
+      ? Required<Required<paths[T][M]['parameters']>['query']>
+      : never;
 
 export type ExtractErrorData<T> = T extends { success: false; error: infer E }
     ? E

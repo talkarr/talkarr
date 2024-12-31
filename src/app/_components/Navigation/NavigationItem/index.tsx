@@ -97,6 +97,7 @@ const NavigationItem: FC<NavigationItemProps> = ({
             key={`navigation-item-list-${index}-${itemIndex}`}
             href={href}
             as={as}
+            style={{ textDecoration: 'none', color: 'inherit' }}
         >
             <StyledListItem highlighted={highlighted} disablePadding>
                 {inner}

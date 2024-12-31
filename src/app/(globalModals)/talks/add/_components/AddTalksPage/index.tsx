@@ -5,15 +5,16 @@ import { useSearchParams } from 'next/navigation';
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import SearchTextField from 'app/_components/SearchTextField';
+
 import type { SearchEventsResponse } from '@/app/_api/search';
-import SearchItem from '@/app/talks/add/_components/SearchItem';
+import SearchItem from '@/app/(globalModals)/talks/add/_components/SearchItem';
 
 import useSearchExample from '@/hooks/useSearchExample';
 
 import { useApiStore } from '@/providers/apiStoreProvider';
 
 import type { ExtractSuccessData } from '@backend/types';
-import CustomTextField from '@components/CustomTextField';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
@@ -49,7 +50,7 @@ const AddTalksPage: FC = () => {
             } else if (result.success) {
                 setResults(result.data);
             } else {
-                setError(result.message);
+                setError(result.error);
             }
 
             setLoading(false);
@@ -89,7 +90,7 @@ const AddTalksPage: FC = () => {
                         handleSearch(search);
                     }}
                 >
-                    <CustomTextField
+                    <SearchTextField
                         placeholder={
                             randomExample ? `e.g. '${randomExample}'` : ''
                         }

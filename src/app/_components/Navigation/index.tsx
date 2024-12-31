@@ -28,6 +28,14 @@ export interface NavigationItemType {
 
 export type SplitNavigationItems = SimpleNavigationItem[][];
 
+export const settings: (SimpleNavigationItem & { description: string })[] = [
+    {
+        title: 'Media Management',
+        path: '/settings/mediamanagement',
+        description: 'Naming and management of media files.',
+    },
+];
+
 const navigationItems: NavigationItemType[] = [
     {
         title: 'Talks',
@@ -48,6 +56,7 @@ const navigationItems: NavigationItemType[] = [
         title: 'Settings',
         Icon: SettingsIcon,
         path: '/settings',
+        subitems: settings,
     },
 ];
 
@@ -79,6 +88,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                     '& .MuiDrawer-paper': {
                         width: drawerWidth,
                         boxSizing: 'border-box',
+                        borderRight: `1px solid rgba(255, 255, 255, 0.05)`,
                     },
                 }}
                 anchor="left"
