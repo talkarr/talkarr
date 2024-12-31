@@ -18,8 +18,8 @@
       "typeorm": "typeorm-ts-node-commonjs",
       "generate:openapi-backend": "openapi-typescript ./backend.json --output backend/generated/schema.ts",
       "generate": "npm run generate:openapi-backend",
-      "test:backend": "pushd backend && jest && popd",
-      "test": "bash -c 'npm run test:backend'"
+      "test:backend": "bash -c 'pushd backend && jest && popd'",
+      "test": "npm run test:backend"
    },
    "dependencies": {
       "@emotion/cache": "^11.14.0",
