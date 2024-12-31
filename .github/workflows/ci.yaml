@@ -60,5 +60,4 @@ jobs:
           npx wait-on http://localhost:3232
 
       - name: Run tests
-        shell: bash
         run: yarn test
