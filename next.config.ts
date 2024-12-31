@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         API_BASE_URL: apiBaseUrl,
     },
     output: 'standalone',
+    devIndicators: {
+        appIsrStatus: true,
+        buildActivity: true,
+        buildActivityPosition: 'bottom-right',
+    },
     compiler:
         process.env.NODE_ENV === 'production'
             ? {

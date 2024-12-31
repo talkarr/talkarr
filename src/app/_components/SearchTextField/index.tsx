@@ -5,6 +5,7 @@ import type { FC } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import type { InputBaseProps } from '@mui/material';
+import { alpha, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -18,6 +19,8 @@ const SearchTextField: FC<CustomTextFieldProps> = ({
     onChange,
     ...rest
 }) => {
+    const theme = useTheme();
+
     const onClear = (): void => {
         if (onChange) {
             onChange({ target: { value: '' } } as any);
@@ -60,7 +63,11 @@ const SearchTextField: FC<CustomTextFieldProps> = ({
                     },
                 }}
             />
-            <Divider orientation="vertical" flexItem />
+            <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ borderColor: alpha(theme.palette.divider, 0.2) }}
+            />
             <IconButton
                 sx={{ mr: 0.5, ml: 1, paddingX: 1, paddingY: 1 }}
                 onClick={onClear}

@@ -50,6 +50,7 @@ const AddTalksPage: FC = () => {
             } else if (result.success) {
                 setResults(result.data);
             } else {
+                setResults(null);
                 setError(result.error);
             }
 
@@ -124,8 +125,7 @@ const AddTalksPage: FC = () => {
                 <Box display="flex" justifyContent="center" mt={4}>
                     <CircularProgress />
                 </Box>
-            ) : null}
-            {error ? (
+            ) : error ? (
                 <Box mt={4}>
                     <Typography
                         variant="h3"

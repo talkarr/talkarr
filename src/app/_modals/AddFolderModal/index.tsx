@@ -14,8 +14,8 @@ import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
-import { useDebounce } from '@uidotdev/usehooks';
 
 const StyledList = styled(List)(({ theme }) => ({
     width: '100%',
@@ -23,7 +23,7 @@ const StyledList = styled(List)(({ theme }) => ({
     position: 'relative',
     overflow: 'auto',
     maxHeight: 300,
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: theme.shape.borderRadius * 2,
 
     '& .MuiListItem-root': {
         '&:not(:last-child)': {
@@ -39,7 +39,6 @@ const AddFolderModal: FC = () => {
     const [folders, setFolders] = useState<string[]>([]);
 
     const [folderName, setFolderName] = useState<string>('');
-    const debouncedFolderName = useDebounce(folderName, 500);
 
     const [separator, setSeparator] = useState<string>('');
 
@@ -97,16 +96,17 @@ const AddFolderModal: FC = () => {
     };
 
     useEffect(() => {
-        if (debouncedFolderName) {
-            handleFetchFolders(debouncedFolderName);
+        if (!folderName && separator === '/') {
+            setFolderName('/');
         }
-    }, [debouncedFolderName]);
+    }, [folderName, separator]);
 
     useEffect(() => {
-        if (addFolderModal && !folders.length) {
+        // if opened and no folders, fetch root folders
+        if (!folders.length) {
             handleFetchFolders(folderName);
         }
-    }, [addFolderModal, folderName, folders.length]);
+    }, [folderName, folders.length]);
 
     const handleAppendFolderPath = useCallback(
         (folder: string): void => {
@@ -114,7 +114,11 @@ const AddFolderModal: FC = () => {
                 return;
             }
 
-            const newFolderName = `${folderName}${separator}${folder}`;
+            const actualSeparator = folderName.endsWith(separator)
+                ? ''
+                : separator;
+
+            const newFolderName = `${folderName}${actualSeparator}${folder}`;
             setFolderName(newFolderName);
             handleFetchFolders(newFolderName);
         },
@@ -128,7 +132,7 @@ const AddFolderModal: FC = () => {
 
         const folderSegments = folderName.split(separator);
         folderSegments.pop();
-        const newFolderName = folderSegments.join(separator);
+        const newFolderName = folderSegments.join(separator) || '/';
         setFolderName(newFolderName);
         handleFetchFolders(newFolderName);
     }, [separator, folderName]);
@@ -162,7 +166,7 @@ const AddFolderModal: FC = () => {
             </Box>
             <Box mb={2}>
                 <StyledList disablePadding>
-                    {folderName && folderName !== '/' ? (
+                    {folders.length ? (
                         <ListItem disablePadding>
                             <ListItemButton
                                 onClick={() => removeFolderSegment()}
@@ -171,7 +175,11 @@ const AddFolderModal: FC = () => {
                                 ..
                             </ListItemButton>
                         </ListItem>
-                    ) : null}
+                    ) : (
+                        <ListItem>
+                            <ListItemText>No folders found</ListItemText>
+                        </ListItem>
+                    )}
                     {folders.map(folder => (
                         <ListItem key={folder} disablePadding>
                             <ListItemButton
