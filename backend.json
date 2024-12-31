@@ -413,7 +413,7 @@
         }
     },
     "paths": {
-        "/search": {
+        "/talks/search": {
             "get": {
                 "description": "Search for events",
                 "parameters": [

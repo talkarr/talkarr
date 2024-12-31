@@ -1,8 +1,8 @@
 import express from 'express';
 import expressWinston from 'express-winston';
 
-import { handleSearchEventsRequest } from '@backend/api/search';
 import settingsRouter from '@backend/api/settings';
+import talksRouter from '@backend/api/talks';
 import rootLog from '@backend/rootLog';
 
 const log = rootLog.child({ label: 'API' });
@@ -24,8 +24,12 @@ router.get('/healthz', (_req, res) => {
     res.sendStatus(200);
 });
 
-router.get('/search', handleSearchEventsRequest);
+router.use('/talks', talksRouter);
 
 router.use('/settings', settingsRouter);
+
+router.use((_req, res) => {
+    res.sendStatus(404);
+});
 
 export default router;
