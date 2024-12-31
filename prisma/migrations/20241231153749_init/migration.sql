@@ -10,7 +10,7 @@ CREATE TABLE "Conference" (
     "url" TEXT NOT NULL,
     "schedule_url" TEXT NOT NULL,
 
-    CONSTRAINT "Conference_pkey" PRIMARY KEY ("slug")
+    CONSTRAINT "Conference_pkey" PRIMARY KEY ("acronym")
 );
 
 -- CreateTable
@@ -35,12 +35,13 @@ CREATE TABLE "Event" (
     "updated_at" TIMESTAMP(3) NOT NULL,
     "slug" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "subtitle" TEXT NOT NULL,
+    "subtitle" TEXT,
     "description" TEXT NOT NULL,
     "thumb_url" TEXT NOT NULL,
     "poster_url" TEXT NOT NULL,
     "original_language" TEXT NOT NULL,
     "frontend_link" TEXT NOT NULL,
+    "conferenceAcronym" TEXT NOT NULL,
 
     CONSTRAINT "Event_pkey" PRIMARY KEY ("guid")
 );
@@ -70,10 +71,16 @@ CREATE TABLE "_EventToTag" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Conference_title_key" ON "Conference"("title");
+
+-- CreateIndex
 CREATE INDEX "_EventToPerson_B_index" ON "_EventToPerson"("B");
 
 -- CreateIndex
 CREATE INDEX "_EventToTag_B_index" ON "_EventToTag"("B");
+
+-- AddForeignKey
+ALTER TABLE "Event" ADD CONSTRAINT "Event_conferenceAcronym_fkey" FOREIGN KEY ("conferenceAcronym") REFERENCES "Conference"("acronym") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_EventToPerson" ADD CONSTRAINT "_EventToPerson_A_fkey" FOREIGN KEY ("A") REFERENCES "Event"("guid") ON DELETE CASCADE ON UPDATE CASCADE;

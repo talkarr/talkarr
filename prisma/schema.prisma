@@ -11,9 +11,9 @@ datasource db {
 }
 
 model Conference {
-  acronym     String
-  title       String
-  slug        String @id
+  acronym     String @id
+  title       String @unique
+  slug        String
   description String
 
   updated_at   DateTime
@@ -23,6 +23,7 @@ model Conference {
   logo_url     String
   url          String
   schedule_url String
+  Event        Event[]
 }
 
 model Person {
@@ -46,7 +47,7 @@ model Event {
 
   // meta
   title             String
-  subtitle          String
+  subtitle          String?
   description       String
   thumb_url         String
   poster_url        String
@@ -54,8 +55,10 @@ model Event {
   frontend_link     String
 
   // relations
-  persons Person[]
-  tags    Tag[]
+  persons           Person[]
+  tags              Tag[]
+  conference        Conference @relation(fields: [conferenceAcronym], references: [acronym])
+  conferenceAcronym String
 }
 
 model Settings {

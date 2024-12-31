@@ -27,6 +27,7 @@ export const setSettingsIfNotSet = async (): Promise<Settings> => {
     });
 
     if (mediaManagementSettings.length === 0) {
+        log.info('Creating initial media management settings');
         await prisma.settings.create({
             data: {
                 key: 'mediamanagement',

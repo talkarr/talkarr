@@ -58,7 +58,9 @@ const CustomBadge: FC<CustomBadgeProps> = ({
                         position: 'relative',
                     }}
                 >
-                    <Box style={{ width: 22, height: 22 }}>
+                    <Box
+                        style={{ width: 22, height: 22, position: 'relative' }}
+                    >
                         <Image
                             src={imageUrl}
                             alt="badge"

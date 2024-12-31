@@ -16,16 +16,17 @@ import useSearchExample from '@/hooks/useSearchExample';
 
 import { mediaManagementSettingsPageLink } from '@/constants';
 
-import type { ExtractSuccessData } from '@backend/types';
+import type { ExtractSuccessData, SuccessData } from '@backend/types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 export interface AddTalksPageProps {
     hasRootFolder: boolean;
+    events: SuccessData<'/talks/list', 'get'> | null;
 }
 
-const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder }) => {
+const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
     const randomExample = useSearchExample();
 
     const searchRef = useRef<AddTalksSearchRef>(null);
@@ -108,7 +109,13 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder }) => {
             {!searchEmpty && results && !loading ? (
                 <Box mt={2} display="flex" flexDirection="column" gap={1}>
                     {results.events.map(event => (
-                        <SearchItem key={`event-${event.guid}`} item={event} />
+                        <SearchItem
+                            key={`event-${event.guid}`}
+                            item={event}
+                            isAlreadyAdded={events?.some(
+                                e => e.guid === event.guid,
+                            )}
+                        />
                     ))}
                 </Box>
             ) : null}

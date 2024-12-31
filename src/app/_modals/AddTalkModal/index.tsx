@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import type { FC } from 'react';
 import { useMemo } from 'react';
 
@@ -20,6 +22,7 @@ import Typography from '@mui/material/Typography';
 const AddTalkModal: FC = () => {
     const addTalkModal = useUiStore(state => state.addTalkModal);
     const close = useUiStore(state => state.closeAddTalkModal);
+    const router = useRouter();
 
     const open = !!addTalkModal;
 
@@ -42,14 +45,13 @@ const AddTalkModal: FC = () => {
             guid: addTalkModal.guid,
         });
 
-        console.log('res', response);
-
         if (response) {
             if (response.success) {
                 enqueueSnackbar('Talk added successfully.', {
                     variant: 'success',
                 });
                 close();
+                router.refresh();
             } else {
                 enqueueSnackbar(`Error adding talk: ${response.error}`, {
                     variant: 'error',

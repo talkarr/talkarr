@@ -107,6 +107,15 @@ export interface paths {
                         "application/json": components["schemas"]["ErrorResponse"];
                     };
                 };
+                /** @description Event already exists */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
                 /** @description Internal server error */
                 500: {
                     headers: {
@@ -238,6 +247,52 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/talks/list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["ExtendedDbEvent"][];
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -564,13 +619,36 @@ export interface components {
             conference_data?: components["schemas"]["Conference"];
         };
         Recordings: components["schemas"]["Recording"][];
+        PrismaConference: {
+            /** @example Conf */
+            acronym: string;
+            /** @example Conference title */
+            title: string;
+            /** @example conf-slug */
+            slug: string;
+            /** @example Conference description */
+            description: string;
+            /**
+             * Format: date-time
+             * @example 2022-01-01T00:00:00Z
+             */
+            updated_at: string;
+            /** @example 16:9 */
+            aspect_ratio: string;
+            /** @example https://example.com/logo.jpg */
+            logo_url: string;
+            /** @example https://api.example.com */
+            url: string;
+            /** @example https://example.com/schedule */
+            schedule_url: string;
+        };
         Event: {
             /** @example c7b3b1b0-7b3b-4b3b-8b3b-3b3b3b3b3b3b */
             guid: string;
             /** @example Event title */
             title: string;
             /** @example Event subtitle */
-            subtitle: string;
+            subtitle: string | null;
             /** @example event-slug */
             slug: string;
             /** @example Event description */
@@ -622,6 +700,46 @@ export interface components {
             conference_url: string;
             conference_data?: components["schemas"]["Conference"];
             recordings: components["schemas"]["Recordings"];
+        };
+        DbEvent: {
+            /** @example c7b3b1b0-7b3b-4b3b-8b3b-3b3b3b3b3b3b */
+            guid: string;
+            /**
+             * Format: date-time
+             * @example 2022-01-01T00:00:00Z
+             */
+            date: string;
+            /**
+             * Format: date-time
+             * @example 2022-01-01T00:00:00Z
+             */
+            release_date: string;
+            /**
+             * Format: date-time
+             * @example 2022-01-01T00:00:00Z
+             */
+            updated_at: string;
+            /** @example event-slug */
+            slug: string;
+            /** @example Event title */
+            title: string;
+            /** @example Event subtitle */
+            subtitle: string | null;
+            /** @example Event description */
+            description: string;
+            /** @example https://example.com/thumb.jpg */
+            thumb_url: string;
+            /** @example https://example.com/poster.jpg */
+            poster_url: string;
+            /** @example eng */
+            original_language: string;
+            /** @example https://example.com */
+            frontend_link: string;
+        };
+        ExtendedDbEvent: components["schemas"]["DbEvent"] & {
+            persons: components["schemas"]["Persons"];
+            tags: components["schemas"]["Tags"];
+            conference: components["schemas"]["PrismaConference"];
         };
         GenericServerError: {
             /**

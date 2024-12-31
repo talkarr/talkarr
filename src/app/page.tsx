@@ -2,15 +2,22 @@ import Link from 'next/link';
 
 import type { FC } from 'react';
 
+import { listEvents } from '@/app/_api/talks/list';
+
 import { addTalksPageLink, mediaManagementSettingsPageLink } from '@/constants';
 
+import YourMediaGrid from '@components/YourMediaGrid';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-const Home: FC = () => (
-    <div>
-        <main>
+const Home: FC = async () => {
+    const eventsResponse = await listEvents();
+
+    const events = eventsResponse?.success ? eventsResponse.data : null;
+
+    if (!events?.length) {
+        return (
             <Box
                 mt={4}
                 display="flex"
@@ -32,8 +39,17 @@ const Home: FC = () => (
                     </Button>
                 </Link>
             </Box>
-        </main>
-    </div>
-);
+        );
+    }
+
+    return (
+        <Box mt={4}>
+            <Typography variant="h3" fontWeight="normal" textAlign="center">
+                Your media
+            </Typography>
+            <YourMediaGrid data={events} />
+        </Box>
+    );
+};
 
 export default Home;

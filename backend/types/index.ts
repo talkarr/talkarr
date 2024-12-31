@@ -89,3 +89,9 @@ export type RequestParams<
 export type ExtractErrorData<T> = T extends { success: false; error: infer E }
     ? E
     : never;
+
+export type ConvertDateToStringType<T> = T extends Date
+    ? string
+    : T extends object
+      ? { [K in keyof T]: ConvertDateToStringType<T[K]> }
+      : T;

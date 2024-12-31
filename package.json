@@ -89,9 +89,6 @@
       "typescript": "^5",
       "typescript-eslint": "^8.18.2"
    },
-   "prisma": {
-      "seed": "ts-node --transpile-only prisma/seed.ts"
-   },
    "engines": {
       "node": ">=22"
    }

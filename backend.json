@@ -226,6 +226,59 @@
                     "$ref": "#/components/schemas/Recording"
                 }
             },
+            "PrismaConference": {
+                "type": "object",
+                "properties": {
+                    "acronym": {
+                        "type": "string",
+                        "example": "Conf"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Conference title"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "conf-slug"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Conference description"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "aspect_ratio": {
+                        "type": "string",
+                        "example": "16:9"
+                    },
+                    "logo_url": {
+                        "type": "string",
+                        "example": "https://example.com/logo.jpg"
+                    },
+                    "url": {
+                        "type": "string",
+                        "example": "https://api.example.com"
+                    },
+                    "schedule_url": {
+                        "type": "string",
+                        "example": "https://example.com/schedule"
+                    }
+                },
+                "required": [
+                    "acronym",
+                    "title",
+                    "slug",
+                    "description",
+                    "updated_at",
+                    "aspect_ratio",
+                    "logo_url",
+                    "url",
+                    "schedule_url"
+                ]
+            },
             "Event": {
                 "type": "object",
                 "properties": {
@@ -239,7 +292,8 @@
                     },
                     "subtitle": {
                         "type": "string",
-                        "example": "Event subtitle"
+                        "example": "Event subtitle",
+                        "nullable": true
                     },
                     "slug": {
                         "type": "string",
@@ -359,6 +413,103 @@
                     "conference_title",
                     "conference_url",
                     "recordings"
+                ]
+            },
+            "DbEvent": {
+                "type": "object",
+                "properties": {
+                    "guid": {
+                        "type": "string",
+                        "example": "c7b3b1b0-7b3b-4b3b-8b3b-3b3b3b3b3b3b"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "release_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "event-slug"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Event title"
+                    },
+                    "subtitle": {
+                        "type": "string",
+                        "example": "Event subtitle",
+                        "nullable": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Event description"
+                    },
+                    "thumb_url": {
+                        "type": "string",
+                        "example": "https://example.com/thumb.jpg"
+                    },
+                    "poster_url": {
+                        "type": "string",
+                        "example": "https://example.com/poster.jpg"
+                    },
+                    "original_language": {
+                        "type": "string",
+                        "example": "eng"
+                    },
+                    "frontend_link": {
+                        "type": "string",
+                        "example": "https://example.com"
+                    }
+                },
+                "required": [
+                    "guid",
+                    "date",
+                    "release_date",
+                    "updated_at",
+                    "slug",
+                    "title",
+                    "subtitle",
+                    "description",
+                    "thumb_url",
+                    "poster_url",
+                    "original_language",
+                    "frontend_link"
+                ]
+            },
+            "ExtendedDbEvent": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/DbEvent"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "persons": {
+                                "$ref": "#/components/schemas/Persons"
+                            },
+                            "tags": {
+                                "$ref": "#/components/schemas/Tags"
+                            },
+                            "conference": {
+                                "$ref": "#/components/schemas/PrismaConference"
+                            }
+                        },
+                        "required": [
+                            "persons",
+                            "tags",
+                            "conference"
+                        ]
+                    }
                 ]
             },
             "GenericServerError": {
@@ -544,6 +695,20 @@
                         },
                         "description": "Missing guid"
                     },
+                    "409": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Event already exists"
+                    },
                     "500": {
                         "content": {
                             "application/json": {
@@ -677,6 +842,54 @@
                             }
                         },
                         "description": "Missing guid"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/talks/list": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/ExtendedDbEvent"
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
                     },
                     "500": {
                         "content": {

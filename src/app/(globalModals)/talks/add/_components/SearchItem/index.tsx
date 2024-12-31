@@ -15,6 +15,7 @@ import searchItemCss from './searchitem.module.css';
 import CustomBadge from '@components/CustomBadge';
 // eslint-disable-next-line import/no-cycle
 import TalkImage from '@components/TalkImage';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import type { BadgeProps } from '@mui/material';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -28,6 +29,7 @@ import Typography from '@mui/material/Typography';
 
 export interface SearchItemProps {
     item: TalkData;
+    isAlreadyAdded?: boolean;
 }
 
 export const searchItemMinHeight = 290;
@@ -65,7 +67,7 @@ export const SearchItemSkeleton: FC = () => (
     />
 );
 
-const SearchItem: FC<SearchItemProps> = ({ item }) => {
+const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
     const openAddTalkModal = useUiStore(state => state.openAddTalkModal);
 
     const title = useMemo(() => {
@@ -137,8 +139,15 @@ const SearchItem: FC<SearchItemProps> = ({ item }) => {
     }, [item]);
 
     return (
-        <StyledCard>
-            <CardActionArea onClick={() => openAddTalkModal(item)}>
+        <StyledCard
+            sx={{
+                opacity: isAlreadyAdded ? 0.5 : 1,
+            }}
+        >
+            <CardActionArea
+                onClick={() => (isAlreadyAdded ? null : openAddTalkModal(item))}
+                disabled={isAlreadyAdded}
+            >
                 <CardMedia>
                     <TalkImage data={item} />
                 </CardMedia>
@@ -146,16 +155,21 @@ const SearchItem: FC<SearchItemProps> = ({ item }) => {
                     <CardHeader
                         title={
                             <Box display="flex" gap={2} flexWrap="wrap">
-                                <Typography variant="h3" minWidth="fit-content">
-                                    {title}
-                                </Typography>
-                                {badges.length ? (
-                                    <Box
-                                        display="flex"
-                                        gap={1}
-                                        flexWrap="wrap"
-                                        mb={1}
+                                <Box display="flex" gap={1} flexWrap="wrap">
+                                    <Typography
+                                        variant="h3"
+                                        minWidth="fit-content"
                                     >
+                                        {title}
+                                    </Typography>
+                                    {isAlreadyAdded ? (
+                                        <Box display="flex" alignItems="center">
+                                            <CheckCircleIcon color="primary" />
+                                        </Box>
+                                    ) : null}
+                                </Box>
+                                {badges.length ? (
+                                    <Box display="flex" gap={1} flexWrap="wrap">
                                         {badges.map((badge, index) => (
                                             <CustomBadge
                                                 key={index}

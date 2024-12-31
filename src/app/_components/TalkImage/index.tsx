@@ -48,16 +48,21 @@ const TalkImage: FC<TalkImageProps> = ({ data, maxWidth, maxHeight }) => {
             ) : (
                 <>
                     <Image
+                        loading="lazy"
                         src={data.poster_url}
                         alt={data.title}
                         sizes="300px"
                         fill
                         style={{ objectFit: 'contain' }}
-                        onLoadingComplete={res => {
-                            if (res.naturalWidth === 0) {
+                        onLoad={event => {
+                            setImageLoading(false);
+
+                            if (
+                                (event.target as HTMLImageElement)
+                                    .naturalWidth === 0
+                            ) {
                                 setShowFallback(true);
                             }
-                            setImageLoading(false);
                         }}
                         onError={() => setShowFallback(true)}
                     />

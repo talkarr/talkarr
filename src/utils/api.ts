@@ -28,6 +28,10 @@ const apiMiddleware: Middleware = {
         // @ts-expect-error: requestTime is not part of the Node.js Request type
         const time = Date.now() - request.requestTime;
 
+        if (error instanceof DOMException && error.name === 'AbortError') {
+            return;
+        }
+
         console.error(
             `[${tag}] Error fetching ${request.url}: ${error && typeof error === 'object' && 'message' in error ? error.message : 'Unknown error'} (${time}ms)`,
         );

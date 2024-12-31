@@ -1,6 +1,7 @@
 import type { Metadata, NextPage } from 'next';
 
 import { getConfig } from '@/app/_api/settings/mediamanagement';
+import { listEvents } from '@/app/_api/talks/list';
 import AddTalksPage from '@/app/(globalModals)/talks/add/_components/AddTalksPage';
 
 interface PageProps {
@@ -21,7 +22,13 @@ const Page: NextPage<PageProps> = async () => {
 
     const data = config?.success ? config.data : null;
 
-    return <AddTalksPage hasRootFolder={!!data?.folders.length} />;
+    const eventsResponse = await listEvents();
+
+    const events = eventsResponse?.success ? eventsResponse.data : null;
+
+    return (
+        <AddTalksPage hasRootFolder={!!data?.folders.length} events={events} />
+    );
 };
 
 export default Page;
