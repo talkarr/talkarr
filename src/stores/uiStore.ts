@@ -5,7 +5,7 @@ import { createStore } from 'zustand';
 import type { SuccessData } from '@backend/types';
 import type { ButtonProps } from '@mui/material';
 
-export type TalkData = SuccessData<'/search', 'get'>['events'][0];
+export type TalkData = SuccessData<'/talks/search', 'get'>['events'][0];
 
 export interface UiState {
     addTalkModal: TalkData | null;

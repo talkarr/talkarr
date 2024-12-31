@@ -2,11 +2,11 @@ import api from '@/utils/api';
 
 import type { RequestParams } from '@backend/types';
 
-export type SearchEventsArgs = RequestParams<'/search'>;
+export type SearchEventsArgs = RequestParams<'/talks/search'>;
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pSearchEvents = async (query: SearchEventsArgs) => {
-    const { data, error, response } = await api.GET('/search', {
+    const { data, error, response } = await api.GET('/talks/search', {
         params: {
             query,
         },

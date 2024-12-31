@@ -11,8 +11,8 @@ import type {
 const log = rootLog.child({ label: 'search' });
 
 export const handleSearchEventsRequest = async (
-    req: ExpressRequest<'/search', 'get'>,
-    res: ExpressResponse<'/search', 'get'>,
+    req: ExpressRequest<'/talks/search', 'get'>,
+    res: ExpressResponse<'/talks/search', 'get'>,
 ): Promise<void> => {
     const query = req.query.q;
 
@@ -46,7 +46,7 @@ export const handleSearchEventsRequest = async (
         return;
     }
 
-    const json = results.json() as SuccessData<'/search', 'get'>;
+    const json = results.json() as SuccessData<'/talks/search', 'get'>;
 
     const uniqueConferenceUrls = new Set<string>();
 
@@ -81,7 +81,7 @@ export const handleSearchEventsRequest = async (
 
     await Promise.all(fetchPromises);
 
-    const data: SuccessData<'/search', 'get'> = {
+    const data: SuccessData<'/talks/search', 'get'> = {
         events: json.events.map(event => {
             const conference = conferences.get(event.conference_url);
 
