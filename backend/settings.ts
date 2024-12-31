@@ -1,6 +1,8 @@
 import type { MediamanagementSettings } from '@backend/api/settings/mediamanagement';
-import log from '@backend/log';
+import rootLog from '@backend/rootLog';
 import { PrismaClient } from '@prisma/client';
+
+const log = rootLog.child({ label: 'settings' });
 
 export interface Settings {
     mediamanagement: MediamanagementSettings;

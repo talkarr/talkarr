@@ -2,9 +2,11 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 
-import log from '@backend/log';
+import rootLog from '@backend/rootLog';
 import { getSettings, setSettings } from '@backend/settings';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
+
+const log = rootLog.child({ label: 'settings/mediamanagement' });
 
 export interface MediamanagementSettings {
     folders: string[];

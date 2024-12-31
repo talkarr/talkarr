@@ -3,7 +3,9 @@ import expressWinston from 'express-winston';
 
 import { handleSearchEventsRequest } from '@backend/api/search';
 import settingsRouter from '@backend/api/settings';
-import log from '@backend/log';
+import rootLog from '@backend/rootLog';
+
+const log = rootLog.child({ label: 'API' });
 
 const router = express.Router();
 

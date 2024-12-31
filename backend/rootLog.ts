@@ -15,7 +15,7 @@ const hformat = winston.format.printf(
     },
 );
 
-const log = winston.createLogger({
+const rootLog = winston.createLogger({
     level: process.env.LOG_LEVEL?.toLowerCase() || 'debug',
     format: winston.format.combine(
         winston.format.splat(),
@@ -59,4 +59,4 @@ const log = winston.createLogger({
     ],
 });
 
-export default log;
+export default rootLog;

@@ -7,13 +7,19 @@ import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
 
 import api from '@backend/api';
-import log from '@backend/log';
+import rootLog from '@backend/rootLog';
 import { loadSettings } from '@backend/settings';
 
 const dev = process.env.NODE_ENV !== 'production';
 
+const log = rootLog.child({ label: 'server' });
+
+log.info('Starting server...');
+
 const app = next({ dev });
 const handle = app.getRequestHandler();
+
+log.info('Preparing server...');
 
 app.prepare()
     .then(async () => {
@@ -56,15 +62,11 @@ app.prepare()
         const host = process.env.HOST;
         if (host) {
             server.listen(port, host, () => {
-                log.info(`Server ready on http://${host}:${port}/`, {
-                    label: 'Server',
-                });
+                log.info(`Server ready on http://${host}:${port}/`);
             });
         } else {
             server.listen(port, () => {
-                log.info(`Server ready on http://localhost:${port}/`, {
-                    label: 'Server',
-                });
+                log.info(`Server ready on http://localhost:${port}/`);
             });
         }
     })

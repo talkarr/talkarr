@@ -1,4 +1,6 @@
-import log from '@backend/log';
+import rootLog from '@backend/rootLog';
+
+const log = rootLog.child({ label: 'fetch' });
 
 type FetchArgs = Parameters<typeof fetch>;
 
