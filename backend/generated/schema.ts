@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/search": {
+    "/talks/search": {
         parameters: {
             query?: never;
             header?: never;

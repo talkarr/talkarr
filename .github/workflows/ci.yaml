@@ -39,6 +39,9 @@ jobs:
           sarif_file: eslint-results.sarif
           wait-for-processing: true
 
+      - name: Run generate and check if something changed
+        run: yarn generate && git diff --exit-code
+
       - name: Run type checks
         run: yarn typecheck
 
