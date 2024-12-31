@@ -47,6 +47,9 @@ jobs:
         run: |
           yarn dev:db
           
+          # wait for the database to be ready
+          npx wait-on tcp:5432
+          
           # initialize the database with prisma.io
           yarn prisma db push --force-reset --accept-data-loss
           
