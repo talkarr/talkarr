@@ -46,7 +46,15 @@ jobs:
         id: prepare
         run: |
           yarn dev:db
+          
+          # initialize the database with prisma.io
+          yarn prisma db push --force-reset --accept-data-loss
+          
           yarn dev &
+
+      - name: Wait for the app to be ready
+        run: |
+          npx wait-on http://localhost:3232
 
       - name: Run tests
         run: yarn test
