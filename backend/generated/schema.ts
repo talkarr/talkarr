@@ -154,6 +154,11 @@ export interface paths {
                     "application/json": {
                         /** @example c7b3b1b0-7b3b-4b3b-8b3b-3b3b3b3b3b3b */
                         guid: string;
+                        /**
+                         * @default false
+                         * @example true
+                         */
+                        delete_files: boolean;
                     };
                 };
             };

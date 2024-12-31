@@ -98,3 +98,5 @@ export const handleSearchEventsRequest = async (
 
     res.json({ success: true, data });
 };
+
+export default handleSearchEventsRequest;

@@ -737,10 +737,16 @@
                                     "guid": {
                                         "type": "string",
                                         "example": "c7b3b1b0-7b3b-4b3b-8b3b-3b3b3b3b3b3b"
+                                    },
+                                    "delete_files": {
+                                        "type": "boolean",
+                                        "example": true,
+                                        "default": false
                                     }
                                 },
                                 "required": [
-                                    "guid"
+                                    "guid",
+                                    "delete_files"
                                 ]
                             }
                         }
