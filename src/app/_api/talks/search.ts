@@ -4,12 +4,19 @@ import type { RequestParams } from '@backend/types';
 
 export type SearchEventsArgs = RequestParams<'/talks/search'>;
 
+let searchEventsHandle: AbortController | null = null;
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pSearchEvents = async (query: SearchEventsArgs) => {
+    if (searchEventsHandle) {
+        searchEventsHandle.abort();
+    }
+
     const { data, error, response } = await api.GET('/talks/search', {
         params: {
             query,
         },
+        signal: (searchEventsHandle = new AbortController()).signal,
     });
 
     if (error) {

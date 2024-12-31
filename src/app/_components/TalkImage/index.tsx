@@ -54,7 +54,6 @@ const TalkImage: FC<TalkImageProps> = ({ data, maxWidth, maxHeight }) => {
                         fill
                         style={{ objectFit: 'contain' }}
                         onLoadingComplete={res => {
-                            console.log('res', res);
                             if (res.naturalWidth === 0) {
                                 setShowFallback(true);
                             }

@@ -16,7 +16,6 @@ CREATE TABLE "Conference" (
 -- CreateTable
 CREATE TABLE "Person" (
     "name" TEXT NOT NULL,
-    "eventInternal_id" TEXT NOT NULL,
 
     CONSTRAINT "Person_pkey" PRIMARY KEY ("name")
 );
@@ -24,14 +23,12 @@ CREATE TABLE "Person" (
 -- CreateTable
 CREATE TABLE "Tag" (
     "name" TEXT NOT NULL,
-    "eventInternal_id" TEXT NOT NULL,
 
     CONSTRAINT "Tag_pkey" PRIMARY KEY ("name")
 );
 
 -- CreateTable
 CREATE TABLE "Event" (
-    "internal_id" TEXT NOT NULL,
     "guid" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "release_date" TIMESTAMP(3) NOT NULL,
@@ -45,7 +42,7 @@ CREATE TABLE "Event" (
     "original_language" TEXT NOT NULL,
     "frontend_link" TEXT NOT NULL,
 
-    CONSTRAINT "Event_pkey" PRIMARY KEY ("internal_id")
+    CONSTRAINT "Event_pkey" PRIMARY KEY ("guid")
 );
 
 -- CreateTable
@@ -56,8 +53,36 @@ CREATE TABLE "Settings" (
     CONSTRAINT "Settings_pkey" PRIMARY KEY ("key")
 );
 
--- AddForeignKey
-ALTER TABLE "Person" ADD CONSTRAINT "Person_eventInternal_id_fkey" FOREIGN KEY ("eventInternal_id") REFERENCES "Event"("internal_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateTable
+CREATE TABLE "_EventToPerson" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL,
+
+    CONSTRAINT "_EventToPerson_AB_pkey" PRIMARY KEY ("A","B")
+);
+
+-- CreateTable
+CREATE TABLE "_EventToTag" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL,
+
+    CONSTRAINT "_EventToTag_AB_pkey" PRIMARY KEY ("A","B")
+);
+
+-- CreateIndex
+CREATE INDEX "_EventToPerson_B_index" ON "_EventToPerson"("B");
+
+-- CreateIndex
+CREATE INDEX "_EventToTag_B_index" ON "_EventToTag"("B");
 
 -- AddForeignKey
-ALTER TABLE "Tag" ADD CONSTRAINT "Tag_eventInternal_id_fkey" FOREIGN KEY ("eventInternal_id") REFERENCES "Event"("internal_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "_EventToPerson" ADD CONSTRAINT "_EventToPerson_A_fkey" FOREIGN KEY ("A") REFERENCES "Event"("guid") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_EventToPerson" ADD CONSTRAINT "_EventToPerson_B_fkey" FOREIGN KEY ("B") REFERENCES "Person"("name") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_EventToTag" ADD CONSTRAINT "_EventToTag_A_fkey" FOREIGN KEY ("A") REFERENCES "Event"("guid") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_EventToTag" ADD CONSTRAINT "_EventToTag_B_fkey" FOREIGN KEY ("B") REFERENCES "Tag"("name") ON DELETE CASCADE ON UPDATE CASCADE;

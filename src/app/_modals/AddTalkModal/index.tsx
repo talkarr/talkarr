@@ -4,12 +4,17 @@ import type { FC } from 'react';
 import { useMemo } from 'react';
 
 import moment from 'moment';
+import { enqueueSnackbar } from 'notistack';
+
+import { addEvent } from '@/app/_api/talks/add';
 
 import { useUiStore } from '@/providers/uiStoreProvider';
 
 import BaseModal from '@components/CustomModal';
 import TalkImage from '@components/TalkImage';
+import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const AddTalkModal: FC = () => {
@@ -27,6 +32,35 @@ const AddTalkModal: FC = () => {
 
         return `${addTalkModal.title} (${year})`;
     }, [addTalkModal]);
+
+    const handleAddTalk = async (): Promise<void> => {
+        if (!addTalkModal?.guid) {
+            return;
+        }
+
+        const response = await addEvent({
+            guid: addTalkModal.guid,
+        });
+
+        console.log('res', response);
+
+        if (response) {
+            if (response.success) {
+                enqueueSnackbar('Talk added successfully.', {
+                    variant: 'success',
+                });
+                close();
+            } else {
+                enqueueSnackbar(`Error adding talk: ${response.error}`, {
+                    variant: 'error',
+                });
+            }
+        } else {
+            enqueueSnackbar('Error adding talk.', {
+                variant: 'error',
+            });
+        }
+    };
 
     return (
         <BaseModal open={open} onClose={close} title={title} moreWidth divider>
@@ -46,7 +80,7 @@ const AddTalkModal: FC = () => {
                     <Typography variant="body2" mb={1}>
                         {addTalkModal?.description}
                     </Typography>
-                    <Box>
+                    <Box mb={2}>
                         <Typography variant="body1" fontWeight="bold">
                             Date:
                         </Typography>
@@ -94,6 +128,16 @@ const AddTalkModal: FC = () => {
                         <Typography variant="body1">
                             {addTalkModal?.tags.join(', ')}
                         </Typography>
+                    </Box>
+                    <Box display="flex" justifyContent="flex-end">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            startIcon={<AddIcon />}
+                            onClick={handleAddTalk}
+                        >
+                            Add talk
+                        </Button>
                     </Box>
                 </Box>
             </Box>

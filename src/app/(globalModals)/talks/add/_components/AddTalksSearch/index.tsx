@@ -8,7 +8,7 @@ import React, {
     useState,
 } from 'react';
 
-import type { SearchEventsResponse } from '@/app/_api/search';
+import type { SearchEventsResponse } from '@/app/_api/talks/search';
 
 import useSearchExample from '@/hooks/useSearchExample';
 

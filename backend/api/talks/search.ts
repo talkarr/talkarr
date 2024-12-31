@@ -8,7 +8,7 @@ import type {
     SuccessData,
 } from '@backend/types';
 
-const log = rootLog.child({ label: 'search' });
+const log = rootLog.child({ label: 'talks/search' });
 
 export const handleSearchEventsRequest = async (
     req: ExpressRequest<'/talks/search', 'get'>,

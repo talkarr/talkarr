@@ -5,7 +5,7 @@ import Link from 'next/link';
 import type { FC } from 'react';
 import React, { useRef, useState } from 'react';
 
-import type { SearchEventsResponse } from '@/app/_api/search';
+import type { SearchEventsResponse } from '@/app/_api/talks/search';
 import type { AddTalksSearchRef } from '@/app/(globalModals)/talks/add/_components/AddTalksSearch';
 import AddTalksSearch from '@/app/(globalModals)/talks/add/_components/AddTalksSearch';
 import SearchItem, {

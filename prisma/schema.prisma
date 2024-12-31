@@ -26,23 +26,19 @@ model Conference {
 }
 
 model Person {
-  name             String @id
-  event            Event  @relation(fields: [eventInternal_id], references: [internal_id])
-  eventInternal_id String
+  name   String  @id
+  events Event[]
 }
 
 model Tag {
-  name             String @id
-  event            Event  @relation(fields: [eventInternal_id], references: [internal_id])
-  eventInternal_id String
+  name   String  @id
+  events Event[]
 }
 
 model Event {
-  internal_id String @id @default(cuid())
-
   // media.ccc.de specific fields
   // datetimes
-  guid         String
+  guid         String   @id
   date         DateTime
   release_date DateTime
   updated_at   DateTime

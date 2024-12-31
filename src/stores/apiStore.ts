@@ -2,8 +2,8 @@ import deepmerge from 'deepmerge';
 import type { PartialDeep } from 'type-fest';
 import { createStore } from 'zustand';
 
-import type { SearchEventsResponse } from '@/app/_api/search';
-import { searchEvents } from '@/app/_api/search';
+import type { SearchEventsResponse } from '@/app/_api/talks/search';
+import { searchEvents } from '@/app/_api/talks/search';
 
 export interface ApiState {
     searchResults: SearchEventsResponse | undefined;
