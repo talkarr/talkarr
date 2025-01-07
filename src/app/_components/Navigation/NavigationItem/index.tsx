@@ -1,9 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 import type { FC } from 'react';
+
+import { getFileRoutePath } from '@/utils/route';
 
 import type {
     NavigationItemType,
@@ -39,6 +41,11 @@ const NavigationItem: FC<NavigationItemProps> = ({
     isSubitem,
 }) => {
     const pathname = usePathname();
+    const params = useParams();
+
+    if (item.visible === false) {
+        return null;
+    }
 
     if ('divider' in item && item.divider) {
         return (
@@ -70,8 +77,10 @@ const NavigationItem: FC<NavigationItemProps> = ({
               )
             : [];
 
+    const fileRoutePath = getFileRoutePath(pathname, params);
     const selected = pathname === href;
-    const subitemSelected = subItemHrefs.includes(pathname);
+    const subitemSelected =
+        subItemHrefs.includes(pathname) || subItemHrefs.includes(fileRoutePath);
     const highlighted = selected || subitemSelected || isSubitem;
 
     const inner = (

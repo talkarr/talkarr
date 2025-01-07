@@ -1,3 +1,5 @@
+// noinspection ES6PreferShortImport
+
 import type { NextConfig } from 'next';
 
 import { apiBaseUrl } from './src/constants';

@@ -49,7 +49,7 @@ export const createApiStore = (initialState?: PartialDeep<ApiState>) =>
             }
         },
         getTalkInfo: async guid => {
-            const response = await talkInfo({ guid });
+            const response = await talkInfo({ guid, slug: '' });
 
             set(state => ({
                 talkInfo: {

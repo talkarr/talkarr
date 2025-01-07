@@ -75,6 +75,11 @@ app.prepare()
         startScanForMissingFiles({});
     })
     .catch(err => {
-        log.error(err.stack);
+        log.error('Catched Error', err.stack);
         process.exit(1);
     });
+
+process.on('uncaughtException', err => {
+    log.error('Uncaught Exception:', err);
+    process.exit(1);
+});

@@ -24,13 +24,17 @@ import type SvgIcon from '@mui/material/SvgIcon/SvgIcon';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-export type SimpleNavigationItem = Pick<NavigationItemType, 'title' | 'path'>;
+export type SimpleNavigationItem = Pick<
+    NavigationItemType,
+    'title' | 'path' | 'visible'
+>;
 
 export interface NavigationItemType {
     title: string;
     Icon: typeof SvgIcon;
     subitems?: SimpleNavigationItem[];
     path: string | { href: string; as: string };
+    visible?: false;
 }
 
 export type SplitNavigationItems = SimpleNavigationItem[][];
@@ -56,6 +60,11 @@ const navigationItems: NavigationItemType[] = [
             {
                 title: 'Import Talks',
                 path: importTalksPageLink,
+            },
+            {
+                title: 'Specific Talk',
+                path: '/talks/[slug]',
+                visible: false,
             },
         ],
     },

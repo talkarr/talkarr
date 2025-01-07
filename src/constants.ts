@@ -10,6 +10,7 @@ export const pageName = 'Talkarr';
 export const homePageLink = '/';
 export const addTalksPageLink = '/talks/add';
 export const importTalksPageLink = '/talks/import';
+export const specificTalkPageLink = (slug: string): string => `/talks/${slug}`;
 export const settingsPageLink = '/settings';
 export const mediaManagementSettingsPageLink = '/settings/mediamanagement';
 

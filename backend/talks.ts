@@ -279,9 +279,8 @@ export const getTalkInfoByGuid = async (
             }),
         );
 
-        console.log('eventinfo', result.eventInfo);
-
         return {
+            title: result.title,
             files: mappedFiles,
             root_folder: result.root_folder.path,
             download_progress: result.eventInfo.download_progress,
@@ -295,6 +294,28 @@ export const getTalkInfoByGuid = async (
     }
 
     return null;
+};
+
+export const getTalkInfoBySlug = async (
+    slug: string,
+): Promise<TalkInfo | null> => {
+    const prisma = new PrismaClient();
+
+    // get guid and call getTalkInfoByGuid
+    const result = await prisma.event.findFirst({
+        where: {
+            slug,
+        },
+        select: {
+            guid: true,
+        },
+    });
+
+    if (!result) {
+        return null;
+    }
+
+    return getTalkInfoByGuid(result.guid);
 };
 
 export const createNewTalkInfo = async (

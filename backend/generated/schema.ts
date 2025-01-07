@@ -315,8 +315,9 @@ export interface paths {
         };
         get: {
             parameters: {
-                query: {
-                    guid: string;
+                query?: {
+                    guid?: string;
+                    slug?: string;
                 };
                 header?: never;
                 path?: never;
@@ -838,6 +839,8 @@ export interface components {
             root_folder: string;
         };
         TalkInfo: {
+            /** @example Event title */
+            title: string;
             /**
              * @description Download progress in percentage
              * @example 0

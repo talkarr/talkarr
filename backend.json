@@ -550,6 +550,10 @@
             "TalkInfo": {
                 "type": "object",
                 "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "Event title"
+                    },
                     "download_progress": {
                         "type": "integer",
                         "example": 0,
@@ -579,6 +583,7 @@
                     }
                 },
                 "required": [
+                    "title",
                     "download_progress",
                     "is_downloading",
                     "has_files",
@@ -977,7 +982,15 @@
                     {
                         "name": "guid",
                         "in": "query",
-                        "required": true,
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "slug",
+                        "in": "query",
+                        "required": false,
                         "schema": {
                             "type": "string"
                         }

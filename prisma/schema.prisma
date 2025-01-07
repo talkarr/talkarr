@@ -13,7 +13,7 @@ datasource db {
 model Conference {
   acronym     String  @id
   title       String  @unique
-  slug        String
+  slug        String  @unique
   description String?
   link        String?
 
@@ -54,7 +54,7 @@ model Event {
   date         DateTime
   release_date DateTime
   updated_at   DateTime
-  slug         String
+  slug         String   @unique
 
   // meta
   title             String
