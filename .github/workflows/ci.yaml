@@ -113,7 +113,7 @@ jobs:
           flavor: |
             latest=true
           images: |
-            ghcr.io/${{ github.repository }}:${{ env.PLATFORM_PAIR }}
+            ghcr.io/${{ github.repository }}
 
       - name: Build and push Docker image
         id: docker_build
@@ -125,7 +125,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: ${{ matrix.platform }}
-          outputs: type=image,name=ghcr.io/${{ github.repository }}:${{ env.PLATFORM_PAIR }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=ghcr.io/${{ github.repository }},push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest
         run: |
