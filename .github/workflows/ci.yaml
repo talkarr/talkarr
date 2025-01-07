@@ -171,7 +171,7 @@ jobs:
           flavor: |
             latest=true
           images: |
-            ghcr.io/${{ github.repository }}:${{ env.PLATFORM_PAIR }}
+            ghcr.io/${{ github.repository }}
 
       - name: Merge digests
         working-directory: /tmp/digests
