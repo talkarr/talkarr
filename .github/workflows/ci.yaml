@@ -145,6 +145,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
     needs: [build-linux-container]
     steps:
       - name: Download digests
