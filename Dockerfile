@@ -34,6 +34,8 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+USER nextjs
+
 COPY --from=deps /app/node_modules ./node_modules
 
 COPY --from=builder /app/backend ./backend
@@ -48,11 +50,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 
 COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
 
-USER nextjs
+# Prisma.io
+RUN yarn prisma generate
 
 EXPOSE 3232
 
-ENV PORT=3232
+ENV PORT 3232
 
-ENV HOSTNAME="0.0.0.0"
+ENV HOSTNAME "0.0.0.0"
 CMD ["yarn", "start:prod"]
