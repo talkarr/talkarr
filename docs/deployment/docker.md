@@ -15,6 +15,9 @@ POSTGRES_DB=talkarr
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
 # Environment variables declared in this file are automatically made available to Prisma.
 # See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
 
@@ -22,6 +25,9 @@ POSTGRES_PORT=5432
 # See the documentation for all the connection string options: https://pris.ly/d/connection-strings
 
 DATABASE_URL="postgresql://talkarr:talkarr@localhost:5432/talkarr?schema=public"
+
+# Docker-Compose:
+# DATABASE_URL="postgresql://talkarr:talkarr@db:5432/talkarr?schema=public"
 ```
 
 Please change the values of the environment variables to match your environment.

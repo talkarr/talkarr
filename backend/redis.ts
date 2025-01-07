@@ -1,17 +1,40 @@
 import type { QueueOptions } from 'bull';
 
-const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
-const REDIS_PORT = (() => {
-    const port = process.env.REDIS_PORT;
-    if (port) {
-        return parseInt(port, 10);
-    }
-    return 6379;
-})();
+import rootLog from '@backend/rootLog';
 
-export const redisConnection: QueueOptions['redis'] = {
-    host: REDIS_HOST,
-    port: REDIS_PORT,
-};
+const log = rootLog.child({ label: 'redis' });
+
+export const redisConnection: QueueOptions['redis'] = (() => {
+    let host = 'localhost';
+    let port = 6379;
+    let fromEnv = false;
+
+    if (process.env.REDIS_HOST) {
+        fromEnv = true;
+        host = process.env.REDIS_HOST;
+    }
+
+    if (process.env.REDIS_PORT) {
+        fromEnv = true;
+        port = Number(process.env.REDIS_PORT);
+    }
+
+    if (fromEnv) {
+        log.info('Using Redis settings from environment variables.', {
+            host,
+            port,
+        });
+    } else {
+        log.info('Using default Redis settings.', {
+            host,
+            port,
+        });
+    }
+
+    return {
+        host,
+        port,
+    };
+})();
 
 export default { redisConnection };

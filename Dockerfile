@@ -53,6 +53,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 
 COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
 
+# create logs folder for the app
+RUN mkdir -p /app/logs
+
+# make sure the user has the right permissions
+RUN chown -R nextjs:nodejs /app/logs
+
 EXPOSE 3232
 
 ENV PORT=3232
