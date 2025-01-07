@@ -23,8 +23,7 @@
       "generate:openapi-backend": "openapi-typescript ./backend.json --output backend/generated/schema.ts",
       "generate": "npm run generate:openapi-backend",
       "test:backend": "bash -c 'pushd backend && jest && popd'",
-      "test": "npm run test:backend",
-      "postinstall": "prisma generate"
+      "test": "npm run test:backend"
    },
    "dependencies": {
       "@emotion/cache": "^11.14.0",

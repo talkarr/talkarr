@@ -39,7 +39,7 @@ RUN adduser --system --uid 1001 nextjs
 
 USER nextjs
 
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/node_modules ./node_modules
 
 COPY --from=builder /app/backend ./backend
 
