@@ -144,8 +144,10 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
       packages: write
+      contents: read
+      attestations: write
+      id-token: write
     needs: [build-linux-container]
     steps:
       - name: Download digests
