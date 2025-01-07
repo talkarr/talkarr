@@ -3,80 +3,159 @@
 import Image from 'next/image';
 
 import type { FC } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import moment from 'moment';
 
+import useOnScreen from '@/hooks/useOnScreen';
+
 import { longDateFormat } from '@/constants';
+import { useApiStore } from '@/providers/apiStoreProvider';
 
 import type { SuccessData } from '@backend/types';
+import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
 import { Grid2, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
+import Skeleton from '@mui/material/Skeleton';
 
 export interface MediaItemProps {
     talk: SuccessData<'/talks/list', 'get'>[0];
 }
 
-export const mediaItemRatio = '4/2.95';
-
 const StyledContainer = styled(Grid2)(({ theme }) => ({
     position: 'relative',
-    aspectRatio: mediaItemRatio,
     borderRadius: theme.shape.borderRadius * 2,
     overflow: 'hidden',
 }));
 
-const MediaItem: FC<MediaItemProps> = ({ talk }) => (
-    <StyledContainer
-        key={talk.guid}
-        size={2}
-        sx={{ position: 'relative', aspectRatio: mediaItemRatio }}
-    >
-        <Card
-            sx={{
-                height: '100%',
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-            }}
+const MediaItem: FC<MediaItemProps> = ({ talk }) => {
+    const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const getTalkInfo = useApiStore(state => state.getTalkInfo);
+
+    const isVisible = useOnScreen(containerRef);
+
+    const talkInfo = useApiStore(state => {
+        if (talk.guid in state.talkInfo) {
+            const res = state.talkInfo[talk.guid];
+
+            if (res?.success) {
+                return res.data;
+            }
+
+            return null;
+        }
+
+        return null;
+    });
+
+    useEffect(() => {
+        const func = async (): Promise<void> => {
+            await getTalkInfo(talk.guid);
+        };
+
+        const intervalMs = talkInfo?.is_downloading ? 1000 : 5000;
+
+        const interval = isVisible ? setInterval(func, intervalMs) : null;
+
+        if (isVisible) {
+            func();
+        }
+
+        return () => {
+            if (interval) {
+                clearInterval(interval);
+            }
+        };
+    }, [
+        getTalkInfo,
+        isVisible,
+        talk.guid,
+        talk.title,
+        talkInfo?.is_downloading,
+    ]);
+
+    console.log('talkInfo', talkInfo);
+
+    return (
+        <StyledContainer
+            size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+            ref={containerRef}
         >
-            <CardMedia>
-                <Box
-                    sx={{
-                        position: 'relative',
-                        aspectRatio: '16/9',
-                        borderRadius: 2,
-                        overflow: 'hidden',
-                        boxShadow: 1,
-                    }}
-                >
-                    <Image
-                        src={talk.poster_url}
-                        layout="fill"
-                        objectFit="cover"
-                        alt={talk.title}
-                    />
-                </Box>
-            </CardMedia>
-            <CardHeader
+            <Card
                 sx={{
-                    '& .MuiCardHeader-content': {
-                        display: 'block',
-                        overflow: 'hidden',
-                    },
-                    p: 1,
+                    height: '100%',
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
                 }}
-                titleTypographyProps={{
-                    noWrap: true,
-                    textOverflow: 'ellipsis',
-                }}
-                title={talk.title}
-                subheader={`${moment(talk.date).format(longDateFormat)} - ${talk.conference.title}`}
-            />
-        </Card>
-    </StyledContainer>
-);
+            >
+                <CardActionArea>
+                    <CardMedia>
+                        {imageLoaded ? null : (
+                            <Skeleton
+                                variant="rectangular"
+                                animation="wave"
+                                sx={{
+                                    aspectRatio: '16/9',
+                                    width: '100%',
+                                    height: 'auto',
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    borderRadius: 2,
+                                }}
+                            />
+                        )}
+                        <Box
+                            sx={{
+                                position: 'relative',
+                                aspectRatio: '16/9',
+                                borderRadius: 2,
+                                overflow: 'hidden',
+                                boxShadow: 1,
+                            }}
+                        >
+                            <Image
+                                src={talk.poster_url}
+                                fill
+                                style={{
+                                    objectFit: 'cover',
+                                }}
+                                alt={talk.title}
+                                onLoad={() => setImageLoaded(true)}
+                            />
+                        </Box>
+                        {talkInfo?.is_downloading ? (
+                            <Box
+                                sx={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    right: 0,
+                                    p: 1,
+                                }}
+                            >
+                                <CircularProgressWithLabel
+                                    value={talkInfo.download_progress}
+                                    backgroundColor="rgb(42, 42, 42)"
+                                />
+                            </Box>
+                        ) : null}
+                    </CardMedia>
+                    <CardHeader
+                        title={talk.title}
+                        subheader={`${moment(talk.date).format(longDateFormat)} - ${talk.conference.title}`}
+                    />
+                </CardActionArea>
+            </Card>
+        </StyledContainer>
+    );
+};
 
 export default MediaItem;

@@ -243,7 +243,8 @@
                     },
                     "description": {
                         "type": "string",
-                        "example": "Conference description"
+                        "example": "Conference description",
+                        "nullable": true
                     },
                     "updated_at": {
                         "type": "string",
@@ -452,7 +453,8 @@
                     },
                     "description": {
                         "type": "string",
-                        "example": "Event description"
+                        "example": "Event description",
+                        "nullable": true
                     },
                     "thumb_url": {
                         "type": "string",
@@ -512,6 +514,78 @@
                     }
                 ]
             },
+            "DownloadedFile": {
+                "type": "object",
+                "properties": {
+                    "path": {
+                        "type": "string",
+                        "example": "/path/to/file.jpg"
+                    },
+                    "filename": {
+                        "type": "string",
+                        "example": "file.jpg"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "mime_type": {
+                        "type": "string",
+                        "example": "image/jpeg",
+                        "nullable": true
+                    },
+                    "root_folder": {
+                        "type": "string",
+                        "example": "/folder"
+                    }
+                },
+                "required": [
+                    "path",
+                    "filename",
+                    "size",
+                    "mime_type",
+                    "root_folder"
+                ]
+            },
+            "TalkInfo": {
+                "type": "object",
+                "properties": {
+                    "download_progress": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "Download progress in percentage"
+                    },
+                    "is_downloading": {
+                        "type": "boolean",
+                        "example": false,
+                        "description": "True if downloading"
+                    },
+                    "has_files": {
+                        "type": "boolean",
+                        "example": false,
+                        "description": "True if files are available"
+                    },
+                    "files": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DownloadedFile"
+                        },
+                        "description": "List of files"
+                    },
+                    "root_folder": {
+                        "type": "string",
+                        "example": "/folder",
+                        "description": "Root folder for files"
+                    }
+                },
+                "required": [
+                    "download_progress",
+                    "is_downloading",
+                    "has_files",
+                    "files",
+                    "root_folder"
+                ]
+            },
             "GenericServerError": {
                 "type": "object",
                 "properties": {
@@ -535,30 +609,8 @@
             "MediaManagementConfig": {
                 "type": "object",
                 "properties": {
-                    "folders": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "folder": {
-                                    "type": "string",
-                                    "example": "/folder"
-                                },
-                                "free_space": {
-                                    "type": "integer",
-                                    "example": 0,
-                                    "description": "Free space in bytes"
-                                }
-                            },
-                            "required": [
-                                "folder",
-                                "free_space"
-                            ]
-                        }
-                    }
                 },
                 "required": [
-                    "folders"
                 ]
             }
         }
@@ -656,10 +708,15 @@
                                     "guid": {
                                         "type": "string",
                                         "example": "c7b3b1b0-7b3b-4b3b-8b3b-3b3b3b3b3b3b"
+                                    },
+                                    "root_folder": {
+                                        "type": "string",
+                                        "example": "/folder"
                                     }
                                 },
                                 "required": [
-                                    "guid"
+                                    "guid",
+                                    "root_folder"
                                 ]
                             }
                         }
@@ -914,6 +971,89 @@
                 }
             }
         },
+        "/talks/info": {
+            "get": {
+                "parameters": [
+                    {
+                        "name": "guid",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/TalkInfo"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Missing guid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Event not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/settings/mediamanagement/files": {
             "get": {
                 "parameters": [
@@ -1000,7 +1140,7 @@
                 }
             }
         },
-        "/settings/mediamanagement/config": {
+        "/settings/mediamanagement/info": {
             "get": {
                 "responses": {
                     "200": {
@@ -1015,7 +1155,37 @@
                                             "type": "object",
                                             "properties": {
                                                 "data": {
-                                                    "$ref": "#/components/schemas/MediaManagementConfig"
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "config": {
+                                                            "$ref": "#/components/schemas/MediaManagementConfig"
+                                                        },
+                                                        "folders": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "folder": {
+                                                                        "type": "string",
+                                                                        "example": "/folder"
+                                                                    },
+                                                                    "free_space": {
+                                                                        "type": "integer",
+                                                                        "example": 0,
+                                                                        "description": "Free space in bytes"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "folder",
+                                                                    "free_space"
+                                                                ]
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "config",
+                                                        "folders"
+                                                    ]
                                                 }
                                             },
                                             "required": [

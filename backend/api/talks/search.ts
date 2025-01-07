@@ -10,7 +10,7 @@ import type {
 
 const log = rootLog.child({ label: 'talks/search' });
 
-export const handleSearchEventsRequest = async (
+const handleSearchEventsRequest = async (
     req: ExpressRequest<'/talks/search', 'get'>,
     res: ExpressResponse<'/talks/search', 'get'>,
 ): Promise<void> => {

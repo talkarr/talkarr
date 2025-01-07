@@ -9,9 +9,7 @@ export interface Settings {
 }
 
 export const initialSettings: Settings = {
-    mediamanagement: {
-        folders: [],
-    },
+    mediamanagement: {},
 };
 
 export const setSettingsIfNotSet = async (): Promise<Settings> => {

@@ -42,14 +42,7 @@ const Home: FC = async () => {
         );
     }
 
-    return (
-        <Box mt={4}>
-            <Typography variant="h3" fontWeight="normal" textAlign="center">
-                Your media
-            </Typography>
-            <YourMediaGrid data={events} />
-        </Box>
-    );
+    return <YourMediaGrid initialData={events} />;
 };
 
 export default Home;

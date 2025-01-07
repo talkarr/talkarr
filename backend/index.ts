@@ -6,9 +6,11 @@ import express from 'express';
 import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
 
+import './workers/addTalk';
 import api from '@backend/api';
 import rootLog from '@backend/rootLog';
 import { loadSettings } from '@backend/settings';
+import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -69,6 +71,8 @@ app.prepare()
                 log.info(`Server ready on http://localhost:${port}/`);
             });
         }
+
+        startScanForMissingFiles({});
     })
     .catch(err => {
         log.error(err.stack);

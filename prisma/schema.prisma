@@ -11,10 +11,11 @@ datasource db {
 }
 
 model Conference {
-  acronym     String @id
-  title       String @unique
+  acronym     String  @id
+  title       String  @unique
   slug        String
-  description String
+  description String?
+  link        String?
 
   updated_at   DateTime
   aspect_ratio String
@@ -36,6 +37,16 @@ model Tag {
   events Event[]
 }
 
+model File {
+  path     String   @id
+  filename String
+  url      String
+  created  DateTime @default(now())
+
+  event     Event  @relation(fields: [eventGuid], references: [guid])
+  eventGuid String
+}
+
 model Event {
   // media.ccc.de specific fields
   // datetimes
@@ -48,7 +59,7 @@ model Event {
   // meta
   title             String
   subtitle          String?
-  description       String
+  description       String?
   thumb_url         String
   poster_url        String
   original_language String
@@ -59,6 +70,32 @@ model Event {
   tags              Tag[]
   conference        Conference @relation(fields: [conferenceAcronym], references: [acronym])
   conferenceAcronym String
+  root_folder       RootFolder @relation(fields: [rootFolderPath], references: [path])
+  rootFolderPath    String
+
+  // files
+  file File[]
+
+  // infos
+  eventInfo     EventInfo @relation(fields: [eventInfoGuid], references: [guid])
+  eventInfoGuid String    @unique
+}
+
+model EventInfo {
+  guid String @id @default(cuid())
+
+  is_downloading     Boolean
+  download_progress  Float
+  download_error     String?
+  download_exit_code Int?
+
+  event Event?
+}
+
+model RootFolder {
+  path String @unique
+
+  events Event[]
 }
 
 model Settings {

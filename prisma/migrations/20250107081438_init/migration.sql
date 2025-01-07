@@ -3,7 +3,8 @@ CREATE TABLE "Conference" (
     "acronym" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
+    "description" TEXT,
+    "link" TEXT,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "aspect_ratio" TEXT NOT NULL,
     "logo_url" TEXT NOT NULL,
@@ -28,6 +29,16 @@ CREATE TABLE "Tag" (
 );
 
 -- CreateTable
+CREATE TABLE "File" (
+    "path" TEXT NOT NULL,
+    "filename" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
+    "eventGuid" TEXT NOT NULL,
+
+    CONSTRAINT "File_pkey" PRIMARY KEY ("path")
+);
+
+-- CreateTable
 CREATE TABLE "Event" (
     "guid" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
@@ -36,14 +47,31 @@ CREATE TABLE "Event" (
     "slug" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "subtitle" TEXT,
-    "description" TEXT NOT NULL,
+    "description" TEXT,
     "thumb_url" TEXT NOT NULL,
     "poster_url" TEXT NOT NULL,
     "original_language" TEXT NOT NULL,
     "frontend_link" TEXT NOT NULL,
     "conferenceAcronym" TEXT NOT NULL,
+    "rootFolderPath" TEXT NOT NULL,
+    "eventInfoGuid" TEXT NOT NULL,
 
     CONSTRAINT "Event_pkey" PRIMARY KEY ("guid")
+);
+
+-- CreateTable
+CREATE TABLE "EventInfo" (
+    "guid" TEXT NOT NULL,
+    "is_downloading" BOOLEAN NOT NULL,
+    "download_progress" DOUBLE PRECISION,
+    "download_error" TEXT,
+
+    CONSTRAINT "EventInfo_pkey" PRIMARY KEY ("guid")
+);
+
+-- CreateTable
+CREATE TABLE "RootFolder" (
+    "path" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -74,13 +102,28 @@ CREATE TABLE "_EventToTag" (
 CREATE UNIQUE INDEX "Conference_title_key" ON "Conference"("title");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Event_eventInfoGuid_key" ON "Event"("eventInfoGuid");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "RootFolder_path_key" ON "RootFolder"("path");
+
+-- CreateIndex
 CREATE INDEX "_EventToPerson_B_index" ON "_EventToPerson"("B");
 
 -- CreateIndex
 CREATE INDEX "_EventToTag_B_index" ON "_EventToTag"("B");
 
 -- AddForeignKey
+ALTER TABLE "File" ADD CONSTRAINT "File_eventGuid_fkey" FOREIGN KEY ("eventGuid") REFERENCES "Event"("guid") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Event" ADD CONSTRAINT "Event_conferenceAcronym_fkey" FOREIGN KEY ("conferenceAcronym") REFERENCES "Conference"("acronym") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Event" ADD CONSTRAINT "Event_rootFolderPath_fkey" FOREIGN KEY ("rootFolderPath") REFERENCES "RootFolder"("path") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Event" ADD CONSTRAINT "Event_eventInfoGuid_fkey" FOREIGN KEY ("eventInfoGuid") REFERENCES "EventInfo"("guid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_EventToPerson" ADD CONSTRAINT "_EventToPerson_A_fkey" FOREIGN KEY ("A") REFERENCES "Event"("guid") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -3,11 +3,12 @@
 import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 
+import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { addEvent } from '@/app/_api/talks/add';
 
 import { useUiStore } from '@/providers/uiStoreProvider';
@@ -17,12 +18,20 @@ import TalkImage from '@components/TalkImage';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 
 const AddTalkModal: FC = () => {
     const addTalkModal = useUiStore(state => state.addTalkModal);
     const close = useUiStore(state => state.closeAddTalkModal);
     const router = useRouter();
+
+    const [availableFolders, setAvailableFolders] = useState<string[]>([]);
+
+    const [rootFolder, setRootFolder] = useState<string>('');
 
     const open = !!addTalkModal;
 
@@ -43,6 +52,7 @@ const AddTalkModal: FC = () => {
 
         const response = await addEvent({
             guid: addTalkModal.guid,
+            root_folder: rootFolder,
         });
 
         if (response) {
@@ -63,6 +73,25 @@ const AddTalkModal: FC = () => {
             });
         }
     };
+
+    useEffect(() => {
+        const func = async () => {
+            const config = await getConfig();
+
+            const data = config?.success ? config.data : null;
+
+            if (data) {
+                setAvailableFolders(data.folders.map(f => f.folder));
+                if (data.folders.length > 0) {
+                    setRootFolder(data.folders[0].folder);
+                }
+            }
+        };
+
+        if (open) {
+            func();
+        }
+    }, [open]);
 
     return (
         <BaseModal open={open} onClose={close} title={title} moreWidth divider>
@@ -130,6 +159,29 @@ const AddTalkModal: FC = () => {
                         <Typography variant="body1">
                             {addTalkModal?.tags.join(', ')}
                         </Typography>
+                    </Box>
+                    <Box mb={2}>
+                        <FormControl fullWidth>
+                            <InputLabel id="root-folder-label">
+                                Root folder
+                            </InputLabel>
+                            <Select
+                                variant="outlined"
+                                fullWidth
+                                value={rootFolder}
+                                onChange={e =>
+                                    setRootFolder(e.target.value as string)
+                                }
+                                labelId="root-folder-label"
+                                label="Root folder"
+                            >
+                                {availableFolders.map(folder => (
+                                    <MenuItem key={folder} value={folder}>
+                                        {folder}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Box>
                     <Box display="flex" justifyContent="flex-end">
                         <Button

@@ -2,14 +2,15 @@ import { getTalkByGuid } from '@backend/helper';
 import rootLog from '@backend/rootLog';
 import { addTalk, AddTalkFailure } from '@backend/talks';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
 
 const log = rootLog.child({ label: 'talks/add' });
 
-export const handleAddEventRequest = async (
+const handleAddEventRequest = async (
     req: ExpressRequest<'/talks/add', 'post'>,
     res: ExpressResponse<'/talks/add', 'post'>,
 ): Promise<void> => {
-    const { guid } = req.body;
+    const { guid, root_folder: rootFolder } = req.body;
 
     if (!guid) {
         log.error('GUID is required.');
@@ -17,6 +18,17 @@ export const handleAddEventRequest = async (
         res.status(400).json({
             success: false,
             error: 'GUID is required.',
+        });
+
+        return;
+    }
+
+    if (!rootFolder) {
+        log.error('Root folder is required.');
+
+        res.status(400).json({
+            success: false,
+            error: 'Root folder is required.',
         });
 
         return;
@@ -36,7 +48,7 @@ export const handleAddEventRequest = async (
     }
 
     // Add talk to database
-    const result = await addTalk(talk);
+    const result = await addTalk(talk, rootFolder);
 
     if (typeof result !== 'object') {
         log.error('Error adding talk to database. Result:', { result });
@@ -57,6 +69,10 @@ export const handleAddEventRequest = async (
 
         return;
     }
+
+    startScanForMissingFiles({
+        event: result,
+    });
 
     res.json({
         success: true,

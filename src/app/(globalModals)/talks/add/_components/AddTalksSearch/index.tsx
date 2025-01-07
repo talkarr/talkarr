@@ -15,6 +15,7 @@ import useSearchExample from '@/hooks/useSearchExample';
 import { useApiStore } from '@/providers/apiStoreProvider';
 
 import type { ExtractSuccessData } from '@backend/types';
+import type { Sort } from '@components/SearchTextField';
 import SearchTextField from '@components/SearchTextField';
 import Box from '@mui/material/Box';
 import { useDebounce } from '@uidotdev/usehooks';
@@ -31,6 +32,8 @@ export interface AddTalksSearchProps {
     ) => void;
     setSearchEmpty: (empty: boolean) => void;
     ref: React.Ref<AddTalksSearchRef>;
+    sort: Sort;
+    setSort: (sort: Sort) => void;
 }
 
 const AddTalksSearch: FC<AddTalksSearchProps> = ({
@@ -39,6 +42,8 @@ const AddTalksSearch: FC<AddTalksSearchProps> = ({
     setResults,
     setSearchEmpty,
     ref,
+    sort,
+    setSort,
 }) => {
     const params = useSearchParams();
     const [search, setSearch] = useState<string>(params.get('search') || '');
@@ -67,16 +72,19 @@ const AddTalksSearch: FC<AddTalksSearchProps> = ({
             }
 
             setLoading(true);
+            setError(null);
 
             const result = await doSearch(searchTerm);
 
-            if (!result) {
-                setError('An error occurred while searching for talks.');
-            } else if (result.success) {
-                setResults(result.data);
-            } else {
-                setResults(null);
-                setError(result.error);
+            if (result !== false) {
+                if (!result) {
+                    setError('An error occurred while searching for talks.');
+                } else if (result.success) {
+                    setResults(result.data);
+                } else {
+                    setResults(null);
+                    setError(result.error);
+                }
             }
 
             setLoading(false);
@@ -102,6 +110,12 @@ const AddTalksSearch: FC<AddTalksSearchProps> = ({
         handleSearch,
     }));
 
+    useEffect(() => {
+        if (search.trim() !== '') {
+            setResults(null);
+        }
+    }, [search, setResults]);
+
     return (
         <Box flex={1} mb={2}>
             <form
@@ -111,6 +125,8 @@ const AddTalksSearch: FC<AddTalksSearchProps> = ({
                 }}
             >
                 <SearchTextField
+                    sort={sort}
+                    setSort={setSort}
                     placeholder={randomExample ? `e.g. '${randomExample}'` : ''}
                     value={search}
                     onChange={e => {

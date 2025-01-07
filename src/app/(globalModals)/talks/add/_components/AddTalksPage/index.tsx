@@ -3,7 +3,7 @@
 import Link from 'next/link';
 
 import type { FC } from 'react';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
 import type { AddTalksSearchRef } from '@/app/(globalModals)/talks/add/_components/AddTalksSearch';
@@ -17,6 +17,7 @@ import useSearchExample from '@/hooks/useSearchExample';
 import { mediaManagementSettingsPageLink } from '@/constants';
 
 import type { ExtractSuccessData, SuccessData } from '@backend/types';
+import { Sort } from '@components/SearchTextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -29,6 +30,8 @@ export interface AddTalksPageProps {
 const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
     const randomExample = useSearchExample();
 
+    const [sort, setSort] = useState<Sort>(Sort.Relevance);
+
     const searchRef = useRef<AddTalksSearchRef>(null);
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -39,6 +42,27 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
     const [searchEmpty, setSearchEmpty] = useState<boolean>(true);
 
     const noResults = results && !loading && results.events.length === 0;
+
+    const sortedResults = useMemo(() => {
+        if (!results) {
+            return null;
+        }
+
+        if (sort === Sort.Relevance) {
+            return results.events;
+        }
+
+        return results.events.toSorted((a, b) => {
+            const aDate = new Date(a.date);
+            const bDate = new Date(b.date);
+
+            if (sort === Sort.DateAsc) {
+                return aDate.getTime() - bDate.getTime();
+            }
+
+            return bDate.getTime() - aDate.getTime();
+        });
+    }, [results, sort]);
 
     if (!hasRootFolder) {
         return (
@@ -68,6 +92,8 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                 setError={setError}
                 setResults={setResults}
                 setSearchEmpty={setSearchEmpty}
+                sort={sort}
+                setSort={setSort}
                 ref={searchRef}
             />
             {searchEmpty ? (
@@ -89,7 +115,10 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                     </Typography>
                 </Box>
             ) : null}
-            {loading ? (
+            {loading ||
+            (!searchEmpty &&
+                !error &&
+                typeof results?.events?.length === 'undefined') ? (
                 <Box mt={2} display="flex" flexDirection="column" gap={1}>
                     {Array.from({ length: 5 }).map((_, index) => (
                         <SearchItemSkeleton key={index} />
@@ -106,9 +135,9 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                     </Typography>
                 </Box>
             ) : null}
-            {!searchEmpty && results && !loading ? (
+            {!searchEmpty && sortedResults && !loading ? (
                 <Box mt={2} display="flex" flexDirection="column" gap={1}>
-                    {results.events.map(event => (
+                    {sortedResults.map(event => (
                         <SearchItem
                             key={`event-${event.guid}`}
                             item={event}

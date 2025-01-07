@@ -2,19 +2,23 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 
+import type { components } from '@backend/generated/schema';
+import {
+    addRootFolder,
+    AddRootFolderResponse,
+    listRootFolders,
+} from '@backend/rootFolder';
 import rootLog from '@backend/rootLog';
-import { getSettings, setSettings } from '@backend/settings';
+import { getSettings } from '@backend/settings';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'settings/mediamanagement' });
 
-export interface MediamanagementSettings {
-    folders: string[];
-}
+export interface MediamanagementSettings {}
 
 const router = express.Router();
 
-export const listFolders = async (
+export const listFoldersFromFs = async (
     startFolderPath: string = '/',
 ): Promise<string[]> => {
     const folders = fs
@@ -36,7 +40,7 @@ router.get(
         const { folder } = req.query;
 
         try {
-            const files = await listFolders(folder);
+            const files = await listFoldersFromFs(folder);
 
             const separator = path.sep;
 
@@ -63,12 +67,14 @@ router.get(
 );
 
 router.get(
-    '/config',
+    '/info',
     async (
-        _req: ExpressRequest<'/settings/mediamanagement/config', 'get'>,
-        res: ExpressResponse<'/settings/mediamanagement/config', 'get'>,
+        _req: ExpressRequest<'/settings/mediamanagement/info', 'get'>,
+        res: ExpressResponse<'/settings/mediamanagement/info', 'get'>,
     ) => {
-        const { folders, ...config } = getSettings().mediamanagement;
+        const config = getSettings().mediamanagement;
+
+        const folders = await listRootFolders();
 
         const mappedFolders = folders.map(folder => {
             const stats = fs.statfsSync(folder);
@@ -82,7 +88,7 @@ router.get(
         res.json({
             success: true,
             data: {
-                ...config,
+                config: config as components['schemas']['MediaManagementConfig'],
                 folders: mappedFolders,
             },
         });
@@ -146,15 +152,36 @@ router.post(
             return;
         }
 
-        await setSettings(
-            'mediamanagement',
-            current => {
-                current.folders.push(folder);
+        try {
+            const result = await addRootFolder(folder);
 
-                return current;
-            },
-            true,
-        );
+            if (result === AddRootFolderResponse.Duplicate) {
+                res.status(409).json({
+                    success: false,
+                    error: 'Folder already exists',
+                });
+
+                return;
+            }
+
+            if (result === AddRootFolderResponse.Other) {
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error',
+                });
+
+                return;
+            }
+        } catch (error) {
+            log.error('Error adding folder:', error);
+
+            res.status(500).json({
+                success: false,
+                error: 'Internal Server Error',
+            });
+
+            return;
+        }
 
         res.json({ success: true, data: null });
     },
@@ -176,18 +203,6 @@ router.post(
 
             return;
         }
-
-        await setSettings(
-            'mediamanagement',
-            current => {
-                const newFolders = current.folders.filter(
-                    currentFolder => currentFolder !== folder,
-                );
-
-                return { ...current, folders: newFolders };
-            },
-            true,
-        );
 
         res.json({ success: true, data: null });
     },

@@ -14,6 +14,7 @@ router.use(
         winstonInstance: log,
         meta: false,
         // responseWhitelist: ['body'],
+        level: 'http',
     }),
 );
 router.use(expressWinston.errorLogger({ winstonInstance: log }));

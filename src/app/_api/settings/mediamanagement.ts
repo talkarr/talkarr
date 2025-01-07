@@ -34,7 +34,7 @@ export const listFiles: (
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pGetConfig = async () => {
     const { data, error, response } = await api.GET(
-        '/settings/mediamanagement/config',
+        '/settings/mediamanagement/info',
         { cache: 'no-cache' },
     );
 

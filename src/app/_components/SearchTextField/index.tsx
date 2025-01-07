@@ -2,7 +2,10 @@
 
 import type { FC } from 'react';
 
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ClearIcon from '@mui/icons-material/Clear';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import SearchIcon from '@mui/icons-material/Search';
 import type { InputBaseProps } from '@mui/material';
 import { alpha, useTheme } from '@mui/material';
@@ -12,11 +15,23 @@ import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
 
-export interface CustomTextFieldProps extends InputBaseProps {}
+export enum Sort {
+    Relevance,
+    DateAsc,
+    DateDesc,
+    MAX = DateDesc,
+}
+
+export interface CustomTextFieldProps extends InputBaseProps {
+    sort: Sort;
+    setSort: (sort: Sort) => void;
+}
 
 const SearchTextField: FC<CustomTextFieldProps> = ({
     value,
     onChange,
+    sort,
+    setSort,
     ...rest
 }) => {
     const theme = useTheme();
@@ -69,7 +84,26 @@ const SearchTextField: FC<CustomTextFieldProps> = ({
                 sx={{ borderColor: alpha(theme.palette.divider, 0.2) }}
             />
             <IconButton
-                sx={{ mr: 0.5, ml: 1, paddingX: 1, paddingY: 1 }}
+                sx={{ marginX: 1, paddingX: 1, paddingY: 1 }}
+                onClick={() => {
+                    setSort((sort + 1) % (Sort.MAX + 1));
+                }}
+            >
+                {sort === Sort.Relevance ? (
+                    <AutoAwesomeIcon />
+                ) : sort === Sort.DateAsc ? (
+                    <KeyboardArrowUpIcon />
+                ) : (
+                    <KeyboardArrowDownIcon />
+                )}
+            </IconButton>
+            <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ borderColor: alpha(theme.palette.divider, 0.2) }}
+            />
+            <IconButton
+                sx={{ ml: 1, mr: 0.5, paddingX: 1, paddingY: 1 }}
                 onClick={onClear}
             >
                 <ClearIcon />

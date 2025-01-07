@@ -6,7 +6,7 @@ import type {
     ExpressResponse,
 } from '@backend/types';
 
-export const handleListEventsRequest = async (
+const handleListEventsRequest = async (
     _req: ExpressRequest<'/talks/list', 'get'>,
     res: ExpressResponse<'/talks/list', 'get'>,
 ): Promise<void> => {

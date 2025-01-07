@@ -85,6 +85,8 @@ export interface paths {
                     "application/json": {
                         /** @example c7b3b1b0-7b3b-4b3b-8b3b-3b3b3b3b3b3b */
                         guid: string;
+                        /** @example /folder */
+                        root_folder: string;
                     };
                 };
             };
@@ -304,6 +306,72 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/talks/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query: {
+                    guid: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["TalkInfo"];
+                        };
+                    };
+                };
+                /** @description Missing guid */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Event not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/settings/mediamanagement/files": {
         parameters: {
             query?: never;
@@ -365,7 +433,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/settings/mediamanagement/config": {
+    "/settings/mediamanagement/info": {
         parameters: {
             query?: never;
             header?: never;
@@ -388,7 +456,18 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["SuccessResponse"] & {
-                            data: components["schemas"]["MediaManagementConfig"];
+                            data: {
+                                config: components["schemas"]["MediaManagementConfig"];
+                                folders: {
+                                    /** @example /folder */
+                                    folder: string;
+                                    /**
+                                     * @description Free space in bytes
+                                     * @example 0
+                                     */
+                                    free_space: number;
+                                }[];
+                            };
                         };
                     };
                 };
@@ -632,7 +711,7 @@ export interface components {
             /** @example conf-slug */
             slug: string;
             /** @example Conference description */
-            description: string;
+            description: string | null;
             /**
              * Format: date-time
              * @example 2022-01-01T00:00:00Z
@@ -731,7 +810,7 @@ export interface components {
             /** @example Event subtitle */
             subtitle: string | null;
             /** @example Event description */
-            description: string;
+            description: string | null;
             /** @example https://example.com/thumb.jpg */
             thumb_url: string;
             /** @example https://example.com/poster.jpg */
@@ -746,6 +825,42 @@ export interface components {
             tags: components["schemas"]["Tags"];
             conference: components["schemas"]["PrismaConference"];
         };
+        DownloadedFile: {
+            /** @example /path/to/file.jpg */
+            path: string;
+            /** @example file.jpg */
+            filename: string;
+            /** @example 0 */
+            size: number;
+            /** @example image/jpeg */
+            mime_type: string | null;
+            /** @example /folder */
+            root_folder: string;
+        };
+        TalkInfo: {
+            /**
+             * @description Download progress in percentage
+             * @example 0
+             */
+            download_progress: number;
+            /**
+             * @description True if downloading
+             * @example false
+             */
+            is_downloading: boolean;
+            /**
+             * @description True if files are available
+             * @example false
+             */
+            has_files: boolean;
+            /** @description List of files */
+            files: components["schemas"]["DownloadedFile"][];
+            /**
+             * @description Root folder for files
+             * @example /folder
+             */
+            root_folder: string;
+        };
         GenericServerError: {
             /**
              * @example false
@@ -755,17 +870,7 @@ export interface components {
             /** @example Internal server error */
             error: string;
         };
-        MediaManagementConfig: {
-            folders: {
-                /** @example /folder */
-                folder: string;
-                /**
-                 * @description Free space in bytes
-                 * @example 0
-                 */
-                free_space: number;
-            }[];
-        };
+        MediaManagementConfig: Record<string, never>;
     };
     responses: never;
     parameters: never;

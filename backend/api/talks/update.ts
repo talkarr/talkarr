@@ -5,7 +5,7 @@ import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/update' });
 
-export const handleUpdateEventRequest = async (
+const handleUpdateEventRequest = async (
     req: ExpressRequest<'/talks/update', 'post'>,
     res: ExpressResponse<'/talks/update', 'post'>,
 ): Promise<void> => {

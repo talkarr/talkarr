@@ -1,11 +1,10 @@
-import { getTalkByGuid } from '@backend/helper';
 import rootLog from '@backend/rootLog';
-import { addTalk, AddTalkFailure, deleteTalk } from '@backend/talks';
+import { deleteTalk } from '@backend/talks';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/delete' });
 
-export const handleDeleteEventRequest = async (
+const handleDeleteEventRequest = async (
     req: ExpressRequest<'/talks/delete', 'post'>,
     res: ExpressResponse<'/talks/delete', 'post'>,
 ): Promise<void> => {

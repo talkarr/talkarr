@@ -16,7 +16,7 @@ const hformat = winston.format.printf(
 );
 
 const rootLog = winston.createLogger({
-    level: process.env.LOG_LEVEL?.toLowerCase() || 'debug',
+    level: process.env.LOG_LEVEL?.toLowerCase() || 'verbose',
     format: winston.format.combine(
         winston.format.splat(),
         winston.format.timestamp(),

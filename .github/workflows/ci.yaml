@@ -56,6 +56,12 @@ jobs:
           # initialize the database with prisma.io
           yarn prisma db push --force-reset --accept-data-loss
           
+          # redis
+          yarn dev:redis
+          
+          # wait for redis to be ready
+          npx wait-on tcp:6379
+          
           yarn dev &
 
       - name: Wait for the app to be ready
