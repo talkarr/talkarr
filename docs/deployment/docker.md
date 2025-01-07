@@ -2,6 +2,30 @@
 
 This is the preferred method of deployment for this application. It helps to ensure that the application is running in a consistent environment, and that the application is isolated from the host system.
 
+## Prerequisites
+
+Before deploying the application, you need to create a `.env` file.
+
+```bash
+# This is for development only. Please use environment variables for production.
+
+POSTGRES_USER=talkarr
+POSTGRES_PASSWORD=talkarr
+POSTGRES_DB=talkarr
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+
+# Environment variables declared in this file are automatically made available to Prisma.
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+DATABASE_URL="postgresql://talkarr:talkarr@localhost:5432/talkarr?schema=public"
+```
+
+Please change the values of the environment variables to match your environment.
+
 ## Deploying via Docker Compose (Recommended)
 
 This is the most basic docker-compose.yml file that you can use to deploy this application:
