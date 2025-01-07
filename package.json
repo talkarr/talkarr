@@ -72,7 +72,7 @@
       "@types/express": "^5.0.0",
       "@types/jest": "^29.5.14",
       "@types/memory-cache": "^0.2.6",
-      "@types/node": "^20",
+      "@types/node": "^22",
       "@types/react": "^19",
       "@types/react-dom": "^19",
       "@types/swagger-ui": "^3.52.4",
@@ -90,13 +90,13 @@
       "eslint-plugin-prettier": "^5.2.1",
       "eslint-plugin-simple-import-sort": "^12.1.1",
       "nodemon": "^3.1.9",
-      "openapi-typescript": "^7.4.4",
+      "openapi-typescript": "^7.5.2",
       "openapi-typescript-helpers": "^0.0.15",
       "prettier": "^3.4.2",
       "ts-jest": "^29.2.5",
       "ts-node-dev": "^2.0.0",
       "typescript": "^5",
-      "typescript-eslint": "^8.18.2"
+      "typescript-eslint": "^8.19.1"
    },
    "engines": {
       "node": ">=22"
