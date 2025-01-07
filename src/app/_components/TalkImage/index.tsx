@@ -1,8 +1,11 @@
+'use client';
+
 import Image from 'next/image';
 
 import type { CSSProperties, FC } from 'react';
 import { useEffect, useState } from 'react';
 
+import type { SingleTalkData } from '@/app/(globalModals)/talks/[slug]/page';
 // eslint-disable-next-line import/no-cycle
 import {
     searchItemMaxImageWidth,
@@ -15,7 +18,7 @@ import ImageFallback from '@components/ImageFallback';
 import Skeleton from '@mui/material/Skeleton';
 
 export interface TalkImageProps {
-    data?: TalkData;
+    data: TalkData | SingleTalkData['db'] | undefined;
     maxWidth?: CSSProperties['maxWidth'];
     maxHeight?: CSSProperties['maxHeight'];
 }

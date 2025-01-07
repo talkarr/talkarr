@@ -5,8 +5,17 @@ import apiFetch from '@backend/fetch';
 import type { ApiEvent } from '@backend/talks';
 import type { Conference } from '@prisma/client';
 
-export const getTalkByGuid = async (guid: string): Promise<ApiEvent | null> => {
-    const response = await apiFetch(`${cccApiBaseUrl}/events/${guid}`);
+export const getTalkFromApiByGuid = async (
+    guid: string,
+    cacheKey?: string,
+    cacheDuration?: number,
+): Promise<ApiEvent | null> => {
+    const response = await apiFetch(
+        `${cccApiBaseUrl}/events/${guid}`,
+        undefined,
+        cacheKey,
+        cacheDuration,
+    );
 
     if (!response.ok) {
         return null;

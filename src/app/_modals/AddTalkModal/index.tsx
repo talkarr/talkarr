@@ -75,7 +75,7 @@ const AddTalkModal: FC = () => {
     };
 
     useEffect(() => {
-        const func = async () => {
+        const func = async (): Promise<void> => {
             const config = await getConfig();
 
             const data = config?.success ? config.data : null;

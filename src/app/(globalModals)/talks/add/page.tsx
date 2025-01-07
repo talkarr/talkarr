@@ -4,6 +4,8 @@ import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { listEvents } from '@/app/_api/talks/list';
 import AddTalksPage from '@/app/(globalModals)/talks/add/_components/AddTalksPage';
 
+import Box from '@mui/material/Box';
+
 interface PageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
@@ -27,7 +29,17 @@ const Page: NextPage<PageProps> = async () => {
     const events = eventsResponse?.success ? eventsResponse.data : null;
 
     return (
-        <AddTalksPage hasRootFolder={!!data?.folders.length} events={events} />
+        <Box
+            sx={{
+                paddingX: 4,
+                paddingY: 2,
+            }}
+        >
+            <AddTalksPage
+                hasRootFolder={!!data?.folders.length}
+                events={events}
+            />
+        </Box>
     );
 };
 

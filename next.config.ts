@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
     env: {
         API_BASE_URL: apiBaseUrl,
     },
-    output: 'standalone',
+    // output: 'standalone',
     devIndicators: {
         appIsrStatus: true,
         buildActivity: true,

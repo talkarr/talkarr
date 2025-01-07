@@ -19,30 +19,53 @@ const Home: FC = async () => {
     if (!events?.length) {
         return (
             <Box
-                mt={4}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                gap={2}
+                sx={{
+                    paddingX: 4,
+                    paddingY: 2,
+                }}
             >
-                <Typography variant="h3" fontWeight="normal" textAlign="center">
-                    You do not have any media yet!
-                </Typography>
-                <Link href={addTalksPageLink}>
-                    <Button variant="contained" color="primary">
-                        Go add some media!
-                    </Button>
-                </Link>
-                <Link href={mediaManagementSettingsPageLink}>
-                    <Button variant="contained" color="secondary">
-                        Go to media management settings
-                    </Button>
-                </Link>
+                <Box
+                    mt={4}
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    gap={2}
+                >
+                    <Typography
+                        variant="h3"
+                        fontWeight="normal"
+                        textAlign="center"
+                    >
+                        You do not have any media yet!
+                    </Typography>
+                    <Link href={addTalksPageLink}>
+                        <Button variant="contained" color="primary">
+                            Go add some media!
+                        </Button>
+                    </Link>
+                    <Link href={mediaManagementSettingsPageLink}>
+                        <Button variant="contained" color="secondary">
+                            Go to media management settings
+                        </Button>
+                    </Link>
+                </Box>
             </Box>
         );
     }
 
-    return <YourMediaGrid initialData={events} />;
+    return (
+        <Box
+            sx={{
+                paddingX: 4,
+                paddingY: 2,
+            }}
+        >
+            <YourMediaGrid initialData={events} />
+        </Box>
+    );
 };
+
+// required for not to fail the build because api
+export const dynamic = 'force-dynamic';
 
 export default Home;

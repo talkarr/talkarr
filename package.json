@@ -8,7 +8,7 @@
       "dev": "npm run dev:nodemon",
       "build:next": "next build",
       "build": "npm run build:next",
-      "start": "ts-node --project backend/tsconfig.json -r tsconfig-paths/register backend/index.ts",
+      "start": "NODE_ENV=production ts-node --project backend/tsconfig.json -r tsconfig-paths/register backend/index.ts",
       "start:prod": "prisma migrate deploy && npm run start",
       "lint": "next lint",
       "typecheck:web": "tsc --noEmit",
@@ -100,5 +100,15 @@
    },
    "engines": {
       "node": ">=22"
+   },
+   "nodemonConfig": {
+      "watch": [
+         "backend/**/*.ts"
+      ],
+      "ignore": [
+         ".next",
+         "src"
+      ],
+      "legacyWatch": true
    }
 }

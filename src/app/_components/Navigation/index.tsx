@@ -155,8 +155,6 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                     sx={{
                         marginTop: `${appbarHeight}px`,
                         marginLeft: `${drawerWidth}px`,
-                        paddingX: 4,
-                        paddingY: 2,
                         width: `calc(100% - ${drawerWidth}px)`,
                     }}
                 >

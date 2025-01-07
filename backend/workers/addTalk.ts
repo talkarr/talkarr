@@ -87,7 +87,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
         );
 
         videoSubprocess.on('spawn', () => {
-            log.info('Video download started:', talk.title);
+            log.info('Video download started:', { title: talk.title });
         });
 
         let lastProgress = 0;

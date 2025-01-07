@@ -1,4 +1,4 @@
-import { getTalkByGuid } from '@backend/helper';
+import { getTalkFromApiByGuid } from '@backend/helper';
 import rootLog from '@backend/rootLog';
 import { updateTalk } from '@backend/talks';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
@@ -22,7 +22,7 @@ const handleUpdateEventRequest = async (
         return;
     }
 
-    const talk = await getTalkByGuid(guid);
+    const talk = await getTalkFromApiByGuid(guid);
 
     if (!talk) {
         log.error('Talk not found.');

@@ -512,3 +512,55 @@ export const setDownloadExitCode = async (
         await prisma.$disconnect();
     }
 };
+
+export const getSpecificTalkByGuid = async (
+    guid: string,
+): Promise<ExtendedDbEvent | null> => {
+    const prisma = new PrismaClient();
+
+    try {
+        return await prisma.event.findUnique({
+            where: {
+                guid,
+            },
+            include: {
+                persons: true,
+                tags: true,
+                conference: true,
+                root_folder: true,
+            },
+        });
+    } catch (error) {
+        log.error('Error getting specific talk', error);
+
+        return null;
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+
+export const getSpecificTalkBySlug = async (
+    slug: string,
+): Promise<ExtendedDbEvent | null> => {
+    const prisma = new PrismaClient();
+
+    try {
+        return await prisma.event.findFirst({
+            where: {
+                slug,
+            },
+            include: {
+                persons: true,
+                tags: true,
+                conference: true,
+                root_folder: true,
+            },
+        });
+    } catch (error) {
+        log.error('Error getting specific talk', error);
+
+        return null;
+    } finally {
+        await prisma.$disconnect();
+    }
+}
