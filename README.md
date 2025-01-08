@@ -1,4 +1,6 @@
 ![GitHub License](https://img.shields.io/github/license/talkarr/talkarr?style=for-the-badge&color=%239b69ff)
+![GitHub Workflow Status for CI](https://img.shields.io/github/actions/workflow/status/talkarr/talkarr/ci.yml?style=for-the-badge&label=CI)
+![GitHub Workflow Status for Docs](https://img.shields.io/github/actions/workflow/status/talkarr/talkarr/docs.yml?style=for-the-badge&label=Docs)
 
 <p align="center">
 <img src="assets/logo_with_text.png" alt="Talkarr Logo" width="300"/>
