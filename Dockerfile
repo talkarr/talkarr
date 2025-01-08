@@ -45,7 +45,14 @@ RUN chown -R nextjs:nodejs /app/logs
 
 USER nextjs
 
-COPY --from=builder /app/node_modules ./node_modules
+# use these for non-standalone output
+# COPY --from=builder /app/node_modules ./node_modules
+# COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+# COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+
+# use these for standalone output
+COPY --from=builder /app/.next/standalone/.next ./.next
+COPY --from=builder /app/.next/standalone/node_modules ./node_modules
 
 COPY --from=builder /app/backend ./backend
 
@@ -53,13 +60,9 @@ COPY --from=builder /app/prisma ./prisma
 
 COPY --from=builder /app/public ./public
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-
-COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
-
 COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
 
-# backend.json
+# backend.json openapi file
 COPY --from=builder --chown=nextjs:nodejs /app/backend.json ./backend.json
 
 EXPOSE 3232
