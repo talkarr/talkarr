@@ -153,13 +153,12 @@ jobs:
       contents: read
       attestations: write
       id-token: write
+    env:
+      container_sha: ${{ needs.build-linux-container.outputs.sha }}
     needs:
       - build-linux-container
       - lint-and-test
     steps:
-      - name: Get container sha from build step
-        run: echo "container_sha=$(echo ${{ needs.build-linux-container.outputs.sha }})" >> $GITHUB_ENV
-
       - name: Check if the container sha is available
         run: |
           if [ -z "${{ env.container_sha }}" ]; then
