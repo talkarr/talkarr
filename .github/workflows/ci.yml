@@ -42,6 +42,9 @@ jobs:
           sarif_file: eslint-results.sarif
           wait-for-processing: true
 
+      - name: Run type checks
+        run: yarn typecheck
+
   typecheck:
     runs-on: ubuntu-latest
     steps:

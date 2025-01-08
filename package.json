@@ -52,7 +52,6 @@
       "pg": "^8.4.0",
       "pretty-bytes": "^6.1.1",
       "prisma": "^6.1.0",
-      "progress-estimator": "^0.3.1",
       "react": "^19.0.0",
       "react-dom": "^19.0.0",
       "react-markdown": "^9.0.1",
