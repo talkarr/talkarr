@@ -10,6 +10,10 @@ Talkarr is a program that allows you to download talks from media.ccc.de. It is 
 
 You can find the documentation for the project hosted at [wiki.talkarr.app](https://wiki.talkarr.app).
 
+## Installation
+
+You can find the installation instructions for the project hosted at [wiki.talkarr.app](https://wiki.talkarr.app/deployment/).
+
 ## About
 
 This project was started as a way to download talks because I was not able to go to 38c3.
