@@ -53,6 +53,7 @@ USER nextjs
 # use these for standalone output
 COPY --from=builder /app/.next/standalone/.next ./.next
 COPY --from=builder /app/.next/standalone/node_modules ./node_modules
+COPY --from=builder /app/.next/standalone/package.json ./package.json
 
 COPY --from=builder /app/backend ./backend
 
