@@ -17,8 +17,6 @@ const nextConfig = async (): Promise<NextConfig> => {
         require.resolve('prisma'),
         // ts-node
         require.resolve('ts-node'),
-        // dotenv-cli
-        require.resolve('dotenv-cli'),
     ]);
 
     return {
