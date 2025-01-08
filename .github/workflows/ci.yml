@@ -100,13 +100,15 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
 
       - name: Generate DOCKER_IMAGE variable
+        env:
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
         run: |
           DOCKER_IMAGE="${{ github.repository }}"
           FLAVOR="latest"
 
           # if the branch is not main, add the branch name to the image
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then
-              BRANCH_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///')
+              BRANCH_NAME=$(echo $BRANCH_NAME | sed 's/[^a-zA-Z0-9]/-/g' | sed 's/^-//g' | sed 's/-*$//g')
               DOCKER_IMAGE="${DOCKER_IMAGE}:${BRANCH_NAME}"
               FLAVOR=""
           fi
