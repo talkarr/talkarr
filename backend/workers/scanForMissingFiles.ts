@@ -1,10 +1,20 @@
-import { doesTalkHaveExistingFiles } from '@backend/fs';
+import pathUtils from 'path';
+
+import { startAddTalk } from '@backend/workers/addTalk';
+import { startGenerateMissingNfo } from '@backend/workers/generateMissingNfo';
+
+import { doesEventHaveNfoFile, doesTalkHaveExistingFiles } from '@backend/fs';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
 import type { ExtendedDbEvent } from '@backend/talks';
-import { createNewTalkInfo, listTalks, setIsDownloading } from '@backend/talks';
-import { startAddTalk } from '@backend/workers/addTalk';
+import {
+    addDownloadedFile,
+    checkIfFileIsInDb,
+    createNewTalkInfo,
+    listTalks,
+    setIsDownloading,
+} from '@backend/talks';
 
 export const taskName = 'scanForMissingFiles';
 
@@ -25,6 +35,8 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
     for await (const talk of talks) {
         const hasFiles = await doesTalkHaveExistingFiles(talk);
 
+        const hasNfo = await doesEventHaveNfoFile(talk);
+
         log.info(
             `${talk.title} ${hasFiles ? 'has files' : 'is missing files'}`,
         );
@@ -40,6 +52,41 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
             startAddTalk({ talk });
         } else {
             await setIsDownloading(talk.eventInfoGuid, false);
+
+            for await (const file of hasFiles) {
+                const fileIsInDb = await checkIfFileIsInDb(
+                    talk.guid,
+                    file.path,
+                );
+
+                log.info('Found file', {
+                    title: talk.title,
+                    file,
+                    fileIsInDb,
+                });
+
+                if (!fileIsInDb) {
+                    const addFileToDbResult = await addDownloadedFile(talk, {
+                        path: file.path,
+                        filename: pathUtils.basename(file.path),
+                        url: talk.frontend_link,
+                        created: file.created_at,
+                        mime: file.mime,
+                        bytes: file.size,
+                        is_video: file.isVideo,
+                    });
+
+                    if (!addFileToDbResult) {
+                        log.error('Error adding file to db:', talk.title);
+
+                        throw new Error('Error adding file to db');
+                    }
+                }
+            }
+        }
+
+        if (!hasNfo) {
+            startGenerateMissingNfo({ talk });
         }
     }
 

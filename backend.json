@@ -347,7 +347,8 @@
                     },
                     "duration": {
                         "type": "integer",
-                        "example": 0
+                        "example": 0,
+                        "description": "Length in seconds"
                     },
                     "thumb_url": {
                         "type": "string",
@@ -537,6 +538,19 @@
                     "root_folder": {
                         "type": "string",
                         "example": "/folder"
+                    },
+                    "url":  {
+                        "type": "string",
+                        "example": "https://example.com/file.jpg"
+                    },
+                    "created": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "is_video":  {
+                        "type": "boolean",
+                        "example": false
                     }
                 },
                 "required": [
@@ -544,7 +558,10 @@
                     "filename",
                     "size",
                     "mime_type",
-                    "root_folder"
+                    "root_folder",
+                    "url",
+                    "created",
+                    "is_video"
                 ]
             },
             "TalkInfo": {
@@ -580,6 +597,10 @@
                         "type": "string",
                         "example": "/folder",
                         "description": "Root folder for files"
+                    },
+                    "folder": {
+                        "type": "string",
+                        "example": "/folder"
                     }
                 },
                 "required": [
@@ -588,7 +609,8 @@
                     "is_downloading",
                     "has_files",
                     "files",
-                    "root_folder"
+                    "root_folder",
+                    "folder"
                 ]
             },
             "GenericServerError": {
@@ -1107,11 +1129,15 @@
                                                         },
                                                         "talk": {
                                                             "$ref": "#/components/schemas/Event"
+                                                        },
+                                                        "info": {
+                                                            "$ref": "#/components/schemas/TalkInfo"
                                                         }
                                                     },
                                                     "required": [
                                                         "db",
-                                                        "talk"
+                                                        "talk",
+                                                        "info"
                                                     ]
                                                 }
                                             },

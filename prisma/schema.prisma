@@ -42,6 +42,9 @@ model File {
   filename String
   url      String
   created  DateTime @default(now())
+  mime     String
+  bytes    Int
+  is_video Boolean
 
   event     Event  @relation(fields: [eventGuid], references: [guid])
   eventGuid String

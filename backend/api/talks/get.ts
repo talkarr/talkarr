@@ -1,7 +1,11 @@
 import { getTalkFromApiByGuid } from '@backend/helper';
 import rootLog from '@backend/rootLog';
 import type { ExtendedDbEvent } from '@backend/talks';
-import { getSpecificTalkByGuid, getSpecificTalkBySlug } from '@backend/talks';
+import {
+    getSpecificTalkByGuid,
+    getSpecificTalkBySlug,
+    getTalkInfoByGuid,
+} from '@backend/talks';
 import type {
     ConvertDateToStringType,
     ExpressRequest,
@@ -48,8 +52,14 @@ const handleGetEventRequest = async (
 
     const talkData = await getTalkFromApiByGuid(event.guid, 'talks/get');
 
-    if (!talkData) {
-        log.error('Talk not found in API.');
+    const talkInfo = await getTalkInfoByGuid(event.guid);
+
+    if (!talkData || !talkInfo) {
+        log.error('Talk not found in API.', {
+            guid: event.guid,
+            isTalkDataNull: talkData === null,
+            isTalkInfoNull: talkInfo === null,
+        });
 
         res.status(404).json({
             success: false,
@@ -68,6 +78,7 @@ const handleGetEventRequest = async (
                 tags: event.tags.map(tag => tag.name),
             },
             talk: talkData,
+            info: talkInfo,
         },
     });
 };

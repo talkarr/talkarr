@@ -1,9 +1,10 @@
-import fs from 'fs/promises';
+import fs_promises from 'fs/promises';
+import mime from 'mime-types';
 import pathUtils from 'path';
 import youtubeDl from 'youtube-dl-exec';
 
-import { getFolderPathForTalk } from '@backend/fs';
-import { generateNfo } from '@backend/helper/nfo';
+import { getFolderPathForTalk, isVideoFile } from '@backend/fs';
+import { generateNfo, handleNfoGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
@@ -149,10 +150,16 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
             throw new Error('No path found');
         }
 
+        const videoStats = await fs_promises.stat(path);
+
         const addFileToDbResult = await addDownloadedFile(talk, {
             path,
             filename: pathUtils.basename(path),
             url: talk.frontend_link,
+            created: videoStats.birthtime,
+            mime: mime.lookup(path) || 'application/octet-stream',
+            bytes: videoStats.size,
+            is_video: isVideoFile(path),
         });
 
         if (!addFileToDbResult) {
@@ -166,14 +173,18 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
             throw new Error('Error adding file to db');
         }
 
-        log.info('Generating NFO file...');
+        const addNfoToDbResult = await handleNfoGeneration(folder, talk);
 
-        const nfoContent = generateNfo(talk);
+        if (!addNfoToDbResult) {
+            log.error('Error adding nfo to db:', talk.title);
 
-        // write nfo file
-        await fs.writeFile(pathUtils.join(folder, 'talk.nfo'), nfoContent);
+            await setDownloadError(
+                talk.eventInfoGuid,
+                'Error adding nfo to db',
+            );
 
-        log.info('NFO file generated.');
+            throw new Error('Error adding nfo to db');
+        }
 
         await setDownloadError(talk.eventInfoGuid, stderrBuffer);
 

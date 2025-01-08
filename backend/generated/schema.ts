@@ -402,6 +402,7 @@ export interface paths {
                             data: {
                                 db: components["schemas"]["ExtendedDbEvent"];
                                 talk: components["schemas"]["Event"];
+                                info: components["schemas"]["TalkInfo"];
                             };
                         };
                     };
@@ -907,6 +908,15 @@ export interface components {
             mime_type: string | null;
             /** @example /folder */
             root_folder: string;
+            /** @example https://example.com/file.jpg */
+            url: string;
+            /**
+             * Format: date-time
+             * @example 2022-01-01T00:00:00Z
+             */
+            created: string;
+            /** @example false */
+            is_video: boolean;
         };
         TalkInfo: {
             /** @example Event title */
@@ -933,6 +943,8 @@ export interface components {
              * @example /folder
              */
             root_folder: string;
+            /** @example /folder */
+            folder: string;
         };
         GenericServerError: {
             /**

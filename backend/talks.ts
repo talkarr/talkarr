@@ -1,7 +1,3 @@
-import { getDownloadedFileInfo } from '@backend/fs';
-import type { components } from '@backend/generated/schema';
-import { getConferenceFromEvent } from '@backend/helper';
-import rootLog from '@backend/rootLog';
 import type {
     Conference,
     Event as DbEvent,
@@ -11,6 +7,12 @@ import type {
     RootFolder,
     Tag,
 } from '@prisma/client';
+
+import { getFolderPathForTalk, isVideoFile } from '@backend/fs';
+import type { components } from '@backend/generated/schema';
+import { getConferenceFromEvent } from '@backend/helper';
+import rootLog from '@backend/rootLog';
+
 import { Prisma, PrismaClient } from '@prisma/client';
 
 const log = rootLog.child({ label: 'talks' });
@@ -258,25 +260,35 @@ export const getTalkInfoByGuid = async (
                 root_folder: true,
                 file: true,
                 eventInfo: true,
+                conference: true,
             },
         });
 
         if (!result) {
+            log.warn('Talk not found', guid);
+            return null;
+        }
+
+        const folder = await getFolderPathForTalk(result);
+
+        if (!folder) {
+            log.warn('Folder not found for talk', result.title);
             return null;
         }
 
         const mappedFiles = await Promise.all(
-            result.file.map(async file => {
-                const fileInfo = await getDownloadedFileInfo(file.path);
-
-                return {
+            result.file.map<Promise<components['schemas']['DownloadedFile']>>(
+                async file => ({
                     filename: file.filename,
                     root_folder: result.root_folder.path,
                     path: file.path,
-                    size: fileInfo.size,
-                    mime_type: fileInfo.mime_type,
-                } as components['schemas']['DownloadedFile'];
-            }),
+                    size: file.bytes,
+                    mime_type: file.mime,
+                    url: file.url,
+                    created: file.created as unknown as string,
+                    is_video: isVideoFile(file.path),
+                }),
+            ),
         );
 
         return {
@@ -286,6 +298,7 @@ export const getTalkInfoByGuid = async (
             download_progress: result.eventInfo.download_progress,
             is_downloading: result.eventInfo.is_downloading,
             has_files: result.file.length > 0,
+            folder,
         };
     } catch (error) {
         log.error('Error getting talk info', error);
@@ -420,7 +433,7 @@ export const setIsDownloading = async (
 
 export const addDownloadedFile = async (
     event: DbEvent,
-    file: Omit<File, 'eventGuid' | 'created'>,
+    file: Omit<File, 'eventGuid'>,
 ): Promise<boolean> => {
     const prisma = new PrismaClient();
 
@@ -435,6 +448,10 @@ export const addDownloadedFile = async (
                 filename: file.filename,
                 url: file.url,
                 path: file.path,
+                bytes: file.bytes,
+                created: file.created,
+                mime: file.mime,
+                is_video: file.is_video,
             },
         });
     } catch (error) {
@@ -446,6 +463,30 @@ export const addDownloadedFile = async (
     }
 
     return true;
+};
+
+export const checkIfFileIsInDb = async (
+    eventGuid: DbEvent['guid'],
+    path: string,
+): Promise<boolean> => {
+    const prisma = new PrismaClient();
+
+    try {
+        const result = await prisma.file.findFirst({
+            where: {
+                eventGuid,
+                path,
+            },
+        });
+
+        return !!result;
+    } catch (error) {
+        log.error('Error checking if file is in db', error);
+
+        return false;
+    } finally {
+        await prisma.$disconnect();
+    }
 };
 
 export const setDownloadError = async (
@@ -537,7 +578,7 @@ export const getSpecificTalkByGuid = async (
     } finally {
         await prisma.$disconnect();
     }
-}
+};
 
 export const getSpecificTalkBySlug = async (
     slug: string,
@@ -563,4 +604,4 @@ export const getSpecificTalkBySlug = async (
     } finally {
         await prisma.$disconnect();
     }
-}
+};

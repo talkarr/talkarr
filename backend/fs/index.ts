@@ -1,35 +1,51 @@
 import fs_promises from 'fs/promises';
+import mime from 'mime-types';
 import pathUtils from 'path';
 
-import type { components } from '@backend/generated/schema';
+import { nfoFilename } from '@backend/helper/nfo';
 import rootLog from '@backend/rootLog';
 import type { ExtendedDbEvent } from '@backend/talks';
 
 // filePath: `${USER_DEFINED_ROOT_FOLDER}/${CONFERENCE}/${FILENAME}`
 
 // These file extensions are the ones provided by media.ccc.de.
-export const validFileExtensions = ['.mp4', '.webm'];
+export const validVideoFileExtensions = ['.mp4', '.webm'];
+
+export const validFileExtensions = [...validVideoFileExtensions, '.nfo'];
 
 const log = rootLog.child({ label: 'fs' });
 
+export interface ExistingFile {
+    path: string;
+    mime: string;
+    size: number;
+    isVideo: boolean;
+    created_at: Date;
+}
+
+export const isVideoFile = (filename: string): boolean => {
+    const ext = pathUtils.extname(filename).toLowerCase();
+
+    return validVideoFileExtensions.includes(ext);
+};
 export const doesTalkHaveExistingFiles = async (
     event: ExtendedDbEvent,
-): Promise<boolean> => {
+): Promise<ExistingFile[] | null> => {
     if (!event.rootFolderPath) {
         log.debug('Event does not have a root folder path');
-        return false;
+        return null;
     }
 
     try {
         await fs_promises.access(event.rootFolderPath);
     } catch {
         log.debug('Root folder path does not exist');
-        return false;
+        return null;
     }
 
     if (!event.conference.acronym || !event.slug) {
         log.debug('Event does not have a conference acronym or slug');
-        return false;
+        return null;
     }
 
     try {
@@ -38,7 +54,7 @@ export const doesTalkHaveExistingFiles = async (
         );
     } catch {
         log.debug('Conference folder does not exist');
-        return false;
+        return null;
     }
 
     const filePath = pathUtils.join(
@@ -52,29 +68,85 @@ export const doesTalkHaveExistingFiles = async (
         await fs_promises.access(filePath);
     } catch {
         log.debug('Folder does not exist');
-        return false;
+        return null;
     }
 
     // check if files exist
-    let fileExists = false;
+    const existingFiles: ExistingFile[] = [];
 
     for await (const extension of validFileExtensions) {
         try {
+            const file = pathUtils.join(filePath, `${event.slug}${extension}`);
+
             await fs_promises.access(
-                pathUtils.join(filePath, `${event.slug}${extension}`),
+                file,
+                // eslint-disable-next-line no-bitwise
+                fs_promises.constants.F_OK | fs_promises.constants.R_OK,
             );
 
-            fileExists = true;
+            const stats = await fs_promises.stat(file);
+
+            existingFiles.push({
+                path: file,
+                mime: mime.lookup(file) || 'application/octet-stream',
+                size: stats.size,
+                isVideo: isVideoFile(file),
+                created_at: stats.birthtime,
+            });
         } catch (error) {
             log.debug(`File ${event.slug}${extension} does not exist ${error}`);
         }
     }
 
-    return fileExists;
+    return existingFiles.length ? existingFiles : null;
+};
+
+export const doesEventHaveNfoFile = async (
+    event: ExtendedDbEvent,
+): Promise<boolean> => {
+    if (!event.rootFolderPath) {
+        return false;
+    }
+
+    try {
+        await fs_promises.access(event.rootFolderPath);
+    } catch {
+        return false;
+    }
+
+    if (!event.conference.acronym || !event.slug) {
+        return false;
+    }
+
+    try {
+        await fs_promises.access(
+            pathUtils.join(event.rootFolderPath, event.conference.acronym),
+        );
+    } catch {
+        return false;
+    }
+
+    const filePath = pathUtils.join(
+        event.rootFolderPath,
+        event.conference.acronym,
+        event.slug,
+    );
+
+    try {
+        await fs_promises.access(
+            pathUtils.join(filePath, nfoFilename),
+            // eslint-disable-next-line no-bitwise
+            fs_promises.constants.F_OK | fs_promises.constants.R_OK,
+        );
+
+        return true;
+    } catch {
+        return false;
+    }
 };
 
 export const getFolderPathForTalk = async (
-    event: ExtendedDbEvent,
+    event: Pick<ExtendedDbEvent, 'rootFolderPath' | 'slug' | 'conference'>,
 ): Promise<string | null> => {
     if (!event.rootFolderPath) {
         return null;
@@ -106,21 +178,3 @@ export const getFolderPathForTalk = async (
 
     return folderPath;
 };
-
-export const getDownloadedFileInfo = async (
-    path: string,
-): Promise<
-    Omit<
-        components['schemas']['DownloadedFile'],
-        'path' | 'root_folder' | 'filename'
-    >
-> => ({
-    size: (await fs_promises
-        .stat(path)
-        .then(stats => stats.size)
-        .catch(() => 0)) as number,
-    mime_type: (await fs_promises
-        .stat(path)
-        .then(stats => stats.isFile() && stats.mtime.toISOString())
-        .catch(() => null)) as string | null,
-});

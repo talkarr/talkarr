@@ -5,9 +5,7 @@ import type { SuccessData } from '@backend/types';
 
 import { getTalk } from '@/app/_api/talks/get';
 import { talkInfo } from '@/app/_api/talks/info';
-import TalkHeader from '@/app/(globalModals)/talks/[slug]/_components/TalkHeader';
-
-import Box from '@mui/material/Box';
+import TalkWrapper from '@/app/(globalModals)/talks/[slug]/_components/TalkWrapper';
 
 interface PageProps {
     params: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -54,14 +52,7 @@ const Page: NextPage<PageProps> = async ({ params }) => {
         notFound();
     }
 
-    return (
-        <Box display="flex" flexDirection="column" gap={1} width="100%">
-            <Box flex={1}>
-                <TalkHeader data={data} />
-            </Box>
-            <Box bgcolor="blue" flex={1} />
-        </Box>
-    );
+    return <TalkWrapper initialData={data} />;
 };
 
 export default Page;

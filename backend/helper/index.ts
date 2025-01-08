@@ -1,9 +1,10 @@
 // Helpers for fetching data from api.media.ccc.de
 
+import type { Conference } from '@prisma/client';
+
 import { cccApiBaseUrl } from '@backend/constants';
 import apiFetch from '@backend/fetch';
 import type { ApiEvent } from '@backend/talks';
-import type { Conference } from '@prisma/client';
 
 export const getTalkFromApiByGuid = async (
     guid: string,

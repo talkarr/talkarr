@@ -11,6 +11,8 @@ import { enqueueSnackbar } from 'notistack';
 import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { addEvent } from '@/app/_api/talks/add';
 
+import { formatVideoDuration } from '@/utils/string';
+
 import { useUiStore } from '@/providers/uiStoreProvider';
 
 import BaseModal from '@components/CustomModal';
@@ -93,6 +95,14 @@ const AddTalkModal: FC = () => {
         }
     }, [open]);
 
+    const formattedLength = useMemo(() => {
+        if (!addTalkModal?.duration) {
+            return '';
+        }
+
+        return formatVideoDuration(addTalkModal.duration);
+    }, [addTalkModal?.duration]);
+
     return (
         <BaseModal open={open} onClose={close} title={title} moreWidth divider>
             <Box
@@ -117,6 +127,12 @@ const AddTalkModal: FC = () => {
                         </Typography>
                         <Typography variant="body1">
                             {moment(addTalkModal?.date).format('MMMM D, YYYY')}
+                        </Typography>
+                        <Typography variant="body1" fontWeight="bold">
+                            Duration:
+                        </Typography>
+                        <Typography variant="body1">
+                            {formattedLength}
                         </Typography>
                         <Typography variant="body1" fontWeight="bold">
                             Conference:
