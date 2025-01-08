@@ -134,7 +134,7 @@ jobs:
       - name: Output sha of the container
         id: sha
         run: |
-          sha=$(docker inspect ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.tags }} --format='{{.Id}}')
+          sha=$(docker inspect ${{ steps.meta.outputs.tags }} --format='{{.Id}}')
           
           if [ -z "${sha}" ]; then
               echo "Failed to get the sha of the container"
