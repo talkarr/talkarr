@@ -22,6 +22,8 @@ const nextConfig = async (): Promise<NextConfig> => {
         require.resolve('minimist'),
         // ts-node
         require.resolve('ts-node'),
+        // typescript
+        require.resolve('typescript'),
     ]);
 
     const additionalTracedFiles = [
