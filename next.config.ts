@@ -17,6 +17,8 @@ const nextConfig = async (): Promise<NextConfig> => {
         require.resolve('prisma'),
         // ts-node
         require.resolve('ts-node'),
+        // dotenv-cli
+        require.resolve('dotenv-cli'),
     ]);
 
     return {
@@ -42,6 +44,7 @@ const nextConfig = async (): Promise<NextConfig> => {
                 ...additionalTracedFiles,
                 './node_modules/.bin/prisma',
                 './node_modules/.bin/ts-node',
+                './node_modules/.bin/dotenv',
             ],
         },
         compiler:
