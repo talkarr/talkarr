@@ -1,10 +1,8 @@
 ![GitHub License](https://img.shields.io/github/license/talkarr/talkarr?style=for-the-badge&color=%239b69ff)
 
 <p align="center">
-<img src="assets/logo.png" alt="Talkarr Logo" width="300"/>
+<img src="assets/logo_with_text.png" alt="Talkarr Logo" width="300"/>
 </p>
-
-# Talkarr
 
 A *arr style program for downloading talks from media.ccc.de.
 
