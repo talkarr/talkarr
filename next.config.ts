@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
         API_BASE_URL: apiBaseUrl,
     },
     // TODO: Try to enable standalone when everything else works
-    // output: 'standalone',
+    output: 'standalone',
     devIndicators: {
         appIsrStatus: true,
         buildActivity: true,
