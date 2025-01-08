@@ -51,6 +51,7 @@ jobs:
         run: |
           yarn typecheck
 
+# Do not ask me why this one is broken
 #  typecheck:
 #    runs-on: ubuntu-latest
 #    permissions:
@@ -224,8 +225,7 @@ jobs:
     needs:
       - build-linux-container
       - test
-      # uncomment when typecheck works
-      # - typecheck
+      - lint
     steps:
       - uses: actions/checkout@v4
 
