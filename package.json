@@ -63,7 +63,11 @@
       "winston": "^3.17.0",
       "winston-daily-rotate-file": "^5.0.0",
       "youtube-dl-exec": "^3.0.12",
-      "zustand": "^5.0.2"
+      "zustand": "^5.0.2",
+      "typescript": "^5",
+      "tsconfig-paths": "^4.2.0",
+      "dotenv": "^16.4.7",
+      "dotenv-cli": "^8.0.0"
    },
    "devDependencies": {
       "@eslint/compat": "^1.2.4",
@@ -83,8 +87,6 @@
       "@types/swagger-ui": "^3.52.4",
       "@types/swagger-ui-express": "^4.1.7",
       "@vercel/nft": "^0.29.0",
-      "dotenv": "^16.4.7",
-      "dotenv-cli": "^8.0.0",
       "eslint": "^9",
       "eslint-config-airbnb-base": "^15.0.0",
       "eslint-config-airbnb-typescript": "^18.0.0",
@@ -102,8 +104,6 @@
       "prettier": "^3.4.2",
       "ts-jest": "^29.2.5",
       "ts-node-dev": "^2.0.0",
-      "tsconfig-paths": "^4.2.0",
-      "typescript": "^5",
       "typescript-eslint": "^8.18.2"
    },
    "engines": {
