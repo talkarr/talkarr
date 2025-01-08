@@ -15,8 +15,6 @@ const nextConfig = async (): Promise<NextConfig> => {
         // prisma.io
         require.resolve('@prisma/client'),
         require.resolve('prisma'),
-        // ts-node
-        require.resolve('ts-node'),
     ]);
 
     return {
@@ -41,9 +39,11 @@ const nextConfig = async (): Promise<NextConfig> => {
             '**': [
                 ...additionalTracedFiles,
                 './node_modules/.bin/prisma',
+                // ts-node
+                './node_modules/ts-node/**',
                 './node_modules/.bin/ts-node',
                 // dotenv-cli
-                './node_modules/dotenv-cli/bin/cli.js',
+                './node_modules/dotenv-cli/**',
                 './node_modules/.bin/dotenv',
             ],
         },
