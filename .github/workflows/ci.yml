@@ -141,6 +141,8 @@ jobs:
               exit 1
           fi
           
+          echo "ref=${ref}"
+          
           # output sha
           echo "ref=${ref}" >> $GITHUB_OUTPUT
 
@@ -213,6 +215,16 @@ jobs:
 
       - name: Start Docker container
         run: |
+          # Make sure the .env file is not empty
+          if [ ! -s .env ]; then
+              echo "The .env file is empty"
+              exit 1
+          fi
+          
+          cat .env
+          
+          rm -f .dockerignore
+          
           docker run --rm --env-file .env ${{ env.container_ref }}
 
       - name: Run E2E tests
