@@ -11,11 +11,27 @@ import { nodeFileTrace } from '@vercel/nft';
 const require = createRequire(import.meta.url);
 
 const nextConfig = async (): Promise<NextConfig> => {
-    const { fileList: additionalTracedFiles } = await nodeFileTrace([
+    const { fileList } = await nodeFileTrace([
         // prisma.io
         require.resolve('@prisma/client'),
         require.resolve('prisma'),
+        // dotenv-cli
+        require.resolve('cross-spawn'),
+        require.resolve('dotenv'),
+        require.resolve('dotenv-expand'),
+        require.resolve('minimist'),
     ]);
+
+    const additionalTracedFiles = [
+        ...fileList,
+        './node_modules/.bin/prisma',
+        // ts-node
+        './node_modules/ts-node/**',
+        './node_modules/.bin/ts-node',
+        // dotenv-cli
+        './node_modules/dotenv-cli/**',
+        './node_modules/.bin/dotenv',
+    ];
 
     return {
         /* config options here */
@@ -36,16 +52,7 @@ const nextConfig = async (): Promise<NextConfig> => {
             buildActivityPosition: 'bottom-right',
         },
         outputFileTracingIncludes: {
-            '**': [
-                ...additionalTracedFiles,
-                './node_modules/.bin/prisma',
-                // ts-node
-                './node_modules/ts-node/**',
-                './node_modules/.bin/ts-node',
-                // dotenv-cli
-                './node_modules/dotenv-cli/**',
-                './node_modules/.bin/dotenv',
-            ],
+            '**': additionalTracedFiles,
         },
         compiler:
             process.env.NODE_ENV === 'production'
