@@ -71,4 +71,4 @@ EXPOSE 3232
 ENV PORT=3232
 
 ENV HOSTNAME="0.0.0.0"
-CMD ["yarn", "start:prod"]
+CMD ["DATABASE_URL=$DATABASE_URL", "yarn", "start:prod"]
