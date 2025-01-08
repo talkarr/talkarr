@@ -57,6 +57,15 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive --prefer-offline
 
+      - name: Make sure that tsconfig.json exists
+        run: |
+          if [ ! -f tsconfig.json ]; then
+              echo "tsconfig.json does not exist"
+              exit 1
+          fi
+          
+          cat src/app/icon.svg
+
       - name: Run generate and check if something changed
         run: yarn generate && git diff --exit-code
 
