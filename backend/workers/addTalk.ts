@@ -1,10 +1,12 @@
 import fs_promises from 'fs/promises';
 import mime from 'mime-types';
 import pathUtils from 'path';
+import typia from 'typia';
 import youtubeDl from 'youtube-dl-exec';
 
+import { startGenerateMissingNfo } from '@backend/workers/generateMissingNfo';
+
 import { getFolderPathForTalk, isVideoFile } from '@backend/fs';
-import { generateNfo, handleNfoGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
@@ -26,10 +28,18 @@ export interface AddTalkData {
     talk: ExtendedDbEvent;
 }
 
+export const check = typia.createIs<AddTalkData>();
+
 const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
     log.info('Adding talk...');
 
     const { talk } = job.data;
+
+    if (!check(job.data)) {
+        log.error('Invalid data:', job.data);
+
+        throw new Error('Invalid data');
+    }
 
     await clearDownloadError(talk.eventInfoGuid);
 
@@ -173,18 +183,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
             throw new Error('Error adding file to db');
         }
 
-        const addNfoToDbResult = await handleNfoGeneration(folder, talk);
-
-        if (!addNfoToDbResult) {
-            log.error('Error adding nfo to db:', talk.title);
-
-            await setDownloadError(
-                talk.eventInfoGuid,
-                'Error adding nfo to db',
-            );
-
-            throw new Error('Error adding nfo to db');
-        }
+        startGenerateMissingNfo({ talk });
 
         await setDownloadError(talk.eventInfoGuid, stderrBuffer);
 

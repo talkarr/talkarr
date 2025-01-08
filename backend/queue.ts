@@ -1,4 +1,5 @@
 import type { DoneCallback, Job } from 'bull';
+
 import Queue from 'bull';
 
 import { redisConnection } from '@backend/redis';

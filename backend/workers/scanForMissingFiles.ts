@@ -1,4 +1,5 @@
 import pathUtils from 'path';
+import typia, { tags } from 'typia';
 
 import { startAddTalk } from '@backend/workers/addTalk';
 import { startGenerateMissingNfo } from '@backend/workers/generateMissingNfo';
@@ -24,11 +25,19 @@ export interface ScanForMissingFilesData {
     event?: ExtendedDbEvent;
 }
 
+export const check = typia.createIs<ScanForMissingFilesData>();
+
 const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
     job,
     done,
-) => {
+): Promise<void> => {
     log.info('Scanning for missing files...');
+
+    if (!check(job.data)) {
+        log.error('Invalid data:', job.data);
+
+        throw new Error('Invalid data');
+    }
 
     const talks = job.data.event ? [job.data.event] : await listTalks();
 

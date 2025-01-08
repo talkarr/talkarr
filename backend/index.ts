@@ -8,6 +8,7 @@ import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
 
 import '@backend/workers/addTalk';
+import '@backend/workers/generateMissingNfo';
 import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
 
 import api from '@backend/api';

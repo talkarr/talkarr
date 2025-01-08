@@ -1,3 +1,5 @@
+import typia from 'typia';
+
 import { getFolderPathForTalk } from '@backend/fs';
 import { handleNfoGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
@@ -13,11 +15,19 @@ export interface GenerateMissingNfoData {
     talk: ExtendedDbEvent;
 }
 
+export const check = typia.createIs<GenerateMissingNfoData>();
+
 const generateMissingNfo: TaskFunction<GenerateMissingNfoData> = async (
     job,
     done,
 ) => {
     const { talk } = job.data;
+
+    if (!check(job.data)) {
+        log.error('Invalid data:', job.data);
+
+        throw new Error('Invalid data');
+    }
 
     try {
         const folder = await getFolderPathForTalk(talk);
