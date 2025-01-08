@@ -121,6 +121,13 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
+      - name: Output sha of the container
+        id: sha
+        run: echo "sha=$(echo ${{ steps.docker_build.outputs.tags }} | cut -d ':' -f 2)" >> $GITHUB_ENV
+
+    outputs:
+      sha: ${{ steps.sha.outputs.sha }}
+
   run-e2e-tests:
     runs-on: ubuntu-latest
     permissions:
@@ -173,7 +180,7 @@ jobs:
 
       - name: Get container sha from build step
         id: meta
-        run: echo "container_sha=$(echo ${{ needs.build-linux-container.outputs.tags }} | cut -d ':' -f 2)" >> $GITHUB_ENV
+        run: echo "container_sha=$(echo ${{ needs.build-linux-container.outputs.sha }})" >> $GITHUB_ENV
 
       - name: Pull Docker image
         run: |
