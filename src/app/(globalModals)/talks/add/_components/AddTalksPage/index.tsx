@@ -5,6 +5,8 @@ import Link from 'next/link';
 import type { FC } from 'react';
 import React, { useMemo, useRef, useState } from 'react';
 
+import type { ExtractSuccessData, SuccessData } from '@backend/types';
+
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
 import type { AddTalksSearchRef } from '@/app/(globalModals)/talks/add/_components/AddTalksSearch';
 import AddTalksSearch from '@/app/(globalModals)/talks/add/_components/AddTalksSearch';
@@ -16,7 +18,6 @@ import useSearchExample from '@/hooks/useSearchExample';
 
 import { mediaManagementSettingsPageLink } from '@/constants';
 
-import type { ExtractSuccessData, SuccessData } from '@backend/types';
 import { Sort } from '@components/SearchTextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';

@@ -1,5 +1,7 @@
 'use client';
 
+import type { InputBaseProps } from '@mui/material';
+
 import type { FC } from 'react';
 
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -7,7 +9,6 @@ import ClearIcon from '@mui/icons-material/Clear';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import SearchIcon from '@mui/icons-material/Search';
-import type { InputBaseProps } from '@mui/material';
 import { alpha, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';

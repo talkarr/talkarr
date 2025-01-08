@@ -1,5 +1,10 @@
 'use client';
 
+import type {
+    NavigationItemType,
+    SimpleNavigationItem,
+} from '@components/Navigation';
+
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
@@ -7,10 +12,6 @@ import type { FC } from 'react';
 
 import { getFileRoutePath } from '@/utils/route';
 
-import type {
-    NavigationItemType,
-    SimpleNavigationItem,
-} from '@components/Navigation';
 import { styled } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';

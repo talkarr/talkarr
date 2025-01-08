@@ -1,3 +1,5 @@
+import type { Sort } from '@components/SearchTextField';
+
 import { useSearchParams } from 'next/navigation';
 
 import type { FC } from 'react';
@@ -8,14 +10,14 @@ import React, {
     useState,
 } from 'react';
 
+import type { ExtractSuccessData } from '@backend/types';
+
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
 
 import useSearchExample from '@/hooks/useSearchExample';
 
 import { useApiStore } from '@/providers/apiStoreProvider';
 
-import type { ExtractSuccessData } from '@backend/types';
-import type { Sort } from '@components/SearchTextField';
 import SearchTextField from '@components/SearchTextField';
 import Box from '@mui/material/Box';
 import { useDebounce } from '@uidotdev/usehooks';

@@ -1,5 +1,7 @@
 'use client';
 
+import type { BadgeProps } from '@mui/material';
+
 import type { FC } from 'react';
 import { useMemo } from 'react';
 import Markdown from 'react-markdown';
@@ -16,7 +18,6 @@ import CustomBadge from '@components/CustomBadge';
 // eslint-disable-next-line import/no-cycle
 import TalkImage from '@components/TalkImage';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import type { BadgeProps } from '@mui/material';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';

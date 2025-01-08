@@ -1,3 +1,5 @@
+import type SvgIcon from '@mui/material/SvgIcon/SvgIcon';
+
 import type { FC, PropsWithChildren } from 'react';
 import { Fragment } from 'react';
 
@@ -20,7 +22,6 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import type SvgIcon from '@mui/material/SvgIcon/SvgIcon';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 

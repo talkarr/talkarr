@@ -1,9 +1,10 @@
-import deepmerge from 'deepmerge';
+import type { ButtonProps } from '@mui/material';
 import type { PartialDeep } from 'type-fest';
+
+import deepmerge from 'deepmerge';
 import { createStore } from 'zustand';
 
 import type { SuccessData } from '@backend/types';
-import type { ButtonProps } from '@mui/material';
 
 export type TalkData = SuccessData<'/talks/search', 'get'>['events'][0];
 

@@ -1,6 +1,6 @@
-import api from '@/utils/api';
-
 import type { RequestBody } from '@backend/types';
+
+import api from '@/utils/api';
 
 export type AddEventBody = RequestBody<'/talks/add'>;
 

@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 
 import type { SuccessData } from '@backend/types';
+
 import MediaItem from '@components/YourMediaGrid/MediaItem';
 import { Grid2 } from '@mui/material';
 

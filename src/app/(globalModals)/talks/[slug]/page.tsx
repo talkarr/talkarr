@@ -1,11 +1,12 @@
 import type { Metadata, NextPage } from 'next';
 import { notFound } from 'next/navigation';
 
+import type { SuccessData } from '@backend/types';
+
 import { getTalk } from '@/app/_api/talks/get';
 import { talkInfo } from '@/app/_api/talks/info';
 import TalkHeader from '@/app/(globalModals)/talks/[slug]/_components/TalkHeader';
 
-import type { SuccessData } from '@backend/types';
 import Box from '@mui/material/Box';
 
 interface PageProps {

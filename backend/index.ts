@@ -1,16 +1,18 @@
+import type { NextFunction, Request, Response } from 'express';
+
 import next from 'next';
 
 import cookieParser from 'cookie-parser';
-import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
 import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
 
-import './workers/addTalk';
+import '@backend/workers/addTalk';
+import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
+
 import api from '@backend/api';
 import rootLog from '@backend/rootLog';
 import { loadSettings } from '@backend/settings';
-import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -25,6 +27,7 @@ log.info('Preparing server...');
 
 app.prepare()
     .then(async () => {
+        log.info('Server prepared');
         const server = express();
 
         await loadSettings();

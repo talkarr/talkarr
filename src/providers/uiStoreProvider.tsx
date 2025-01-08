@@ -1,9 +1,10 @@
 'use client';
 
+import type { PartialDeep } from 'type-fest';
+
 import type { FC } from 'react';
 import React, { createContext, useContext, useRef } from 'react';
 
-import type { PartialDeep } from 'type-fest';
 import { useStore } from 'zustand';
 
 import type { UiState, UiStore } from '@/stores/uiStore';

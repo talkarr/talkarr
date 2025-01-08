@@ -11,6 +11,7 @@
       "start": "NODE_ENV=production ts-node --project backend/tsconfig.json -r tsconfig-paths/register backend/index.ts",
       "start:prod": "prisma migrate deploy && npm run start",
       "lint": "next lint",
+      "lint:fix": "next lint --fix",
       "typecheck:web": "tsc --noEmit",
       "typecheck:backend": "tsc --noEmit --project backend/tsconfig.json",
       "typecheck": "npm run typecheck:web && npm run typecheck:backend",

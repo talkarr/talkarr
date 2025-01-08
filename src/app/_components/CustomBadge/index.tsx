@@ -1,10 +1,11 @@
 'use client';
 
+import type { BadgeProps } from '@mui/material';
+
 import Image from 'next/image';
 
 import type { FC } from 'react';
 
-import type { BadgeProps } from '@mui/material';
 import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';

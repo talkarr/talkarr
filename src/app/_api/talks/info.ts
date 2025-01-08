@@ -1,6 +1,6 @@
-import api from '@/utils/api';
-
 import type { RequestParams } from '@backend/types';
+
+import api from '@/utils/api';
 
 export type TalksInfoParams = RequestParams<'/talks/info'>;
 

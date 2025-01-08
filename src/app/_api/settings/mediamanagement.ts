@@ -1,6 +1,6 @@
-import api from '@/utils/api';
-
 import type { RequestBody, RequestParams } from '@backend/types';
+
+import api from '@/utils/api';
 
 export type MediaManagementFilesArgs =
     RequestParams<'/settings/mediamanagement/files'>;

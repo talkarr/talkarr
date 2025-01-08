@@ -8,12 +8,13 @@ import { useEffect, useRef, useState } from 'react';
 
 import moment from 'moment';
 
+import type { SuccessData } from '@backend/types';
+
 import useOnScreen from '@/hooks/useOnScreen';
 
 import { longDateFormat, specificTalkPageLink } from '@/constants';
 import { useApiStore } from '@/providers/apiStoreProvider';
 
-import type { SuccessData } from '@backend/types';
 import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
 import { Grid2, styled } from '@mui/material';
 import Box from '@mui/material/Box';

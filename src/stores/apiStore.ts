@@ -1,5 +1,6 @@
-import deepmerge from 'deepmerge';
 import type { PartialDeep } from 'type-fest';
+
+import deepmerge from 'deepmerge';
 import { createStore } from 'zustand';
 
 import type { TalkInfoResponse } from '@/app/_api/talks/info';
