@@ -202,7 +202,9 @@ jobs:
       - name: Output sha of the container
         id: ref
         run: |
-          ref=$(docker manifest inspect -v ${{ steps.meta.outputs.tags }} | jq -r '.[0].Ref')
+          tags="${{ steps.meta.outputs.tags }}"
+          first_tag=$(echo $tags | cut -d ' ' -f 1)
+          ref=$(docker manifest inspect -v "$first_tag" | jq -r '.[0].Ref')
           
           if [ -z "${ref}" ]; then
               echo "Failed to get the sha of the container"
