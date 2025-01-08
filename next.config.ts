@@ -37,6 +37,8 @@ const nextConfig = async (): Promise<NextConfig> => {
         // dotenv-cli
         './node_modules/dotenv-cli/**',
         './node_modules/.bin/dotenv',
+        // @types/*
+        './node_modules/@types/**',
     ];
 
     return {
