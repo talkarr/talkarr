@@ -1,3 +1,5 @@
+name: CI
+
 on:
   push:
     branches:
@@ -49,6 +51,12 @@ jobs:
 
   typecheck:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+      checks: write
+      pull-requests: write
+      security-events: write
     steps:
       - uses: actions/checkout@v4
 
@@ -71,9 +79,6 @@ jobs:
 
       - name: Run generate and check if something changed
         run: yarn generate && git diff --exit-code
-
-      - name: Get typescript version
-        run: yarn tsc --version
 
       - name: Run type checks
         run: |
