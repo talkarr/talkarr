@@ -1,9 +1,11 @@
+import type { Event as DbEvent } from '.prisma/client';
+import type { Conference, Person, RootFolder, Tag } from '@prisma/client';
 import type express from 'express';
 import type * as core from 'express-serve-static-core';
 import type { Method } from 'openapi-typescript';
 import type { PathsWithMethod } from 'openapi-typescript-helpers';
 
-import type { paths } from '@backend/generated/schema';
+import type { components, paths } from '@backend/generated/schema';
 
 export type ExtractSuccessData<T> = T extends { success: true; data: infer D }
     ? D
@@ -95,3 +97,19 @@ export type ConvertDateToStringType<T> = T extends Date
     : T extends object
       ? { [K in keyof T]: ConvertDateToStringType<T[K]> }
       : T;
+
+export type ApiEvent = components['schemas']['Event'];
+
+export type TalkInfo = components['schemas']['TalkInfo'];
+
+export enum AddTalkFailure {
+    Duplicate,
+    Other,
+}
+
+export interface ExtendedDbEvent extends DbEvent {
+    persons: Person[];
+    tags: Tag[];
+    conference: Conference;
+    root_folder: RootFolder;
+}

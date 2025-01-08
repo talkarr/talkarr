@@ -5,7 +5,7 @@ import { handleNfoGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
-import type { ExtendedDbEvent } from '@backend/talks';
+import type { ExtendedDbEvent } from '@backend/types';
 
 export const taskName = 'generateMissingNfo';
 

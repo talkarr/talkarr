@@ -10,7 +10,6 @@ import { getFolderPathForTalk, isVideoFile } from '@backend/fs';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
-import type { ExtendedDbEvent } from '@backend/talks';
 import {
     addDownloadedFile,
     clearDownloadError,
@@ -19,6 +18,7 @@ import {
     setIsDownloading,
     updateDownloadProgress,
 } from '@backend/talks';
+import type { ExtendedDbEvent } from '@backend/types';
 
 export const taskName = 'addTalk';
 

@@ -1,5 +1,5 @@
 import pathUtils from 'path';
-import typia, { tags } from 'typia';
+import typia from 'typia';
 
 import { startAddTalk } from '@backend/workers/addTalk';
 import { startGenerateMissingNfo } from '@backend/workers/generateMissingNfo';
@@ -8,7 +8,6 @@ import { doesEventHaveNfoFile, doesTalkHaveExistingFiles } from '@backend/fs';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
-import type { ExtendedDbEvent } from '@backend/talks';
 import {
     addDownloadedFile,
     checkIfFileIsInDb,
@@ -16,6 +15,7 @@ import {
     listTalks,
     setIsDownloading,
 } from '@backend/talks';
+import type { ExtendedDbEvent } from '@backend/types';
 
 export const taskName = 'scanForMissingFiles';
 

@@ -3,7 +3,7 @@ import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import { isValidData } from '@backend/workers';
 
 // TODO
-const handleEventInfoRequest = async (
+const handleExecuteTaskRequest = async (
     req: ExpressRequest<'/tasks/execute', 'post'>,
     res: ExpressResponse<'/tasks/execute', 'post'>,
 ): Promise<void> => {
@@ -38,3 +38,5 @@ const handleEventInfoRequest = async (
         },
     });
 };
+
+export default handleExecuteTaskRequest;

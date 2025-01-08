@@ -1,6 +1,5 @@
 import { getTalkFromApiByGuid } from '@backend/helper';
 import rootLog from '@backend/rootLog';
-import type { ExtendedDbEvent } from '@backend/talks';
 import {
     getSpecificTalkByGuid,
     getSpecificTalkBySlug,
@@ -10,6 +9,7 @@ import type {
     ConvertDateToStringType,
     ExpressRequest,
     ExpressResponse,
+    ExtendedDbEvent,
 } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/get' });

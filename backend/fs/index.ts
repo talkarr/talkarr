@@ -2,9 +2,8 @@ import fs_promises from 'fs/promises';
 import mime from 'mime-types';
 import pathUtils from 'path';
 
-import { nfoFilename } from '@backend/helper/nfo';
 import rootLog from '@backend/rootLog';
-import type { ExtendedDbEvent } from '@backend/talks';
+import type { ExtendedDbEvent } from '@backend/types';
 
 // filePath: `${USER_DEFINED_ROOT_FOLDER}/${CONFERENCE}/${FILENAME}`
 
@@ -12,6 +11,8 @@ import type { ExtendedDbEvent } from '@backend/talks';
 export const validVideoFileExtensions = ['.mp4', '.webm'];
 
 export const validFileExtensions = [...validVideoFileExtensions, '.nfo'];
+
+export const nfoFilename = 'talk.nfo';
 
 const log = rootLog.child({ label: 'fs' });
 

@@ -3,6 +3,7 @@ import expressWinston from 'express-winston';
 
 import settingsRouter from '@backend/api/settings';
 import talksRouter from '@backend/api/talks';
+import taskRouter from '@backend/api/tasks';
 import rootLog from '@backend/rootLog';
 
 const log = rootLog.child({ label: 'API' });
@@ -28,6 +29,8 @@ router.get('/healthz', (_req, res) => {
 router.use('/talks', talksRouter);
 
 router.use('/settings', settingsRouter);
+
+router.use('/tasks', taskRouter);
 
 router.use((_req, res) => {
     res.sendStatus(404);

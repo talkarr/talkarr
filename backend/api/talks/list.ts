@@ -1,9 +1,9 @@
-import type { ExtendedDbEvent } from '@backend/talks';
 import { listTalks } from '@backend/talks';
 import type {
     ConvertDateToStringType,
     ExpressRequest,
     ExpressResponse,
+    ExtendedDbEvent,
 } from '@backend/types';
 
 const handleListEventsRequest = async (

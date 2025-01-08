@@ -1,5 +1,6 @@
 import type { MediamanagementSettings } from '@backend/api/settings/mediamanagement';
 import rootLog from '@backend/rootLog';
+
 import { PrismaClient } from '@prisma/client';
 
 const log = rootLog.child({ label: 'settings' });

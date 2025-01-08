@@ -1,8 +1,10 @@
+import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
+
 import { getTalkFromApiByGuid } from '@backend/helper';
 import rootLog from '@backend/rootLog';
-import { addTalk, AddTalkFailure } from '@backend/talks';
+import { addTalk } from '@backend/talks';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
-import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
+import { AddTalkFailure } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/add' });
 

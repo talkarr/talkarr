@@ -2,10 +2,10 @@ import fs_promises from 'fs/promises';
 import mime from 'mime-types';
 import pathUtils from 'path';
 
-import { isVideoFile } from '@backend/fs';
+import { isVideoFile, nfoFilename } from '@backend/fs';
 import rootLog from '@backend/rootLog';
-import type { ApiEvent, ExtendedDbEvent } from '@backend/talks';
 import { addDownloadedFile } from '@backend/talks';
+import type { ApiEvent, ExtendedDbEvent } from '@backend/types';
 
 const log = rootLog.child({ label: 'helper/nfo' });
 
@@ -19,8 +19,6 @@ export const generateNfo = (data: ApiEvent | ExtendedDbEvent): string => `
         <premiered>${data.date}</premiered>
     </movie>
     `;
-
-export const nfoFilename = 'talk.nfo';
 
 export const handleNfoGeneration = async (
     folder: string,

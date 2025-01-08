@@ -4,7 +4,7 @@ import type { Conference } from '@prisma/client';
 
 import { cccApiBaseUrl } from '@backend/constants';
 import apiFetch from '@backend/fetch';
-import type { ApiEvent } from '@backend/talks';
+import type { ApiEvent } from '@backend/types';
 
 export const getTalkFromApiByGuid = async (
     guid: string,

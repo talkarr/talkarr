@@ -1,7 +1,6 @@
 import rootLog from '@backend/rootLog';
-import type { TalkInfo } from '@backend/talks';
 import { getTalkInfoByGuid, getTalkInfoBySlug } from '@backend/talks';
-import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import type { ExpressRequest, ExpressResponse, TalkInfo } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/info' });
 

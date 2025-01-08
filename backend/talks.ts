@@ -1,37 +1,15 @@
-import type {
-    Conference,
-    Event as DbEvent,
-    EventInfo,
-    File,
-    Person,
-    RootFolder,
-    Tag,
-} from '@prisma/client';
+import type { Event as DbEvent, EventInfo, File } from '@prisma/client';
 
 import { getFolderPathForTalk, isVideoFile } from '@backend/fs';
 import type { components } from '@backend/generated/schema';
 import { getConferenceFromEvent } from '@backend/helper';
 import rootLog from '@backend/rootLog';
+import type { ApiEvent, ExtendedDbEvent, TalkInfo } from '@backend/types';
+import { AddTalkFailure } from '@backend/types';
 
 import { Prisma, PrismaClient } from '@prisma/client';
 
 const log = rootLog.child({ label: 'talks' });
-
-export type ApiEvent = components['schemas']['Event'];
-
-export type TalkInfo = components['schemas']['TalkInfo'];
-
-export enum AddTalkFailure {
-    Duplicate,
-    Other,
-}
-
-export interface ExtendedDbEvent extends DbEvent {
-    persons: Person[];
-    tags: Tag[];
-    conference: Conference;
-    root_folder: RootFolder;
-}
 
 export const addTalk = async (
     event: ApiEvent,

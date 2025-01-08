@@ -1,6 +1,6 @@
 import rootLog from '@backend/rootLog';
 
-import { check as validateAddTalk, taskName as addTalk } from './addTalk';
+import { taskName as addTalk } from './addTalk';
 import {
     check as validateGenerateMissingNfo,
     taskName as generateMissingNfo,
@@ -18,15 +18,19 @@ export const taskNames = [
     scanForMissingFiles,
 ] as const;
 
-export type InternalTaskNames = 'addTalk';
+export type NonInternalTaskNames = 'generateMissingNfo' | 'scanForMissingFiles';
 
-export type UsableTaskNames = Exclude<
+export type UsableTaskNames = Extract<
     (typeof taskNames)[number],
-    InternalTaskNames
+    NonInternalTaskNames
 >;
 
+type InternalUseableTaskNames = UsableTaskNames extends never
+    ? '__NEVER__'
+    : UsableTaskNames;
+
 export type TaskValidator = {
-    readonly [K in UsableTaskNames]: (data: unknown) => boolean;
+    readonly [K in InternalUseableTaskNames]: (data: unknown) => boolean;
 };
 
 export const taskValidators: TaskValidator = {
