@@ -30,6 +30,7 @@ This is the most basic docker-compose.yml file that you can use to deploy this a
 services:
   db:
     image: postgres:16-alpine
+    restart: unless-stopped
     env_file:
       - .env
     volumes:
@@ -39,11 +40,13 @@ services:
 
   redis:
     image: redis:7-alpine
+    restart: unless-stopped
     ports:
       - "6379:6379"
   
   app:
     image: ghcr.io/talkarr/talkarr:latest
+    restart: unless-stopped
     env_file:
       - .env
     ports:
