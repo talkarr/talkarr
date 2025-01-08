@@ -141,7 +141,8 @@ jobs:
               exit 1
           fi
           
-          echo "sha=${sha}" >> $GITHUB_ENV
+          # output sha
+          echo "sha=${sha}" >> $GITHUB_OUTPUT
 
     outputs:
       sha: ${{ steps.sha.outputs.sha }}
