@@ -32,7 +32,9 @@ app.prepare()
 
         await loadSettings();
 
-        // server.enable('trust proxy');
+        if (process.env.NODE_ENV === 'production') {
+            server.set('trust proxy', 1);
+        }
 
         server.use(cookieParser());
         server.use(express.json());

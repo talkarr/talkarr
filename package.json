@@ -104,12 +104,12 @@
    },
    "nodemonConfig": {
       "watch": [
-         "backend/**/*.ts"
+         "./backend"
       ],
       "ignore": [
          ".next",
          "src"
       ],
-      "legacyWatch": true
+      "ext": "ts,json"
    }
 }
