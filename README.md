@@ -3,7 +3,7 @@
 ![GitHub Workflow Status for Docs](https://img.shields.io/github/actions/workflow/status/talkarr/talkarr/docs.yml?style=for-the-badge&label=Docs)
 
 <p align="center" style="padding-bottom: 16px">
-<img src="assets/logo_with_text_no_padding.png" alt="Talkarr Logo" width="300" />
+<img src="assets/logo_with_text_no_padding.png" alt="Talkarr Logo" width="200" />
 </p>
 
 <h5 align="center">
