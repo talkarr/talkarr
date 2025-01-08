@@ -2,3 +2,4 @@
 .github
 .idea
 docker-compose.*
+.git*
