@@ -106,7 +106,8 @@ jobs:
 
           # if the branch is not main, add the branch name to the image
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then
-              DOCKER_IMAGE="${DOCKER_IMAGE}:${{ github.ref }}"
+              BRANCH_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///')
+              DOCKER_IMAGE="${DOCKER_IMAGE}:${BRANCH_NAME}"
               FLAVOR=""
           fi
         
