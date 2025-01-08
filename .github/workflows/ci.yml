@@ -129,11 +129,12 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: ${{ env.PLATFORMS }}
           # push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          push: true
 
       - name: Output sha of the container
         id: sha
         run: |
-          sha=$(echo ${{ steps.docker_build.outputs.tags }} | cut -d ':' -f 2)
+          sha=$(docker inspect ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.tags }} --format='{{.Id}}')
           
           if [ -z "${sha}" ]; then
               echo "Failed to get the sha of the container"
