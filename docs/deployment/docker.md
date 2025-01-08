@@ -2,37 +2,27 @@
 
 This is the preferred method of deployment for this application. It helps to ensure that the application is running in a consistent environment, and that the application is isolated from the host system.
 
-## Prerequisites
+Please change the values of the environment variables to match your environment.
 
-Before deploying the application, you need to create a `.env` file.
+## Deploying via Docker Compose (Recommended)
+
+For more information about Docker Compose itself, please refer to the [official documentation](https://docs.docker.com/compose/).
+
+For docker-compose, you can use this `.env` file as is and it should work:
 
 ```bash
-# This is for development only. Please use environment variables for production.
-
 POSTGRES_USER=talkarr
-POSTGRES_PASSWORD=talkarr
+POSTGRES_PASSWORD=talkarr # Change this to a more secure password
 POSTGRES_DB=talkarr
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 
-REDIS_HOST=localhost
+REDIS_HOST=redis
 REDIS_PORT=6379
 
-# Environment variables declared in this file are automatically made available to Prisma.
-# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
-
-# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
-# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
-
-DATABASE_URL="postgresql://talkarr:talkarr@localhost:5432/talkarr?schema=public"
-
-# Docker-Compose:
-# DATABASE_URL="postgresql://talkarr:talkarr@db:5432/talkarr?schema=public"
+# postgresql://<username>:<password>@<host>:<port>/<database>?schema=<schema>
+DATABASE_URL="postgresql://talkarr:talkarr@db:5432/talkarr?schema=public"
 ```
-
-Please change the values of the environment variables to match your environment.
-
-## Deploying via Docker Compose (Recommended)
 
 This is the most basic docker-compose.yml file that you can use to deploy this application:
 
@@ -43,7 +33,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - ./data:/var/lib/postgresql/data # Store the data from postgres in "./data" directory
     ports:
       - "5432:5432"
 
@@ -63,7 +53,65 @@ services:
       - redis
 ```
 
+To run the application, you can use the following command:
+
+```bash
+docker-compose up -d
+
+# or
+
+docker compose up -d
+```
+
+To stop the application, you can use the following command:
+
+```bash
+docker-compose down
+
+# or
+
+docker compose down
+```
+
+To view the logs of the application, you can use the following command:
+
+```bash
+docker-compose logs -f app
+
+# or
+
+docker compose logs -f app
+```
+
+And to update the application, you can use the following command:
+
+```bash
+docker-compose pull
+docker-compose up -d
+
+# or
+
+docker compose pull
+docker compose up -d
+```
+
 ## Deploying via Docker
+
+For normal Docker, you can use this `.env` file as is and it should work:
+
+```bash
+POSTGRES_USER=talkarr
+POSTGRES_PASSWORD=talkarr # Change this to a more secure password
+POSTGRES_DB=talkarr
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# postgresql://<username>:<password>@<host>:<port>/<database>?schema=<schema>
+DATABASE_URL="postgresql://talkarr:talkarr@localhost:5432/talkarr?schema=public"
+```
 
 If you prefer to deploy the application without using Docker Compose, you can use the following commands:
 
@@ -74,3 +122,39 @@ docker run -d --name app --env-file .env -p 3232:3232 --link db:db --link redis:
 ```
 
 However, this method is not recommended as it is more difficult to manage the containers and their dependencies.
+
+## Deploying to with existing PostgreSQL and Redis instances
+
+If you already have a PostgreSQL and Redis instance running, you can just set the environment variables accordingly:
+
+```bash
+POSTGRES_USER=talkarr
+POSTGRES_PASSWORD=talkarr # Change this to a more secure password
+POSTGRES_DB=talkarr
+POSTGRES_HOST=localhost # Change this to the hostname of your PostgreSQL instance
+POSTGRES_PORT=5432 # Change this to the port of your PostgreSQL instance
+
+REDIS_HOST=localhost # Change this to the hostname of your Redis instance
+REDIS_PORT=6379 # Change this to the port of your Redis instance
+
+# postgresql://<username>:<password>@<host>:<port>/<database>?schema=<schema>
+DATABASE_URL="postgresql://talkarr:talkarr@localhost:5432/talkarr?schema=public"
+```
+
+Then you can run the application using the following docker-compose file:
+
+```yaml
+services:
+  app:
+    image: ghcr.io/talkarr/talkarr:latest
+    env_file:
+      - .env
+    ports:
+      - "3232:3232"
+```
+
+Or you can run the application using the following command:
+
+```bash
+docker run -d --name app --env-file .env -p 3232:3232 ghcr.io/talkarr/talkarr:latest
+```
