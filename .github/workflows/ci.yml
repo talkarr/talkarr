@@ -63,8 +63,6 @@ jobs:
               echo "tsconfig.json does not exist"
               exit 1
           fi
-          
-          cat src/app/icon.svg
 
       - name: Run generate and check if something changed
         run: yarn generate && git diff --exit-code
