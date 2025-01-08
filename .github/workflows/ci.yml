@@ -107,7 +107,7 @@ jobs:
           # if the branch is not main, add the branch name to the image
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then
               DOCKER_IMAGE="${DOCKER_IMAGE}:${{ github.ref }}"
-              FLAVOR="branch"
+              FLAVOR=""
           fi
         
           echo "DOCKER_IMAGE=${DOCKER_IMAGE}" >> $GITHUB_ENV
