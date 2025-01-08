@@ -80,6 +80,7 @@ export const addTalk = async (
                 thumb_url: event.thumb_url,
                 updated_at: event.updated_at,
                 release_date: event.release_date,
+                duration: event.duration,
                 eventInfo: {
                     create: {
                         is_downloading: false,

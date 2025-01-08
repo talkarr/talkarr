@@ -472,6 +472,11 @@
                     "frontend_link": {
                         "type": "string",
                         "example": "https://example.com"
+                    },
+                    "duration": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "Length in seconds"
                     }
                 },
                 "required": [
@@ -486,7 +491,8 @@
                     "thumb_url",
                     "poster_url",
                     "original_language",
-                    "frontend_link"
+                    "frontend_link",
+                    "duration"
                 ]
             },
             "ExtendedDbEvent": {
@@ -1138,7 +1144,8 @@
                                                         "db",
                                                         "talk",
                                                         "info"
-                                                    ]
+                                                    ],
+                                                    "description": "\"db\" is the data from the database, \"talk\" is the data from the API (fetched every time), \"info\" is the data from the filesystem"
                                                 }
                                             },
                                             "required": [

@@ -399,6 +399,7 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["SuccessResponse"] & {
+                            /** @description "db" is the data from the database, "talk" is the data from the API (fetched every time), "info" is the data from the filesystem */
                             data: {
                                 db: components["schemas"]["ExtendedDbEvent"];
                                 talk: components["schemas"]["Event"];
@@ -836,7 +837,10 @@ export interface components {
             updated_at: string;
             /** @example 0 */
             length: number;
-            /** @example 0 */
+            /**
+             * @description Length in seconds
+             * @example 0
+             */
             duration: number;
             /** @example https://example.com/thumb.jpg */
             thumb_url: string;
@@ -891,6 +895,11 @@ export interface components {
             original_language: string;
             /** @example https://example.com */
             frontend_link: string;
+            /**
+             * @description Length in seconds
+             * @example 0
+             */
+            duration: number;
         };
         ExtendedDbEvent: components["schemas"]["DbEvent"] & {
             persons: components["schemas"]["Persons"];

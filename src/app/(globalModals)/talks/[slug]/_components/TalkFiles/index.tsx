@@ -39,8 +39,8 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
     );
 
     const videoDuration = useMemo(
-        () => formatVideoDuration(data.talk.duration),
-        [data.talk.duration],
+        () => formatVideoDuration(data.db.duration),
+        [data.db.duration],
     );
 
     return (
@@ -97,6 +97,11 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                             </ListItemButton>
                         </ListItem>
                     ))}
+                    {videoFiles.length === 0 ? (
+                        <ListItem>
+                            <ListItemText primary="No video files" />
+                        </ListItem>
+                    ) : null}
                 </List>
             </Box>
             <Box mb={3}>
@@ -114,6 +119,11 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                             </ListItemButton>
                         </ListItem>
                     ))}
+                    {otherFiles.length === 0 ? (
+                        <ListItem>
+                            <ListItemText primary="No other files" />
+                        </ListItem>
+                    ) : null}
                 </List>
             </Box>
         </Box>

@@ -67,6 +67,7 @@ model Event {
   poster_url        String
   original_language String
   frontend_link     String
+  duration          Int
 
   // relations
   persons           Person[]
