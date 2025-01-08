@@ -132,20 +132,20 @@ jobs:
           push: true
 
       - name: Output sha of the container
-        id: sha
+        id: ref
         run: |
-          sha=$(docker manifest inspect ${{ steps.meta.outputs.tags }} | jq -r '.config.digest')
+          ref=$(docker manifest inspect ${{ steps.meta.outputs.tags }} | jq -r '.[0].Ref')
           
-          if [ -z "${sha}" ]; then
+          if [ -z "${ref}" ]; then
               echo "Failed to get the sha of the container"
               exit 1
           fi
           
           # output sha
-          echo "sha=${sha}" >> $GITHUB_OUTPUT
+          echo "ref=${ref}" >> $GITHUB_OUTPUT
 
     outputs:
-      sha: ${{ steps.sha.outputs.sha }}
+      ref: ${{ steps.ref.outputs.ref }}
 
   run-e2e-tests:
     runs-on: ubuntu-latest
@@ -155,18 +155,11 @@ jobs:
       attestations: write
       id-token: write
     env:
-      container_sha: ${{ needs.build-linux-container.outputs.sha }}
+      container_ref: ${{ needs.build-linux-container.outputs.ref }}
     needs:
       - build-linux-container
       - lint-and-test
     steps:
-      - name: Check if the container sha is available
-        run: |
-          if [ -z "${{ env.container_sha }}" ]; then
-              echo "Container sha is not available"
-              exit 1
-          fi
-
       - uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -208,7 +201,7 @@ jobs:
 
       - name: Pull Docker image
         run: |
-          docker pull ghcr.io/${{ github.repository }}:${{ env.container_sha }}
+          docker pull ${{ env.container_ref }}
 
       - name: Start Database and Redis
         run: |
@@ -220,7 +213,7 @@ jobs:
 
       - name: Start Docker container
         run: |
-          docker run --rm --env-file .env ghcr.io/${{ github.repository }}:${{ env.container_sha }}
+          docker run --rm --env-file .env ${{ env.container_ref }}
 
       - name: Run E2E tests
         id: e2e
