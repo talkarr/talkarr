@@ -8,7 +8,7 @@
       "dev": "npm run dev:nodemon",
       "build:next": "next build",
       "build": "npm run build:next",
-      "start": "NODE_ENV=production DATABASE_URL=$DATABASE_URL ts-node --project backend/tsconfig.json -r tsconfig-paths/register backend/index.ts",
+      "start": "NODE_ENV=production ts-node --project backend/tsconfig.json -r tsconfig-paths/register backend/index.ts",
       "start:prod": "DATABASE_URL=$DATABASE_URL prisma migrate deploy && npm run start",
       "lint": "next lint",
       "lint:fix": "next lint --fix",
