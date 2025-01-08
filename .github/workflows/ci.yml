@@ -99,14 +99,27 @@ jobs:
         with:
           platforms: ${{ env.PLATFORMS }}
 
+      - name: Generate DOCKER_IMAGE variable
+        run:
+          DOCKER_IMAGE="${{ github.repository }}"
+          FLAVOR="latest"
+
+          # if the branch is not main, add the branch name to the image
+          if [ "${{ github.ref }}" != "refs/heads/main" ]; then
+              DOCKER_IMAGE="${DOCKER_IMAGE}:${{ github.ref }}"
+              FLAVOR="branch"
+          fi
+        
+          echo "DOCKER_IMAGE=${DOCKER_IMAGE}" >> $GITHUB_ENV
+          echo "FLAVOR=${FLAVOR}" >> $GITHUB_ENV
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
-          flavor: |
-            latest=true
+          flavor: ${{ env.FLAVOR }}
           images: |
-            ghcr.io/${{ github.repository }}
+            ghcr.io/${{ env.DOCKER_IMAGE }}
 
       - name: Build and push Docker image
         id: docker_build
@@ -123,7 +136,15 @@ jobs:
 
       - name: Output sha of the container
         id: sha
-        run: echo "sha=$(echo ${{ steps.docker_build.outputs.tags }} | cut -d ':' -f 2)" >> $GITHUB_ENV
+        run: |
+          sha=$(echo ${{ steps.docker_build.outputs.tags }} | cut -d ':' -f 2)
+          
+          if [ -z "${sha}" ]; then
+              echo "Failed to get the sha of the container"
+              exit 1
+          fi
+          
+          echo "sha=${sha}" >> $GITHUB_ENV
 
     outputs:
       sha: ${{ steps.sha.outputs.sha }}
@@ -139,6 +160,16 @@ jobs:
       - build-linux-container
       - lint-and-test
     steps:
+      - name: Get container sha from build step
+        run: echo "container_sha=$(echo ${{ needs.build-linux-container.outputs.sha }})" >> $GITHUB_ENV
+
+      - name: Check if the container sha is available
+        run: |
+          if [ -z "${{ env.container_sha }}" ]; then
+              echo "Container sha is not available"
+              exit 1
+          fi
+
       - uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -177,10 +208,6 @@ jobs:
           
           sudo apt-get update
           sudo apt-get install -y docker-compose-plugin
-
-      - name: Get container sha from build step
-        id: meta
-        run: echo "container_sha=$(echo ${{ needs.build-linux-container.outputs.sha }})" >> $GITHUB_ENV
 
       - name: Pull Docker image
         run: |
