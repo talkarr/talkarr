@@ -171,18 +171,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose-plugin
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Get container sha from build step
         id: meta
-        uses: docker/metadata-action@v5
-        with:
-          flavor: |
-              latest=true
-          images: |
-              ghcr.io/${{ github.repository }}
+        run: echo "container_sha=$(echo ${{ needs.build-linux-container.outputs.tags }} | cut -d ':' -f 2)" >> $GITHUB_ENV
 
       - name: Pull Docker image
         run: |
-          docker pull ghcr.io/${{ github.repository }}:latest
+          docker pull ghcr.io/${{ github.repository }}:${{ env.container_sha }}
 
       - name: Start Database and Redis
         run: |
@@ -194,7 +189,7 @@ jobs:
 
       - name: Start Docker container
         run: |
-          docker run --rm ghcr.io/${{ github.repository }}:latest
+          docker run --rm --env-file .env ghcr.io/${{ github.repository }}:${{ env.container_sha }}
 
       - name: Run E2E tests
         id: e2e
