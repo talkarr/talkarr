@@ -20,6 +20,8 @@ const nextConfig = async (): Promise<NextConfig> => {
         require.resolve('dotenv'),
         require.resolve('dotenv-expand'),
         require.resolve('minimist'),
+        // ts-node
+        require.resolve('ts-node'),
     ]);
 
     const additionalTracedFiles = [
