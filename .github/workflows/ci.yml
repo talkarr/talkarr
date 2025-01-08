@@ -68,8 +68,8 @@ jobs:
         run: |
           npx wait-on http://localhost:3232
 
-      - name: Run tests
-        run: yarn test
+      - name: Run backend tests
+        run: yarn test:backend
 
   build-linux-container:
     runs-on: ubuntu-latest
@@ -120,3 +120,91 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: ${{ env.PLATFORMS }}
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+
+  run-e2e-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    needs:
+      - build-linux-container
+      - lint-and-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in into GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+         platforms: linux/amd64
+
+      - name: Set up Docker Compose
+        run: |
+          # Check if "docker compose" is installed
+          version=$(docker compose version --short 2>/dev/null)
+          
+          if [ -n "$version" ]; then
+              exit 0
+          fi
+          
+          sudo apt-get update
+          sudo apt-get install -y docker-compose-plugin
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          flavor: |
+              latest=true
+          images: |
+              ghcr.io/${{ github.repository }}
+
+      - name: Pull Docker image
+        run: |
+          docker pull ghcr.io/${{ github.repository }}:latest
+
+      - name: Start Database and Redis
+        run: |
+          docker compose -f docker-compose.dev.yml up -d db redis
+          
+          # wait for the database to be ready
+          npx wait-on tcp:5432
+          npx wait-on tcp:6379
+
+      - name: Start Docker container
+        run: |
+          docker run --rm ghcr.io/${{ github.repository }}:latest
+
+      - name: Run E2E tests
+        id: e2e
+        continue-on-error: true
+        run: yarn test:e2e
+
+      - uses: daun/playwright-report-summary@v3
+        with:
+          report-file: results.json
+          job-summary: 'true'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload logs folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs
+          path: logs/
+          retention-days: 30

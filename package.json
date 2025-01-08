@@ -24,6 +24,7 @@
       "generate:openapi-backend": "openapi-typescript ./backend.json --output backend/generated/schema.ts",
       "generate": "npm run generate:openapi-backend",
       "test:backend": "bash -c 'pushd backend && jest && popd'",
+      "test:e2e": "playwright test",
       "test": "npm run test:backend"
    },
    "dependencies": {
@@ -69,6 +70,7 @@
       "@eslint/eslintrc": "^3",
       "@eslint/js": "^9.17.0",
       "@microsoft/eslint-formatter-sarif": "^3.1.0",
+      "@playwright/test": "^1.49.1",
       "@types/bull": "^4.10.4",
       "@types/cookie-parser": "^1.4.8",
       "@types/express": "^5.0.0",
