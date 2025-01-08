@@ -24,6 +24,8 @@ const nextConfig = async (): Promise<NextConfig> => {
         require.resolve('ts-node'),
         // typescript
         require.resolve('typescript'),
+        // tsconfig-paths/register
+        require.resolve('tsconfig-paths/register'),
     ]);
 
     const additionalTracedFiles = [
