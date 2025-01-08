@@ -2,7 +2,7 @@
 ![GitHub Workflow Status for CI](https://img.shields.io/github/actions/workflow/status/talkarr/talkarr/ci.yml?style=for-the-badge&label=CI)
 ![GitHub Workflow Status for Docs](https://img.shields.io/github/actions/workflow/status/talkarr/talkarr/docs.yml?style=for-the-badge&label=Docs)
 
-<p align="center" style="padding-bottom: 16px">
+<p align="center" style="padding-bottom: 16px" id="logo">
 <img src="assets/logo_with_text_no_padding.png" alt="Talkarr Logo" width="200" />
 </p>
 
