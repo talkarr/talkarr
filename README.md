@@ -4,7 +4,9 @@
 <img src="assets/logo_with_text.png" alt="Talkarr Logo" width="300"/>
 </p>
 
+<h5 align="center">
 A *arr style program for downloading talks from media.ccc.de.
+</h5>
 
 ## Important Note on the state of the project
 
