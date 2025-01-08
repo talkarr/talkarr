@@ -15,6 +15,8 @@ const nextConfig = async (): Promise<NextConfig> => {
         // prisma.io
         require.resolve('@prisma/client'),
         require.resolve('prisma'),
+        // ts-node
+        require.resolve('ts-node'),
     ]);
 
     return {
@@ -36,7 +38,11 @@ const nextConfig = async (): Promise<NextConfig> => {
             buildActivityPosition: 'bottom-right',
         },
         outputFileTracingIncludes: {
-            '**': [...additionalTracedFiles, './node_modules/.bin/prisma'],
+            '**': [
+                ...additionalTracedFiles,
+                './node_modules/.bin/prisma',
+                './node_modules/.bin/ts-node',
+            ],
         },
         compiler:
             process.env.NODE_ENV === 'production'
