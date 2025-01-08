@@ -39,4 +39,5 @@ next-env.d.ts
 
 # project
 logs/
-
+test-results/
+.nft-cache

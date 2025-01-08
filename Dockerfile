@@ -46,14 +46,14 @@ RUN chown -R nextjs:nodejs /app/logs
 USER nextjs
 
 # use these for non-standalone output
-# COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-# COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
-# COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
 
 # use these for standalone output
-COPY --from=builder /app/.next/standalone/.next ./.next
-COPY --from=builder /app/.next/standalone/package.json ./package.json
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/node_modules ./node_modules
+# COPY --from=builder /app/.next/standalone/.next ./.next
+# COPY --from=builder /app/.next/standalone/package.json ./package.json
+# COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/node_modules ./node_modules
 
 COPY --from=builder /app/backend ./backend
 
@@ -71,4 +71,4 @@ EXPOSE 3232
 ENV PORT=3232
 
 ENV HOSTNAME="0.0.0.0"
-CMD ["yarn", "start:prod"]
+CMD yarn start:prod

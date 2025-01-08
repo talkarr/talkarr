@@ -2,22 +2,17 @@
 
 import type { NextConfig } from 'next';
 
-import { createRequire } from 'module';
-
 import { apiBaseUrl } from './src/constants';
 
-import { nodeFileTrace } from '@vercel/nft';
-
-const require = createRequire(import.meta.url);
-
 const nextConfig = async (): Promise<NextConfig> => {
-    const { fileList: additionalTracedFiles } = await nodeFileTrace([
-        // prisma.io
-        require.resolve('@prisma/client'),
-        require.resolve('prisma'),
-        // ts-node
-        require.resolve('ts-node'),
-    ]);
+    // check if command is "next build"
+    if (process.argv.includes('build')) {
+        if (process.env.NODE_ENV !== 'production') {
+            throw new Error(
+                'You must build in production mode. Set NODE_ENV=production.',
+            );
+        }
+    }
 
     return {
         /* config options here */
@@ -30,19 +25,10 @@ const nextConfig = async (): Promise<NextConfig> => {
         env: {
             API_BASE_URL: apiBaseUrl,
         },
-        // TODO: Try to enable standalone when everything else works
-        output: 'standalone',
         devIndicators: {
             appIsrStatus: true,
             buildActivity: true,
             buildActivityPosition: 'bottom-right',
-        },
-        outputFileTracingIncludes: {
-            '**': [
-                ...additionalTracedFiles,
-                './node_modules/.bin/prisma',
-                './node_modules/.bin/ts-node',
-            ],
         },
         compiler:
             process.env.NODE_ENV === 'production'
