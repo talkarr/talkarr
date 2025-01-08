@@ -43,7 +43,9 @@ jobs:
           wait-for-processing: true
 
       - name: Run type checks
-        run: yarn typecheck
+        run: |
+          pwd
+          yarn typecheck
 
   typecheck:
     runs-on: ubuntu-latest
@@ -74,7 +76,9 @@ jobs:
         run: yarn tsc --version
 
       - name: Run type checks
-        run: yarn typecheck
+        run: |
+          pwd
+          yarn typecheck
 
   test:
     runs-on: ubuntu-latest

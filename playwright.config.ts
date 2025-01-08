@@ -81,9 +81,9 @@ export default defineConfig({
     ],
 
     webServer: {
-        command: 'yarn dev',
+        // CI always has to start its own server
+        command: process.env.CI ? 'exit 1' : 'yarn dev',
         port: 3232,
-        reuseExistingServer:
-            !process.env.CI || process.env.REUSE_EXISTING_SERVER === 'true',
+        reuseExistingServer: true,
     },
 });
