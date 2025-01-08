@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  lint-and-test:
+  lint:
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -39,12 +39,30 @@ jobs:
           sarif_file: eslint-results.sarif
           wait-for-processing: true
 
+  typecheck:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+      checks: write
+      pull-requests: write
+      security-events: write
+    steps:
       - name: Run generate and check if something changed
         run: yarn generate && git diff --exit-code
 
       - name: Run type checks
         run: yarn typecheck
 
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+      checks: write
+      pull-requests: write
+      security-events: write
+    steps:
       - name: Prepare for tests
         id: prepare
         run: |
@@ -160,7 +178,8 @@ jobs:
       container_ref: ${{ needs.build-linux-container.outputs.ref }}
     needs:
       - build-linux-container
-      - lint-and-test
+      - test
+      - typecheck
     steps:
       - uses: actions/checkout@v4
 
