@@ -291,7 +291,7 @@ jobs:
           fi          
           
           # docker run --rm --env-file .env ${{ env.container_ref }}
-          docker run --rm --env-file .env -v $(pwd)/.env:/app/.env ${{ env.container_ref }}
+          docker run --rm -v ./.env:/app/.env ${{ env.container_ref }}
 
       - name: Run E2E tests
         id: e2e
