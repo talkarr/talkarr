@@ -67,6 +67,9 @@ jobs:
       - name: Run generate and check if something changed
         run: yarn generate && git diff --exit-code
 
+      - name: Get typescript version
+        run: yarn tsc --version
+
       - name: Run type checks
         run: yarn typecheck
 
