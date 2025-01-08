@@ -100,7 +100,7 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
 
       - name: Generate DOCKER_IMAGE variable
-        run:
+        run: |
           DOCKER_IMAGE="${{ github.repository }}"
           FLAVOR="latest"
 
