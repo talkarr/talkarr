@@ -42,6 +42,8 @@ const nextConfig = async (): Promise<NextConfig> => {
                 ...additionalTracedFiles,
                 './node_modules/.bin/prisma',
                 './node_modules/.bin/ts-node',
+                // dotenv-cli
+                './node_modules/dotenv-cli/bin/cli.js',
                 './node_modules/.bin/dotenv',
             ],
         },
