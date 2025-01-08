@@ -290,7 +290,10 @@ jobs:
               exit 1
           fi          
           
-          docker run --rm -v ./.env:/app/.env --network host ${{ env.container_ref }}
+          docker run -d --rm -v ./.env:/app/.env --network host ${{ env.container_ref }}
+          
+          # wait for the app to be ready
+          npx wait-on http://localhost:3232
 
       - name: Run E2E tests
         id: e2e
