@@ -169,7 +169,7 @@ jobs:
 
       - name: Generate FLAVOR variable
         run: |
-          FLAVOR="latest"
+          FLAVOR="latest=true"
 
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then
               FLAVOR=""
