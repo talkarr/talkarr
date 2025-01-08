@@ -9,7 +9,7 @@
       "build:next": "next build",
       "build": "npm run build:next",
       "start": "NODE_ENV=production DATABASE_URL=$DATABASE_URL ts-node --project backend/tsconfig.json -r tsconfig-paths/register backend/index.ts",
-      "start:prod": "if [ -z \"$DATABASE_URL\" ]; then echo \"DATABASE_URL is empty\"; else DATABASE_URL=$DATABASE_URL prisma migrate deploy && npm run start; fi",
+      "start:prod": "DATABASE_URL=$DATABASE_URL if [ -z \"$DATABASE_URL\" ]; then echo \"DATABASE_URL is empty\"; else prisma migrate deploy && npm run start; fi",
       "lint": "next lint",
       "lint:fix": "next lint --fix",
       "typecheck:web": "tsc --noEmit",
