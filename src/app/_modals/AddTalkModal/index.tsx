@@ -18,6 +18,7 @@ import { useUiStore } from '@/providers/uiStoreProvider';
 import BaseModal from '@components/CustomModal';
 import TalkImage from '@components/TalkImage';
 import AddIcon from '@mui/icons-material/Add';
+import { alpha } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -110,15 +111,29 @@ const AddTalkModal: FC = () => {
                 flexDirection="row"
                 justifyContent="center"
                 gap={2}
+                overflow="hidden"
+                height="100%"
             >
-                <Box flex={1} maxWidth="33%">
+                <Box flex={1} maxWidth="33%" height="100%">
                     <TalkImage
                         data={addTalkModal || undefined}
                         maxWidth="100%"
                     />
                 </Box>
-                <Box flex={1}>
-                    <Typography variant="body2" mb={1}>
+                <Box flex={1} height="100%">
+                    <Typography
+                        variant="body2"
+                        mb={1}
+                        sx={{ overflowY: 'auto' }}
+                        maxHeight={300}
+                        height="100%"
+                        p={1}
+                        border={1}
+                        borderColor={theme => alpha(theme.palette.divider, 0.2)}
+                        borderRadius={4}
+                        bgcolor="background.default"
+                        boxShadow={2}
+                    >
                         {addTalkModal?.description}
                     </Typography>
                     <Box mb={2}>
