@@ -42,29 +42,42 @@ jobs:
         id: eslint-frontend
         run: |
           yarn lint:frontend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+          
+          # if success, create an empty file
+          if [ $? -eq 0 ]; then
+              touch eslint-results-frontend.result
+          fi
 
       - name: Upload Frontend ESLint results
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: eslint-results.sarif
+          category: 'Frontend'
           wait-for-processing: true
 
       - name: Run ESLint for backend
         continue-on-error: true
         id: eslint-backend
         run: |
-          yarn lint:backend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+          yarn lint:backend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results-backend.sarif
+          
+          # if success, create an empty file
+          if [ $? -eq 0 ]; then
+              touch eslint-results-backend.result
+          fi
 
       - name: Upload Backend ESLint results
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: eslint-results.sarif
+          sarif_file: eslint-results-backend.sarif
+          category: 'Backend'
           wait-for-processing: true
 
       - name: Fail if ESLint found any errors
         run: |
-          if [ -s eslint-results.sarif ]; then
-              echo "ESLint found some errors"
+          if [ -f eslint-results-frontend.result ] && [ -f eslint-results-backend.result ]; then
+              exit 0
+          else
               exit 1
           fi
 
