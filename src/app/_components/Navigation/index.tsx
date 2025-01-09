@@ -125,7 +125,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                 </Box>
                 {splitItemsByDivider.map((items, index, { length }) => (
                     <Fragment key={`navigation-item-list-${index}`}>
-                        <List disablePadding>
+                        <List disablePadding tabIndex={-1}>
                             {items.map((item, itemIndex) => (
                                 <NavigationItem
                                     item={item}

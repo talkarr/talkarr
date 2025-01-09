@@ -12,7 +12,7 @@ import type { FC } from 'react';
 
 import { getFileRoutePath } from '@/utils/route';
 
-import { styled } from '@mui/material';
+import { styled, useTheme } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -43,6 +43,7 @@ const NavigationItem: FC<NavigationItemProps> = ({
 }) => {
     const pathname = usePathname();
     const params = useParams();
+    const theme = useTheme();
 
     if (item.visible === false) {
         return null;
@@ -91,6 +92,7 @@ const NavigationItem: FC<NavigationItemProps> = ({
                 sx={{
                     paddingLeft: isSubitem ? 4 : undefined,
                 }}
+                tabIndex={-1}
             >
                 {'Icon' in item && item.Icon ? (
                     <ListItemIcon>
@@ -107,9 +109,22 @@ const NavigationItem: FC<NavigationItemProps> = ({
             key={`navigation-item-list-${index}-${itemIndex}`}
             href={href}
             as={as}
-            style={{ textDecoration: 'none', color: 'inherit' }}
+            tabIndex={0}
+            className="_custom_link_highlight"
+            style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                outline: 'none',
+                transition: theme.transitions.create('background-color', {
+                    duration: theme.transitions.duration.shortest,
+                }),
+            }}
         >
-            <StyledListItem highlighted={highlighted} disablePadding>
+            <StyledListItem
+                highlighted={highlighted}
+                disablePadding
+                tabIndex={-1}
+            >
                 {inner}
             </StyledListItem>
         </Link>
@@ -118,6 +133,7 @@ const NavigationItem: FC<NavigationItemProps> = ({
             key={`navigation-item-list-${index}-${itemIndex}`}
             highlighted={highlighted}
             disablePadding
+            tabIndex={-1}
         >
             {inner}
         </StyledListItem>
@@ -125,11 +141,18 @@ const NavigationItem: FC<NavigationItemProps> = ({
 
     return (
         <>
+            <style jsx global>
+                {`
+                    ._custom_link_highlight:focus > * {
+                        background-color: ${theme.palette.action.hover};
+                    }
+                `}
+            </style>
             {component}
             {(selected || subitemSelected) &&
             'subitems' in item &&
             item.subitems?.length ? (
-                <List disablePadding>
+                <List disablePadding tabIndex={-1}>
                     {item.subitems.map((subitem, subitemIndex) => (
                         <NavigationItem
                             key={`navigation-item-list-${index}-${itemIndex}-subitem-${subitemIndex}`}
