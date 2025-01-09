@@ -9,6 +9,12 @@ export const pageName = 'Talkarr';
 // === Paths ===
 export const homePageLink = '/';
 export const addTalksPageLink = '/talks/add';
+export const addTalksPageWithSearchLink = (search: string): string => {
+    const searchParams = new URLSearchParams();
+    searchParams.set('search', search);
+
+    return `/talks/add?${searchParams.toString()}`;
+};
 export const importTalksPageLink = '/talks/import';
 export const specificTalkPageLink = (slug: string): string => `/talks/${slug}`;
 export const settingsPageLink = '/settings';

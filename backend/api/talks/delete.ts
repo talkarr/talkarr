@@ -37,6 +37,7 @@ const handleDeleteEventRequest = async (
 
     if (deleteFiles) {
         log.warn('HANDLE DELETE EVENT REQUEST NOT IMPLEMENTED');
+        throw new Error('Not implemented');
     }
 
     if (!result) {

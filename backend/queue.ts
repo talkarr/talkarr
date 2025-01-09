@@ -3,21 +3,32 @@ import type { DoneCallback, Job } from 'bull';
 import Queue from 'bull';
 
 import { redisConnection } from '@backend/redis';
+import rootLog from '@backend/rootLog';
+
+const log = rootLog.child({ label: 'queue' });
 
 const queue = new Queue('talkarr', {
     redis: redisConnection,
 });
 
 queue.on('error', err => {
-    console.error(`Queue error: ${err.message}`);
+    log.error('Queue error:', { error: err });
 });
 
 queue.on('failed', (job, err) => {
-    console.error(`Job ${job.id} failed: ${err.message}`);
+    log.error(`Job ${job.id} (${job.name}) failed:`, { error: err });
 });
 
 queue.on('progress', (job, progress) => {
-    console.log(`Job ${job.id} is ${progress}% done`);
+    log.info(`Job ${job.id} (${job.name}) is ${progress}% done`);
+});
+
+queue.on('stalled', job => {
+    log.error(`Job ${job.id} (${job.name}) stalled`);
+});
+
+queue.on('completed', job => {
+    log.info(`Job ${job.id} (${job.name}) completed`);
 });
 
 export type TaskFunction<T extends object | undefined = undefined> = (

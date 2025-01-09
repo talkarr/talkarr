@@ -4,7 +4,12 @@ import { getFolderPathForTalk, isVideoFile } from '@backend/fs';
 import type { components } from '@backend/generated/schema';
 import { getConferenceFromEvent } from '@backend/helper';
 import rootLog from '@backend/rootLog';
-import type { ApiEvent, ExtendedDbEvent, TalkInfo } from '@backend/types';
+import type {
+    ApiEvent,
+    ConvertDateToStringType,
+    ExtendedDbEvent,
+    TalkInfo,
+} from '@backend/types';
 import { AddTalkFailure } from '@backend/types';
 
 import { Prisma, PrismaClient } from '@prisma/client';
@@ -14,7 +19,7 @@ const log = rootLog.child({ label: 'talks' });
 export const addTalk = async (
     event: ApiEvent,
     rootFolder: string,
-): Promise<ExtendedDbEvent | AddTalkFailure> => {
+): Promise<ConvertDateToStringType<ExtendedDbEvent | AddTalkFailure>> => {
     const prisma = new PrismaClient();
 
     const conference = await getConferenceFromEvent(event);
@@ -96,16 +101,18 @@ export const addTalk = async (
             },
         });
 
-        log.info('Created talk', createdTalk);
+        log.info('Created talk', { createdTalk });
 
-        return createdTalk;
+        return createdTalk as unknown as ConvertDateToStringType<
+            typeof createdTalk
+        >;
     } catch (error) {
-        log.error(
-            'Error creating talk',
-            error instanceof Prisma.PrismaClientKnownRequestError
-                ? error.code
-                : error,
-        );
+        log.error('Error creating talk', {
+            error:
+                error instanceof Prisma.PrismaClientKnownRequestError
+                    ? error.code
+                    : error,
+        });
 
         if (
             error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -120,11 +127,13 @@ export const addTalk = async (
     }
 };
 
-export const listTalks = async (): Promise<ExtendedDbEvent[]> => {
+export const listTalks = async (): Promise<
+    ConvertDateToStringType<ExtendedDbEvent>[]
+> => {
     const prisma = new PrismaClient();
 
     try {
-        return await prisma.event.findMany({
+        const result = await prisma.event.findMany({
             include: {
                 persons: true,
                 tags: true,
@@ -132,8 +141,12 @@ export const listTalks = async (): Promise<ExtendedDbEvent[]> => {
                 root_folder: true,
             },
         });
+
+        return result as unknown as ConvertDateToStringType<
+            (typeof result)[0]
+        >[];
     } catch (error) {
-        log.error('Error listing talks', error);
+        log.error('Error listing talks', { error });
 
         return [];
     } finally {
@@ -147,7 +160,7 @@ export const simpleListTalks = async (): Promise<DbEvent[]> => {
     try {
         return await prisma.event.findMany();
     } catch (error) {
-        log.error('Error listing talks', error);
+        log.error('Error listing talks', { error });
 
         return [];
     } finally {
@@ -193,11 +206,11 @@ export const updateTalk = async (
             },
         });
 
-        log.info('Updated talk', updatedTalk);
+        log.info('Updated talk', { updatedTalk });
 
         return updatedTalk;
     } catch (error) {
-        log.error('Error updating talk', error);
+        log.error('Error updating talk', { error });
 
         return false;
     } finally {
@@ -217,7 +230,7 @@ export const deleteTalk = async (guid: string): Promise<boolean> => {
 
         return true;
     } catch (error) {
-        log.error('Error deleting talk', error);
+        log.error('Error deleting talk', { error });
 
         return false;
     } finally {
@@ -244,14 +257,14 @@ export const getTalkInfoByGuid = async (
         });
 
         if (!result) {
-            log.warn('Talk not found', guid);
+            log.warn('Talk not found', { guid });
             return null;
         }
 
         const folder = await getFolderPathForTalk(result);
 
         if (!folder) {
-            log.warn('Folder not found for talk', result.title);
+            log.warn('Folder not found for talk', { title: result.title });
             return null;
         }
 
@@ -280,7 +293,7 @@ export const getTalkInfoByGuid = async (
             folder,
         };
     } catch (error) {
-        log.error('Error getting talk info', error);
+        log.error('Error getting talk info', { error });
     } finally {
         await prisma.$disconnect();
     }
@@ -311,7 +324,7 @@ export const getTalkInfoBySlug = async (
 };
 
 export const createNewTalkInfo = async (
-    talk: ExtendedDbEvent,
+    talk: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>,
 ): Promise<EventInfo['guid'] | null> => {
     const prisma = new PrismaClient();
 
@@ -355,7 +368,7 @@ export const createNewTalkInfo = async (
 
         return result.guid;
     } catch (error) {
-        log.error('Error creating new talk info', error);
+        log.error('Error creating new talk info', { error });
     } finally {
         await prisma.$disconnect();
     }
@@ -382,7 +395,7 @@ export const updateDownloadProgress = async ({
             },
         });
     } catch (error) {
-        log.error('Error updating download progress', error);
+        log.error('Error updating download progress', { error });
     } finally {
         await prisma.$disconnect();
     }
@@ -404,14 +417,37 @@ export const setIsDownloading = async (
             },
         });
     } catch (error) {
-        log.error('Error setting is downloading', error);
+        log.error('Error setting is downloading', { error });
+    } finally {
+        await prisma.$disconnect();
+    }
+};
+
+export const isEventDownloading = async (
+    eventInfoGuid: EventInfo['guid'],
+): Promise<boolean> => {
+    const prisma = new PrismaClient();
+
+    try {
+        const result = await prisma.eventInfo.findFirst({
+            where: {
+                guid: eventInfoGuid,
+                is_downloading: true,
+            },
+        });
+
+        return !!result;
+    } catch (error) {
+        log.error('Error checking if event is downloading', { error });
+
+        return false;
     } finally {
         await prisma.$disconnect();
     }
 };
 
 export const addDownloadedFile = async (
-    event: DbEvent,
+    event: DbEvent | ConvertDateToStringType<DbEvent>,
     file: Omit<File, 'eventGuid'>,
 ): Promise<boolean> => {
     const prisma = new PrismaClient();
@@ -434,7 +470,7 @@ export const addDownloadedFile = async (
             },
         });
     } catch (error) {
-        log.error('Error adding downloaded file', error);
+        log.error('Error adding downloaded file', { error, file });
 
         return false;
     } finally {
@@ -460,7 +496,7 @@ export const checkIfFileIsInDb = async (
 
         return !!result;
     } catch (error) {
-        log.error('Error checking if file is in db', error);
+        log.error('Error checking if file is in db', { error });
 
         return false;
     } finally {
@@ -484,7 +520,7 @@ export const setDownloadError = async (
             },
         });
     } catch (db_error) {
-        log.error('Error setting download error', db_error);
+        log.error('Error setting download error', { db_error });
     } finally {
         await prisma.$disconnect();
     }
@@ -505,7 +541,7 @@ export const clearDownloadError = async (
             },
         });
     } catch (db_error) {
-        log.error('Error clearing download error', db_error);
+        log.error('Error clearing download error', { db_error });
     } finally {
         await prisma.$disconnect();
     }
@@ -527,7 +563,7 @@ export const setDownloadExitCode = async (
             },
         });
     } catch (db_error) {
-        log.error('Error setting download exit code', db_error);
+        log.error('Error setting download exit code', { db_error });
     } finally {
         await prisma.$disconnect();
     }
@@ -551,7 +587,7 @@ export const getSpecificTalkByGuid = async (
             },
         });
     } catch (error) {
-        log.error('Error getting specific talk', error);
+        log.error('Error getting specific talk', { error });
 
         return null;
     } finally {
@@ -577,7 +613,7 @@ export const getSpecificTalkBySlug = async (
             },
         });
     } catch (error) {
-        log.error('Error getting specific talk', error);
+        log.error('Error getting specific talk', { error });
 
         return null;
     } finally {

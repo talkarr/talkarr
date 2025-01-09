@@ -8,14 +8,16 @@ import type { ApiEvent } from '@backend/types';
 
 export const getTalkFromApiByGuid = async (
     guid: string,
-    cacheKey?: string,
-    cacheDuration?: number,
+    cache?: {
+        cacheKey?: string;
+        cacheDuration?: number;
+    },
 ): Promise<ApiEvent | null> => {
     const response = await apiFetch(
         `${cccApiBaseUrl}/events/${guid}`,
         undefined,
-        cacheKey,
-        cacheDuration,
+        cache?.cacheKey,
+        cache?.cacheDuration,
     );
 
     if (!response.ok) {

@@ -3,7 +3,7 @@ import mime from 'mime-types';
 import pathUtils from 'path';
 
 import rootLog from '@backend/rootLog';
-import type { ExtendedDbEvent } from '@backend/types';
+import type { ConvertDateToStringType, ExtendedDbEvent } from '@backend/types';
 
 // filePath: `${USER_DEFINED_ROOT_FOLDER}/${CONFERENCE}/${FILENAME}`
 
@@ -30,7 +30,7 @@ export const isVideoFile = (filename: string): boolean => {
     return validVideoFileExtensions.includes(ext);
 };
 export const doesTalkHaveExistingFiles = async (
-    event: ExtendedDbEvent,
+    event: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>,
 ): Promise<ExistingFile[] | null> => {
     if (!event.rootFolderPath) {
         log.debug('Event does not have a root folder path');
@@ -103,7 +103,7 @@ export const doesTalkHaveExistingFiles = async (
 };
 
 export const doesEventHaveNfoFile = async (
-    event: ExtendedDbEvent,
+    event: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>,
 ): Promise<boolean> => {
     if (!event.rootFolderPath) {
         return false;
@@ -146,8 +146,15 @@ export const doesEventHaveNfoFile = async (
     }
 };
 
+type GetFolderPathForTalkEvent = Pick<
+    ExtendedDbEvent,
+    'rootFolderPath' | 'slug' | 'conference'
+>;
+
 export const getFolderPathForTalk = async (
-    event: Pick<ExtendedDbEvent, 'rootFolderPath' | 'slug' | 'conference'>,
+    event:
+        | GetFolderPathForTalkEvent
+        | ConvertDateToStringType<GetFolderPathForTalkEvent>,
 ): Promise<string | null> => {
     if (!event.rootFolderPath) {
         return null;

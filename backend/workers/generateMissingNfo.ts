@@ -5,14 +5,14 @@ import { handleNfoGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
-import type { ExtendedDbEvent } from '@backend/types';
+import type { ConvertDateToStringType, ExtendedDbEvent } from '@backend/types';
 
 export const taskName = 'generateMissingNfo';
 
 const log = rootLog.child({ label: 'workers/addTalk' });
 
 export interface GenerateMissingNfoData {
-    talk: ExtendedDbEvent;
+    talk: ConvertDateToStringType<ExtendedDbEvent>;
 }
 
 export const check = typia.createIs<GenerateMissingNfoData>();
@@ -24,7 +24,7 @@ const generateMissingNfo: TaskFunction<GenerateMissingNfoData> = async (
     const { talk } = job.data;
 
     if (!check(job.data)) {
-        log.error('Invalid data:', job.data);
+        log.error('Invalid data:', { data: job.data });
 
         throw new Error('Invalid data');
     }
@@ -33,20 +33,22 @@ const generateMissingNfo: TaskFunction<GenerateMissingNfoData> = async (
         const folder = await getFolderPathForTalk(talk);
 
         if (!folder) {
-            log.error('Error getting folder path for talk:', talk.title);
+            log.error('Error getting folder path for talk:', {
+                title: talk.title,
+            });
 
             throw new Error('Error getting folder path for talk');
         }
 
         if (!(await handleNfoGeneration(folder, talk))) {
-            log.error('Error generating missing nfo:', talk.title);
+            log.error('Error generating missing nfo:', { title: talk.title });
 
             throw new Error('Error generating missing nfo');
         }
 
         done();
     } catch (error) {
-        log.error('Error generating missing nfo:', error);
+        log.error('Error generating missing nfo:', { error });
 
         throw error;
     }

@@ -65,11 +65,11 @@ export const loadSettings = async (): Promise<void> => {
             ) as Settings[keyof Settings];
         }
 
-        log.info('Settings loaded:', settings);
+        log.info('Settings loaded:', { settings });
 
         settingsLoaded = true;
     } catch (e) {
-        log.error('Error loading settings:', e);
+        log.error('Error loading settings:', { e });
 
         throw e;
     }
@@ -90,9 +90,9 @@ export const saveSettings = async (): Promise<void> => {
             });
         }
 
-        log.info('Settings saved:', settings);
+        log.info('Settings saved:', { settings });
     } catch (e) {
-        log.error('Error saving settings:', e);
+        log.error('Error saving settings:', { e });
 
         throw e;
     } finally {

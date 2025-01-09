@@ -5,11 +5,18 @@ import pathUtils from 'path';
 import { isVideoFile, nfoFilename } from '@backend/fs';
 import rootLog from '@backend/rootLog';
 import { addDownloadedFile } from '@backend/talks';
-import type { ApiEvent, ExtendedDbEvent } from '@backend/types';
+import type {
+    ApiEvent,
+    ConvertDateToStringType,
+    ExtendedDbEvent,
+    NormalAndConvertedDate,
+} from '@backend/types';
 
 const log = rootLog.child({ label: 'helper/nfo' });
 
-export const generateNfo = (data: ApiEvent | ExtendedDbEvent): string => `
+export const generateNfo = (
+    data: NormalAndConvertedDate<ApiEvent | ExtendedDbEvent>,
+): string => `
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
     <movie>
         <title>${data.title}</title>
@@ -22,13 +29,24 @@ export const generateNfo = (data: ApiEvent | ExtendedDbEvent): string => `
 
 export const handleNfoGeneration = async (
     folder: string,
-    talk: ExtendedDbEvent,
+    talk: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>,
 ): Promise<boolean> => {
     log.info('Generating NFO file...');
 
-    const nfoContent = generateNfo(talk);
-
     const nfoPath = pathUtils.join(folder, nfoFilename);
+
+    const nfoExists = await fs_promises
+        .access(nfoPath)
+        .then(() => true)
+        .catch(() => false);
+
+    if (nfoExists) {
+        log.info('NFO file already exists.');
+
+        return true;
+    }
+
+    const nfoContent = generateNfo(talk);
 
     // write nfo file
     await fs_promises.writeFile(nfoPath, nfoContent);

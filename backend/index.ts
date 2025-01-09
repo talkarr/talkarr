@@ -21,7 +21,7 @@ const log = rootLog.child({ label: 'server' });
 
 log.info('Starting server...');
 
-const app = next({ dev });
+const app = next({ dev, turbopack: true });
 const handle = app.getRequestHandler();
 
 log.info('Preparing server...');
@@ -86,6 +86,6 @@ app.prepare()
     });
 
 process.on('uncaughtException', err => {
-    log.error('Uncaught Exception:', err);
+    log.error('Uncaught Exception:', { err });
     process.exit(1);
 });

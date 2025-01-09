@@ -1,6 +1,6 @@
 'use client';
 
-import type { BadgeProps } from '@mui/material';
+import type { VideoBadgeType } from '@components/VideoMetaBadge';
 
 import type { FC } from 'react';
 import { useMemo } from 'react';
@@ -8,17 +8,19 @@ import Markdown from 'react-markdown';
 
 import moment from 'moment';
 
+import { formatLanguageCode } from '@/utils/string';
+
 import { longDateFormat } from '@/constants';
 import { useUiStore } from '@/providers/uiStoreProvider';
 import type { TalkData } from '@/stores/uiStore';
 
 import searchItemCss from './searchitem.module.css';
 
-import CustomBadge from '@components/CustomBadge';
 // eslint-disable-next-line import/no-cycle
 import TalkImage from '@components/TalkImage';
+import VideoMetaBadge from '@components/VideoMetaBadge';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { styled } from '@mui/material';
+import { capitalize, Grid2, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -44,6 +46,16 @@ const StyledCard = styled(Card)(({ theme }) => ({
     minHeight: searchItemMinHeight,
     maxHeight: '500px',
     borderRadius: theme.shape.borderRadius * 4,
+
+    // header
+    '& .MuiCardHeader-root': {
+        padding: theme.spacing(1, 2),
+    },
+
+    // content
+    '& .MuiCardContent-root': {
+        padding: theme.spacing(1, 2),
+    },
 
     '& .MuiCardActionArea-root': {
         padding: theme.spacing(2),
@@ -80,8 +92,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
     const badges = useMemo(() => {
         const badgesArray: {
             text: string;
-            color: BadgeProps['color'];
-            type: string;
+            type: VideoBadgeType;
             imageUrl?: string;
         }[] = [];
 
@@ -90,8 +101,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
 
             badgesArray.push({
                 text: item.conference_title,
-                color: 'primary',
-                type: 'Conference',
+                type: 'conference',
                 imageUrl: logoUrl,
             });
         }
@@ -101,8 +111,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                 if (person) {
                     badgesArray.push({
                         text: person,
-                        color: 'secondary',
-                        type: 'Person',
+                        type: 'speaker',
                     });
                 }
             }
@@ -110,9 +119,8 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
 
         if (item.original_language) {
             badgesArray.push({
-                text: item.original_language.toUpperCase(),
-                color: 'info',
-                type: 'Language',
+                text: formatLanguageCode(item.original_language),
+                type: 'language',
             });
         }
 
@@ -121,8 +129,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                 if (tag) {
                     badgesArray.push({
                         text: tag,
-                        color: 'success',
-                        type: 'Tags',
+                        type: 'tag',
                     });
                 }
             }
@@ -131,8 +138,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
         if (item.date) {
             badgesArray.push({
                 text: moment(item.date).format(longDateFormat),
-                color: 'warning',
-                type: 'Date',
+                type: 'date',
             });
         }
 
@@ -155,8 +161,13 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                 <Box display="flex" flexDirection="column" mb={1}>
                     <CardHeader
                         title={
-                            <Box display="flex" gap={2} flexWrap="wrap">
-                                <Box display="flex" gap={1} flexWrap="wrap">
+                            <Box display="flex" gap={2} flexDirection="column">
+                                <Box
+                                    display="flex"
+                                    gap={1}
+                                    flexWrap="wrap"
+                                    flex={1}
+                                >
                                     <Typography
                                         variant="h3"
                                         minWidth="fit-content"
@@ -170,21 +181,41 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                                     ) : null}
                                 </Box>
                                 {badges.length ? (
-                                    <Box display="flex" gap={1} flexWrap="wrap">
+                                    <Grid2
+                                        container
+                                        spacing={1}
+                                        mb={item.subtitle ? 1 : undefined}
+                                        alignItems="center"
+                                        gridAutoRows="1fr"
+                                    >
                                         {badges.map((badge, index) => (
-                                            <CustomBadge
-                                                key={index}
-                                                badgeContent={badge.text}
-                                                imageUrl={badge.imageUrl}
-                                                color={badge.color}
-                                                title={badge.type}
-                                            />
+                                            <Grid2
+                                                key={`badge-${index}-${badge.type}`}
+                                            >
+                                                <VideoMetaBadge
+                                                    badgeContent={badge.text}
+                                                    imageUrl={badge.imageUrl}
+                                                    title={capitalize(
+                                                        badge.type,
+                                                    )}
+                                                    badgeType={badge.type}
+                                                    style={{
+                                                        height: 32,
+                                                    }}
+                                                />
+                                            </Grid2>
                                         ))}
-                                    </Box>
+                                    </Grid2>
                                 ) : null}
                             </Box>
                         }
-                        subheader={item.subtitle}
+                        subheader={
+                            !item.subtitle
+                                ? undefined
+                                : item.description?.startsWith(item.subtitle)
+                                  ? undefined
+                                  : item.subtitle
+                        }
                     />
                     <CardContent style={{ marginBottom: 4 }}>
                         <Markdown skipHtml className={searchItemCss.markdown}>

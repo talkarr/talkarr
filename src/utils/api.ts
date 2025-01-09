@@ -33,7 +33,7 @@ const apiMiddleware: Middleware = {
             return;
         }
 
-        console.error(
+        console.warn(
             `[${tag}] Error fetching ${request.url}: ${error && typeof error === 'object' && 'message' in error ? error.message : 'Unknown error'} (${time}ms)`,
         );
     },

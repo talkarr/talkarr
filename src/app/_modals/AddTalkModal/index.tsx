@@ -118,24 +118,30 @@ const AddTalkModal: FC = () => {
                     <TalkImage
                         data={addTalkModal || undefined}
                         maxWidth="100%"
+                        maxHeight="auto"
                     />
                 </Box>
                 <Box flex={1} height="100%">
-                    <Typography
-                        variant="body2"
-                        mb={1}
-                        sx={{ overflowY: 'auto' }}
-                        maxHeight={300}
-                        height="100%"
-                        p={1}
-                        border={1}
-                        borderColor={theme => alpha(theme.palette.divider, 0.2)}
-                        borderRadius={4}
-                        bgcolor="background.default"
-                        boxShadow={2}
-                    >
-                        {addTalkModal?.description}
-                    </Typography>
+                    {addTalkModal?.description || addTalkModal?.subtitle ? (
+                        <Typography
+                            variant="body2"
+                            mb={1}
+                            sx={{ overflowY: 'auto' }}
+                            maxHeight={300}
+                            height="100%"
+                            p={1}
+                            border={1}
+                            borderColor={theme =>
+                                alpha(theme.palette.divider, 0.2)
+                            }
+                            borderRadius={4}
+                            bgcolor="background.default"
+                            boxShadow={2}
+                        >
+                            {addTalkModal?.description ||
+                                addTalkModal?.subtitle}
+                        </Typography>
+                    ) : null}
                     <Box mb={2}>
                         <Typography variant="body1" fontWeight="bold">
                             Date:

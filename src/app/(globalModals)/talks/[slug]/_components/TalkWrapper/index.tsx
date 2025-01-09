@@ -19,6 +19,11 @@ const TalkWrapper: FC<TalkWrapperProps> = ({ initialData }) => {
     const getSingleTalkData = useApiStore(state => state.getSingleTalkData);
     const singleTalkData = useApiStore(state => state.singleTalkData);
 
+    console.warn('initialData', {
+        talk: initialData.talk.slug,
+        db: initialData.db.slug,
+    });
+
     useEffect(() => {
         const func = async (): Promise<void> => {
             await getSingleTalkData({ guid: initialData.talk.guid });

@@ -40,7 +40,7 @@ export const isValidData = <T extends InternalUseableTaskNames>(
     data: unknown,
 ): data is Parameters<TaskValidator[T]>[0] => {
     if (!(taskName in taskValidators)) {
-        log.warn('Invalid task name:', taskName);
+        log.warn('Invalid task name:', { taskName });
         return false;
     }
 

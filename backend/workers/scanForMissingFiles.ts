@@ -15,14 +15,14 @@ import {
     listTalks,
     setIsDownloading,
 } from '@backend/talks';
-import type { ExtendedDbEvent } from '@backend/types';
+import type { ConvertDateToStringType, ExtendedDbEvent } from '@backend/types';
 
 export const taskName = 'scanForMissingFiles';
 
 const log = rootLog.child({ label: 'workers/scanForMissingFiles' });
 
 export interface ScanForMissingFilesData {
-    event?: ExtendedDbEvent;
+    event?: ConvertDateToStringType<ExtendedDbEvent>;
 }
 
 export const check = typia.createIs<ScanForMissingFilesData>();
@@ -34,7 +34,9 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
     log.info('Scanning for missing files...');
 
     if (!check(job.data)) {
-        log.error('Invalid data:', job.data);
+        const foo = typia.validate<ScanForMissingFilesData>(job.data);
+
+        log.error('Invalid data:', { foo });
 
         throw new Error('Invalid data');
     }
@@ -53,7 +55,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
         const result = await createNewTalkInfo(talk);
 
         if (!result) {
-            log.error('Error creating new talk info:', talk.title);
+            log.error('Error creating new talk info:', { title: talk.title });
             continue;
         }
 
@@ -86,7 +88,9 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                     });
 
                     if (!addFileToDbResult) {
-                        log.error('Error adding file to db:', talk.title);
+                        log.error('Error adding file to db:', {
+                            title: talk.title,
+                        });
 
                         throw new Error('Error adding file to db');
                     }

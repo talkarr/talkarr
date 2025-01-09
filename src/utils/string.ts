@@ -1,3 +1,5 @@
+import ISO6391 from 'iso-639-1';
+
 export const limitChars = (
     str: string,
     limit: number,
@@ -51,4 +53,33 @@ export const formatVideoDuration = (seconds: number): string => {
     }
 
     return parts.join(' ');
+};
+
+export const formatLanguageCode = (code: string): string => {
+    const codesToCheck = [code];
+
+    if (code.length === 3) {
+        // add code without last char
+        codesToCheck.push(code.slice(0, 2));
+    }
+
+    const getCode = (codeToCheck: string): string | null => {
+        if (!ISO6391.validate(codeToCheck)) {
+            return null;
+        }
+
+        return ISO6391.getName(codeToCheck);
+    };
+
+    for (const codeToCheck of codesToCheck) {
+        const name = getCode(codeToCheck);
+        if (name) {
+            if (codeToCheck !== code) {
+                return `${name} (${code})`;
+            }
+            return name;
+        }
+    }
+
+    return code;
 };

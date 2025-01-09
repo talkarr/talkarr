@@ -50,7 +50,9 @@ const handleGetEventRequest = async (
         return;
     }
 
-    const talkData = await getTalkFromApiByGuid(event.guid, 'talks/get');
+    const talkData = await getTalkFromApiByGuid(event.guid, {
+        cacheKey: `talks/get/${event.guid}`,
+    });
 
     const talkInfo = await getTalkInfoByGuid(event.guid);
 

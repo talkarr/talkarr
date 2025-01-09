@@ -2,6 +2,7 @@ import type { TypographyProps } from '@mui/material/Typography';
 
 import type { FC } from 'react';
 
+import SmallText from '@components/SmallText';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
@@ -19,15 +20,7 @@ const TalkAttribute: FC<TalkAttributeProps> = ({
     color,
 }) => (
     <Box title={title}>
-        <Typography
-            variant="body1"
-            fontWeight="bold"
-            lineHeight={1.2}
-            color="text.secondary"
-            fontSize={10}
-        >
-            {name}
-        </Typography>
+        <SmallText>{name}</SmallText>
         <Typography variant="body2" lineHeight={1.2} color={color}>
             {value}
         </Typography>

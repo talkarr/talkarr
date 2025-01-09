@@ -20,8 +20,13 @@ if (!['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
     throw new Error('Invalid NODE_ENV');
 }
 
+console.log(`====================
+NODE_ENV: ${process.env.NODE_ENV}
+====================`);
+
 export const unpluginTypiaOptions: Options = {
     log: process.env.NODE_ENV === 'development',
+    cache: process.env.NODE_ENV === 'production',
 };
 
 const nextConfig: NextConfig = {

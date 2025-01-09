@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import type { FC } from 'react';
 import React, { useState } from 'react';
 
-import { addTalksPageLink } from '@/constants';
+import { addTalksPageWithSearchLink } from '@/constants';
 
 import SearchIcon from '@mui/icons-material/SearchRounded';
 import Box from '@mui/material/Box';
@@ -18,10 +18,8 @@ const NavigationSearch: FC = () => {
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        const searchParams = new URLSearchParams();
-        searchParams.set('search', search);
 
-        router.push(`${addTalksPageLink}?${searchParams.toString()}`);
+        router.push(addTalksPageWithSearchLink(search));
     };
 
     return (

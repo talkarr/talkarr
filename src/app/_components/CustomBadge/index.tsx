@@ -6,18 +6,63 @@ import Image from 'next/image';
 
 import type { FC } from 'react';
 
-import { useTheme } from '@mui/material';
+import { darken, styled, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+type Size = 'small' | 'medium' | 'large';
+
 export interface CustomBadgeProps extends Omit<BadgeProps, 'children'> {
     imageUrl?: string;
+    size?: Size;
 }
+
+const FontSizeMap: Record<Size, number> = {
+    small: 10,
+    medium: 12,
+    large: 14,
+};
+
+type Key = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning';
+
+const StyledBox = styled(Box, {
+    shouldForwardProp(propName: PropertyKey): boolean {
+        return propName !== 'badgeColor';
+    },
+})<{
+    badgeColor: Key;
+}>(({ theme, badgeColor, onClick }) => ({
+    ...(onClick
+        ? {
+              cursor: 'pointer',
+              userSelect: 'none',
+              '&:hover': {
+                  backgroundColor: badgeColor
+                      ? darken(theme.palette[badgeColor as Key].main, 0.2)
+                      : theme.palette.action.hover,
+              },
+              '&:focus': {
+                  backgroundColor: badgeColor
+                      ? darken(theme.palette[badgeColor as Key].main, 0.3)
+                      : theme.palette.action.focus,
+              },
+              '&:active': {
+                  backgroundColor: badgeColor
+                      ? darken(theme.palette[badgeColor as Key].main, 0.4)
+                      : theme.palette.action.selected,
+              },
+              transition: theme.transitions.create('background-color', {
+                  duration: theme.transitions.duration.shortest,
+              }),
+          }
+        : {}),
+}));
 
 const CustomBadge: FC<CustomBadgeProps> = ({
     color = 'primary',
     badgeContent,
     imageUrl,
+    size = 'medium',
     ...rest
 }) => {
     const theme = useTheme();
@@ -31,10 +76,11 @@ const CustomBadge: FC<CustomBadgeProps> = ({
             : processedColor;
 
     return (
-        <Box
+        <StyledBox
             borderRadius={4}
             bgcolor={actualColor}
             color={theme.palette.getContrastText(actualColor)}
+            badgeColor={processedColor}
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -75,10 +121,10 @@ const CustomBadge: FC<CustomBadgeProps> = ({
                     </Box>
                 </Box>
             ) : null}
-            <Typography variant="body1" noWrap>
+            <Typography variant="body1" noWrap fontSize={FontSizeMap[size]}>
                 {badgeContent}
             </Typography>
-        </Box>
+        </StyledBox>
     );
 };
 

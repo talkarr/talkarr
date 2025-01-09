@@ -98,6 +98,8 @@ export type ConvertDateToStringType<T> = T extends Date
       ? { [K in keyof T]: ConvertDateToStringType<T[K]> }
       : T;
 
+export type NormalAndConvertedDate<T> = T | ConvertDateToStringType<T>;
+
 export type ApiEvent = components['schemas']['Event'];
 
 export type TalkInfo = components['schemas']['TalkInfo'];

@@ -46,7 +46,7 @@ router.get(
 
             res.json({ success: true, data: { files, separator } });
         } catch (error) {
-            log.error('Error listing files', error);
+            log.error('Error listing files', { error });
 
             // check if error is because folder does not exist
             if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
@@ -114,7 +114,7 @@ router.post(
 
         // Check if folder exists
         if (!fs.existsSync(folder)) {
-            log.error('Folder does not exist:', folder);
+            log.error('Folder does not exist:', { folder });
 
             res.status(404).json({
                 success: false,
@@ -128,7 +128,7 @@ router.post(
         try {
             fs.accessSync(folder, fs.constants.R_OK);
         } catch (error) {
-            log.error('Error accessing folder (READ_CHECK):', error);
+            log.error('Error accessing folder (READ_CHECK):', { error });
 
             res.status(403).json({
                 success: false,
@@ -142,7 +142,7 @@ router.post(
         try {
             fs.accessSync(folder, fs.constants.W_OK);
         } catch (error) {
-            log.error('Error accessing folder (WRITE_CHECK):', error);
+            log.error('Error accessing folder (WRITE_CHECK):', { error });
 
             res.status(403).json({
                 success: false,
@@ -173,7 +173,7 @@ router.post(
                 return;
             }
         } catch (error) {
-            log.error('Error adding folder:', error);
+            log.error('Error adding folder:', { error });
 
             res.status(500).json({
                 success: false,

@@ -50,13 +50,29 @@ const TalkImage: FC<TalkImageProps> = ({ data, maxWidth, maxHeight }) => {
                 <ImageFallback />
             ) : (
                 <>
+                    {imageLoading ? (
+                        <Skeleton
+                            variant="rectangular"
+                            width={maxWidth}
+                            height={maxHeight ?? searchItemMinHeight}
+                            sx={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                borderRadius: '4px',
+                            }}
+                        />
+                    ) : null}
                     <Image
                         loading="lazy"
                         src={data.poster_url}
                         alt={data.title}
+                        title={data.title}
                         sizes="300px"
                         fill
-                        style={{ objectFit: 'contain' }}
+                        style={{
+                            objectFit: 'contain',
+                        }}
                         onLoad={event => {
                             setImageLoading(false);
 
@@ -69,19 +85,6 @@ const TalkImage: FC<TalkImageProps> = ({ data, maxWidth, maxHeight }) => {
                         }}
                         onError={() => setShowFallback(true)}
                     />
-                    {imageLoading ? (
-                        <Skeleton
-                            variant="rectangular"
-                            width={maxWidth}
-                            height={searchItemMinHeight}
-                            sx={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                borderRadius: '4px',
-                            }}
-                        />
-                    ) : null}
                 </>
             )}
         </div>

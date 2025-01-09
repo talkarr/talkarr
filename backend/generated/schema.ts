@@ -875,7 +875,7 @@ export interface components {
             /** @example event-slug */
             slug: string;
             /** @example Event description */
-            description: string;
+            description: string | null;
             /** @example https://example.com */
             link: string;
             /** @example eng */

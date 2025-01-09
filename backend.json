@@ -302,7 +302,8 @@
                     },
                     "description": {
                         "type": "string",
-                        "example": "Event description"
+                        "example": "Event description",
+                        "nullable": true
                     },
                     "link": {
                         "type": "string",
