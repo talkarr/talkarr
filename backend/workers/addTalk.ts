@@ -189,6 +189,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
 
         await setDownloadExitCode(talk.eventInfoGuid, exitCode);
 
+        await setIsDownloading(talk.eventInfoGuid, false);
+
         done();
     } catch (error) {
         log.error('Error downloading video:', error);
@@ -201,9 +203,9 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
                   : 'Unknown error';
         await setDownloadError(talk.eventInfoGuid, errorAsString);
 
-        throw error;
-    } finally {
         await setIsDownloading(talk.eventInfoGuid, false);
+
+        throw error;
     }
 };
 
