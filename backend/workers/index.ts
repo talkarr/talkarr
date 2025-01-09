@@ -18,12 +18,9 @@ export const taskNames = [
     scanForMissingFiles,
 ] as const;
 
-export type NonInternalTaskNames = 'generateMissingNfo' | 'scanForMissingFiles';
+export type TaskNames = 'generateMissingNfo' | 'scanForMissingFiles';
 
-export type UsableTaskNames = Extract<
-    (typeof taskNames)[number],
-    NonInternalTaskNames
->;
+export type UsableTaskNames = Extract<(typeof taskNames)[number], TaskNames>;
 
 type InternalUseableTaskNames = UsableTaskNames extends never
     ? '__NEVER__'
@@ -38,7 +35,7 @@ export const taskValidators: TaskValidator = {
     [scanForMissingFiles]: validateScanForMissingFiles,
 } as const;
 
-export const isValidData = <T extends UsableTaskNames>(
+export const isValidData = <T extends InternalUseableTaskNames>(
     taskName: T,
     data: unknown,
 ): data is Parameters<TaskValidator[T]>[0] => {
