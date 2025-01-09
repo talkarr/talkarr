@@ -2,7 +2,10 @@ name: Bug report
 description: Create a report to help us improve
 title: "[BUG]: "
 labels: ["bug", "maintainer Check"]
-assignees: []
+projects:
+  - talkarr/1
+assignees:
+  - CommanderRedYT
 body:
   - type: markdown
     attributes:
@@ -86,7 +89,6 @@ body:
         placeholder: Additional context
 
   - type: markdown
-    id: end
     attributes:
         value: |
             ---

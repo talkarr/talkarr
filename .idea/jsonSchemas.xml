@@ -19,6 +19,28 @@
             </SchemaInfo>
           </value>
         </entry>
+        <entry key="github-issue-forms">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="github-issue-forms" />
+              <option name="relativePathToSchema" value="https://json.schemastore.org/github-issue-forms.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value=".github/ISSUE_TEMPLATE/00*.yml" />
+                  </Item>
+                  <Item>
+                    <option name="path" value=".github/ISSUE_TEMPLATE/002-feature_request.yml" />
+                  </Item>
+                  <Item>
+                    <option name="path" value=".github/ISSUE_TEMPLATE/001-bug_report.yml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
       </map>
     </state>
   </component>
