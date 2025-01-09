@@ -2,7 +2,7 @@ name: Bug report
 about: Create a report to help us improve
 title: "[BUG]: "
 labels: ["bug", "maintainer Check"]
-assignees: ''
+assignees: ""
 body:
   - type: markdown
     attributes:
@@ -14,7 +14,6 @@ body:
         label: Describe the bug
         description: A clear and concise description of what the bug is.
         placeholder: Describe the bug
-        value: ""
     validations:
         required: true
 
@@ -28,7 +27,6 @@ body:
             2. Click on '....'
             3. Scroll down to '....'
             4. See error
-        value: ""
     validations:
         required: true
 
@@ -38,7 +36,6 @@ body:
         label: Expected behavior
         description: A clear and concise description of what you expected to happen.
         placeholder: Expected behavior
-        value: ""
     validations:
         required: true
 
@@ -48,7 +45,6 @@ body:
         label: Screenshots
         description: If applicable, add screenshots to help explain your problem.
         placeholder: Screenshots
-        value: ""
 
   - type: input
     id: bug-browser
@@ -56,7 +52,6 @@ body:
         label: Browser
         description: Browser including version (e.g. Firefox 100.0.0)
         placeholder: Browser
-        value: ""
     validations:
         required: true
 
@@ -71,7 +66,6 @@ body:
         label: OS
         description: Operating System (e.g. Ubuntu 20.04)
         placeholder: OS
-        value: ""
 
   - type: input
     id: bug-software-version
@@ -79,7 +73,6 @@ body:
         label: Version
         description: Software version (e.g. 1.0.0). You can find it in the sidebar of the software.
         placeholder: Version
-        value: ""
 
   - type: markdown
     attributes:
@@ -92,7 +85,6 @@ body:
         label: Additional context
         description: Add any other context about the problem here.
         placeholder: Additional context
-        value: ""
 
   - type: markdown
     id: end
