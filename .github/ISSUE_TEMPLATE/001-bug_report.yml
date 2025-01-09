@@ -58,7 +58,7 @@ body:
   - type: markdown
     attributes:
         value: |
-            **Server Information**
+            ## Server Information
 
   - type: input
     id: bug-server-os
@@ -66,6 +66,8 @@ body:
         label: OS
         description: Operating System (e.g. Ubuntu 20.04)
         placeholder: OS
+    validations:
+      required: true
 
   - type: input
     id: bug-software-version
@@ -73,11 +75,8 @@ body:
         label: Version
         description: Software version (e.g. 1.0.0). You can find it in the sidebar of the software.
         placeholder: Version
-
-  - type: markdown
-    attributes:
-        value: |
-            **Additional context**
+    validations:
+      required: true
 
   - type: textarea
     id: bug-additional-context
