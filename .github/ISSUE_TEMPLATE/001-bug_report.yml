@@ -1,0 +1,102 @@
+name: Bug report
+about: Create a report to help us improve
+title: "[BUG]: "
+labels: ["bug", "maintainer Check"]
+assignees: ''
+body:
+  - type: markdown
+    attributes:
+        value: |
+            Thank you for reaching out. Please fill out the form below to help us understand the issue better.
+  - type: textarea
+    id: bug-description
+    attributes:
+        label: Describe the bug
+        description: A clear and concise description of what the bug is.
+        placeholder: Describe the bug
+        value: ""
+    validations:
+        required: true
+
+  - type: textarea
+    id: bug-reproduce
+    attributes:
+        label: To Reproduce
+        description: "Steps to reproduce the behavior:"
+        placeholder: |
+            1. Go to '...'
+            2. Click on '....'
+            3. Scroll down to '....'
+            4. See error
+        value: ""
+    validations:
+        required: true
+
+  - type: textarea
+    id: bug-expected
+    attributes:
+        label: Expected behavior
+        description: A clear and concise description of what you expected to happen.
+        placeholder: Expected behavior
+        value: ""
+    validations:
+        required: true
+
+  - type: textarea
+    id: bug-screenshots
+    attributes:
+        label: Screenshots
+        description: If applicable, add screenshots to help explain your problem.
+        placeholder: Screenshots
+        value: ""
+
+  - type: input
+    id: bug-browser
+    attributes:
+        label: Browser
+        description: Browser including version (e.g. Firefox 100.0.0)
+        placeholder: Browser
+        value: ""
+    validations:
+        required: true
+
+  - type: markdown
+    attributes:
+        value: |
+            **Server Information**
+
+  - type: input
+    id: bug-server-os
+    attributes:
+        label: OS
+        description: Operating System (e.g. Ubuntu 20.04)
+        placeholder: OS
+        value: ""
+
+  - type: input
+    id: bug-software-version
+    attributes:
+        label: Version
+        description: Software version (e.g. 1.0.0). You can find it in the sidebar of the software.
+        placeholder: Version
+        value: ""
+
+  - type: markdown
+    attributes:
+        value: |
+            **Additional context**
+
+  - type: textarea
+    id: bug-additional-context
+    attributes:
+        label: Additional context
+        description: Add any other context about the problem here.
+        placeholder: Additional context
+        value: ""
+
+  - type: markdown
+    id: end
+    attributes:
+        value: |
+            ---
+            **Note**: Please make sure to fill out all the information above. Thank you!
