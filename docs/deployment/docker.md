@@ -19,6 +19,7 @@ POSTGRES_PORT=5432
 
 REDIS_HOST=redis
 REDIS_PORT=6379
+REDIS_PASSWORD=
 
 # postgresql://<username>:<password>@<host>:<port>/<database>?schema=<schema>
 DATABASE_URL="postgresql://talkarr:talkarr@db:5432/talkarr?schema=public"
@@ -111,6 +112,7 @@ POSTGRES_PORT=5432
 
 REDIS_HOST=localhost
 REDIS_PORT=6379
+REDIS_PASSWORD=
 
 # postgresql://<username>:<password>@<host>:<port>/<database>?schema=<schema>
 DATABASE_URL="postgresql://talkarr:talkarr@localhost:5432/talkarr?schema=public"
@@ -139,6 +141,7 @@ POSTGRES_PORT=5432 # Change this to the port of your PostgreSQL instance
 
 REDIS_HOST=localhost # Change this to the hostname of your Redis instance
 REDIS_PORT=6379 # Change this to the port of your Redis instance
+REDIS_PASSWORD=
 
 # postgresql://<username>:<password>@<host>:<port>/<database>?schema=<schema>
 DATABASE_URL="postgresql://talkarr:talkarr@localhost:5432/talkarr?schema=public"
