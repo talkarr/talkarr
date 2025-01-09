@@ -37,16 +37,36 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive --prefer-offline
 
-      - name: Run ESLint
+      - name: Run ESLint for frontend
         continue-on-error: true
+        id: eslint-frontend
         run: |
-          yarn lint --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+          yarn lint:frontend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
 
-      - name: Upload ESLint results
+      - name: Upload Frontend ESLint results
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: eslint-results.sarif
           wait-for-processing: true
+
+      - name: Run ESLint for backend
+        continue-on-error: true
+        id: eslint-backend
+        run: |
+          yarn lint:backend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+
+      - name: Upload Backend ESLint results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: eslint-results.sarif
+          wait-for-processing: true
+
+      - name: Fail if ESLint found any errors
+        run: |
+          if [ -s eslint-results.sarif ]; then
+              echo "ESLint found some errors"
+              exit 1
+          fi
 
       - name: Run generate and check if something changed
         run: yarn generate && git diff --exit-code
