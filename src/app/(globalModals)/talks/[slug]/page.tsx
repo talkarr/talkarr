@@ -5,6 +5,7 @@ import type { SuccessData } from '@backend/types';
 
 import { getTalk } from '@/app/_api/talks/get';
 import { talkInfo } from '@/app/_api/talks/info';
+import TalkToolbar from '@/app/(globalModals)/talks/[slug]/_components/TalkToolbar';
 import TalkWrapper from '@/app/(globalModals)/talks/[slug]/_components/TalkWrapper';
 
 interface PageProps {

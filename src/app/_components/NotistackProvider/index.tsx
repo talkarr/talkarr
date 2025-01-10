@@ -13,12 +13,17 @@ const NotistackProvider: FC<PropsWithChildren> = ({ children }) => (
             vertical: 'top',
             horizontal: 'right',
         }}
+        SnackbarProps={{
+            // @ts-expect-error
+            'data-testid': 'snackbar',
+        }}
         action={snackbarId => (
             <Button
                 onClick={() => {
                     closeSnackbar(snackbarId);
                 }}
                 color="inherit"
+                data-testid="snackbar-dismiss"
             >
                 Dismiss
             </Button>

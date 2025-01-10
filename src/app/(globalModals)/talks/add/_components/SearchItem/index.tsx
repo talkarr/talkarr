@@ -150,6 +150,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
             sx={{
                 opacity: isAlreadyAdded ? 0.5 : 1,
             }}
+            data-testid="search-item"
         >
             <CardActionArea
                 onClick={() => (isAlreadyAdded ? null : openAddTalkModal(item))}

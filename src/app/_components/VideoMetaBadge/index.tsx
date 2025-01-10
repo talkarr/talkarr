@@ -55,6 +55,8 @@ const VideoMetaBadge: FC<VideoMetaBadgeProps> = ({
                           );
                       }
             }
+            data-testid="video-meta-badge"
+            data-badge-type={badgeType}
         />
     );
 };

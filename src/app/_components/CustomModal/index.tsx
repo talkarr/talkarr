@@ -20,7 +20,7 @@ export interface ModalProps {
     moreWidth?: boolean;
     keepMounted?: boolean;
     title?: string;
-    testID?: string;
+    testID: string;
     closeButtonDisabled?: boolean;
     divider?: boolean;
 }

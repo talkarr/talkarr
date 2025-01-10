@@ -1,3 +1,5 @@
+import rootLog from '@backend/rootLog';
+
 import { Prisma, PrismaClient } from '@prisma/client';
 
 export enum AddRootFolderResponse {
@@ -5,6 +7,8 @@ export enum AddRootFolderResponse {
     Duplicate,
     Other,
 }
+
+const log = rootLog.child({ label: 'rootFolder' });
 
 export const addRootFolder = async (
     rootFolder: string,
@@ -18,6 +22,7 @@ export const addRootFolder = async (
             },
         });
     } catch (error) {
+        log.error('Error adding root folder', { error });
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === 'P2002') {
                 return AddRootFolderResponse.Duplicate;
@@ -37,7 +42,8 @@ export const listRootFolders = async (): Promise<string[]> => {
         const rootFolders = await prisma.rootFolder.findMany();
 
         return rootFolders.map(folder => folder.path);
-    } catch {
+    } catch (e) {
+        log.error('Error listing root folders', { error: e });
         return [];
     } finally {
         await prisma.$disconnect();
@@ -58,7 +64,8 @@ export const deleteRootFolder = async (
                 events: true,
             },
         });
-    } catch {
+    } catch (e) {
+        log.error('Error deleting root folder', { error: e });
         return false;
     }
 

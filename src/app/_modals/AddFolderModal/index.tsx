@@ -16,6 +16,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
+import {enqueueSnackbar} from "notistack";
 
 const StyledList = styled(List)(({ theme }) => ({
     width: '100%',
@@ -80,6 +81,9 @@ const AddFolderModal: FC = () => {
 
             if (response) {
                 if (response.success) {
+                    enqueueSnackbar('Folder added successfully.', {
+                        variant: 'success',
+                    });
                     close();
                 } else {
                     setError(response.error);
@@ -144,6 +148,7 @@ const AddFolderModal: FC = () => {
             title="Add a root folder"
             moreWidth
             closeButtonDisabled={addFolderLoading}
+            testID="add-folder-modal"
         >
             <Box mb={2}>
                 <form
@@ -161,6 +166,14 @@ const AddFolderModal: FC = () => {
                         helperText={error}
                         error={Boolean(error)}
                         disabled={addFolderLoading}
+                        slotProps={{
+                            htmlInput: {
+                                'data-testid': 'add-folder-input',
+                            },
+                            formHelperText: {
+                                'data-testid': 'add-folder-helper-text',
+                            },
+                        }}
                     />
                 </form>
             </Box>
@@ -206,6 +219,7 @@ const AddFolderModal: FC = () => {
                     onClick={handleAddFolder}
                     variant="contained"
                     disabled={addFolderLoading}
+                    data-testid="add-folder-button"
                 >
                     Add
                 </Button>

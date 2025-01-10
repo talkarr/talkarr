@@ -42,3 +42,4 @@ logs/
 test-results/
 .nft-cache
 playwright-report/
+/e2e/e2e-test-folder/

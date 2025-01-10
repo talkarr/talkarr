@@ -63,6 +63,7 @@ const FolderRow: FC<FolderRowProps> = ({ folder, freeSpace }) => {
                     color="error"
                     aria-label="delete"
                     onClick={handleDelete}
+                    data-testid="delete-folder-button"
                 >
                     <DeleteIcon />
                 </IconButton>

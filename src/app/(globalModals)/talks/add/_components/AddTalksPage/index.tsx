@@ -120,7 +120,13 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
             (!searchEmpty &&
                 !error &&
                 typeof results?.events?.length === 'undefined') ? (
-                <Box mt={2} display="flex" flexDirection="column" gap={1}>
+                <Box
+                    mt={2}
+                    display="flex"
+                    flexDirection="column"
+                    gap={1}
+                    data-testid="search-results-loading"
+                >
                     {Array.from({ length: 5 }).map((_, index) => (
                         <SearchItemSkeleton key={index} />
                     ))}
@@ -131,6 +137,7 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                         variant="h3"
                         fontWeight="normal"
                         textAlign="center"
+                        data-testid="search-results-error"
                     >
                         {error}
                     </Typography>

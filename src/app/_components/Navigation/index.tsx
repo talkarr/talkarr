@@ -1,22 +1,17 @@
-import type SvgIcon from '@mui/material/SvgIcon/SvgIcon';
+import type {
+    NavigationItemType,
+    SplitNavigationItems,
+} from '@components/Navigation/navigation';
 
 import type { FC, PropsWithChildren } from 'react';
 import { Fragment } from 'react';
 
-import {
-    addTalksPageLink,
-    homePageLink,
-    importTalksPageLink,
-    mediaManagementSettingsPageLink,
-    pageName,
-    settingsPageLink,
-} from '@/constants';
+import { pageName } from '@/constants';
 
 import Logo from '@components/Logo';
+import { navigationItems } from '@components/Navigation/navigation';
 import NavigationItem from '@components/Navigation/NavigationItem';
 import NavigationSearch from '@components/Navigation/NavigationSearch';
-import TalksIcon from '@mui/icons-material/RecordVoiceOverRounded';
-import SettingsIcon from '@mui/icons-material/SettingsRounded';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -24,58 +19,6 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-
-export type SimpleNavigationItem = Pick<
-    NavigationItemType,
-    'title' | 'path' | 'visible'
->;
-
-export interface NavigationItemType {
-    title: string;
-    Icon: typeof SvgIcon;
-    subitems?: SimpleNavigationItem[];
-    path: string | { href: string; as: string };
-    visible?: false;
-}
-
-export type SplitNavigationItems = SimpleNavigationItem[][];
-
-export const settings: (SimpleNavigationItem & { description: string })[] = [
-    {
-        title: 'Media Management',
-        path: mediaManagementSettingsPageLink,
-        description: 'Naming and management of media files.',
-    },
-];
-
-const navigationItems: NavigationItemType[] = [
-    {
-        title: 'Talks',
-        Icon: TalksIcon,
-        path: homePageLink,
-        subitems: [
-            {
-                title: 'Add Talk',
-                path: addTalksPageLink,
-            },
-            {
-                title: 'Import Talks',
-                path: importTalksPageLink,
-            },
-            {
-                title: 'Specific Talk',
-                path: '/talks/[slug]',
-                visible: false,
-            },
-        ],
-    },
-    {
-        title: 'Settings',
-        Icon: SettingsIcon,
-        path: settingsPageLink,
-        subitems: settings,
-    },
-];
 
 export const drawerWidth = 240;
 
@@ -125,7 +68,11 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                 </Box>
                 {splitItemsByDivider.map((items, index, { length }) => (
                     <Fragment key={`navigation-item-list-${index}`}>
-                        <List disablePadding tabIndex={-1}>
+                        <List
+                            disablePadding
+                            tabIndex={-1}
+                            data-testid="navigation"
+                        >
                             {items.map((item, itemIndex) => (
                                 <NavigationItem
                                     item={item}

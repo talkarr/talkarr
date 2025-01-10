@@ -111,6 +111,7 @@ const NavigationItem: FC<NavigationItemProps> = ({
             as={as}
             tabIndex={0}
             className="_custom_link_highlight"
+            data-navigation-slug={item.slug}
             style={{
                 textDecoration: 'none',
                 color: 'inherit',

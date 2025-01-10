@@ -3,6 +3,8 @@ import type { PartialDeep } from 'type-fest';
 import deepmerge from 'deepmerge';
 import { createStore } from 'zustand';
 
+import type { DeleteEventResponse } from '@/app/_api/talks/delete';
+import { deleteEvent } from '@/app/_api/talks/delete';
 import type { GetTalkResponse } from '@/app/_api/talks/get';
 import { getTalk } from '@/app/_api/talks/get';
 import type { TalkInfoResponse } from '@/app/_api/talks/info';
@@ -25,6 +27,10 @@ export interface ApiActions {
     getSingleTalkData: (
         data: { guid: string; slug?: never } | { slug: string; guid?: never },
     ) => Promise<GetTalkResponse>;
+    handleDeleteTalk: (
+        guid: string,
+        deleteFiles: boolean,
+    ) => Promise<DeleteEventResponse>;
 }
 
 export type ApiStore = ApiState & ApiActions;
@@ -83,4 +89,6 @@ export const createApiStore = (initialState?: PartialDeep<ApiState>) =>
 
             return response;
         },
+        handleDeleteTalk: async (guid, deleteFiles) =>
+            deleteEvent({ guid, delete_files: deleteFiles }),
     }));

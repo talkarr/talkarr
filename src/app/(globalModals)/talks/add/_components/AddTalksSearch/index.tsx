@@ -134,6 +134,9 @@ const AddTalksSearch: FC<AddTalksSearchProps> = ({
                     onChange={e => {
                         setSearch(e.target.value);
                     }}
+                    inputProps={{
+                        'data-testid': 'add-talks-search',
+                    }}
                 />
             </form>
         </Box>

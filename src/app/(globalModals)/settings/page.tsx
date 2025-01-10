@@ -1,7 +1,7 @@
 import type { Metadata, NextPage } from 'next';
 import Link from 'next/link';
 
-import { settings } from '@components/Navigation';
+import { settings } from '@components/Navigation/navigation';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
@@ -18,7 +18,11 @@ const Page: NextPage = () => (
 
             return (
                 <Box key={item.title}>
-                    <Link href={href} as={as}>
+                    <Link
+                        href={href}
+                        as={as}
+                        data-testid={`settings-${item.slug}`}
+                    >
                         <Typography variant="h4">{item.title}</Typography>
                     </Link>
                     <Typography variant="body1" mt={1}>

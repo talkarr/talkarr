@@ -93,6 +93,8 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
         <StyledContainer
             size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
             ref={containerRef}
+            data-media-item-slug={talk.slug}
+            data-testid="media-item"
         >
             <Card
                 sx={{

@@ -22,6 +22,7 @@ const ConfirmationModal: FC = () => {
             open={!!confirmationModal}
             onClose={closeConfirmationModal}
             title={title}
+            testID="confirmation-modal"
         >
             <Box>
                 <Typography variant="body1">{message}</Typography>
@@ -30,6 +31,7 @@ const ConfirmationModal: FC = () => {
                         onClick={closeConfirmationModal}
                         variant="contained"
                         color="secondary"
+                        data-testid="cancel-button"
                     >
                         Cancel
                     </Button>
@@ -40,6 +42,7 @@ const ConfirmationModal: FC = () => {
                         }}
                         variant="contained"
                         color={confirmationModal?.confirmColor || 'primary'}
+                        data-testid="confirm-button"
                     >
                         Confirm
                     </Button>

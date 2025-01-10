@@ -32,6 +32,11 @@ const NavigationSearch: FC = () => {
                     variant="standard"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
+                    slotProps={{
+                        htmlInput: {
+                            'data-testid': 'navigation-search',
+                        },
+                    }}
                 />
             </Box>
         </form>

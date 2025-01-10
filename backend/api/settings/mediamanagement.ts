@@ -6,6 +6,7 @@ import type { components } from '@backend/generated/schema';
 import {
     addRootFolder,
     AddRootFolderResponse,
+    deleteRootFolder,
     listRootFolders,
 } from '@backend/rootFolder';
 import rootLog from '@backend/rootLog';
@@ -72,26 +73,35 @@ router.get(
         _req: ExpressRequest<'/settings/mediamanagement/info', 'get'>,
         res: ExpressResponse<'/settings/mediamanagement/info', 'get'>,
     ) => {
-        const config = getSettings().mediamanagement;
+        try {
+            const config = getSettings().mediamanagement;
 
-        const folders = await listRootFolders();
+            const folders = await listRootFolders();
 
-        const mappedFolders = folders.map(folder => {
-            const stats = fs.statfsSync(folder);
+            const mappedFolders = folders.map(folder => {
+                const stats = fs.statfsSync(folder);
 
-            return {
-                folder,
-                free_space: stats.bsize * stats.bfree,
-            };
-        });
+                return {
+                    folder,
+                    free_space: stats.bsize * stats.bfree,
+                };
+            });
 
-        res.json({
-            success: true,
-            data: {
-                config: config as components['schemas']['MediaManagementConfig'],
-                folders: mappedFolders,
-            },
-        });
+            res.json({
+                success: true,
+                data: {
+                    config: config as components['schemas']['MediaManagementConfig'],
+                    folders: mappedFolders,
+                },
+            });
+        } catch (error) {
+            log.error('Error getting config:', { error });
+
+            res.status(500).json({
+                success: false,
+                error: 'Internal Server Error',
+            });
+        }
     },
 );
 
@@ -203,6 +213,30 @@ router.post(
 
             return;
         }
+
+        try {
+            const result = await deleteRootFolder(folder);
+
+            if (!result) {
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error',
+                });
+
+                return;
+            }
+        } catch (error) {
+            log.error('Error deleting folder:', { error });
+
+            res.status(500).json({
+                success: false,
+                error: 'Internal Server Error',
+            });
+
+            return;
+        }
+
+        log.info('Folder removed:', { folder });
 
         res.json({ success: true, data: null });
     },

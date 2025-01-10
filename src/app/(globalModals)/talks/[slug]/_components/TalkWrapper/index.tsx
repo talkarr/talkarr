@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 
 import TalkFiles from '@/app/(globalModals)/talks/[slug]/_components/TalkFiles';
 import TalkHeader from '@/app/(globalModals)/talks/[slug]/_components/TalkHeader';
+import TalkToolbar from '@/app/(globalModals)/talks/[slug]/_components/TalkToolbar';
 import type { SingleTalkData } from '@/app/(globalModals)/talks/[slug]/page';
 
 import { useApiStore } from '@/providers/apiStoreProvider';
@@ -47,14 +48,17 @@ const TalkWrapper: FC<TalkWrapperProps> = ({ initialData }) => {
     ]);
 
     return (
-        <Box display="flex" flexDirection="column" gap={1} width="100%">
-            <Box flex={1}>
-                <TalkHeader data={singleTalkData || initialData} />
+        <>
+            <TalkToolbar data={singleTalkData || initialData} />
+            <Box display="flex" flexDirection="column" gap={1} width="100%">
+                <Box flex={1}>
+                    <TalkHeader data={singleTalkData || initialData} />
+                </Box>
+                <Box flex={1}>
+                    <TalkFiles data={singleTalkData || initialData} />
+                </Box>
             </Box>
-            <Box flex={1}>
-                <TalkFiles data={singleTalkData || initialData} />
-            </Box>
-        </Box>
+        </>
     );
 };
 

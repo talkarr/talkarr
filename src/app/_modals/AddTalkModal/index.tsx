@@ -105,7 +105,14 @@ const AddTalkModal: FC = () => {
     }, [addTalkModal?.duration]);
 
     return (
-        <BaseModal open={open} onClose={close} title={title} moreWidth divider>
+        <BaseModal
+            open={open}
+            onClose={close}
+            title={title}
+            moreWidth
+            divider
+            testID="add-talk-modal"
+        >
             <Box
                 display="flex"
                 flexDirection="row"
@@ -121,7 +128,12 @@ const AddTalkModal: FC = () => {
                         maxHeight="auto"
                     />
                 </Box>
-                <Box flex={1} height="100%">
+                <Box
+                    flex={1}
+                    height="100%"
+                    data-testid="add-talk-modal"
+                    data-add-modal-slug={addTalkModal?.slug}
+                >
                     {addTalkModal?.description || addTalkModal?.subtitle ? (
                         <Typography
                             variant="body2"
@@ -226,6 +238,7 @@ const AddTalkModal: FC = () => {
                             color="primary"
                             startIcon={<AddIcon />}
                             onClick={handleAddTalk}
+                            data-testid="add-talk-button"
                         >
                             Add talk
                         </Button>

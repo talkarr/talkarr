@@ -1,0 +1,35 @@
+diff --git a/node_modules/@mui/material/InputBase/InputBase.d.ts b/node_modules/@mui/material/InputBase/InputBase.d.ts
+index 31908f1..08b29e6 100644
+--- a/node_modules/@mui/material/InputBase/InputBase.d.ts
++++ b/node_modules/@mui/material/InputBase/InputBase.d.ts
+@@ -119,7 +119,9 @@ export interface InputBaseProps
+    * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+    * @default {}
+    */
+-  inputProps?: InputBaseComponentProps;
++  inputProps: {
++    'data-testid': string;
++  }
+   /**
+    * Pass a ref to the `input` element.
+    */
+diff --git a/node_modules/@mui/material/TextField/TextField.d.ts b/node_modules/@mui/material/TextField/TextField.d.ts
+index 28f7c23..4f00005 100644
+--- a/node_modules/@mui/material/TextField/TextField.d.ts
++++ b/node_modules/@mui/material/TextField/TextField.d.ts
+@@ -54,7 +54,14 @@ export type TextFieldSlotsAndSlotProps<InputPropsType> = CreateSlotsAndSlotProps
+     formHelperText: SlotProps<React.ElementType<FormHelperTextProps>, {}, TextFieldOwnerState>;
+     select: SlotProps<React.ElementType<SelectProps>, {}, TextFieldOwnerState>;
+   }
+->;
++> & {
++  // slotProps['htmlInput'] should have data-testid
++  slotProps: {
++    htmlInput: {
++      'data-testid': string;
++    };
++  };
++}
+
+ export interface BaseTextFieldProps
+   extends StandardProps<

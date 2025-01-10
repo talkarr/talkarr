@@ -35,7 +35,7 @@ export const listFiles: (
 const pGetConfig = async () => {
     const { data, error, response } = await api.GET(
         '/settings/mediamanagement/info',
-        { cache: 'no-cache' },
+        { cache: 'no-store' },
     );
 
     if (error) {

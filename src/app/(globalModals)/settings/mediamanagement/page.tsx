@@ -21,6 +21,8 @@ const Page: NextPage = async () => {
 
     const data = config?.success ? config.data : null;
 
+    console.log('data', data);
+
     return (
         <Box>
             <Box>
@@ -48,7 +50,7 @@ const Page: NextPage = async () => {
                             />
                         ))}
                         {data?.folders.length === 0 ? (
-                            <TableRow>
+                            <TableRow data-testid="no-root-folder">
                                 <TableCell colSpan={3}>
                                     No root folders have been configured.
                                 </TableCell>
