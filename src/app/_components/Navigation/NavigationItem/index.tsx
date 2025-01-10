@@ -3,7 +3,7 @@
 import type {
     NavigationItemType,
     SimpleNavigationItem,
-} from '@components/Navigation';
+} from '@components/Navigation/navigation';
 
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';

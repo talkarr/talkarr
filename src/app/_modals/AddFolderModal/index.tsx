@@ -3,6 +3,8 @@
 import type { FC } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 
+import { enqueueSnackbar } from 'notistack';
+
 import { addFolder, listFiles } from '@/app/_api/settings/mediamanagement';
 
 import { useUiStore } from '@/providers/uiStoreProvider';
@@ -16,7 +18,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
-import {enqueueSnackbar} from "notistack";
 
 const StyledList = styled(List)(({ theme }) => ({
     width: '100%',
