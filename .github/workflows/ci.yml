@@ -154,19 +154,17 @@ jobs:
           # wait for the database to be ready
           npx wait-on tcp:5432
           
-          # print container status
-          docker ps -a
-          
-          # initialize the database with prisma.io
-          yarn prisma db push --force-reset --accept-data-loss
-          
           # redis
           yarn dev:redis
           
           # wait for redis to be ready
           npx wait-on tcp:6379
-          
-          yarn dev &
+
+      - name: Run migrations
+        run: yarn prisma db push --force-reset --accept-data-loss
+
+      - name: Start dev server
+        run: yarn dev &
 
       - name: Wait for the app to be ready
         run: |
