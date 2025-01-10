@@ -154,6 +154,9 @@ jobs:
           # wait for the database to be ready
           npx wait-on tcp:5432
           
+          # print container status
+          docker ps -a
+          
           # initialize the database with prisma.io
           yarn prisma db push --force-reset --accept-data-loss
           
@@ -316,8 +319,10 @@ jobs:
           docker compose -f docker-compose.dev.yml up -d db redis
           
           # wait for the database to be ready
-          npx wait-on tcp:5432
-          npx wait-on tcp:6379
+          npx wait-on tcp:5432 tcp:6379
+          
+          # print container status
+          docker ps -a
 
       - name: Start Docker container
         run: |
