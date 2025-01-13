@@ -23,8 +23,6 @@ test.beforeAll(async () => {
 test('should be able to add a root folder', async ({ page }) => {
     await page.goto('http://localhost:3232');
 
-    await page.waitForTimeout(3000);
-
     // data-testid: navigation-settings
     await page.click('[data-navigation-slug=settings]');
 
@@ -62,6 +60,8 @@ test('should be able to add a root folder', async ({ page }) => {
 
     // submit the form (add-folder-button)
     await page.click('[data-testid=add-folder-button]');
+
+    await expect(page.getByTestId('add-folder-loading')).not.toBeVisible();
 
     // expect add-folder-helper-text to not be visible
     await expect(page.getByTestId('add-folder-helper-text')).not.toBeVisible();
@@ -294,9 +294,6 @@ test('should be able to remove the root folder', async ({ page }) => {
 
     // text "No root folders have been configured" should be visible
     await expect(page.getByTestId('no-root-folder')).toBeVisible();
-
-    // wait 3 seconds
-    await page.waitForTimeout(3000);
 
     // refresh page
     await page.reload();

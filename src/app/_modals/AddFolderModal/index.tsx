@@ -13,6 +13,7 @@ import BaseModal from '@components/CustomModal';
 import { alpha, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -221,6 +222,15 @@ const AddFolderModal: FC = () => {
                     variant="contained"
                     disabled={addFolderLoading}
                     data-testid="add-folder-button"
+                    endIcon={
+                        addFolderLoading ? (
+                            <CircularProgress
+                                size={20}
+                                color="inherit"
+                                data-testid="add-folder-loading"
+                            />
+                        ) : null
+                    }
                 >
                     Add
                 </Button>
