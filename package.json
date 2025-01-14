@@ -18,7 +18,7 @@
         "typecheck:web": "tsc --noEmit",
         "typecheck:backend": "tsc --noEmit --project backend/tsconfig.json",
         "typecheck": "npm run typecheck:web && npm run typecheck:backend",
-        "migration:init": "prisma migrate dev --name init",
+        "migration:init": "prisma migrate dev --name init && NODE_ENV=development ts-node --project backend/tsconfig.json -r tsconfig-paths/register prisma/seed.ts",
         "migration:deploy": "node_modules/.bin/dotenv -e .env prisma migrate deploy",
         "dev:db": "docker compose -f docker-compose.dev.yml up -d",
         "dev:redis": "docker compose -f docker-compose.dev.yml up -d redis",

@@ -45,7 +45,7 @@ const handleDeleteEventRequest = async (
 
         res.status(500).json({
             success: false,
-            error: 'Error adding talk to database.',
+            error: 'Error removing talk from database.',
         });
 
         return;

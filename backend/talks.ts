@@ -226,6 +226,10 @@ export const deleteTalk = async (guid: string): Promise<boolean> => {
             where: {
                 guid,
             },
+            include: {
+                eventInfo: true,
+                file: true,
+            },
         });
 
         return true;
@@ -258,6 +262,11 @@ export const getTalkInfoByGuid = async (
 
         if (!result) {
             log.warn('Talk not found', { guid });
+            return null;
+        }
+
+        if (!result.eventInfo) {
+            log.warn('Event info not found for talk', { title: result.title });
             return null;
         }
 
@@ -377,10 +386,10 @@ export const createNewTalkInfo = async (
 };
 
 export const updateDownloadProgress = async ({
-    eventInfoGuid,
+    eventGuid,
     progress,
 }: {
-    eventInfoGuid: EventInfo['guid'];
+    eventGuid: DbEvent['guid'];
     progress: number;
 }): Promise<void> => {
     const prisma = new PrismaClient();
@@ -388,7 +397,7 @@ export const updateDownloadProgress = async ({
     try {
         await prisma.eventInfo.update({
             where: {
-                guid: eventInfoGuid,
+                eventGuid,
             },
             data: {
                 download_progress: progress,
@@ -402,7 +411,7 @@ export const updateDownloadProgress = async ({
 };
 
 export const setIsDownloading = async (
-    eventInfoGuid: EventInfo['guid'],
+    eventGuid: DbEvent['guid'],
     isDownloading: boolean,
 ): Promise<void> => {
     const prisma = new PrismaClient();
@@ -410,7 +419,7 @@ export const setIsDownloading = async (
     try {
         await prisma.eventInfo.update({
             where: {
-                guid: eventInfoGuid,
+                eventGuid,
             },
             data: {
                 is_downloading: isDownloading,

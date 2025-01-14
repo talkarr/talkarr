@@ -46,7 +46,7 @@ model File {
   bytes    Int
   is_video Boolean
 
-  event     Event  @relation(fields: [eventGuid], references: [guid])
+  event     Event  @relation(fields: [eventGuid], references: [guid], onDelete: Cascade)
   eventGuid String
 }
 
@@ -72,17 +72,16 @@ model Event {
   // relations
   persons           Person[]
   tags              Tag[]
-  conference        Conference @relation(fields: [conferenceAcronym], references: [acronym])
+  conference        Conference @relation(fields: [conferenceAcronym], references: [acronym], onDelete: Cascade)
   conferenceAcronym String
-  root_folder       RootFolder @relation(fields: [rootFolderPath], references: [path])
+  root_folder       RootFolder @relation(fields: [rootFolderPath], references: [path], onDelete: Restrict)
   rootFolderPath    String
 
   // files
   file File[]
 
   // infos
-  eventInfo     EventInfo @relation(fields: [eventInfoGuid], references: [guid])
-  eventInfoGuid String    @unique
+  eventInfo EventInfo?
 }
 
 model EventInfo {
@@ -93,7 +92,9 @@ model EventInfo {
   download_error     String?
   download_exit_code Int?
 
-  event Event?
+  // event
+  event     Event? @relation(fields: [eventGuid], references: [guid], onDelete: Cascade)
+  eventGuid String @unique
 }
 
 model RootFolder {

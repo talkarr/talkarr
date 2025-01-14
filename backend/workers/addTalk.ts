@@ -40,7 +40,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
         throw new Error('Invalid data');
     }
 
-    const isAlreadyDownloading = await isEventDownloading(talk.eventInfoGuid);
+    const isAlreadyDownloading = await isEventDownloading(talk.guid);
 
     if (isAlreadyDownloading) {
         log.warn('Talk is already downloading:', { title: talk.title });
@@ -50,15 +50,12 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
 
     log.info('Adding talk...', { slug: job.data.talk.slug });
 
-    await clearDownloadError(talk.eventInfoGuid);
+    await clearDownloadError(talk.guid);
 
     if (!talk.frontend_link) {
         log.error('Talk does not have a frontend link:', { title: talk.title });
 
-        await setDownloadError(
-            talk.eventInfoGuid,
-            'Talk does not have a frontend link',
-        );
+        await setDownloadError(talk.guid, 'Talk does not have a frontend link');
 
         throw new Error('Talk does not have a frontend link');
     }
@@ -79,17 +76,14 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
         if (!videoInfo || typeof videoInfo === 'string') {
             log.error('Error fetching video info:', { videoInfo });
 
-            await setDownloadError(
-                talk.eventInfoGuid,
-                videoInfo ?? 'Unknown error',
-            );
+            await setDownloadError(talk.guid, videoInfo ?? 'Unknown error');
 
             throw new Error('Error fetching video info');
         }
     } catch (error) {
         log.error('Error fetching video info:', { error });
 
-        await setDownloadError(talk.eventInfoGuid, 'Error fetching video info');
+        await setDownloadError(talk.guid, 'Error fetching video info');
 
         throw new Error('Error fetching video info');
     }
@@ -99,15 +93,12 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
     if (!folder) {
         log.error('Error getting folder path for talk:', { title: talk.title });
 
-        await setDownloadError(
-            talk.eventInfoGuid,
-            'Error getting folder path for talk',
-        );
+        await setDownloadError(talk.guid, 'Error getting folder path for talk');
 
         throw new Error('Error getting folder path for talk');
     }
 
-    await setIsDownloading(talk.eventInfoGuid, true);
+    await setIsDownloading(talk.guid, true);
 
     let exitCode: number | null = null;
 
@@ -158,7 +149,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
             if (rounded !== lastProgress) {
                 lastProgress = rounded;
                 await updateDownloadProgress({
-                    eventInfoGuid: talk.eventInfoGuid,
+                    eventGuid: talk.guid,
                     progress: rounded,
                 });
             }
@@ -202,10 +193,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
         if (!addFileToDbResult) {
             log.error('Error adding file to db:', { title: talk.title });
 
-            await setDownloadError(
-                talk.eventInfoGuid,
-                'Error adding file to db',
-            );
+            await setDownloadError(talk.guid, 'Error adding file to db');
 
             throw new Error('Error adding file to db');
         }
@@ -216,11 +204,11 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
             log.error('Error downloading video:', { stderrBuffer });
         }
 
-        await setDownloadError(talk.eventInfoGuid, stderrBuffer);
+        await setDownloadError(talk.guid, stderrBuffer);
 
-        await setDownloadExitCode(talk.eventInfoGuid, exitCode);
+        await setDownloadExitCode(talk.guid, exitCode);
 
-        await setIsDownloading(talk.eventInfoGuid, false);
+        await setIsDownloading(talk.guid, false);
 
         done();
     } catch (error) {
@@ -236,9 +224,9 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
                 : typeof error === 'string'
                   ? error
                   : 'Unknown error';
-        await setDownloadError(talk.eventInfoGuid, errorAsString);
+        await setDownloadError(talk.guid, errorAsString);
 
-        await setIsDownloading(talk.eventInfoGuid, false);
+        await setIsDownloading(talk.guid, false);
 
         throw error;
     }

@@ -62,7 +62,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
         if (!hasFiles) {
             startAddTalk({ talk });
         } else {
-            await setIsDownloading(talk.eventInfoGuid, false);
+            await setIsDownloading(talk.guid, false);
 
             for await (const file of hasFiles) {
                 const fileIsInDb = await checkIfFileIsInDb(
