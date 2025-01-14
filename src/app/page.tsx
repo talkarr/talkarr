@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import type { FC } from 'react';
 
+import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { listEvents } from '@/app/_api/talks/list';
 
 import { addTalksPageLink, mediaManagementSettingsPageLink } from '@/constants';
@@ -13,8 +14,12 @@ import Typography from '@mui/material/Typography';
 
 const Home: FC = async () => {
     const eventsResponse = await listEvents();
+    const configResponse = await getConfig();
 
     const events = eventsResponse?.success ? eventsResponse.data : null;
+
+    const hasRootFolders =
+        configResponse?.success && configResponse.data.folders.length > 0;
 
     if (!events?.length) {
         return (
@@ -43,11 +48,13 @@ const Home: FC = async () => {
                             Go add some media!
                         </Button>
                     </Link>
-                    <Link href={mediaManagementSettingsPageLink}>
-                        <Button variant="contained" color="secondary">
-                            Go to media management settings
-                        </Button>
-                    </Link>
+                    {hasRootFolders ? null : (
+                        <Link href={mediaManagementSettingsPageLink}>
+                            <Button variant="contained" color="secondary">
+                                Go to media management settings
+                            </Button>
+                        </Link>
+                    )}
                 </Box>
             </Box>
         );

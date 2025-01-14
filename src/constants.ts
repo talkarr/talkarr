@@ -15,6 +15,7 @@ export const addTalksPageWithSearchLink = (search: string): string => {
 
     return `/talks/add?${searchParams.toString()}`;
 };
+export const scanFilesPageLink = '/talks/scan';
 export const importTalksPageLink = '/talks/import';
 export const specificTalkPageLink = (slug: string): string => `/talks/${slug}`;
 export const settingsPageLink = '/settings';
@@ -28,6 +29,7 @@ export const searchExamples = [
     `Breaking "DRM" in Polish trains`,
     `Breaking NATO Radio Encryption`,
     `Fnord-Nachrichtenrückblick 2024`,
+    `Wie synthetisiert man DNA`,
 ] as const;
 
 export const getSearchExample = (): string =>

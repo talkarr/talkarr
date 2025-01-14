@@ -5,6 +5,7 @@ import {
     homePageLink,
     importTalksPageLink,
     mediaManagementSettingsPageLink,
+    scanFilesPageLink,
     settingsPageLink,
 } from '@/constants';
 
@@ -49,9 +50,14 @@ export const navigationItems: NavigationItemType[] = [
                 slug: 'add-talk',
             },
             {
-                title: 'Import Talks',
+                title: 'Scan files',
+                path: scanFilesPageLink,
+                slug: 'scan-files',
+            },
+            {
+                title: 'Import Fahrplan',
                 path: importTalksPageLink,
-                slug: 'import-talk',
+                slug: 'import-fahrplan',
             },
             {
                 title: 'Specific Talk',
