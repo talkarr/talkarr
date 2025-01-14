@@ -4,6 +4,10 @@ This is the preferred method of deployment for this application. It helps to ens
 
 Please change the values of the environment variables to match your environment.
 
+> [!WARNING]
+> Right now, the application is still in its early days. Some features might not work as expected or might not work at all.
+> If you encounter any issues, please open an issue on the [GitHub repository](https://github.com/talkarr/talkarr/issues).
+
 ## Deploying via Docker Compose (Recommended)
 
 For more information about Docker Compose itself, please refer to the [official documentation](https://docs.docker.com/compose/).
