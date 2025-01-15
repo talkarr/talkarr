@@ -10,11 +10,17 @@ import { expect, test } from '@playwright/test';
 
 const validSearchString = 'camp2023';
 
+const BASE_DIR = process.env.CI ? '/tmp' : __dirname;
+
 const e2eTestFolderName = (browserName: string): string => {
-    const path = pathUtils.join(__dirname, 'e2e-test-folder', browserName);
+    const path = pathUtils.join(BASE_DIR, 'e2e-test-folder', browserName);
 
     if (!fs.existsSync(path)) {
         fs.mkdirSync(path, { recursive: true });
+
+        if (!fs.existsSync(path)) {
+            throw new Error('Failed to create folder');
+        }
     }
 
     return path;
