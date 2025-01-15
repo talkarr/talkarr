@@ -1,6 +1,7 @@
 import type { Event as DbEvent, EventInfo, File } from '@prisma/client';
 
 import { getFolderPathForTalk, isVideoFile } from '@backend/fs';
+import type { ExistingFileWithGuessedInformation } from '@backend/fs/scan';
 import type { components } from '@backend/generated/schema';
 import { getConferenceFromEvent } from '@backend/helper';
 import rootLog from '@backend/rootLog';
@@ -19,7 +20,11 @@ const log = rootLog.child({ label: 'talks' });
 export const addTalk = async (
     event: ApiEvent,
     rootFolder: string,
-): Promise<ConvertDateToStringType<ExtendedDbEvent | AddTalkFailure>> => {
+): Promise<
+    ConvertDateToStringType<
+        Omit<ExtendedDbEvent, 'recordings'> | AddTalkFailure
+    >
+> => {
     const prisma = new PrismaClient();
 
     const conference = await getConferenceFromEvent(event);
@@ -625,6 +630,171 @@ export const getSpecificTalkBySlug = async (
         log.error('Error getting specific talk', { error });
 
         return null;
+    } finally {
+        await prisma.$disconnect();
+    }
+};
+
+export const getEventByFilePath = async (
+    filePath: string,
+): Promise<ExtendedDbEvent | null> => {
+    const prisma = new PrismaClient();
+
+    try {
+        const result = await prisma.file.findFirst({
+            where: {
+                path: {
+                    contains: filePath,
+                },
+            },
+            include: {
+                event: {
+                    include: {
+                        persons: true,
+                        tags: true,
+                        conference: true,
+                        root_folder: true,
+                    },
+                },
+            },
+        });
+
+        if (!result) {
+            log.warn('Event not found by file path', { filePath });
+            return null;
+        }
+
+        return result.event;
+    } catch (error) {
+        log.error('Error getting event by file path', { error });
+
+        return null;
+    } finally {
+        await prisma.$disconnect();
+    }
+};
+
+export const importExistingFileFromFilesystem = async (
+    rootFolder: string,
+    file: ExistingFileWithGuessedInformation,
+): Promise<boolean> => {
+    // We need to follow these steps:
+    // 1. Check if conference exists in db. If not, create it.
+    // 2. Check if event exists in db. If not, create it.
+    // 3. Create the file in db. If it already exists, skip it.
+
+    if (!file.guess.conferenceAcronym || !file.guess.conference) {
+        log.warn('Conference acronym or title is missing', { file });
+
+        return false;
+    }
+
+    if (!file.guess.slug || !file.guess.event) {
+        log.warn('Event or slug is missing', { file });
+
+        return false;
+    }
+
+    const prisma = new PrismaClient();
+
+    try {
+        let conference = await prisma.conference.findFirst({
+            where: {
+                acronym: file.guess.conferenceAcronym,
+            },
+        });
+
+        if (!conference) {
+            log.warn('Conference does not exist in db', {
+                acronym: file.guess.conferenceAcronym,
+            });
+        }
+
+        let event = await prisma.event.findFirst({
+            where: {
+                slug: file.guess.slug,
+            },
+        });
+
+        if (!event) {
+            log.warn('Event does not exist in db', { slug: file.guess.slug });
+
+            await addTalk(file.guess.event, rootFolder);
+        }
+
+        conference = await prisma.conference.findFirst({
+            where: {
+                acronym: file.guess.conferenceAcronym,
+            },
+        });
+
+        if (!conference) {
+            log.error('Conference still does not exist in db after adding', {
+                acronym: file.guess.conferenceAcronym,
+            });
+
+            return false;
+        }
+
+        event = await prisma.event.findFirst({
+            where: {
+                slug: file.guess.slug,
+            },
+        });
+
+        if (!event) {
+            log.error('Event still does not exist in db after adding', {
+                slug: file.guess.slug,
+            });
+
+            return false;
+        }
+
+        const filesForGuid = await prisma.file.findMany({
+            where: {
+                eventGuid: event.guid,
+            },
+        });
+
+        if (filesForGuid?.length) {
+            const fileExists = filesForGuid.some(
+                dbFile => dbFile.path === file.path,
+            );
+
+            if (fileExists) {
+                log.warn('File already exists in db', {
+                    file: file.path,
+                    filesInDb: filesForGuid,
+                });
+
+                return false;
+            }
+        }
+
+        const createdFile = await prisma.file.create({
+            data: {
+                event: {
+                    connect: {
+                        guid: event.guid,
+                    },
+                },
+                filename: file.filename,
+                url: file.guess.event.frontend_link,
+                mime: file.mime,
+                is_video: file.isVideo,
+                created: file.created_at,
+                bytes: file.size,
+                path: file.path,
+            },
+        });
+
+        log.info('Created file', { createdFile: createdFile.path });
+
+        return true;
+    } catch (error) {
+        log.error('Error importing file', { error, file });
+
+        return false;
     } finally {
         await prisma.$disconnect();
     }

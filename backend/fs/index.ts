@@ -181,6 +181,7 @@ export const getFolderPathForTalk = async (
     try {
         await fs_promises.access(folderPath);
     } catch {
+        log.error(`Could not create folder ${folderPath}`);
         return null;
     }
 

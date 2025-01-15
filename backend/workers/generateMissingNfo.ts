@@ -9,7 +9,7 @@ import type { ConvertDateToStringType, ExtendedDbEvent } from '@backend/types';
 
 export const taskName = 'generateMissingNfo';
 
-const log = rootLog.child({ label: 'workers/addTalk' });
+const log = rootLog.child({ label: 'workers/generateMissingNfo' });
 
 export interface GenerateMissingNfoData {
     talk: ConvertDateToStringType<ExtendedDbEvent>;

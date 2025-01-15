@@ -13,8 +13,12 @@ const apiFetch = async (
     input: RequestInfo | URL,
     init?: RequestInit,
     cacheKey?: string,
-    cacheTime: number = apiCacheTime,
+    _cacheTime?: number,
+    _cacheStoreKeys: string[] = [],
 ): Promise<FetchResponse> => {
+    const cacheTime = _cacheTime || apiCacheTime;
+    const cacheStoreKeys = [..._cacheStoreKeys];
+
     const url =
         typeof input === 'string'
             ? input
@@ -46,9 +50,15 @@ const apiFetch = async (
     }
 
     if (cacheKey) {
+        if (!cacheStoreKeys.includes(cacheKey)) {
+            cacheStoreKeys.push(cacheKey);
+        }
+
         log.info(`Caching response for ${url}`);
 
-        cache.put(cacheKey, fetchResponse, cacheTime);
+        for (const key of cacheStoreKeys) {
+            cache.put(key, fetchResponse, cacheTime);
+        }
     }
 
     return fetchResponse;

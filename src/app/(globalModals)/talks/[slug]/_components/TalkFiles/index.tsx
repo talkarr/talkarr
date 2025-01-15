@@ -93,7 +93,10 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                                 <ListItemIcon>
                                     <VideoIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={file.filename} />
+                                <ListItemText
+                                    primary={file.filename}
+                                    secondary={prettyBytes(file.size)}
+                                />
                             </ListItemButton>
                         </ListItem>
                     ))}
@@ -115,7 +118,10 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                                 <ListItemIcon>
                                     <DescriptionIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={file.filename} />
+                                <ListItemText
+                                    primary={file.filename}
+                                    secondary={prettyBytes(file.size)}
+                                />
                             </ListItemButton>
                         </ListItem>
                     ))}

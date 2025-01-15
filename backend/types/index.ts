@@ -102,6 +102,8 @@ export type NormalAndConvertedDate<T> = T | ConvertDateToStringType<T>;
 
 export type ApiEvent = components['schemas']['Event'];
 
+export type ApiConference = components['schemas']['Conference'];
+
 export type TalkInfo = components['schemas']['TalkInfo'];
 
 export enum AddTalkFailure {

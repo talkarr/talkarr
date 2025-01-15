@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import '@backend/workers/addTalk';
 import '@backend/workers/generateMissingNfo';
+import { startScanAndImportExistingFiles } from '@backend/workers/scanAndImportExistingFiles';
 import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
 
 import api from '@backend/api';
@@ -79,6 +80,8 @@ app.prepare()
         }
 
         startScanForMissingFiles({});
+
+        startScanAndImportExistingFiles();
     })
     .catch(err => {
         log.error('Catched Error', { stack: err.stack });
