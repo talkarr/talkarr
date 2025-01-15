@@ -45,15 +45,17 @@ const nextConfig: NextConfig = {
         buildActivity: true,
         buildActivityPosition: 'bottom-right',
     },
-    compiler:
-        process.env.NODE_ENV === 'production'
+    compiler: {
+        ...(process.env.NODE_ENV === 'production'
             ? {
                   removeConsole: {
                       exclude: ['dir'],
                   },
-                  reactRemoveProperties: true,
+                  // or else playwright will break
+                  reactRemoveProperties: false,
               }
-            : {},
+            : {}),
+    },
     async rewrites() {
         return [
             {
