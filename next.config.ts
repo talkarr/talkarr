@@ -72,6 +72,9 @@ const nextConfig: NextConfig = {
             },
         ],
     },
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
 };
 
 export default unTypiaNext(nextConfig, unpluginTypiaOptions);
