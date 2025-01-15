@@ -16,7 +16,7 @@ const e2eTestFolderName = (browserName: string): string => {
     const path = pathUtils.join(BASE_DIR, 'e2e-test-folder', browserName);
 
     if (!fs.existsSync(path)) {
-        fs.mkdirSync(path, { recursive: true });
+        fs.mkdirSync(path, { recursive: true, mode: '0777' });
 
         if (!fs.existsSync(path)) {
             throw new Error('Failed to create folder');
