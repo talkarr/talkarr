@@ -19,6 +19,7 @@ env:
 
 jobs:
   lint:
+    name: Run ESLint and type checks
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -128,6 +129,7 @@ jobs:
 #          yarn typecheck
 
   test:
+    name: Run unit tests
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -175,7 +177,9 @@ jobs:
       - name: Run backend tests
         run: yarn test:backend
 
+# Changing it from build-linux-container to build-container would break statistics, so we will keep it as is
   build-linux-container:
+    name: Build Linux container
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -262,6 +266,7 @@ jobs:
       ref: ${{ steps.ref.outputs.ref }}
 
   run-e2e-tests:
+    name: Run E2E tests
     runs-on: ubuntu-latest
     permissions:
       packages: write
