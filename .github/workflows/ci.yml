@@ -182,6 +182,8 @@ jobs:
       contents: read
       attestations: write
       id-token: write
+    # if it is a pull request, author must be CommanderRedYT
+    if: github.event_name != 'pull_request' || github.actor == 'CommanderRedYT'
     needs:
       - lint
     env:
