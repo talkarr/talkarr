@@ -11,7 +11,6 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-console.log(`Running playwright in ${process.env.CI ? 'CI' : 'normal'} mode.`);
 
 export default defineConfig({
     testDir: './e2e',
