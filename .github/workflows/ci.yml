@@ -6,6 +6,8 @@ on:
       - main
     paths-ignore:
       - 'docs/**'
+    tags:
+      - 'v*.*.*'
   pull_request:
     branches:
       - main
@@ -205,10 +207,10 @@ jobs:
 
       - name: Generate FLAVOR variable
         run: |
-          FLAVOR="latest=true"
+          FLAVOR="latest=auto"
 
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then
-              FLAVOR=""
+              FLAVOR="latest=false"
           fi
         
           echo "FLAVOR=${FLAVOR}" >> $GITHUB_ENV
@@ -218,6 +220,10 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           flavor: ${{ env.FLAVOR }}
+          # create a tag "nightly" which works like "latest" but is updated with every commit instead of only for git tags
+          tags: |
+            type=raw,value=nightly
+
           images: |
             ghcr.io/${{ github.repository }}
 
