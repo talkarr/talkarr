@@ -55,7 +55,7 @@ const FolderRow: FC<FolderRowProps> = ({ folder, freeSpace }) => {
     };
 
     return (
-        <TableRow>
+        <TableRow data-folder-name={folder}>
             <TableCell>{folder}</TableCell>
             <TableCell>{prettyBytes(freeSpace)}</TableCell>
             <TableCell align="right" style={{ width: 200 }}>

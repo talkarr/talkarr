@@ -83,3 +83,6 @@ export const formatLanguageCode = (code: string): string => {
 
     return code;
 };
+
+export const stripInvalidCharsForDataAttribute = (str: string): string =>
+    str.replace(/[^a-zA-Z0-9]/g, '');

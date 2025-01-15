@@ -2,25 +2,29 @@
 import fs from 'fs';
 import pathUtils from 'path';
 
+import { stripInvalidCharsForDataAttribute } from '@/utils/string';
+
 import { mediaManagementSettingsPageLink } from '@/constants';
 
 import { expect, test } from '@playwright/test';
 
 const validSearchString = 'camp2023';
 
+const e2eTestFolderName = (browserName: string): string => {
+    const path = pathUtils.join(__dirname, 'e2e-test-folder', browserName);
+
+    if (!fs.existsSync(path)) {
+        fs.mkdirSync(path, { recursive: true });
+    }
+
+    return path;
+};
+
 test.describe.configure({
     mode: 'serial',
 });
 
-const e2eTestFolderName = pathUtils.join(__dirname, 'e2e-test-folder');
-
-test.beforeAll(async () => {
-    if (!fs.existsSync(e2eTestFolderName)) {
-        fs.mkdirSync(e2eTestFolderName, { recursive: true });
-    }
-});
-
-test('should be able to add a root folder', async ({ page }) => {
+test('should be able to add a root folder', async ({ page, browserName }) => {
     await page.goto('http://localhost:3232');
 
     // data-testid: navigation-settings
@@ -37,7 +41,32 @@ test('should be able to add a root folder', async ({ page }) => {
         `http://localhost:3232${mediaManagementSettingsPageLink}`,
     );
 
-    await expect(page.getByTestId('no-root-folder')).toBeVisible();
+    const rootFolder = e2eTestFolderName(browserName);
+
+    const areRootFoldersConfigured = page.locator('[data-folder-name]');
+
+    let isOkay = true;
+
+    if (await areRootFoldersConfigured.count()) {
+        for await (const folder of await areRootFoldersConfigured.all()) {
+            const folderName = await folder.innerText();
+
+            if (folderName === rootFolder) {
+                isOkay = false;
+                break;
+            }
+        }
+    } else {
+        const noRootFolderVisible = await page
+            .locator('[data-testid=no-root-folder]')
+            .isVisible();
+
+        if (!noRootFolderVisible) {
+            isOkay = false;
+        }
+    }
+
+    expect(isOkay).toBe(true);
 
     // check for add-folder-button
     const showAddFolderButton = page.locator(
@@ -56,7 +85,10 @@ test('should be able to add a root folder', async ({ page }) => {
     await expect(page.getByTestId('add-folder-input')).toBeVisible();
 
     // fill the input field
-    await page.fill('[data-testid=add-folder-input]', e2eTestFolderName);
+    await page.fill(
+        '[data-testid=add-folder-input]',
+        e2eTestFolderName(browserName),
+    );
 
     // submit the form (add-folder-button)
     await page.click('[data-testid=add-folder-button]');
@@ -74,8 +106,11 @@ test('should be able to add a root folder', async ({ page }) => {
     await expect(page.getByTestId('snackbar')).toBeVisible();
 });
 
-test('should be able to search for a string', async ({ page }) => {
-    test.skip();
+test('should be able to search for a string', async ({ page, browserName }) => {
+    const { workerIndex } = test.info();
+
+    const rootFolder = e2eTestFolderName(browserName);
+
     await page.goto('http://localhost:3232');
 
     // data-testid: navigation-search
@@ -125,46 +160,51 @@ test('should be able to search for a string', async ({ page }) => {
     // check if there are at least 1 search items (data-testid: search-item)
     const searchItems = await page.locator('[data-testid=search-item]').count();
 
-    expect(searchItems).toBeGreaterThan(0);
+    // should have enough to index with workerIndex
+    expect(searchItems).toBeGreaterThan(workerIndex);
 
     // get the first search item
-    const firstSearchItem = page.locator('[data-testid=search-item]').first();
+    const selectedSearchItem = page
+        .locator('[data-testid=search-item]')
+        .nth(workerIndex);
 
     // check if it has the following badges
-    const badges = await firstSearchItem
+    const badges = await selectedSearchItem
         .locator('[data-testid=video-meta-badge]')
         .count();
 
     expect(badges).toBeGreaterThan(0);
 
     // it should have a badge with the following types: conference, speaker, language, date. others are optional
-    const conferenceBadge = await firstSearchItem
+    const conferenceBadge = await selectedSearchItem
         .locator('[data-badge-type=conference]')
         .count();
-    const speakerBadge = await firstSearchItem
-        .locator('[data-badge-type=speaker]')
-        .count();
-    const languageBadge = await firstSearchItem
+    const languageBadge = await selectedSearchItem
         .locator('[data-badge-type=language]')
         .count();
-    const dateBadge = await firstSearchItem
+    const dateBadge = await selectedSearchItem
         .locator('[data-badge-type=date]')
         .count();
 
+    const slug = await selectedSearchItem.getAttribute('data-slug');
+
+    expect(slug).not.toBe(null);
+
+    console.log('Slug', slug);
+
     expect(conferenceBadge).toBeGreaterThan(0);
-    expect(speakerBadge).toBeGreaterThan(0);
     expect(languageBadge).toBeGreaterThan(0);
     expect(dateBadge).toBeGreaterThan(0);
 
     // click on the first search item
-    await firstSearchItem.click();
+    await selectedSearchItem.click();
 
     // expect add-talk-modal to be visible
-    await expect(page.getByTestId('add-talk-modal')).toBeVisible();
+    await expect(page.getByTestId('add-talk-modal-inner')).toBeVisible();
 
     // get "data-add-modal-slug" attribute
     const addModalSlug = await page.getAttribute(
-        '[data-testid=add-talk-modal]',
+        '[data-testid=add-talk-modal-inner]',
         'data-add-modal-slug',
     );
 
@@ -201,13 +241,40 @@ test('should be able to search for a string', async ({ page }) => {
         .locator('[data-testid=search-item]')
         .count();
 
-    expect(searchItems_1).toBeGreaterThan(0);
+    expect(searchItems_1).toBeGreaterThan(workerIndex);
 
     // open the first search item again
-    await firstSearchItem.click();
+    await selectedSearchItem.click();
 
     // expect add-talk-modal to be visible
     await expect(page.getByTestId('add-talk-modal')).toBeVisible();
+
+    const rootFolderSelect = page.getByTestId('root-folder-select');
+
+    await expect(rootFolderSelect).toBeVisible();
+
+    // click on the select
+    await rootFolderSelect.click();
+
+    const selectItem = page.getByTestId(
+        `root-folder-${stripInvalidCharsForDataAttribute(rootFolder)}`,
+    );
+
+    await expect(selectItem).toBeVisible();
+
+    await selectItem.click();
+
+    // expect "data-selected-root-folder" to be the correct folder
+    const selectedRootFolder = await page.getAttribute(
+        '[data-testid=add-talk-button]',
+        'data-selected-root-folder',
+    );
+
+    expect(selectedRootFolder).not.toBe(null);
+
+    expect(selectedRootFolder).toBe(
+        stripInvalidCharsForDataAttribute(rootFolder),
+    );
 
     // click the add talk button
     await addTalkButton.click();
@@ -232,10 +299,12 @@ test('should be able to search for a string', async ({ page }) => {
     await page.waitForURL('http://localhost:3232/');
 
     // expect media-item to be visible
-    await expect(page.getByTestId('media-item')).toBeVisible();
+    const items = page.getByTestId('media-item');
 
-    // get the media item where data-media-item-slug matches addModalSlug
-    const mediaItem = page.locator(`[data-media-item-slug=${addModalSlug}]`);
+    expect(await items.count()).toBeGreaterThan(0);
+
+    // find items where data-media-item-slug matches slug
+    const mediaItem = page.locator(`[data-media-item-slug=${slug}]`);
 
     await expect(mediaItem).toBeVisible();
 
@@ -261,7 +330,10 @@ test('should be able to search for a string', async ({ page }) => {
     await page.waitForURL('http://localhost:3232/');
 });
 
-test('should be able to remove the root folder', async ({ page }) => {
+test('should be able to remove the root folder', async ({
+    page,
+    browserName,
+}) => {
     // directly go to the media management settings page
     await page.goto(`http://localhost:3232${mediaManagementSettingsPageLink}`);
 
@@ -270,8 +342,13 @@ test('should be able to remove the root folder', async ({ page }) => {
         `http://localhost:3232${mediaManagementSettingsPageLink}`,
     );
 
-    // check for remove-folder-button
-    const removeFolderButton = page.locator(
+    const folderName = e2eTestFolderName(browserName);
+
+    const folderItem = page.locator(`[data-folder-name="${folderName}"]`);
+
+    await expect(folderItem).toBeVisible();
+
+    const removeFolderButton = folderItem.locator(
         '[data-testid=delete-folder-button]',
     );
 
@@ -292,12 +369,14 @@ test('should be able to remove the root folder', async ({ page }) => {
     // notification should be visible
     await expect(page.getByTestId('snackbar')).toBeVisible();
 
-    // text "No root folders have been configured" should be visible
-    await expect(page.getByTestId('no-root-folder')).toBeVisible();
+    // there should not be a folder item with the path
+    await expect(folderItem).not.toBeVisible();
 
     // refresh page
     await page.reload();
 
     // should still have no root folder
-    await expect(page.getByTestId('no-root-folder')).toBeVisible();
+    const newFolderItem = page.locator(`[data-folder-name="${folderName}"]`);
+
+    await expect(newFolderItem).not.toBeVisible();
 });

@@ -11,7 +11,10 @@ import { enqueueSnackbar } from 'notistack';
 import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { addEvent } from '@/app/_api/talks/add';
 
-import { formatVideoDuration } from '@/utils/string';
+import {
+    formatVideoDuration,
+    stripInvalidCharsForDataAttribute,
+} from '@/utils/string';
 
 import { useUiStore } from '@/providers/uiStoreProvider';
 
@@ -131,7 +134,7 @@ const AddTalkModal: FC = () => {
                 <Box
                     flex={1}
                     height="100%"
-                    data-testid="add-talk-modal"
+                    data-testid="add-talk-modal-inner"
                     data-add-modal-slug={addTalkModal?.slug}
                 >
                     {addTalkModal?.description || addTalkModal?.subtitle ? (
@@ -223,9 +226,14 @@ const AddTalkModal: FC = () => {
                                 }
                                 labelId="root-folder-label"
                                 label="Root folder"
+                                data-testid="root-folder-select"
                             >
                                 {availableFolders.map(folder => (
-                                    <MenuItem key={folder} value={folder}>
+                                    <MenuItem
+                                        key={folder}
+                                        value={folder}
+                                        data-testid={`root-folder-${stripInvalidCharsForDataAttribute(folder)}`}
+                                    >
                                         {folder}
                                     </MenuItem>
                                 ))}
@@ -239,6 +247,9 @@ const AddTalkModal: FC = () => {
                             startIcon={<AddIcon />}
                             onClick={handleAddTalk}
                             data-testid="add-talk-button"
+                            data-selected-root-folder={stripInvalidCharsForDataAttribute(
+                                rootFolder,
+                            )}
                         >
                             Add talk
                         </Button>

@@ -293,7 +293,9 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive --prefer-offline
 
       - name: Install playwright dependencies
-        run: yarn playwright install
+        run: |
+          sudo yarn playwright install-deps
+          yarn playwright install
 
       - name: Log in into GitHub Container Registry
         uses: docker/login-action@v3
