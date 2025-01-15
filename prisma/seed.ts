@@ -27,9 +27,6 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 async function main(): Promise<void> {
-    // function
-    return;
-
     await prisma.rootFolder.create({
         data: {
             path: '/Users/ccomm/Movies/talkarr',

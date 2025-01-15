@@ -294,7 +294,7 @@ jobs:
 
       - name: Install playwright dependencies
         run: |
-          sudo yarn playwright install-deps
+          yarn playwright install-deps
           yarn playwright install
 
       - name: Log in into GitHub Container Registry
