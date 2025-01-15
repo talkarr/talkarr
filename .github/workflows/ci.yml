@@ -346,8 +346,7 @@ jobs:
         continue-on-error: true
         run: |
           yarn test:e2e:ci
-          # dump exit code into env
-          echo "EXIT_CODE=$?" >> $GITHUB_ENV
+          echo "TESTING_STATUS=$?" >> $GITHUB_ENV
 
       - uses: daun/playwright-report-summary@v3
         with:
@@ -369,6 +368,11 @@ jobs:
 
       - name: Fail if exit code is not 0
         run: |
-          if [ "${{ env.EXIT_CODE }}" -ne 0 ]; then
+          # if TESTING_STATUS is empty, fail the job
+          if [ -z "${{ env.TESTING_STATUS }}" ]; then
+              exit 1
+          fi
+          
+          if [ "${{ env.TESTING_STATUS }}" -ne 0 ]; then
               exit 1
           fi
