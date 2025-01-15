@@ -344,7 +344,10 @@ jobs:
       - name: Run E2E tests
         id: e2e
         continue-on-error: true
-        run: yarn test:e2e
+        run: |
+          yarn test:e2e:ci
+          # dump exit code into env
+          echo "EXIT_CODE=$?" >> $GITHUB_ENV
 
       - uses: daun/playwright-report-summary@v3
         with:
@@ -363,3 +366,9 @@ jobs:
           name: logs
           path: logs/
           retention-days: 30
+
+      - name: Fail if exit code is not 0
+        run: |
+          if [ "${{ env.EXIT_CODE }}" -ne 0 ]; then
+              exit 1
+          fi

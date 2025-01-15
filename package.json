@@ -28,6 +28,7 @@
         "generate:openapi-backend": "openapi-typescript ./backend.json --output backend/generated/schema.ts",
         "generate": "npm run generate:openapi-backend",
         "test:backend": "bash -c 'pushd backend && jest && popd'",
+        "test:e2e:ci": "CI=true npm run test:e2e",
         "test:e2e": "playwright test",
         "test": "npm run test:backend",
         "prepare": "ts-patch install && typia patch",
