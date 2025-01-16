@@ -179,7 +179,7 @@ jobs:
 
 # Changing it from build-linux-container to build-container would break statistics, so we will keep it as is
   build-linux-container:
-    name: Build Linux container
+    name: Build container
     runs-on: ubuntu-latest
     permissions:
       packages: write

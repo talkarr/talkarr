@@ -111,5 +111,5 @@ queue.process(taskName, 1, scanForMissingFiles);
 export const startScanForMissingFiles = (
     data: ScanForMissingFilesData,
 ): void => {
-    queue.add(taskName, data, { removeOnComplete: true, timeout: 60000 }); // 1 minute
+    queue.add(taskName, data, { removeOnComplete: true, timeout: 60000 * 3 }); // 3 minutes
 };

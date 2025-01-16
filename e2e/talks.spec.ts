@@ -16,10 +16,26 @@ const e2eTestFolderName = (browserName: string): string => {
     const path = pathUtils.join(BASE_DIR, 'e2e-test-folder', browserName);
 
     if (!fs.existsSync(path)) {
+        console.log(
+            `e2e test folder does not exist, running "mkdir -p ${path}"`,
+        );
         fs.mkdirSync(path, { recursive: true, mode: '0777' });
 
         if (!fs.existsSync(path)) {
             throw new Error('Failed to create folder');
+        }
+
+        // try to write a file
+        try {
+            fs.writeFileSync(pathUtils.join(path, 'test-file.txt'), 'test');
+
+            if (!fs.existsSync(pathUtils.join(path, 'test-file.txt'))) {
+                throw new Error('Failed to write file');
+            }
+        } catch (error) {
+            console.error('Error writing file:', error);
+
+            throw error;
         }
     }
 
