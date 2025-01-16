@@ -349,7 +349,10 @@ jobs:
           mkdir -p logs
           chmod 777 -R logs
           
-          docker run -d --rm -v ./.env:/app/.env -v ./logs:/app/logs --network host ${{ env.container_ref }}
+          mkdir -p /tmp/e2e-test-folder
+          chmod 777 -R /tmp/e2e-test-folder
+          
+          docker run -d --rm -v ./.env:/app/.env -v ./logs:/app/logs -v /tmp/e2e-test-folder:/tmp/e2e-test-folder --network host ${{ env.container_ref }}
           
           # wait for the app to be ready
           npx wait-on http://localhost:3232
@@ -358,8 +361,6 @@ jobs:
         id: e2e
         continue-on-error: true
         run: |
-          mkdir -p /tmp/e2e-test-folder
-          chmod 777 -R /tmp/e2e-test-folder
           yarn test:e2e:ci
           echo "TESTING_STATUS=$?" >> $GITHUB_ENV
 
