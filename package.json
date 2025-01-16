@@ -76,7 +76,7 @@
         "typia": "^7.5.1",
         "winston": "^3.17.0",
         "winston-daily-rotate-file": "^5.0.0",
-        "youtube-dl-exec": "^3.0.12",
+        "youtube-dl-exec": "3.0.13",
         "zustand": "^5.0.3"
     },
     "devDependencies": {

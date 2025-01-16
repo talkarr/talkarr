@@ -45,3 +45,4 @@ playwright-report/
 **/e2e-test-folder/
 
 **/*video-info-error*
+**/results.json
