@@ -1,3 +1,5 @@
+import type { TestOptions } from './e2e/talks.spec';
+
 import { defineConfig, devices } from '@playwright/test';
 
 /**
@@ -11,8 +13,9 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+const excludeMobile = process.env.EXCLUDE_MOBILE; // || process.env.CI;
 
-export default defineConfig({
+export default defineConfig<TestOptions>({
     testDir: './e2e',
     /* Run tests in files in parallel */
     fullyParallel: true,
@@ -43,7 +46,7 @@ export default defineConfig({
     projects: [
         {
             name: 'chromium',
-            use: { ...devices['Desktop Chrome'] },
+            use: { ...devices['Desktop Chrome'], searchItemIndex: 0 },
         },
 
         {
@@ -51,32 +54,32 @@ export default defineConfig({
             // for some reason, firefox sometimes fails on local machine
             retries: process.env.CI ? undefined : 5,
             timeout: process.env.CI ? undefined : 30000,
-            use: { ...devices['Desktop Firefox'] },
+            use: { ...devices['Desktop Firefox'], searchItemIndex: 1 },
         },
 
         {
             name: 'webkit',
-            use: { ...devices['Desktop Safari'] },
+            use: { ...devices['Desktop Safari'], searchItemIndex: 2 },
         },
 
         /* Test against mobile viewports. */
-        ...(process.env.EXCLUDE_MOBILE
+        ...(excludeMobile
             ? []
             : [
                   {
                       name: 'Mobile Chrome',
-                      use: { ...devices['Pixel 5'] },
+                      use: { ...devices['Pixel 7'], searchItemIndex: 3 },
                   },
                   {
                       name: 'Mobile Safari',
-                      use: { ...devices['iPhone 12'] },
+                      use: { ...devices['iPhone 15'], searchItemIndex: 4 },
                   },
               ]),
     ],
 
     webServer: {
         // CI always has to start its own server
-        command: 'yarn dev',
+        command: 'exit 1',
         port: 3232,
         reuseExistingServer: true,
     },

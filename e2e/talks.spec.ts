@@ -6,18 +6,29 @@ import { stripInvalidCharsForDataAttribute } from '@/utils/string';
 
 import { mediaManagementSettingsPageLink } from '@/constants';
 
-import { expect, test } from '@playwright/test';
+import { expect, test as base } from '@playwright/test';
 
 const validSearchString = 'camp2023';
 
 const BASE_DIR = process.env.CI ? '/tmp' : __dirname;
 
-const e2eTestFolderName = (browserName: string | unknown): string => {
-    if (!browserName || typeof browserName !== 'string' || !BASE_DIR) {
+export interface TestOptions {
+    searchItemIndex: number;
+}
+
+const test = base.extend<TestOptions>({
+    searchItemIndex: [-1, { option: true }],
+});
+
+const e2eTestFolderName = (name: string | unknown): string => {
+    if (!name || typeof name !== 'string' || !BASE_DIR) {
         throw new Error('Invalid input for e2eTestFolderName');
     }
 
-    const path = pathUtils.join(BASE_DIR, 'e2e-test-folder', browserName);
+    // make name all lower case and replace invalid chars with _
+    const formatted = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+
+    const path = pathUtils.join(BASE_DIR, 'e2e-test-folder', formatted);
 
     if (!fs.existsSync(path)) {
         console.log(
@@ -52,7 +63,7 @@ const e2eTestFolderName = (browserName: string | unknown): string => {
                 );
             }
 
-            console.log('Folder created successfully', browserName);
+            console.log('Folder created successfully', formatted);
         } catch (error) {
             console.error('Error writing file:', error);
 
@@ -63,19 +74,11 @@ const e2eTestFolderName = (browserName: string | unknown): string => {
     return path;
 };
 
-test.beforeEach(async ({ browserName }) => {
-    console.log('Browser name:', browserName);
-
-    const folder = e2eTestFolderName(browserName);
-
-    console.log('Using folder:', folder);
-});
-
 test.describe.configure({
     mode: 'serial',
 });
 
-test('should be able to add a root folder', async ({ page, browserName }) => {
+test('should be able to add a root folder', async ({ page }, testInfo) => {
     await page.goto('http://localhost:3232');
 
     // wait for navigation-settings to be visible
@@ -95,7 +98,7 @@ test('should be able to add a root folder', async ({ page, browserName }) => {
         `http://localhost:3232${mediaManagementSettingsPageLink}`,
     );
 
-    const rootFolder = e2eTestFolderName(browserName);
+    const rootFolder = e2eTestFolderName(testInfo.project.name);
 
     const areRootFoldersConfigured = page.locator('[data-folder-name]');
 
@@ -141,7 +144,7 @@ test('should be able to add a root folder', async ({ page, browserName }) => {
     // fill the input field
     await page.fill(
         '[data-testid=add-folder-input]',
-        e2eTestFolderName(browserName),
+        e2eTestFolderName(testInfo.project.name),
     );
 
     // submit the form (add-folder-button)
@@ -160,10 +163,13 @@ test('should be able to add a root folder', async ({ page, browserName }) => {
     await expect(page.getByTestId('snackbar')).toBeVisible();
 });
 
-test('should be able to search for a string', async ({ page, browserName }) => {
-    const { workerIndex } = test.info();
+test('should be able to search for a string', async ({
+    page,
+    searchItemIndex,
+}, testInfo) => {
+    expect(searchItemIndex).toBeGreaterThan(-1);
 
-    const rootFolder = e2eTestFolderName(browserName);
+    const rootFolder = e2eTestFolderName(testInfo.project.name);
 
     await page.goto('http://localhost:3232');
 
@@ -218,12 +224,12 @@ test('should be able to search for a string', async ({ page, browserName }) => {
     const searchItems = await page.locator('[data-testid=search-item]').count();
 
     // should have enough to index with workerIndex
-    expect(searchItems).toBeGreaterThan(workerIndex);
+    expect(searchItems).toBeGreaterThan(searchItemIndex);
 
     // get the first search item
     const selectedSearchItem = page
         .locator('[data-testid=search-item]')
-        .nth(workerIndex);
+        .nth(searchItemIndex);
 
     // check if it has the following badges
     const badges = await selectedSearchItem
@@ -298,7 +304,7 @@ test('should be able to search for a string', async ({ page, browserName }) => {
         .locator('[data-testid=search-item]')
         .count();
 
-    expect(searchItems_1).toBeGreaterThan(workerIndex);
+    expect(searchItems_1).toBeGreaterThan(searchItemIndex);
 
     // open the first search item again
     await selectedSearchItem.click();
@@ -387,17 +393,14 @@ test('should be able to search for a string', async ({ page, browserName }) => {
     await page.waitForURL('http://localhost:3232/');
 });
 
-test('should be able to remove the root folder', async ({
-    page,
-    browserName,
-}) => {
+test('should be able to remove the root folder', async ({ page }, testInfo) => {
     // directly go to the media management settings page
     await page.goto(`http://localhost:3232${mediaManagementSettingsPageLink}`);
 
     // expect media-management-settings to be visible
     await page.waitForSelector('[data-testid=media-management-settings]');
 
-    const folderName = e2eTestFolderName(browserName);
+    const folderName = e2eTestFolderName(testInfo.project.name);
 
     const folderItem = page.locator(`[data-folder-name="${folderName}"]`);
 

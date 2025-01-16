@@ -21,17 +21,19 @@ console.log(buf.toString());
 
 const prisma = new PrismaClient();
 
-if (process.env.NODE_ENV !== 'development') {
-    console.error('Seed script should only be run in development mode');
-    process.exit(1);
-}
-
 async function main(): Promise<void> {
-    await prisma.rootFolder.create({
-        data: {
-            path: '/Users/ccomm/Movies/talkarr',
-        },
-    });
+    const applyLaptopPreset =
+        !process.env.CI &&
+        process.env.NODE_ENV !== 'test' &&
+        process.env.APPLY_PRESET === '1';
+
+    if (applyLaptopPreset) {
+        await prisma.rootFolder.create({
+            data: {
+                path: '/Users/ccomm/Movies/talkarr',
+            },
+        });
+    }
 }
 
 main()
