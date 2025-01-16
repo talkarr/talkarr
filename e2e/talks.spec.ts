@@ -13,6 +13,10 @@ const validSearchString = 'camp2023';
 const BASE_DIR = process.env.CI ? '/tmp' : __dirname;
 
 const e2eTestFolderName = (browserName: string): string => {
+    if (!browserName || typeof browserName !== 'string' || !BASE_DIR) {
+        throw new Error('Invalid input for e2eTestFolderName');
+    }
+
     const path = pathUtils.join(BASE_DIR, 'e2e-test-folder', browserName);
 
     if (!fs.existsSync(path)) {
