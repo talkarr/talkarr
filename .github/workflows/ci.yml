@@ -444,9 +444,11 @@ jobs:
       - name: Tag container using buildx
         run: |  
           # tag the container as latest
-          docker buildx imagetools create ${{ env.container_ref }} --tag ghcr.io/${{ github.repository }}:latest
+          docker buildx imagetools create "${{ env.container_ref }}" --tag "ghcr.io/${{ github.repository }}:latest"
           
-          if [ -n "${{ github.ref }}" ]; then
-              # tag the container with the tag
-              docker buildx imagetools create ${{ env.container_ref }} --tag ghcr.io/${{ github.repository }}:${{ github.ref }}
+          # tag with git tag if it exists
+          IS_GIT_TAG=$(echo "${{ github.ref }}" | grep -E '^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+$')
+          
+          if [ -n "${IS_GIT_TAG}" ]; then
+              docker buildx imagetools create "${{ env.container_ref }}" --tag "ghcr.io/${{ github.repository }}:${{ github.ref }}"
           fi
