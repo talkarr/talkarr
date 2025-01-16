@@ -45,5 +45,5 @@ These are the features that will be implemented:
 If you want to contribute to the project, feel free to fork the project and create a pull request! I will then review your changes and, if everything looks good, merge them into the master branch.
 
 <a href="https://github.com/talkarr/talkarr/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=talkarr/talkarr" />
+  <img src="https://contrib.rocks/image?repo=talkarr/talkarr" alt="contributors" />
 </a>

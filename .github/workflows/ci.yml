@@ -344,9 +344,11 @@ jobs:
           if [ ! -s .env ]; then
               echo "The .env file is empty"
               exit 1
-          fi          
+          fi
           
-          docker run -d --rm -v ./.env:/app/.env --network host ${{ env.container_ref }}
+          mkdir -p logs
+          
+          docker run -d --rm -v ./.env:/app/.env -v ./logs:/app/logs --network host ${{ env.container_ref }}
           
           # wait for the app to be ready
           npx wait-on http://localhost:3232
