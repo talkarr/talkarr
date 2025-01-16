@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import * as winston from 'winston';
 
@@ -58,5 +59,19 @@ const rootLog = winston.createLogger({
         }),
     ],
 });
+
+// make sure the logs directory exists and is writable
+const logDir = path.join(__dirname, '../logs');
+
+if (!fs.existsSync(logDir)) {
+    fs.mkdirSync(logDir);
+}
+
+try {
+    fs.accessSync(logDir, fs.constants.W_OK);
+} catch (error) {
+    console.error('Error accessing logs directory:', { error });
+    process.exit(1);
+}
 
 export default rootLog;

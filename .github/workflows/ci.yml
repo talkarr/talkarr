@@ -347,6 +347,7 @@ jobs:
           fi
           
           mkdir -p logs
+          chmod 777 -R logs
           
           docker run -d --rm -v ./.env:/app/.env -v ./logs:/app/logs --network host ${{ env.container_ref }}
           
