@@ -29,7 +29,27 @@ You can find the installation instructions for the project hosted at [wiki.talka
 This project was started as a way to download talks because I was not able to go to 38c3.
 It is also a way for keeping everything from the [**Fahrplan app**](https://github.com/EventFahrplan/EventFahrplan) favorite list.
 
-## Roadmap and Features
+## Roadmap
+
+The project is still in its early stages, so there are a lot of things that need to be implemented.
+
+### Planned for initial release
+
+- [ ] Provide basic functionality to download talks
+  - Includes importing the talks from the Fahrplan app
+  - Downloading the talks
+  - Saving the talks to a specified folder
+  - Managing the downloaded talks
+  - Updating information about the talks
+  - Regenerate the NFO files
+  - Basic settings configuration
+    - Import / Export via JSON file to allow for backup and restore
+- [ ] Make database schema stable
+  - This means that the database schema should not change in breaking ways.
+  - This also means the migrations in `prisma/migrations` should be stable and not be deleted in any way.
+  - To make this happen, we must be sure that the current database structure is future-proof. Therefore, I would love to hear feedback in form of a issue or discussion.
+
+## Planned features
 
 These are the features that will be implemented:
 
