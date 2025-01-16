@@ -99,7 +99,7 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                 setSort={setSort}
                 ref={searchRef}
             />
-            {searchActuallyEmpty ? (
+            {searchActuallyEmpty && !error ? (
                 <Box mt={4}>
                     <Typography
                         variant="h3"
@@ -139,7 +139,7 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                         variant="h3"
                         fontWeight="normal"
                         textAlign="center"
-                        data-testid="search-results-error"
+                        data-testid="rsearch-results-error"
                     >
                         {error}
                     </Typography>

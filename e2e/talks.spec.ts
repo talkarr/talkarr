@@ -219,7 +219,8 @@ test('should be able to search for a string', async ({
     });
 
     // expect search-results-error to be hidden
-    await expect(page.getByTestId('search-results-error')).not.toBeVisible();
+    const error = page.getByTestId('search-results-error');
+    expect(await error.count()).toBe(0);
 
     // check if the search string is in the input field
     const searchInputValue_1 = await page.getAttribute(
