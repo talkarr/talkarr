@@ -191,14 +191,15 @@ test('should be able to search for a string', async ({
     await page.keyboard.press('Enter');
 
     // wait for the page to load
-    await page.waitForURL('http://localhost:3232/talks/add?search=camp2023');
-
-    // expect "search-results-loading" to be visible
-    // NOTE: This could fail if page loads too fast, so if it fails, we might just be fine removing it
-    // await expect(page.getByTestId('search-results-loading')).toBeVisible();
+    await page.waitForURL('http://localhost:3232/talks/add?search=camp2023', {
+        waitUntil: 'domcontentloaded',
+    });
 
     // check if the search string is in the URL
     expect(page.url()).toContain('search=camp2023');
+
+    // wait for the search results to load
+    await page.waitForSelector('[data-testid=search-item]');
 
     // expect search-results-error to be hidden
     await expect(page.getByTestId('search-results-error')).not.toBeVisible();
@@ -210,9 +211,6 @@ test('should be able to search for a string', async ({
     );
 
     expect(searchInputValue_1).toBe(validSearchString);
-
-    // wait for the search results to load
-    await page.waitForSelector('[data-testid=search-item]');
 
     // expect "search-results-loading" to be hidden
     await expect(page.getByTestId('search-results-loading')).not.toBeVisible();
