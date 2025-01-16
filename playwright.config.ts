@@ -72,10 +72,17 @@ export default defineConfig<TestOptions>({
                   },
                   // after hundreds of runs i give up on this one. if somebody can fix it, please, go for it!
                   // (its only broken on CI, not locally :hidethepain:)
-                  /* {
-                      name: 'Mobile Safari',
-                      use: { ...devices['iPhone 15'], searchItemIndex: 4 },
-                  }, */
+                  ...(process.env.CI
+                      ? []
+                      : [
+                            {
+                                name: 'Mobile Safari',
+                                use: {
+                                    ...devices['iPhone 13'],
+                                    searchItemIndex: 4,
+                                },
+                            },
+                        ]),
               ]),
     ],
 
