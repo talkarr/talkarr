@@ -209,21 +209,11 @@ jobs:
         with:
           platforms: ${{ env.PLATFORMS }}
 
-      - name: Generate FLAVOR variable
-        run: |
-          FLAVOR="latest=auto"
-
-          if [ "${{ github.ref }}" != "refs/heads/main" ]; then
-              FLAVOR="latest=false"
-          fi
-        
-          echo "FLAVOR=${FLAVOR}" >> $GITHUB_ENV
-
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
-          flavor: ${{ env.FLAVOR }}
+          flavor: latest=false
           # create a tag "nightly" which works like "latest" but is updated with every commit instead of only for git tags
           tags: |
             type=raw,value=nightly
@@ -395,4 +385,50 @@ jobs:
           
           if [ "${{ env.TESTING_STATUS }}" -ne 0 ]; then
               exit 1
+          fi
+
+  tag-latest-container:
+    name: Tag latest container
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    needs:
+      - build-linux-container
+      # Only release when all tests succeed
+      - run-e2e-tests
+      - test
+      - lint
+    env:
+      container_ref: ${{ needs.build-linux-container.outputs.ref }}
+    # only for main branch or tags
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in into GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag latest container
+        run: |
+          # get the sha of the container
+          tags="${{ steps.meta.outputs.tags }}"
+          first_tag=$(echo $tags | cut -d ' ' -f 1)
+          
+          # tag the container as latest
+          docker tag ${{ env.container_ref }} ghcr.io/${{ github.repository }}:latest
+          
+          # push the container
+          docker push ghcr.io/${{ github.repository }}:latest
+          
+          # if this is a tag push, tag another container with the tag
+          if [ -n "${{ github.ref }}" ]; then
+              docker tag ${{ env.container_ref }} ghcr.io/${{ github.repository }}:${{ github.ref }}
+              docker push ghcr.io/${{ github.repository }}:${{ github.ref }}
           fi
