@@ -199,7 +199,7 @@ test('should be able to search for a string', async ({
     expect(page.url()).toContain('search=camp2023');
 
     // wait for the search results to load
-    await page.waitForSelector('[data-testid=search-results', {
+    await page.waitForSelector('[data-testid=search-results]', {
         // wait 60s
         timeout: 60 * 1000,
     });
