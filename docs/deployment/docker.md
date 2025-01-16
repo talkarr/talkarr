@@ -11,7 +11,7 @@ Please change the values of the environment variables to match your environment.
 > [!NOTE]
 > There are multiple version tags available. For the latest stable image, use the `latest` tag.
 > For the latest commit, use the `nightly` tag.
-> For a specific version, use the version number as the tag.
+> For a specific version, use the version number as the tag, e.g. `v1.0.0`. You can find the releases [here](https://github.com/talkarr/talkarr/releases).
 
 ## Deploying via Docker Compose (Recommended)
 
