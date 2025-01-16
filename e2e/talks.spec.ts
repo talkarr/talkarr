@@ -33,6 +33,9 @@ test.describe.configure({
 test('should be able to add a root folder', async ({ page, browserName }) => {
     await page.goto('http://localhost:3232');
 
+    // wait for navigation-settings to be visible
+    await page.waitForSelector('[data-navigation-slug=settings]');
+
     // data-testid: navigation-settings
     await page.click('[data-navigation-slug=settings]');
 
@@ -118,6 +121,9 @@ test('should be able to search for a string', async ({ page, browserName }) => {
     const rootFolder = e2eTestFolderName(browserName);
 
     await page.goto('http://localhost:3232');
+
+    // wait for navigation-search to be visible
+    await page.waitForSelector('[data-testid=navigation-search]');
 
     // data-testid: navigation-search
     await page.fill('[data-testid=navigation-search]', validSearchString);
@@ -344,9 +350,7 @@ test('should be able to remove the root folder', async ({
     await page.goto(`http://localhost:3232${mediaManagementSettingsPageLink}`);
 
     // expect media-management-settings to be visible
-    await page.waitForURL(
-        `http://localhost:3232${mediaManagementSettingsPageLink}`,
-    );
+    await page.waitForSelector('[data-testid=media-management-settings]');
 
     const folderName = e2eTestFolderName(browserName);
 

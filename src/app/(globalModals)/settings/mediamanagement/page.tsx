@@ -21,10 +21,8 @@ const Page: NextPage = async () => {
 
     const data = config?.success ? config.data : null;
 
-    console.log('data', data);
-
     return (
-        <Box>
+        <Box data-testid="media-management-settings">
             <Box>
                 <Typography variant="h3">Root Folders</Typography>
                 <Typography variant="body1">

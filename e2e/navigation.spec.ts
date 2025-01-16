@@ -4,6 +4,9 @@ import { expect, test } from '@playwright/test';
 test('should be able to navigate to the home page', async ({ page }) => {
     await page.goto('http://localhost:3232');
 
+    // wait for data-testid="navigation" to be visible
+    await page.waitForSelector('[data-testid="navigation"]');
+
     await expect(page.getByTestId('navigation')).toBeVisible();
 
     await expect(page.title()).resolves.toBe('Talkarr');
@@ -34,6 +37,8 @@ test('should be able to navigate to each page', async ({ page }) => {
 
     for await (const pageSlug of pages) {
         await page.goto(`http://localhost:3232${pageSlug}`);
+
+        await page.waitForSelector('[data-testid="navigation"]');
 
         await expect(page.getByTestId('navigation')).toBeVisible();
 
