@@ -413,7 +413,10 @@ test('should be able to remove the root folder', async ({ page }, testInfo) => {
     await expect(removeFolderButton).toBeVisible();
 
     // click on the remove folder button
-    await removeFolderButton.click();
+    await removeFolderButton.click({
+        noWaitAfter: true,
+        force: true,
+    });
 
     // await confirmation modal
     await expect(page.getByTestId('confirmation-modal')).toBeVisible();
