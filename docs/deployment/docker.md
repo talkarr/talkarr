@@ -8,6 +8,11 @@ Please change the values of the environment variables to match your environment.
 > Right now, the application is still in its early days. Some features might not work as expected or might not work at all.
 > If you encounter any issues, please open an issue on the [GitHub repository](https://github.com/talkarr/talkarr/issues).
 
+> [!NOTE]
+> There are multiple version tags available. For the latest stable image, use the `latest` tag.
+> For the latest commit, use the `nightly` tag.
+> For a specific version, use the version number as the tag.
+
 ## Deploying via Docker Compose (Recommended)
 
 For more information about Docker Compose itself, please refer to the [official documentation](https://docs.docker.com/compose/).
