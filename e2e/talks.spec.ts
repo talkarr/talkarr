@@ -63,6 +63,14 @@ const e2eTestFolderName = (browserName: string | unknown): string => {
     return path;
 };
 
+test.beforeEach(async ({ browserName }) => {
+    console.log('Browser name:', browserName);
+
+    const folder = e2eTestFolderName(browserName);
+
+    console.log('Using folder:', folder);
+});
+
 test.describe.configure({
     mode: 'serial',
 });
