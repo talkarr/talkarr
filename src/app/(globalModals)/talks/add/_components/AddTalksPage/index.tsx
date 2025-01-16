@@ -144,7 +144,13 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                 </Box>
             ) : null}
             {!searchEmpty && sortedResults && !loading ? (
-                <Box mt={2} display="flex" flexDirection="column" gap={1}>
+                <Box
+                    mt={2}
+                    display="flex"
+                    flexDirection="column"
+                    gap={1}
+                    data-testid="search-results"
+                >
                     {sortedResults.map(event => (
                         <SearchItem
                             key={`event-${event.guid}`}
