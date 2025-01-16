@@ -86,6 +86,8 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
         );
     }
 
+    const searchActuallyEmpty = searchEmpty && !results?.events.length;
+
     return (
         <Box>
             <AddTalksSearch
@@ -97,7 +99,7 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                 setSort={setSort}
                 ref={searchRef}
             />
-            {searchEmpty ? (
+            {searchActuallyEmpty ? (
                 <Box mt={4}>
                     <Typography
                         variant="h3"
@@ -117,7 +119,7 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                 </Box>
             ) : null}
             {loading ||
-            (!searchEmpty &&
+            (!searchActuallyEmpty &&
                 !error &&
                 typeof results?.events?.length === 'undefined') ? (
                 <Box
@@ -143,7 +145,7 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                     </Typography>
                 </Box>
             ) : null}
-            {!searchEmpty && sortedResults && !loading ? (
+            {!searchActuallyEmpty && sortedResults && !loading ? (
                 <Box
                     mt={2}
                     display="flex"

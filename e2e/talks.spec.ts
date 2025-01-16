@@ -161,6 +161,20 @@ test('should be able to add a root folder', async ({ page }, testInfo) => {
 
     // notification should be visible
     await expect(page.getByTestId('snackbar')).toBeVisible();
+
+    // reload page
+    await page.reload({
+        waitUntil: 'domcontentloaded',
+    });
+
+    // expect media-management-settings to be visible
+    await page.waitForSelector('[data-testid=media-management-settings]');
+
+    const folderName = e2eTestFolderName(testInfo.project.name);
+
+    const folderItem = page.locator(`[data-folder-name="${folderName}"]`);
+
+    await expect(folderItem).toBeVisible();
 });
 
 test('should be able to search for a string', async ({
