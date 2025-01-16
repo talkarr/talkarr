@@ -12,7 +12,7 @@ const validSearchString = 'camp2023';
 
 const BASE_DIR = process.env.CI ? '/tmp' : __dirname;
 
-const e2eTestFolderName = (browserName: string): string => {
+const e2eTestFolderName = (browserName: string | unknown): string => {
     if (!browserName || typeof browserName !== 'string' || !BASE_DIR) {
         throw new Error('Invalid input for e2eTestFolderName');
     }
@@ -35,7 +35,24 @@ const e2eTestFolderName = (browserName: string): string => {
 
             if (!fs.existsSync(pathUtils.join(path, 'test-file.txt'))) {
                 throw new Error('Failed to write file');
+            } else {
+                console.log(
+                    `File ${pathUtils.join(path, 'test-file.txt')} written`,
+                );
             }
+
+            // read the file
+            const data = fs.readFileSync(pathUtils.join(path, 'test-file.txt'));
+
+            if (data.toString() !== 'test') {
+                throw new Error('Failed to read file');
+            } else {
+                console.log(
+                    `File ${pathUtils.join(path, 'test-file.txt')} read`,
+                );
+            }
+
+            console.log('Folder created successfully', browserName);
         } catch (error) {
             console.error('Error writing file:', error);
 
