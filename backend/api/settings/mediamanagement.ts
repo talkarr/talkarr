@@ -53,7 +53,7 @@ router.get(
             if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
                 res.status(404).json({
                     success: false,
-                    error: 'Folder does not exist',
+                    error: `Folder does not exist (Error code ${(error as NodeJS.ErrnoException).code})`,
                 });
 
                 return;
