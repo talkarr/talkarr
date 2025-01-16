@@ -415,20 +415,38 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Tag latest container
-        run: |
-          # get the sha of the container
-          tags="${{ steps.meta.outputs.tags }}"
-          first_tag=$(echo $tags | cut -d ' ' -f 1)
-          
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64
+
+      # - name: Tag latest container
+      #   run: |
+      #     # get the sha of the container
+      #     tags="${{ steps.meta.outputs.tags }}"
+      #     first_tag=$(echo $tags | cut -d ' ' -f 1)
+      #
+      #     # tag the container as latest
+      #     docker tag ${{ env.container_ref }} ghcr.io/${{ github.repository }}:latest
+      #
+      #     # push the container
+      #     docker push ghcr.io/${{ github.repository }}:latest
+      #
+      #     echo "Tagged latest container with the tag: latest"
+      #
+      #     # if this is a tag push, tag another container with the tag
+      #     if [ -n "${{ github.ref }}" ]; then
+      #         docker tag ${{ env.container_ref }} ghcr.io/${{ github.repository }}:${{ github.ref }}
+      #         docker push ghcr.io/${{ github.repository }}:${{ github.ref }}
+      #         echo "Tagged latest container with the tag: ${{ github.ref }}"
+      #     fi
+
+      - name: Tag container using buildx
+        run: |  
           # tag the container as latest
-          docker tag ${{ env.container_ref }} ghcr.io/${{ github.repository }}:latest
+          docker buildx imagetools create ${{ env.container_ref }} --tag ghcr.io/${{ github.repository }}:latest
           
-          # push the container
-          docker push ghcr.io/${{ github.repository }}:latest
-          
-          # if this is a tag push, tag another container with the tag
           if [ -n "${{ github.ref }}" ]; then
-              docker tag ${{ env.container_ref }} ghcr.io/${{ github.repository }}:${{ github.ref }}
-              docker push ghcr.io/${{ github.repository }}:${{ github.ref }}
+              # tag the container with the tag
+              docker buildx imagetools create ${{ env.container_ref }} --tag ghcr.io/${{ github.repository }}:${{ github.ref }}
           fi
