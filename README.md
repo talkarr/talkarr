@@ -10,11 +10,9 @@
 A *arr style program for downloading talks from media.ccc.de.
 </h5>
 
-## Important Note on the state of the project
-
-Right now, the project is still in its early stages. This means, not everything is implemented or works as expected.
-
-That is why I would love to get some feedback on what you think about the project and what you would like to see implemented.
+> [!IMPORTANT]
+> Right now, the project is still in its early stages. This means, not everything is implemented or works as expected.
+> That is why I would love to get some feedback on what you think about the project and what you would like to see implemented.
 
 ## Documentation
 
