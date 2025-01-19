@@ -25,6 +25,6 @@ router.get('/info', handleEventInfoRequest);
 
 router.get('/get', handleGetEventRequest);
 
-router.get('/scan', handleScanEventsRequest);
+router.post('/scan', handleScanEventsRequest);
 
 export default router;
