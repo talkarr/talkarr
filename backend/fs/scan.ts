@@ -12,7 +12,11 @@ import {
 } from '@backend/helper';
 import rootLog from '@backend/rootLog';
 import { getEventByFilePath } from '@backend/talks';
-import type { ApiConference, ApiEvent } from '@backend/types';
+import type {
+    ApiConference,
+    ApiEvent,
+    ConvertDateToStringType,
+} from '@backend/types';
 
 const log = rootLog.child({ label: 'fs/scan' });
 
@@ -30,8 +34,11 @@ export interface ExistingFileWithGuessedInformation
 
 export const scanForExistingFiles = async (
     rootFolderPath: string,
-): Promise<ExistingFileWithGuessedInformation[] | null> => {
-    const existingFiles: ExistingFileWithGuessedInformation[] = [];
+): Promise<
+    ConvertDateToStringType<ExistingFileWithGuessedInformation>[] | null
+> => {
+    const existingFiles: ConvertDateToStringType<ExistingFileWithGuessedInformation>[] =
+        [];
 
     // folder structure is <rootFolderPath>/<conference_acronym>/<event_slug>
 
@@ -159,7 +166,7 @@ export const scanForExistingFiles = async (
                         confidence: Math.round(confidence),
                     },
                     size: fileStats.size,
-                    created_at: fileStats.birthtime,
+                    createdAt: fileStats.birthtime.toISOString(),
                     path: filePath,
                     mime: mime.lookup(file.name) || 'application/octet-stream',
                     isVideo: isVideoFile(filePath),

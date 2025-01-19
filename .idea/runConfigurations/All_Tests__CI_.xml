@@ -1,9 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="All Tests" type="JavaScriptTestRunnerPlaywright">
+  <configuration default="false" name="All Tests (CI)" type="JavaScriptTestRunnerPlaywright">
     <node-interpreter value="project" />
     <playwright-package value="$PROJECT_DIR$/node_modules/@playwright/test" />
     <working-dir value="$PROJECT_DIR$" />
-    <envs />
+    <envs>
+      <env name="CI" value="1" />
+    </envs>
     <scope-kind value="ALL" />
     <method v="2" />
   </configuration>

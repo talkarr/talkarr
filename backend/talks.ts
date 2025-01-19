@@ -676,7 +676,9 @@ export const getEventByFilePath = async (
 
 export const importExistingFileFromFilesystem = async (
     rootFolder: string,
-    file: ExistingFileWithGuessedInformation,
+    file:
+        | ExistingFileWithGuessedInformation
+        | ConvertDateToStringType<ExistingFileWithGuessedInformation>,
 ): Promise<boolean> => {
     // We need to follow these steps:
     // 1. Check if conference exists in db. If not, create it.
@@ -782,7 +784,7 @@ export const importExistingFileFromFilesystem = async (
                 url: file.guess.event.frontend_link,
                 mime: file.mime,
                 is_video: file.isVideo,
-                created: file.created_at,
+                created: file.createdAt,
                 bytes: file.size,
                 path: file.path,
             },

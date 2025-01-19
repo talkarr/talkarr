@@ -646,6 +646,105 @@
                 },
                 "required": [
                 ]
+            },
+            "ExistingFile": {
+                "type": "object",
+                "properties": {
+                    "path": {
+                        "type": "string",
+                        "example": "/path/to/file.jpg"
+                    },
+                    "mime": {
+                        "type": "string",
+                        "example": "image/jpeg",
+                        "nullable": true
+                    },
+                    "size": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "is_video": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
+                    }
+                },
+                "required": [
+                    "path",
+                    "mime",
+                    "size",
+                    "is_video",
+                    "created_at"
+                ]
+            },
+            "FileGuess": {
+                "type": "object",
+                "properties": {
+                    "conference_acronym": {
+                        "type": "string",
+                        "example": "Conf",
+                        "nullable": true
+                    },
+                    "conference": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Conference"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "event-slug",
+                        "nullable": true
+                    },
+                    "event": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/Event"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "confidence": {
+                        "type": "number",
+                        "example": 0.0
+                    }
+                },
+                "required": [
+                    "conference_acronym",
+                    "conference",
+                    "slug",
+                    "event",
+                    "confidence"
+                ]
+            },
+            "ExtendedFileWithGuess": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ExistingFile"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "filename": {
+                                "type": "string",
+                                "example": "file.jpg"
+                            },
+                            "guess": {
+                                "$ref": "#/components/schemas/FileGuess"
+                            }
+                        },
+                        "required": [
+                            "filename",
+                            "guess"
+                        ]
+                    }
+                ]
             }
         }
     },
@@ -1186,6 +1285,83 @@
                             }
                         },
                         "description": "Event not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/talks/scan": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "root_folder": {
+                                        "type": "string",
+                                        "example": "/folder"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "files": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/ExtendedFileWithGuess"
+                                                            }
+                                                        },
+                                                        "has_new_files": {
+                                                            "type": "boolean",
+                                                            "example": false
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "files",
+                                                        "has_new_files"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
                     },
                     "500": {
                         "content": {

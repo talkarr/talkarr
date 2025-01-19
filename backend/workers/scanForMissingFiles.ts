@@ -81,7 +81,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                         path: file.path,
                         filename: pathUtils.basename(file.path),
                         url: talk.frontend_link,
-                        created: file.created_at,
+                        created: file.createdAt,
                         mime: file.mime,
                         bytes: file.size,
                         is_video: file.isVideo,

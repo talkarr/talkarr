@@ -21,7 +21,7 @@ export interface ExistingFile {
     mime: string;
     size: number;
     isVideo: boolean;
-    created_at: Date;
+    createdAt: Date;
 }
 
 export const isVideoFile = (filename: string): boolean => {
@@ -92,7 +92,7 @@ export const doesTalkHaveExistingFiles = async (
                 mime: mime.lookup(file) || 'application/octet-stream',
                 size: stats.size,
                 isVideo: isVideoFile(file),
-                created_at: stats.birthtime,
+                createdAt: stats.birthtime,
             });
         } catch (error) {
             log.debug(`File ${event.slug}${extension} does not exist ${error}`);

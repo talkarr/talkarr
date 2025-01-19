@@ -445,6 +445,63 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/talks/scan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @example /folder */
+                        root_folder?: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: {
+                                files: components["schemas"]["ExtendedFileWithGuess"][];
+                                /** @example false */
+                                has_new_files: boolean;
+                            };
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/settings/mediamanagement/files": {
         parameters: {
             query?: never;
@@ -1031,6 +1088,36 @@ export interface components {
             error: string;
         };
         MediaManagementConfig: Record<string, never>;
+        ExistingFile: {
+            /** @example /path/to/file.jpg */
+            path: string;
+            /** @example image/jpeg */
+            mime: string | null;
+            /** @example 0 */
+            size: number;
+            /** @example false */
+            is_video: boolean;
+            /**
+             * Format: date-time
+             * @example 2022-01-01T00:00:00Z
+             */
+            created_at: string;
+        };
+        FileGuess: {
+            /** @example Conf */
+            conference_acronym: string | null;
+            conference: components["schemas"]["Conference"] | null;
+            /** @example event-slug */
+            slug: string | null;
+            event: components["schemas"]["Event"] | null;
+            /** @example 0 */
+            confidence: number;
+        };
+        ExtendedFileWithGuess: components["schemas"]["ExistingFile"] & {
+            /** @example file.jpg */
+            filename: string;
+            guess: components["schemas"]["FileGuess"];
+        };
     };
     responses: never;
     parameters: never;

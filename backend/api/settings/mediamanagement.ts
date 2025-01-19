@@ -2,6 +2,8 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 
+import { startScanAndImportExistingFiles } from '@backend/workers/scanAndImportExistingFiles';
+
 import type { components } from '@backend/generated/schema';
 import {
     addRootFolder,
@@ -192,6 +194,8 @@ router.post(
 
             return;
         }
+
+        startScanAndImportExistingFiles();
 
         res.json({ success: true, data: null });
     },
