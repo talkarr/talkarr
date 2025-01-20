@@ -76,7 +76,7 @@ export default defineConfig<TestOptions>({
                   },
                   // after hundreds of runs i give up on this one. if somebody can fix it, please, go for it!
                   // (its only broken on CI, not locally :hidethepain:)
-                  ...(process.env.CI
+                  ...(process.env.CI && false
                       ? []
                       : [
                             {
