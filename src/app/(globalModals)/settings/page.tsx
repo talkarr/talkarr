@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const Page: NextPage = () => (
-    <Box>
+    <Box data-testid="settings">
         {settings.map(item => {
             const href =
                 typeof item.path === 'string' ? item.path : item.path.href;
@@ -21,6 +21,7 @@ const Page: NextPage = () => (
                     <Link
                         href={href}
                         as={as}
+                        // eg settings-media-management
                         data-testid={`settings-${item.slug}`}
                     >
                         <Typography variant="h4">{item.title}</Typography>

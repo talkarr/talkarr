@@ -28,7 +28,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => (
             flexWrap="wrap"
         >
             <Box flex={1}>
-                <TalkImage data={data.db} maxWidth="100%" maxHeight="auto" />
+                <TalkImage data={data.db} maxWidth="100%" height="auto" />
             </Box>
             <Box flex={2} display="flex" flexDirection="column" gap={2}>
                 <Typography variant="h2">{data.db.title}</Typography>

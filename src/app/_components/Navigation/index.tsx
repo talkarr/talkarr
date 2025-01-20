@@ -5,8 +5,10 @@ import type {
     SplitNavigationItems,
 } from '@components/Navigation/navigation';
 
+import { usePathname } from 'next/navigation';
+
 import type { FC, PropsWithChildren } from 'react';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 import { pageName } from '@/constants';
 
@@ -32,7 +34,14 @@ export const appbarHeight = 64;
 const Navigation: FC<PropsWithChildren> = ({ children }) => {
     const theme = useTheme();
 
+    const pathname = usePathname();
+
     const [open, setOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+        // close the mobile drawer when the route changes
+        setOpen(false);
+    }, [pathname]);
 
     const splitItemsByDivider: SplitNavigationItems = navigationItems.reduce(
         (acc, item) => {

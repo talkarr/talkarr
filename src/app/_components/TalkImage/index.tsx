@@ -20,10 +20,16 @@ import Skeleton from '@mui/material/Skeleton';
 export interface TalkImageProps {
     data: TalkData | SingleTalkData['db'] | undefined;
     maxWidth?: CSSProperties['maxWidth'];
+    height?: CSSProperties['height'];
     maxHeight?: CSSProperties['maxHeight'];
 }
 
-const TalkImage: FC<TalkImageProps> = ({ data, maxWidth, maxHeight }) => {
+const TalkImage: FC<TalkImageProps> = ({
+    data,
+    maxWidth,
+    height,
+    maxHeight,
+}) => {
     const [showFallback, setShowFallback] = useState<boolean>(false);
     const [imageLoading, setImageLoading] = useState<boolean>(true);
 
@@ -40,7 +46,8 @@ const TalkImage: FC<TalkImageProps> = ({ data, maxWidth, maxHeight }) => {
             style={{
                 position: 'relative',
                 maxWidth: maxWidth ?? `${searchItemMaxImageWidth}px`,
-                height: maxHeight ?? `${searchItemMinHeight}px`,
+                height: height ?? `${searchItemMinHeight}px`,
+                maxHeight: maxHeight ?? undefined,
                 aspectRatio: '16 / 9',
                 borderRadius: '4px',
                 overflow: 'hidden',

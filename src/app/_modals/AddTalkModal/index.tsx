@@ -21,7 +21,7 @@ import { useUiStore } from '@/providers/uiStoreProvider';
 import BaseModal from '@components/CustomModal';
 import TalkImage from '@components/TalkImage';
 import AddIcon from '@mui/icons-material/Add';
-import { alpha } from '@mui/material';
+import { alpha, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -34,6 +34,7 @@ const AddTalkModal: FC = () => {
     const addTalkModal = useUiStore(state => state.addTalkModal);
     const close = useUiStore(state => state.closeAddTalkModal);
     const router = useRouter();
+    const theme = useTheme();
 
     const [availableFolders, setAvailableFolders] = useState<string[]>([]);
 
@@ -118,17 +119,32 @@ const AddTalkModal: FC = () => {
         >
             <Box
                 display="flex"
-                flexDirection="row"
                 justifyContent="center"
                 gap={2}
                 overflow="hidden"
                 height="100%"
+                sx={{
+                    flexDirection: 'row',
+                    [theme.breakpoints.down('md')]: {
+                        flexDirection: 'column',
+                    },
+                }}
             >
-                <Box flex={1} maxWidth="33%" height="100%">
+                <Box
+                    flex={1}
+                    sx={{
+                        maxWidth: '33%',
+                        height: '100%',
+                        [theme.breakpoints.down('md')]: {
+                            maxWidth: '100%',
+                        },
+                    }}
+                >
                     <TalkImage
                         data={addTalkModal || undefined}
                         maxWidth="100%"
-                        maxHeight="auto"
+                        height="auto"
+                        maxHeight="fit-content"
                     />
                 </Box>
                 <Box
@@ -141,17 +157,20 @@ const AddTalkModal: FC = () => {
                         <Typography
                             variant="body2"
                             mb={1}
-                            sx={{ overflowY: 'auto' }}
-                            maxHeight={300}
                             height="100%"
                             p={1}
                             border={1}
-                            borderColor={theme =>
-                                alpha(theme.palette.divider, 0.2)
-                            }
+                            borderColor={alpha(theme.palette.divider, 0.2)}
                             borderRadius={4}
                             bgcolor="background.default"
                             boxShadow={2}
+                            sx={{
+                                overflowY: 'auto',
+                                maxHeight: 300,
+                                [theme.breakpoints.down('md')]: {
+                                    maxHeight: 'none',
+                                },
+                            }}
                         >
                             {addTalkModal?.description ||
                                 addTalkModal?.subtitle}

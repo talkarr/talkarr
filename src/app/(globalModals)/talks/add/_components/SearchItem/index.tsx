@@ -45,6 +45,9 @@ export const searchItemMaxImageWidth = Math.floor(
 const StyledCard = styled(Card)(({ theme }) => ({
     minHeight: searchItemMinHeight,
     maxHeight: '500px',
+    [theme.breakpoints.down('sm')]: {
+        maxHeight: 'none',
+    },
     borderRadius: theme.shape.borderRadius * 4,
 
     // header
@@ -61,6 +64,9 @@ const StyledCard = styled(Card)(({ theme }) => ({
         padding: theme.spacing(2),
         display: 'flex',
         flexDirection: 'row',
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+        },
         height: '100%',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
@@ -158,8 +164,12 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                 onClick={() => (isAlreadyAdded ? null : openAddTalkModal(item))}
                 disabled={isAlreadyAdded}
             >
-                <CardMedia>
-                    <TalkImage data={item} />
+                <CardMedia sx={{ maxWidth: '100%' }}>
+                    <TalkImage
+                        data={item}
+                        maxWidth="100%"
+                        maxHeight="fit-content"
+                    />
                 </CardMedia>
                 <Box display="flex" flexDirection="column" mb={1}>
                     <CardHeader

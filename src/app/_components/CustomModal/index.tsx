@@ -63,7 +63,7 @@ const OuterWrapper = styled(Box, {
     },
 
     [theme.breakpoints.down('md')]: {
-        maxWidth: moreWidth ? 'calc(100vw - 80px)' : 'calc(100vw - 40px)',
+        maxWidth: moreWidth ? 'calc(100vw - 40px)' : 'calc(100vw - 80px)',
         maxHeight: 'calc(100vh - 80px)',
         top: '40px',
         left: 0,
@@ -77,6 +77,9 @@ const InnerWrapper = styled(Box)(({ theme }) => ({
     maxWidth: 'inherit',
     backgroundColor: theme.palette.background.paper,
     padding: theme.shape.borderRadius * 4,
+    [theme.breakpoints.down('md')]: {
+        padding: theme.shape.borderRadius * 2,
+    },
     borderRadius: theme.shape.borderRadius * 6,
     pointerEvents: 'auto',
 }));
