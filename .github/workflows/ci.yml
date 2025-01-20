@@ -18,6 +18,8 @@ on:
 
 env:
   NODE_VERSION: 23.x
+  PLATFORMS: linux/amd64,linux/arm64
+  # PLATFORMS: linux/amd64
 
 jobs:
   lint:
@@ -190,9 +192,6 @@ jobs:
       id-token: write
     needs:
       - lint
-    env:
-      PLATFORMS: linux/amd64,linux/arm64
-      # PLATFORMS: linux/amd64
     steps:
       - uses: actions/checkout@v4
 
@@ -302,7 +301,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-         platforms: linux/amd64
+         platforms: ${{ env.PLATFORMS }}
 
       - name: Set up Docker Compose
         run: |
@@ -420,7 +419,7 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          platforms: linux/amd64
+          platforms: ${{ env.PLATFORMS }}
 
       # - name: Tag latest container
       #   run: |
