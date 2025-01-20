@@ -1,4 +1,5 @@
 import rootLog from '@backend/rootLog';
+import { deleteTalk } from '@backend/talks';
 
 import { Prisma, PrismaClient } from '@prisma/client';
 
@@ -54,6 +55,24 @@ export const deleteRootFolder = async (
     rootFolder: string,
 ): Promise<boolean> => {
     const prisma = new PrismaClient();
+
+    const events = await prisma.event.findMany({
+        where: {
+            root_folder: {
+                path: rootFolder,
+            },
+        },
+    });
+
+    if (events.length > 0) {
+        const promises = events.map(event =>
+            deleteTalk(event.guid, { deleteFiles: true }),
+        );
+
+        await Promise.all(promises);
+    } else {
+        log.info('No events found for root folder', { rootFolder });
+    }
 
     try {
         await prisma.rootFolder.delete({

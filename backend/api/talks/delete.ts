@@ -33,12 +33,7 @@ const handleDeleteEventRequest = async (
     }
 
     // Add talk to database
-    const result = await deleteTalk(guid);
-
-    if (deleteFiles) {
-        log.warn('HANDLE DELETE EVENT REQUEST NOT IMPLEMENTED');
-        throw new Error('Not implemented');
-    }
+    const result = await deleteTalk(guid, { deleteFiles });
 
     if (!result) {
         log.error('Error removing talk from database.');

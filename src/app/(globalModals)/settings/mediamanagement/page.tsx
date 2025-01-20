@@ -34,9 +34,7 @@ const Page: NextPage = async () => {
                         <TableRow>
                             <TableCell>Folder</TableCell>
                             <TableCell>Free Space</TableCell>
-                            <TableCell align="right" style={{ width: 200 }}>
-                                Actions
-                            </TableCell>
+                            <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

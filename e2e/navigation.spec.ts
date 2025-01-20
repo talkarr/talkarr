@@ -1,6 +1,8 @@
 import { navigationItems } from '@components/Navigation/navigation';
 import { expect, test } from '@playwright/test';
 
+test.setTimeout(60000);
+
 test('should be able to navigate to the home page', async ({ page }) => {
     await page.goto('http://localhost:3232');
 

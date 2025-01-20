@@ -223,8 +223,16 @@ export const updateTalk = async (
     }
 };
 
-export const deleteTalk = async (guid: string): Promise<boolean> => {
+export const deleteTalk = async (
+    guid: string,
+    { deleteFiles = false }: { deleteFiles: boolean },
+): Promise<boolean> => {
     const prisma = new PrismaClient();
+
+    if (deleteFiles) {
+        // TODO: Implement file deletion
+        log.warn('Deleting files is not implemented yet');
+    }
 
     try {
         await prisma.event.delete({

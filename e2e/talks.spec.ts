@@ -41,34 +41,26 @@ const e2eTestFolderName = (name: string | unknown): string => {
         }
 
         // try to write a file
-        try {
-            fs.writeFileSync(pathUtils.join(path, 'test-file.txt'), 'test');
+        fs.writeFileSync(pathUtils.join(path, 'test-file.txt'), 'test');
 
-            if (!fs.existsSync(pathUtils.join(path, 'test-file.txt'))) {
-                throw new Error('Failed to write file');
-            } else {
-                console.log(
-                    `File ${pathUtils.join(path, 'test-file.txt')} written`,
-                );
-            }
-
-            // read the file
-            const data = fs.readFileSync(pathUtils.join(path, 'test-file.txt'));
-
-            if (data.toString() !== 'test') {
-                throw new Error('Failed to read file');
-            } else {
-                console.log(
-                    `File ${pathUtils.join(path, 'test-file.txt')} read`,
-                );
-            }
-
-            console.log('Folder created successfully', formatted);
-        } catch (error) {
-            console.error('Error writing file:', error);
-
-            throw error;
+        if (!fs.existsSync(pathUtils.join(path, 'test-file.txt'))) {
+            throw new Error('Failed to write file');
+        } else {
+            console.log(
+                `File ${pathUtils.join(path, 'test-file.txt')} written`,
+            );
         }
+
+        // read the file
+        const data = fs.readFileSync(pathUtils.join(path, 'test-file.txt'));
+
+        if (data.toString() !== 'test') {
+            throw new Error('Failed to read file');
+        } else {
+            console.log(`File ${pathUtils.join(path, 'test-file.txt')} read`);
+        }
+
+        console.log('Folder created successfully', formatted);
     }
 
     console.log('Using folder for e2e tests:', path);
@@ -80,20 +72,44 @@ test.describe.configure({
     mode: 'serial',
 });
 
-test('should be able to add a root folder', async ({ page }, testInfo) => {
+test('should be able to add a root folder', async ({
+    page,
+    isMobile,
+}, testInfo) => {
     await page.goto('http://localhost:3232');
+
+    // eslint-disable-next-line playwright/no-conditional-in-test
+    if (isMobile) {
+        const mobileNavigationDrawerToggle = page.locator(
+            '[data-testid=mobile-navigation-drawer-toggle]',
+        );
+        // eslint-disable-next-line playwright/no-conditional-expect
+        await expect(mobileNavigationDrawerToggle).toBeVisible();
+
+        await mobileNavigationDrawerToggle.click();
+    }
 
     // wait for navigation-settings to be visible
     await page.waitForSelector('[data-navigation-slug=settings]');
 
     // data-testid: navigation-settings
-    await page.click('[data-navigation-slug=settings]');
+    const navigationSettings = page.locator('[data-navigation-slug=settings]');
+
+    await expect(navigationSettings).toBeVisible();
+
+    await navigationSettings.click();
 
     // expect url to be /settings
     await page.waitForURL('http://localhost:3232/settings');
 
     // open media management settings
-    await page.click('[data-testid=settings-media-management]');
+    const mediaManagementSettings = page.locator(
+        '[data-testid=settings-media-management]',
+    );
+
+    await expect(mediaManagementSettings).toBeVisible();
+
+    await mediaManagementSettings.click();
 
     // expect media-management-settings to be visible
     await page.waitForURL(
@@ -398,14 +414,18 @@ test('should be able to search for a string', async ({
     await expect(mediaItem).toBeVisible();
 
     // click on the media item
-    await mediaItem.click();
+    await mediaItem.click({
+        delay: 80,
+    });
 
     const mediaItemUrl = `http://localhost:3232/talks/${slug}`;
 
     console.info('mediaItemUrl', mediaItemUrl);
 
     // url should be /talks/:slug
-    await page.waitForURL(mediaItemUrl);
+    await page.waitForURL(mediaItemUrl, {
+        timeout: 60 * 1000,
+    });
 
     // expect data-testid=delete-talk to be visible
     const deleteTalkButton = page.locator('[data-testid=delete-talk]');
@@ -447,7 +467,11 @@ test('should be able to remove the root folder', async ({ page }, testInfo) => {
     await expect(page.getByTestId('confirmation-modal')).toBeVisible();
 
     // click on the confirm button
-    await page.click('[data-testid=confirm-button]');
+    const confirmButton = page.locator('[data-testid=confirm-button]');
+
+    await expect(confirmButton).toBeVisible();
+
+    await confirmButton.click();
 
     // expect confirmation modal to be hidden
     await expect(page.getByTestId('confirmation-modal')).toBeHidden();

@@ -1,21 +1,26 @@
+'use client';
+
 import type {
     NavigationItemType,
     SplitNavigationItems,
 } from '@components/Navigation/navigation';
 
 import type { FC, PropsWithChildren } from 'react';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 
 import { pageName } from '@/constants';
 
+import AnimatedArrowIcon from '@components/AnimatedArrowIcon';
 import Logo from '@components/Logo';
 import { navigationItems } from '@components/Navigation/navigation';
 import NavigationItem from '@components/Navigation/NavigationItem';
 import NavigationSearch from '@components/Navigation/NavigationSearch';
+import { useTheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -25,6 +30,10 @@ export const drawerWidth = 240;
 export const appbarHeight = 64;
 
 const Navigation: FC<PropsWithChildren> = ({ children }) => {
+    const theme = useTheme();
+
+    const [open, setOpen] = useState<boolean>(false);
+
     const splitItemsByDivider: SplitNavigationItems = navigationItems.reduce(
         (acc, item) => {
             if ('divider' in item && item.divider) {
@@ -39,71 +48,168 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
     );
 
     return (
-        <Box>
-            <Drawer
-                variant="permanent"
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                        borderRight: `1px solid rgba(255, 255, 255, 0.05)`,
-                    },
+        <Box data-testid="navigation">
+            <Box
+                display={{
+                    xs: 'none',
+                    md: 'block',
                 }}
-                anchor="left"
             >
-                <Box
+                <Drawer
+                    variant="permanent"
                     sx={{
-                        p: 2,
-                        display: 'flex',
-                        alignItems: 'center',
-                        flexDirection: 'column',
+                        width: drawerWidth,
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: drawerWidth,
+                            boxSizing: 'border-box',
+                            borderRight: `1px solid rgba(255, 255, 255, 0.05)`,
+                        },
                     }}
+                    anchor="left"
+                    data-testid="desktop-navigation-drawer"
                 >
-                    <Logo />
-                    <Typography variant="h3" component="h1" fontWeight="bold">
-                        {pageName}
-                    </Typography>
-                </Box>
-                {splitItemsByDivider.map((items, index, { length }) => (
-                    <Fragment key={`navigation-item-list-${index}`}>
-                        <List
-                            disablePadding
-                            tabIndex={-1}
-                            data-testid="navigation"
+                    <Box
+                        sx={{
+                            p: 2,
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                        }}
+                    >
+                        <Logo />
+                        <Typography
+                            variant="h3"
+                            component="h1"
+                            fontWeight="bold"
                         >
-                            {items.map((item, itemIndex) => (
-                                <NavigationItem
-                                    item={item}
-                                    key={itemIndex}
-                                    itemIndex={itemIndex}
-                                    index={index}
-                                />
-                            ))}
-                        </List>
-                        {index < length - 1 ? <Divider /> : null}
-                    </Fragment>
-                ))}
-            </Drawer>
+                            {pageName}
+                        </Typography>
+                    </Box>
+                    {splitItemsByDivider.map((items, index, { length }) => (
+                        <Fragment key={`desktop-navigation-item-list-${index}`}>
+                            <List
+                                disablePadding
+                                tabIndex={-1}
+                                data-testid="navigation-desktop"
+                            >
+                                {items.map((item, itemIndex) => (
+                                    <NavigationItem
+                                        item={item}
+                                        key={itemIndex}
+                                        itemIndex={itemIndex}
+                                        index={index}
+                                    />
+                                ))}
+                            </List>
+                            {index < length - 1 ? <Divider /> : null}
+                        </Fragment>
+                    ))}
+                </Drawer>
+            </Box>
+            <Box
+                display={{
+                    xs: 'block',
+                    md: 'none',
+                }}
+            >
+                <Drawer
+                    variant="temporary"
+                    sx={{
+                        width: drawerWidth,
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: drawerWidth,
+                            boxSizing: 'border-box',
+                            borderRight: `1px solid rgba(255, 255, 255, 0.05)`,
+                        },
+                    }}
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    anchor="left"
+                    data-testid="mobile-navigation-drawer"
+                >
+                    <Box
+                        sx={{
+                            p: 2,
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                        }}
+                    >
+                        <Logo />
+                        <Typography
+                            variant="h3"
+                            component="h1"
+                            fontWeight="bold"
+                        >
+                            {pageName}
+                        </Typography>
+                    </Box>
+                    {splitItemsByDivider.map((items, index, { length }) => (
+                        <Fragment key={`mobile-navigation-item-list-${index}`}>
+                            <List
+                                disablePadding
+                                tabIndex={-1}
+                                data-testid="navigation-mobile"
+                            >
+                                {items.map((item, itemIndex) => (
+                                    <NavigationItem
+                                        item={item}
+                                        key={itemIndex}
+                                        itemIndex={itemIndex}
+                                        index={index}
+                                    />
+                                ))}
+                            </List>
+                            {index < length - 1 ? <Divider /> : null}
+                        </Fragment>
+                    ))}
+                </Drawer>
+            </Box>
             <Box>
                 <AppBar
                     position="fixed"
                     sx={{
                         height: appbarHeight,
-                        width: `calc(100% - ${drawerWidth}px)`,
-                        ml: `${drawerWidth}px`,
+                        [theme.breakpoints.up('md')]: {
+                            width: `calc(100% - ${drawerWidth}px)`,
+                            ml: `${drawerWidth}px`,
+                        },
+                        width: '100%',
                     }}
                 >
-                    <Toolbar>
+                    <Toolbar
+                        sx={{
+                            height: '100%',
+                        }}
+                    >
+                        <Box
+                            display={{ xs: 'flex', md: 'none' }}
+                            alignItems="center"
+                            mr={2}
+                        >
+                            <IconButton
+                                color="inherit"
+                                onClick={() => setOpen(true)}
+                                data-testid="mobile-navigation-drawer-toggle"
+                            >
+                                <AnimatedArrowIcon open={open} />
+                            </IconButton>
+                        </Box>
                         <NavigationSearch />
                     </Toolbar>
                 </AppBar>
                 <Box
                     sx={{
+                        // make that above only happens for everything above md
+                        [theme.breakpoints.up('md')]: {
+                            marginLeft: `${drawerWidth}px`,
+                            width: `calc(100% - ${drawerWidth}px)`,
+                        },
+                        width: '100%',
+                        marginLeft: 0,
                         marginTop: `${appbarHeight}px`,
-                        marginLeft: `${drawerWidth}px`,
-                        width: `calc(100% - ${drawerWidth}px)`,
                     }}
                 >
                     {children}
