@@ -1,7 +1,7 @@
 site_name: talkarr
 repo_url: https://github.com/talkarr/talkarr
 theme:
-  logo: assets/logo.svg
+  logo: assets/logo_cropped.png
   favicon: assets/favicon.ico
   name: material
   palette:
