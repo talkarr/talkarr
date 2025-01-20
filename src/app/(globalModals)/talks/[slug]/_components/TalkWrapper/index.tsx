@@ -19,6 +19,7 @@ export interface TalkWrapperProps {
 const TalkWrapper: FC<TalkWrapperProps> = ({ initialData }) => {
     const getSingleTalkData = useApiStore(state => state.getSingleTalkData);
     const singleTalkData = useApiStore(state => state.singleTalkData);
+    const clearSingleTalkData = useApiStore(state => state.clearSingleTalkData);
 
     useEffect(() => {
         const func = async (): Promise<void> => {
@@ -35,8 +36,11 @@ const TalkWrapper: FC<TalkWrapperProps> = ({ initialData }) => {
             if (interval) {
                 clearInterval(interval);
             }
+
+            clearSingleTalkData();
         };
     }, [
+        clearSingleTalkData,
         getSingleTalkData,
         initialData.info.is_downloading,
         initialData.talk.guid,

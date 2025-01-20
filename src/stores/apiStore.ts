@@ -27,6 +27,7 @@ export interface ApiActions {
     getSingleTalkData: (
         data: { guid: string; slug?: never } | { slug: string; guid?: never },
     ) => Promise<GetTalkResponse>;
+    clearSingleTalkData: () => void;
     handleDeleteTalk: (
         guid: string,
         deleteFiles: boolean,
@@ -89,6 +90,7 @@ export const createApiStore = (initialState?: PartialDeep<ApiState>) =>
 
             return response;
         },
+        clearSingleTalkData: () => set({ singleTalkData: null }),
         handleDeleteTalk: async (guid, deleteFiles) =>
             deleteEvent({ guid, delete_files: deleteFiles }),
     }));

@@ -71,6 +71,8 @@ const e2eTestFolderName = (name: string | unknown): string => {
         }
     }
 
+    console.log('Using folder for e2e tests:', path);
+
     return path;
 };
 
@@ -180,8 +182,11 @@ test('should be able to add a root folder', async ({ page }, testInfo) => {
 test('should be able to search for a string', async ({
     page,
     searchItemIndex,
+    browserName,
 }, testInfo) => {
     expect(searchItemIndex).toBeGreaterThan(-1);
+
+    console.log('searchItemIndex', searchItemIndex);
 
     const rootFolder = e2eTestFolderName(testInfo.project.name);
 
@@ -269,11 +274,18 @@ test('should be able to search for a string', async ({
 
     expect(slug).not.toBe(null);
 
-    console.log('Slug', slug);
+    console.log('Slug', { slug, searchItemIndex, browserName });
 
     expect(conferenceBadge).toBeGreaterThan(0);
     expect(languageBadge).toBeGreaterThan(0);
     expect(dateBadge).toBeGreaterThan(0);
+
+    // selectedSearchItem should not have data-is-already-added="true"
+    const isAlreadyAdded = await selectedSearchItem.getAttribute(
+        'data-is-already-added',
+    );
+
+    expect(isAlreadyAdded).toBe('false');
 
     // click on the first search item
     await selectedSearchItem.click();

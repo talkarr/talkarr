@@ -152,6 +152,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
             }}
             data-testid="search-item"
             data-slug={item.slug}
+            data-is-already-added={isAlreadyAdded ? 'true' : 'false'}
         >
             <CardActionArea
                 onClick={() => (isAlreadyAdded ? null : openAddTalkModal(item))}
