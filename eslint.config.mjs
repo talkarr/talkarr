@@ -15,6 +15,8 @@ import {FlatCompat} from "@eslint/eslintrc";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
 
+import playwright from 'eslint-plugin-playwright';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
@@ -23,7 +25,15 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
-export default tseslint.config({
+export default tseslint.config(
+    {
+        ...playwright.configs['flat/recommended'],
+        files: ['e2e/**'],
+        rules: {
+            ...playwright.configs['flat/recommended'].rules,
+        }
+    },
+    {
         ignores: [
             "**/node_modules/",
             "**/dist",
@@ -213,5 +223,5 @@ export default tseslint.config({
         // disable type-aware linting on JS files
         files: ['**/*.js'],
         extends: [tseslint.configs.disableTypeChecked],
-    },
+    }
 );

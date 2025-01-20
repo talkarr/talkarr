@@ -11,7 +11,7 @@ test('should be able to navigate to the home page', async ({ page }) => {
 
     await expect(page.title()).resolves.toBe('Talkarr');
 
-    await expect(page.getByText('404')).not.toBeVisible();
+    await expect(page.getByText('404')).toBeHidden();
 });
 
 test('should be able to navigate to each page', async ({ page }) => {
@@ -46,6 +46,6 @@ test('should be able to navigate to each page', async ({ page }) => {
 
         await expect(page.title()).resolves.toContain('Talkarr');
 
-        await expect(page.getByText('404')).not.toBeVisible();
+        await expect(page.getByText('404')).toBeHidden();
     }
 });

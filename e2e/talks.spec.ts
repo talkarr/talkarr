@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/naming-convention,playwright/no-wait-for-selector */
 import fs from 'fs';
 import pathUtils from 'path';
 
@@ -106,10 +106,12 @@ test('should be able to add a root folder', async ({ page }, testInfo) => {
 
     let isOkay = true;
 
+    // eslint-disable-next-line playwright/no-conditional-in-test
     if (await areRootFoldersConfigured.count()) {
         for await (const folder of await areRootFoldersConfigured.all()) {
             const folderName = await folder.innerText();
 
+            // eslint-disable-next-line playwright/no-conditional-in-test
             if (folderName === rootFolder) {
                 isOkay = false;
                 break;
@@ -120,6 +122,7 @@ test('should be able to add a root folder', async ({ page }, testInfo) => {
             .locator('[data-testid=no-root-folder]')
             .isVisible();
 
+        // eslint-disable-next-line playwright/no-conditional-in-test
         if (!noRootFolderVisible) {
             isOkay = false;
         }
@@ -153,10 +156,10 @@ test('should be able to add a root folder', async ({ page }, testInfo) => {
     // submit the form (add-folder-button)
     await page.click('[data-testid=add-folder-button]');
 
-    await expect(page.getByTestId('add-folder-loading')).not.toBeVisible();
+    await expect(page.getByTestId('add-folder-loading')).toBeHidden();
 
     // expect add-folder-helper-text to not be visible
-    await expect(page.getByTestId('add-folder-helper-text')).not.toBeVisible();
+    await expect(page.getByTestId('add-folder-helper-text')).toBeHidden();
 
     await expect(page.getByTestId('add-folder-modal')).not.toBeVisible({
         timeout: 5000, // 5 seconds because it might take a while to fade out
@@ -203,13 +206,8 @@ test('should be able to search for a string', async ({
 
     await navigationSearch.fill(validSearchString);
 
-    // make sure the input field has the correct value
-    const searchInputValue_0 = await page.getAttribute(
-        '[data-testid=navigation-search]',
-        'value',
-    );
-
-    expect(searchInputValue_0).toBe(validSearchString);
+    // replace with web-first
+    await expect(navigationSearch).toHaveAttribute('value', validSearchString);
 
     // focus and press enter
     await page.keyboard.press('Enter');
@@ -233,18 +231,18 @@ test('should be able to search for a string', async ({
     expect(await error.count()).toBe(0);
 
     // check if the search string is in the input field
-    const searchInputValue_1 = await page.getAttribute(
-        '[data-testid=navigation-search]',
+    const navigationSearch_1 = page.locator('[data-testid=navigation-search]');
+
+    await expect(navigationSearch_1).toHaveAttribute(
         'value',
+        validSearchString,
     );
 
-    expect(searchInputValue_1).toBe(validSearchString);
-
     // expect "search-results-loading" to be hidden
-    await expect(page.getByTestId('search-results-loading')).not.toBeVisible();
+    await expect(page.getByTestId('search-results-loading')).toBeHidden();
 
     // expect search-results-error to be hidden
-    await expect(page.getByTestId('search-results-error')).not.toBeVisible();
+    await expect(page.getByTestId('search-results-error')).toBeHidden();
 
     // check if there are at least 1 search items (data-testid: search-item)
     const searchItems = await page.locator('[data-testid=search-item]').count();
@@ -275,9 +273,13 @@ test('should be able to search for a string', async ({
         .locator('[data-badge-type=date]')
         .count();
 
+    await expect(selectedSearchItem).toHaveAttribute('data-slug');
+
+    // get the slug
     const slug = await selectedSearchItem.getAttribute('data-slug');
 
-    expect(slug).not.toBe(null);
+    // slug should have length of > 0
+    expect(slug?.length).toBeGreaterThan(0);
 
     console.log('Slug', { slug, searchItemIndex, browserName });
 
@@ -286,11 +288,10 @@ test('should be able to search for a string', async ({
     expect(dateBadge).toBeGreaterThan(0);
 
     // selectedSearchItem should not have data-is-already-added="true"
-    const isAlreadyAdded = await selectedSearchItem.getAttribute(
+    await expect(selectedSearchItem).toHaveAttribute(
         'data-is-already-added',
+        'false',
     );
-
-    expect(isAlreadyAdded).toBe('false');
 
     // click on the first search item
     await selectedSearchItem.click();
@@ -299,14 +300,11 @@ test('should be able to search for a string', async ({
     await expect(page.getByTestId('add-talk-modal-inner')).toBeVisible();
 
     // get "data-add-modal-slug" attribute
-    const addModalSlug = await page.getAttribute(
-        '[data-testid=add-talk-modal-inner]',
-        'data-add-modal-slug',
-    );
+    const addModalInner = page.getByTestId('add-talk-modal-inner');
 
-    expect(addModalSlug).not.toBe(null);
+    await expect(addModalInner).toBeVisible();
 
-    expect(addModalSlug).not.toBe('');
+    await expect(addModalInner).toHaveAttribute('data-add-modal-slug');
 
     // test if it has a add talk button
     const addTalkButton = page.locator('[data-testid=add-talk-button]');
@@ -322,15 +320,12 @@ test('should be able to search for a string', async ({
     await closeButton.click();
 
     // expect add-talk-modal to be hidden
-    await expect(page.getByTestId('add-talk-modal')).not.toBeVisible();
+    await expect(page.getByTestId('add-talk-modal')).toBeHidden();
 
     // check if the search string is still in the input field
-    const searchInputValue_2 = await page.getAttribute(
-        '[data-testid=navigation-search]',
-        'value',
-    );
+    const searchInput_2 = page.locator('[data-testid=navigation-search]');
 
-    expect(searchInputValue_2).toBe(validSearchString);
+    await expect(searchInput_2).toHaveAttribute('value', validSearchString);
 
     // check if the search items are still visible
     const searchItems_1 = await page
@@ -361,22 +356,20 @@ test('should be able to search for a string', async ({
     await selectItem.click();
 
     // expect "data-selected-root-folder" to be the correct folder
-    const selectedRootFolder = await page.getAttribute(
-        '[data-testid=add-talk-button]',
+    const addTalkButton_2 = page.locator('[data-testid=add-talk-button]');
+
+    await expect(addTalkButton_2).toBeVisible();
+
+    await expect(addTalkButton_2).toHaveAttribute(
         'data-selected-root-folder',
-    );
-
-    expect(selectedRootFolder).not.toBe(null);
-
-    expect(selectedRootFolder).toBe(
         stripInvalidCharsForDataAttribute(rootFolder),
     );
 
     // click the add talk button
-    await addTalkButton.click();
+    await addTalkButton_2.click();
 
     // expect add-talk-modal to be hidden
-    await expect(page.getByTestId('add-talk-modal')).not.toBeVisible();
+    await expect(page.getByTestId('add-talk-modal')).toBeHidden();
 
     // expect snackbar to be visible
     await expect(page.getByTestId('snackbar')).toBeVisible();
@@ -407,7 +400,7 @@ test('should be able to search for a string', async ({
     // click on the media item
     await mediaItem.click();
 
-    const mediaItemUrl = `http://localhost:3232/talks/${addModalSlug}`;
+    const mediaItemUrl = `http://localhost:3232/talks/${slug}`;
 
     console.info('mediaItemUrl', mediaItemUrl);
 
@@ -448,7 +441,6 @@ test('should be able to remove the root folder', async ({ page }, testInfo) => {
     // click on the remove folder button
     await removeFolderButton.click({
         noWaitAfter: true,
-        force: true,
     });
 
     // await confirmation modal
@@ -458,13 +450,13 @@ test('should be able to remove the root folder', async ({ page }, testInfo) => {
     await page.click('[data-testid=confirm-button]');
 
     // expect confirmation modal to be hidden
-    await expect(page.getByTestId('confirmation-modal')).not.toBeVisible();
+    await expect(page.getByTestId('confirmation-modal')).toBeHidden();
 
     // notification should be visible
     await expect(page.getByTestId('snackbar')).toBeVisible();
 
     // there should not be a folder item with the path
-    await expect(folderItem).not.toBeVisible();
+    await expect(folderItem).toBeHidden();
 
     // refresh page
     await page.reload();
@@ -472,5 +464,5 @@ test('should be able to remove the root folder', async ({ page }, testInfo) => {
     // should still have no root folder
     const newFolderItem = page.locator(`[data-folder-name="${folderName}"]`);
 
-    await expect(newFolderItem).not.toBeVisible();
+    await expect(newFolderItem).toBeHidden();
 });
