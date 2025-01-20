@@ -7,6 +7,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
         sx={{
             paddingX: 4,
             paddingY: 2,
+            width: '100%',
         }}
     >
         {children}

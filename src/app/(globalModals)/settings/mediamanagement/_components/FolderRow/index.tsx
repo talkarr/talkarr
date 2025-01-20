@@ -55,10 +55,10 @@ const FolderRow: FC<FolderRowProps> = ({ folder, freeSpace }) => {
     };
 
     return (
-        <TableRow data-folder-name={folder}>
+        <TableRow data-folder-name={folder} sx={{ width: '100%' }}>
             <TableCell>{folder}</TableCell>
             <TableCell>{prettyBytes(freeSpace)}</TableCell>
-            <TableCell align="right" style={{ width: 200 }}>
+            <TableCell align="right">
                 <IconButton
                     color="error"
                     aria-label="delete"

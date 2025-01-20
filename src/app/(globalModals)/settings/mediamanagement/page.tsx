@@ -29,7 +29,18 @@ const Page: NextPage = async () => {
                     Root folders are the base directories where media files are
                     stored.
                 </Typography>
-                <Table>
+                <Table
+                    sx={{
+                        // Thanks to Google Chrome for being such a nice browser
+                        tableLayout: 'fixed',
+                        maxWidth: '100%',
+
+                        // set word-wrap for all inner td elements
+                        '& td': {
+                            wordWrap: 'break-word',
+                        },
+                    }}
+                >
                     <TableHead>
                         <TableRow>
                             <TableCell>Folder</TableCell>

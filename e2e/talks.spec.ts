@@ -486,8 +486,15 @@ test('should be able to search for a string', async ({
 });
 
 test('should be able to remove the root folder', async ({ page }, testInfo) => {
+    test.setTimeout(60000);
+
     // directly go to the media management settings page
-    await page.goto(`http://localhost:3232${mediaManagementSettingsPageLink}`);
+    await page.goto(`http://localhost:3232${mediaManagementSettingsPageLink}`, {
+        waitUntil: 'domcontentloaded',
+    });
+
+    // wait for 5s
+    await page.waitForTimeout(5000);
 
     // expect media-management-settings to be visible
     await page.waitForSelector('[data-testid=media-management-settings]');
@@ -498,14 +505,15 @@ test('should be able to remove the root folder', async ({ page }, testInfo) => {
 
     await expect(folderItem).toBeVisible();
 
-    const removeFolderButton = folderItem.locator(
+    const deleteFolderButton = folderItem.locator(
         '[data-testid=delete-folder-button]',
     );
 
-    await expect(removeFolderButton).toBeVisible();
+    await expect(deleteFolderButton).toBeVisible();
 
     // click on the remove folder button
-    await removeFolderButton.click({
+    await deleteFolderButton.click({
+        delay: 80,
         noWaitAfter: true,
     });
 
@@ -517,7 +525,9 @@ test('should be able to remove the root folder', async ({ page }, testInfo) => {
 
     await expect(confirmButton).toBeVisible();
 
-    await confirmButton.click();
+    await confirmButton.click({
+        delay: 80,
+    });
 
     // expect confirmation modal to be hidden
     await expect(page.getByTestId('confirmation-modal')).toBeHidden();
