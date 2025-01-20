@@ -89,18 +89,30 @@ test('should be able to add a root folder', async ({
         await mobileNavigationDrawerToggle.click();
     }
 
-    // wait for navigation-settings to be visible
-    await page.waitForSelector('[data-navigation-slug=settings]');
+    const container = page.locator(
+        isMobile
+            ? '[data-testid=navigation-mobile]'
+            : '[data-testid=navigation-desktop]',
+    );
+
+    await expect(container).toBeVisible();
 
     // data-testid: navigation-settings
-    const navigationSettings = page.locator('[data-navigation-slug=settings]');
+    const navigationSettings = container.locator(
+        '[data-navigation-slug=settings]',
+    );
 
     await expect(navigationSettings).toBeVisible();
 
     await navigationSettings.click();
 
-    // expect url to be /settings
-    await page.waitForURL('http://localhost:3232/settings');
+    // wait for load
+    await page.waitForLoadState('domcontentloaded');
+
+    // expect settings to be visible
+    const settings = page.locator('[data-testid=settings]');
+
+    await expect(settings).toBeVisible();
 
     // open media management settings
     const mediaManagementSettings = page.locator(
@@ -203,6 +215,7 @@ test('should be able to search for a string', async ({
     page,
     searchItemIndex,
     browserName,
+    isMobile,
 }, testInfo) => {
     expect(searchItemIndex).toBeGreaterThan(-1);
 
@@ -271,6 +284,11 @@ test('should be able to search for a string', async ({
         .locator('[data-testid=search-item]')
         .nth(searchItemIndex);
 
+    // scroll it into view
+    await selectedSearchItem.scrollIntoViewIfNeeded();
+
+    await expect(selectedSearchItem).toBeVisible();
+
     // check if it has the following badges
     const badges = await selectedSearchItem
         .locator('[data-testid=video-meta-badge]')
@@ -310,7 +328,12 @@ test('should be able to search for a string', async ({
     );
 
     // click on the first search item
-    await selectedSearchItem.click();
+    await selectedSearchItem.click({
+        position: { x: 10, y: 10 },
+    });
+
+    // expect add-talk-modal to be visible
+    await expect(page.getByTestId('add-talk-modal')).toBeVisible();
 
     // expect add-talk-modal to be visible
     await expect(page.getByTestId('add-talk-modal-inner')).toBeVisible();
@@ -350,8 +373,12 @@ test('should be able to search for a string', async ({
 
     expect(searchItems_1).toBeGreaterThan(searchItemIndex);
 
+    await expect(selectedSearchItem).toBeVisible();
+
     // open the first search item again
-    await selectedSearchItem.click();
+    await selectedSearchItem.click({
+        position: { x: 10, y: 10 },
+    });
 
     // expect add-talk-modal to be visible
     await expect(page.getByTestId('add-talk-modal')).toBeVisible();
@@ -397,8 +424,27 @@ test('should be able to search for a string', async ({
 
     expect(snackbarMessage.toLowerCase()).toContain('successfully');
 
+    // eslint-disable-next-line playwright/no-conditional-in-test
+    if (isMobile) {
+        const mobileNavigationDrawerToggle = page.locator(
+            '[data-testid=mobile-navigation-drawer-toggle]',
+        );
+        // eslint-disable-next-line playwright/no-conditional-expect
+        await expect(mobileNavigationDrawerToggle).toBeVisible();
+
+        await mobileNavigationDrawerToggle.click();
+    }
+
+    const container = page.locator(
+        isMobile
+            ? '[data-testid=navigation-mobile]'
+            : '[data-testid=navigation-desktop]',
+    );
+
+    const navigationTalks = container.locator('[data-navigation-slug=talks]');
+
     // navigate to the talks page
-    await page.click('[data-navigation-slug=talks]');
+    await navigationTalks.click();
 
     // wait for the page to load
     await page.waitForURL('http://localhost:3232/');

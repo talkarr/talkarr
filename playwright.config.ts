@@ -13,7 +13,7 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-const excludeMobile = process.env.EXCLUDE_MOBILE; // || process.env.CI;
+const excludeMobile = process.env.EXCLUDE_MOBILE || process.env.FIREFOX_ONLY; // || process.env.CI;
 
 export default defineConfig<TestOptions>({
     testDir: './e2e',
@@ -44,10 +44,19 @@ export default defineConfig<TestOptions>({
 
     /* Configure projects for major browsers */
     projects: [
-        {
-            name: 'chromium',
-            use: { ...devices['Desktop Chrome'], searchItemIndex: 0 },
-        },
+        ...(process.env.FIREFOX_ONLY
+            ? []
+            : [
+                  {
+                      name: 'chromium',
+                      use: { ...devices['Desktop Chrome'], searchItemIndex: 0 },
+                  },
+
+                  {
+                      name: 'webkit',
+                      use: { ...devices['Desktop Safari'], searchItemIndex: 2 },
+                  },
+              ]),
 
         {
             name: 'firefox',
@@ -55,11 +64,6 @@ export default defineConfig<TestOptions>({
             retries: process.env.CI ? undefined : 5,
             timeout: process.env.CI ? undefined : 30000,
             use: { ...devices['Desktop Firefox'], searchItemIndex: 1 },
-        },
-
-        {
-            name: 'webkit',
-            use: { ...devices['Desktop Safari'], searchItemIndex: 2 },
         },
 
         /* Test against mobile viewports. */
