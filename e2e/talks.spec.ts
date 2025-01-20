@@ -143,11 +143,12 @@ test('should be able to add a root folder', async ({ page }, testInfo) => {
     // add-folder-input
     await expect(page.getByTestId('add-folder-input')).toBeVisible();
 
+    const inputField = page.locator('[data-testid=add-folder-input]');
+
+    await expect(inputField).toBeVisible();
+
     // fill the input field
-    await page.fill(
-        '[data-testid=add-folder-input]',
-        e2eTestFolderName(testInfo.project.name),
-    );
+    await inputField.fill(e2eTestFolderName(testInfo.project.name));
 
     // submit the form (add-folder-button)
     await page.click('[data-testid=add-folder-button]');
@@ -196,7 +197,11 @@ test('should be able to search for a string', async ({
     await page.waitForSelector('[data-testid=navigation-search]');
 
     // data-testid: navigation-search
-    await page.fill('[data-testid=navigation-search]', validSearchString);
+    const navigationSearch = page.locator('[data-testid=navigation-search]');
+
+    await expect(navigationSearch).toBeVisible();
+
+    await navigationSearch.fill(validSearchString);
 
     // make sure the input field has the correct value
     const searchInputValue_0 = await page.getAttribute(
