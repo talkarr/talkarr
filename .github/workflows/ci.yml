@@ -22,25 +22,6 @@ env:
   PLATFORMS: linux/amd64
 
 jobs:
-  test-docker-in-github:
-    runs-on: ubuntu-latest
-    steps:
-      # start a simple docker container with a mounted volume. in the container, create a file. then check if the file exists on the host
-      - name: Run a simple docker container
-        run: |
-          docker run -d --rm -v /tmp:/tmp alpine touch /tmp/test.txt
-          sleep 5
-          ls -l /tmp/test.txt
-          
-          # also try with a file from the host
-          mkdir -p ./test
-          touch ./test/test.txt
-          
-          docker run -d --rm -v $(pwd)/test:/app alpine touch /app/test2.txt
-          
-          sleep 5
-          ls -l ./test/
-
   lint:
     name: Run ESLint and type checks
     runs-on: ubuntu-latest
@@ -365,6 +346,8 @@ jobs:
           mkdir -p e2e/e2e-test-folder
           chmod 777 -R e2e/
           
+          touch e2e/e2e-test-folder/iwashere.txt
+          
           docker run -d --rm -v ./.env:/app/.env -v ./logs:/app/logs -v ./e2e/2e-test-folder:/app/e2e/e2e-test-folder --network host ${{ env.container_ref }}
           
           # wait for the app to be ready
@@ -381,6 +364,9 @@ jobs:
         continue-on-error: true
         run: |
           tree e2e/e2e-test-folder
+          
+          # list files in docker container
+          docker exec $(docker ps -q --filter ancestor=${{ env.container_ref }}) ls -lah /app/e2e/e2e-test-folder
 
       - uses: daun/playwright-report-summary@v3
         with:
