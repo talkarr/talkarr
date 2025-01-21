@@ -3,3 +3,6 @@
 .idea
 docker-compose.*
 .git*
+*.md
+Makefile
+playwright.config.ts
