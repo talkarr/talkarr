@@ -34,14 +34,14 @@ The project is still in its early stages, so there are a lot of things that need
 ### Planned for initial release
 
 - [ ] Provide basic functionality to download talks
-  - Includes importing the talks from the Fahrplan app
-  - Downloading the talks
-  - Saving the talks to a specified folder
-  - Managing the downloaded talks
-  - Updating information about the talks
-  - Regenerate the NFO files
-  - Basic settings configuration
-    - Import / Export via JSON file to allow for backup and restore
+  - [ ] Includes importing the talks from the Fahrplan app
+  - [x] Downloading the talks
+  - [x] Saving the talks to a specified folder
+  - [ ] Managing the downloaded talks
+  - [ ] Updating information about the talks
+  - [ ] Regenerate the NFO files
+  - [ ] Basic settings configuration
+    - [ ] Import / Export via JSON file to allow for backup and restore
 - [ ] Make database schema stable
   - This means that the database schema should not change in breaking ways.
   - This also means the migrations in `prisma/migrations` should be stable and not be deleted in any way.
