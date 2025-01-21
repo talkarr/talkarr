@@ -76,4 +76,9 @@ EXPOSE 3232
 ENV PORT=3232
 
 ENV HOSTNAME="0.0.0.0"
-CMD yarn start:prod
+# CMD yarn start:prod
+SHELL ["/bin/bash", "-c"]
+
+HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 CMD curl --fail http://localhost:3232/healthz || exit 1
+
+CMD ["yarn", "start:prod"]

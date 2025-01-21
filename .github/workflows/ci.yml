@@ -313,7 +313,7 @@ jobs:
           fi
           
           sudo apt-get update
-          sudo apt-get install -y docker-compose-plugin
+          sudo apt-get install -y docker-compose-plugin tree
 
       - name: Pull Docker image
         run: |
@@ -354,6 +354,10 @@ jobs:
         run: |
           yarn test:e2e:ci
           echo "TESTING_STATUS=$?" >> $GITHUB_ENV
+
+      - name: List files in the e2e-test-folder
+        run: |
+          tree e2e-test-folder
 
       - uses: daun/playwright-report-summary@v3
         with:
