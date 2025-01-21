@@ -117,6 +117,8 @@ export const addTalk = async (
                 error instanceof Prisma.PrismaClientKnownRequestError
                     ? error.code
                     : error,
+            title: event.title,
+            guid: event.guid,
         });
 
         if (
@@ -215,7 +217,7 @@ export const updateTalk = async (
 
         return updatedTalk;
     } catch (error) {
-        log.error('Error updating talk', { error });
+        log.error('Error updating talk', { error, title: event.title, guid });
 
         return false;
     } finally {
@@ -247,7 +249,7 @@ export const deleteTalk = async (
 
         return true;
     } catch (error) {
-        log.error('Error deleting talk', { error });
+        log.error('Error deleting talk', { error, guid });
 
         return false;
     } finally {
@@ -315,7 +317,7 @@ export const getTalkInfoByGuid = async (
             folder,
         };
     } catch (error) {
-        log.error('Error getting talk info', { error });
+        log.error('Error getting talk info', { error, guid });
     } finally {
         await prisma.$disconnect();
     }
@@ -368,6 +370,9 @@ export const createNewTalkInfo = async (
         if (exists.length > 1) {
             log.error(
                 `More than one event info found for talk ${talk.guid} (This should not be possible)`,
+                {
+                    count: exists.length,
+                },
             );
 
             return null;
@@ -390,7 +395,11 @@ export const createNewTalkInfo = async (
 
         return result.guid;
     } catch (error) {
-        log.error('Error creating new talk info', { error });
+        log.error('Error creating new talk info', {
+            error,
+            title: talk.title,
+            guid: talk.guid,
+        });
     } finally {
         await prisma.$disconnect();
     }
@@ -417,7 +426,11 @@ export const updateDownloadProgress = async ({
             },
         });
     } catch (error) {
-        log.error('Error updating download progress', { error });
+        log.error('Error updating download progress', {
+            error,
+            eventGuid,
+            progress,
+        });
     } finally {
         await prisma.$disconnect();
     }
@@ -439,7 +452,11 @@ export const setIsDownloading = async (
             },
         });
     } catch (error) {
-        log.error('Error setting is downloading', { error });
+        log.error('Error setting is downloading', {
+            error,
+            eventGuid,
+            isDownloading,
+        });
     } finally {
         await prisma.$disconnect();
     }
@@ -460,7 +477,10 @@ export const isEventDownloading = async (
 
         return !!result;
     } catch (error) {
-        log.error('Error checking if event is downloading', { error });
+        log.error('Error checking if event is downloading', {
+            error,
+            eventInfoGuid,
+        });
 
         return false;
     } finally {
@@ -492,7 +512,12 @@ export const addDownloadedFile = async (
             },
         });
     } catch (error) {
-        log.error('Error adding downloaded file', { error, file });
+        log.error('Error adding downloaded file', {
+            error,
+            file,
+            title: event.title,
+            guid: event.guid,
+        });
 
         return false;
     } finally {
@@ -518,7 +543,11 @@ export const checkIfFileIsInDb = async (
 
         return !!result;
     } catch (error) {
-        log.error('Error checking if file is in db', { error });
+        log.error('Error checking if file is in db', {
+            error,
+            eventGuid,
+            path,
+        });
 
         return false;
     } finally {
@@ -542,7 +571,11 @@ export const setDownloadError = async (
             },
         });
     } catch (db_error) {
-        log.error('Error setting download error', { db_error });
+        log.error('Error setting download error', {
+            db_error,
+            error,
+            eventInfoGuid,
+        });
     } finally {
         await prisma.$disconnect();
     }
@@ -563,7 +596,7 @@ export const clearDownloadError = async (
             },
         });
     } catch (db_error) {
-        log.error('Error clearing download error', { db_error });
+        log.error('Error clearing download error', { db_error, eventInfoGuid });
     } finally {
         await prisma.$disconnect();
     }
@@ -585,7 +618,11 @@ export const setDownloadExitCode = async (
             },
         });
     } catch (db_error) {
-        log.error('Error setting download exit code', { db_error });
+        log.error('Error setting download exit code', {
+            db_error,
+            exitCode,
+            eventInfoGuid,
+        });
     } finally {
         await prisma.$disconnect();
     }
@@ -609,7 +646,7 @@ export const getSpecificTalkByGuid = async (
             },
         });
     } catch (error) {
-        log.error('Error getting specific talk', { error });
+        log.error('Error getting specific talk', { error, guid });
 
         return null;
     } finally {
@@ -635,7 +672,7 @@ export const getSpecificTalkBySlug = async (
             },
         });
     } catch (error) {
-        log.error('Error getting specific talk', { error });
+        log.error('Error getting specific talk', { error, slug });
 
         return null;
     } finally {
@@ -674,7 +711,7 @@ export const getEventByFilePath = async (
 
         return result.event;
     } catch (error) {
-        log.error('Error getting event by file path', { error });
+        log.error('Error getting event by file path', { error, filePath });
 
         return null;
     } finally {

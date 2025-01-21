@@ -81,7 +81,11 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
             throw new Error('Error fetching video info');
         }
     } catch (error) {
-        log.error('Error fetching video info:', { error });
+        log.error('Error fetching video info:', {
+            error,
+            title: talk.title,
+            frontend_url: talk.frontend_link,
+        });
 
         await setDownloadError(talk.guid, 'Error fetching video info');
 

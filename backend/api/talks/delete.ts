@@ -36,7 +36,7 @@ const handleDeleteEventRequest = async (
     const result = await deleteTalk(guid, { deleteFiles });
 
     if (!result) {
-        log.error('Error removing talk from database.');
+        log.error('Error removing talk from database.', { guid, deleteFiles });
 
         res.status(500).json({
             success: false,

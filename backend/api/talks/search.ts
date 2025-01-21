@@ -36,6 +36,10 @@ const handleSearchEventsRequest = async (
     if (!results.ok) {
         log.error(
             `Failed to fetch search results for query "${query}": ${results.status}`,
+            {
+                query,
+                status: results.status,
+            },
         );
 
         res.status(500).json({

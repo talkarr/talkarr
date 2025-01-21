@@ -30,7 +30,7 @@ const handleEventInfoRequest = async (
     }
 
     if (!talk) {
-        log.error('Talk not found.');
+        log.error('Talk not found.', { slug, guid });
 
         res.status(404).json({
             success: false,

@@ -23,7 +23,7 @@ export const addRootFolder = async (
             },
         });
     } catch (error) {
-        log.error('Error adding root folder', { error });
+        log.error('Error adding root folder', { error, rootFolder });
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === 'P2002') {
                 return AddRootFolderResponse.Duplicate;
@@ -84,7 +84,7 @@ export const deleteRootFolder = async (
             },
         });
     } catch (e) {
-        log.error('Error deleting root folder', { error: e });
+        log.error('Error deleting root folder', { error: e, rootFolder });
         return false;
     }
 

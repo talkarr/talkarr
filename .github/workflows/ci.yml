@@ -344,11 +344,7 @@ jobs:
           chmod 777 -R logs
           
           mkdir -p e2e/e2e-test-folder
-          chmod 777 -R e2e/
-          
-          touch e2e/e2e-test-folder/iwashere.txt
-          
-          ls -lah ./e2e/e2e-test-folder
+          chmod 777 -R e2e/e2e-test-folder
           
           docker run -d --rm -v ./.env:/app/.env -v ./logs:/app/logs -v ./e2e/e2e-test-folder:/app/e2e/e2e-test-folder --network host ${{ env.container_ref }}
           
@@ -360,16 +356,7 @@ jobs:
         continue-on-error: true
         run: |
           yarn test:e2e:ci
-          echo "Simulating running E2E tests"
           echo "TESTING_STATUS=$?" >> $GITHUB_ENV
-
-      - name: List files in the e2e-test-folder
-        continue-on-error: true
-        run: |
-          tree e2e/e2e-test-folder
-          
-          # list files in docker container
-          docker exec $(docker ps -q --filter ancestor=${{ env.container_ref }}) ls -lah /app/e2e/e2e-test-folder
 
       - uses: daun/playwright-report-summary@v3
         with:

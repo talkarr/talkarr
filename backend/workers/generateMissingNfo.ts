@@ -41,14 +41,21 @@ const generateMissingNfo: TaskFunction<GenerateMissingNfoData> = async (
         }
 
         if (!(await handleNfoGeneration(folder, talk))) {
-            log.error('Error generating missing nfo:', { title: talk.title });
+            log.error('Error generating missing nfo:', {
+                title: talk.title,
+                guid: talk.guid,
+            });
 
             throw new Error('Error generating missing nfo');
         }
 
         done();
     } catch (error) {
-        log.error('Error generating missing nfo:', { error });
+        log.error('Error generating missing nfo:', {
+            error,
+            title: talk.title,
+            guid: talk.guid,
+        });
 
         throw error;
     }

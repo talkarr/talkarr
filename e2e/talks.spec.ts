@@ -287,10 +287,12 @@ test('should be able to search for a string', async ({
     await expect(page.getByTestId('search-results-error')).toBeHidden();
 
     // check if there are at least 1 search items (data-testid: search-item)
-    const searchItems = await page.locator('[data-testid=search-item]').count();
+    const searchItemsCount = await page
+        .locator('[data-testid=search-item]')
+        .count();
 
     // should have enough to index with workerIndex
-    expect(searchItems).toBeGreaterThan(searchItemIndex);
+    expect(searchItemsCount).toBeGreaterThan(searchItemIndex);
 
     // get the first search item
     const selectedSearchItem = page
@@ -301,6 +303,12 @@ test('should be able to search for a string', async ({
     await selectedSearchItem.scrollIntoViewIfNeeded();
 
     await expect(selectedSearchItem).toBeVisible();
+
+    // selectedSearchItem should not have data-is-already-added="true"
+    await expect(selectedSearchItem).toHaveAttribute(
+        'data-is-already-added',
+        'false',
+    );
 
     // check if it has the following badges
     const badges = await selectedSearchItem
@@ -333,12 +341,6 @@ test('should be able to search for a string', async ({
     expect(conferenceBadge).toBeGreaterThan(0);
     expect(languageBadge).toBeGreaterThan(0);
     expect(dateBadge).toBeGreaterThan(0);
-
-    // selectedSearchItem should not have data-is-already-added="true"
-    await expect(selectedSearchItem).toHaveAttribute(
-        'data-is-already-added',
-        'false',
-    );
 
     // click on the first search item
     await selectedSearchItem.click({

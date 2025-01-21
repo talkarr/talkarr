@@ -25,7 +25,7 @@ const handleUpdateEventRequest = async (
     const talk = await getTalkFromApiByGuid(guid);
 
     if (!talk) {
-        log.error('Talk not found.');
+        log.error('Talk not found.', { guid });
 
         res.status(404).json({
             success: false,
@@ -39,7 +39,7 @@ const handleUpdateEventRequest = async (
     const result = await updateTalk(guid, talk);
 
     if (typeof result !== 'object') {
-        log.error('Error adding talk to database. Result:', { result });
+        log.error('Error adding talk to database. Result:', { result, guid });
 
         res.status(500).json({
             success: false,

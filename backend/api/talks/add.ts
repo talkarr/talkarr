@@ -53,7 +53,10 @@ const handleAddEventRequest = async (
     const result = await addTalk(talk, rootFolder);
 
     if (typeof result !== 'object') {
-        log.error('Error adding talk to database. Result:', { result });
+        log.error('Error adding talk to database. Result:', {
+            result,
+            guid: talk.guid,
+        });
 
         if (result === AddTalkFailure.Duplicate) {
             res.status(409).json({

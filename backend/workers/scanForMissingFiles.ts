@@ -34,9 +34,9 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
     log.info('Scanning for missing files...');
 
     if (!check(job.data)) {
-        const foo = typia.validate<ScanForMissingFilesData>(job.data);
+        const jobDataValid = typia.validate<ScanForMissingFilesData>(job.data);
 
-        log.error('Invalid data:', { foo });
+        log.error('Invalid data:', { jobDataValid });
 
         throw new Error('Invalid data');
     }
