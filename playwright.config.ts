@@ -74,15 +74,17 @@ export default defineConfig<TestOptions>({
                       use: { ...devices['Pixel 7'], searchItemIndex: 3 },
                   },
                   // Mobile safari is completely broken, just forget about it
-                  process.env.CI
-                      ? {}
-                      : {
-                            name: 'Mobile Safari',
-                            use: {
-                                ...devices['iPhone 13'],
-                                searchItemIndex: 4,
+                  ...(process.env.CI
+                      ? []
+                      : [
+                            {
+                                name: 'Mobile Safari',
+                                use: {
+                                    ...devices['iPhone 13'],
+                                    searchItemIndex: 4,
+                                },
                             },
-                        },
+                        ]),
               ]),
     ],
 
