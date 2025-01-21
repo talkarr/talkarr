@@ -2,7 +2,7 @@
 export const pagePrimaryColor = '#9b69ff';
 export const pageSecondaryColor = '#390a96';
 export const pageBackgroundColor = '#181a1b';
-export const pagePaperColor = '#242526';
+export const pagePaperColor = '#343536';
 export const pageBorderColor = '#ffffff';
 export const pageName = 'Talkarr';
 
