@@ -20,13 +20,11 @@ env:
   NODE_VERSION: 23.x
   # PLATFORMS: linux/amd64,linux/arm64
   PLATFORMS: linux/amd64
-  SKIP_BEFORE_E2E: true
 
 jobs:
   lint:
     name: Run ESLint and type checks
     runs-on: ubuntu-latest
-    if: env.SKIP_BEFORE_E2E != 'true'
     permissions:
       actions: read
       contents: write
@@ -137,7 +135,6 @@ jobs:
   test:
     name: Run unit tests
     runs-on: ubuntu-latest
-    if: env.SKIP_BEFORE_E2E != 'true'
     permissions:
       actions: read
       contents: write
@@ -191,7 +188,6 @@ jobs:
   build-linux-container:
     name: Build container
     runs-on: ubuntu-latest
-    if: env.SKIP_BEFORE_E2E != 'true'
     permissions:
       packages: write
       contents: read
@@ -273,11 +269,10 @@ jobs:
       id-token: write
     env:
       container_ref: ${{ needs.build-linux-container.outputs.ref }}
-    #needs:
-    #  - build-linux-container
-    #  - test
-    #  - lint
-    needs: ${{ env.SKIP_BEFORE_E2E == 'true' && '' || 'build-linux-container, test, lint' }}
+    needs:
+      - build-linux-container
+      - test
+      - lint
     steps:
       - uses: actions/checkout@v4
 
