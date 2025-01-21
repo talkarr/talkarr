@@ -342,12 +342,19 @@ test('should be able to search for a string', async ({
     expect(languageBadge).toBeGreaterThan(0);
     expect(dateBadge).toBeGreaterThan(0);
 
-    // click on the first search item
     const selectedItemAction = selectedSearchItem.locator(
         '[data-testid=search-item-action]',
     );
 
-    await selectedItemAction.click();
+    await expect(selectedItemAction).toBeVisible();
+
+    await selectedItemAction.click({
+        delay: 80,
+        position: {
+            x: 10,
+            y: 10,
+        },
+    });
 
     // expect add-talk-modal to be visible
     await expect(page.getByTestId('add-talk-modal')).toBeVisible();
@@ -390,11 +397,26 @@ test('should be able to search for a string', async ({
 
     expect(searchItems_1).toBeGreaterThan(searchItemIndex);
 
-    await expect(selectedSearchItem).toBeVisible();
+    const selectedSearchItem_1 = page
+        .locator('[data-testid=search-item]')
+        .nth(searchItemIndex);
+
+    await expect(selectedSearchItem_1).toBeVisible();
+
+    // click on the first search item
+    const selectedItemAction_1 = selectedSearchItem_1.locator(
+        '[data-testid=search-item-action]',
+    );
+
+    await expect(selectedItemAction_1).toBeVisible();
 
     // open the first search item again
-    await selectedSearchItem.click({
-        position: { x: 10, y: 10 },
+    await selectedItemAction_1.click({
+        delay: 80,
+        position: {
+            x: 10,
+            y: 10,
+        },
     });
 
     // expect add-talk-modal to be visible
