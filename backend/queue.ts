@@ -16,7 +16,10 @@ queue.on('error', err => {
 });
 
 queue.on('failed', (job, err) => {
-    log.error(`Job ${job.id} (${job.name}) failed:`, { error: err });
+    log.error(`Job ${job.id} (${job.name}) failed:`, {
+        error: err,
+        data: job.data,
+    });
 });
 
 queue.on('progress', (job, progress) => {
