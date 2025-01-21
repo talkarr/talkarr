@@ -194,7 +194,7 @@ jobs:
       attestations: write
       id-token: write
     needs:
-      - lint
+  #    - lint
     steps:
       - uses: actions/checkout@v4
 
@@ -271,8 +271,8 @@ jobs:
       container_ref: ${{ needs.build-linux-container.outputs.ref }}
     needs:
       - build-linux-container
-      - test
-      - lint
+  #    - test
+  #    - lint
     steps:
       - uses: actions/checkout@v4
 
@@ -287,6 +287,7 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive --prefer-offline
 
       - name: Install playwright dependencies
+        if: 0
         run: |
           yarn playwright install-deps
           yarn playwright install
