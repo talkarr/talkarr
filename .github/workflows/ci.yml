@@ -193,7 +193,7 @@ jobs:
       contents: read
       attestations: write
       id-token: write
-    needs:
+  #  needs:
   #    - lint
     steps:
       - uses: actions/checkout@v4
