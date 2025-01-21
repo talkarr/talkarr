@@ -78,7 +78,7 @@ const e2eTestFolderName = (name: string | unknown): string => {
     }
 
     // replace BASE_DIR with "/app" for CI
-    return path.replace(BASE_DIR, '/app');
+    return path.replace(BASE_DIR, '/app/e2e');
 };
 
 test.describe.configure({
