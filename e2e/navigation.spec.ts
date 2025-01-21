@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-wait-for-selector */
 import { navigationItems } from '@components/Navigation/navigation';
 import { expect, test } from '@playwright/test';
 

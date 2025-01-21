@@ -84,7 +84,7 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
             </Box>
             <Box mb={3}>
                 <Typography variant="h5" borderBottom={1}>
-                    Files
+                    Videos
                 </Typography>
                 <List disablePadding>
                     {videoFiles.map(file => (

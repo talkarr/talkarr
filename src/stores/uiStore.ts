@@ -1,4 +1,3 @@
-import type { ButtonProps } from '@mui/material';
 import type { PartialDeep } from 'type-fest';
 
 import deepmerge from 'deepmerge';
@@ -6,18 +5,14 @@ import { createStore } from 'zustand';
 
 import type { SuccessData } from '@backend/types';
 
+import type { ConfirmationModalConfig } from '@/app/_modals/ConfirmationModal';
+
 export type TalkData = SuccessData<'/talks/search', 'get'>['events'][0];
 
 export interface UiState {
     addTalkModal: TalkData | null;
     addFolderModal: boolean;
-    confirmationModal: {
-        title: string;
-        message: string;
-        onConfirm: () => void;
-        confirmColor?: ButtonProps['color'];
-        cancelColor?: ButtonProps['color'];
-    } | null;
+    confirmationModal: ConfirmationModalConfig | null;
 }
 
 export interface UiActions {
@@ -30,7 +25,9 @@ export interface UiActions {
     closeAddFolderModal: () => void;
 
     // showConfirmationModal
-    showConfirmationModal: (config: UiState['confirmationModal']) => void;
+    showConfirmationModal: <T extends string = string>(
+        config: ConfirmationModalConfig<T>,
+    ) => void;
     closeConfirmationModal: () => void;
 }
 

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention,playwright/no-wait-for-selector */
+/* eslint-disable @typescript-eslint/naming-convention,playwright/no-wait-for-selector,playwright/no-wait-for-timeout */
 import fs from 'fs';
 import pathUtils from 'path';
 
