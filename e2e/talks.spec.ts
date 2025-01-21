@@ -30,6 +30,14 @@ const e2eTestFolderName = (name: string | unknown): string => {
 
     const path = pathUtils.join(BASE_DIR, 'e2e-test-folder', formatted);
 
+    // check if base dir exists and can do read/write
+    if (!fs.existsSync(BASE_DIR)) {
+        throw new Error('Base directory does not exist');
+    }
+
+    // eslint-disable-next-line no-bitwise
+    fs.accessSync(BASE_DIR, fs.constants.R_OK | fs.constants.W_OK);
+
     if (!fs.existsSync(path)) {
         console.log(
             `e2e test folder does not exist, running "mkdir -p ${path}"`,
