@@ -22,6 +22,25 @@ env:
   PLATFORMS: linux/amd64
 
 jobs:
+  test-docker-in-github:
+    runs-on: ubuntu-latest
+    steps:
+      # start a simple docker container with a mounted volume. in the container, create a file. then check if the file exists on the host
+      - name: Run a simple docker container
+        run: |
+          docker run -d --rm -v /tmp:/tmp alpine touch /tmp/test.txt
+          sleep 5
+          ls -l /tmp/test.txt
+          
+          # also try with a file from the host
+          mkdir -p ./test
+          touch ./test/test.txt
+          
+          docker run -d --rm -v $(pwd)/test:/app alpine touch /app/test2.txt
+          
+          sleep 5
+          ls -l ./test/
+
   lint:
     name: Run ESLint and type checks
     runs-on: ubuntu-latest
