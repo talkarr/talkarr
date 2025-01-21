@@ -1,18 +1,40 @@
 site_name: talkarr
+site_description: "Talkarr is a self-hosted forum software that is easy to use and customize."
+site_author: "CommanderRedYT"
+copyright: Copyright &copy; 2024 CommanderRedYT and others
+
 repo_url: https://github.com/talkarr/talkarr
+repo_name: talkarr/talkarr
+edit_uri: edit/main/docs/
+
+extra:
+  social:
+      - icon: fontawesome/brands/github
+        link: https://github.com/talkarr/talkarr
+
 theme:
   logo: assets/logo_cropped.png
   favicon: assets/favicon.ico
   name: material
+  language: en
   palette:
     primary: "deep-purple"
     accent: "blue-grey"
+
   features:
+    - navigation.instant
+    - navigation.tracking
     - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.prev_next
     - navigation.top
     - search
+    - search.suggest
     - content.code.copy
+    - content.code.highlight
+    - content.tooltips
+    - content.action.view
+    - content.action.edit
 
 markdown_extensions:
   - pymdownx.highlight:
