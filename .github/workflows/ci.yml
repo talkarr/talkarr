@@ -18,8 +18,8 @@ on:
 
 env:
   NODE_VERSION: 23.x
-  # PLATFORMS: linux/amd64,linux/arm64
-  PLATFORMS: linux/amd64
+  PLATFORMS: linux/amd64,linux/arm64
+  # PLATFORMS: linux/amd64
 
 jobs:
   lint:
@@ -193,8 +193,8 @@ jobs:
       contents: read
       attestations: write
       id-token: write
-  #  needs:
-  #    - lint
+    needs:
+     - lint
     steps:
       - uses: actions/checkout@v4
 
@@ -271,8 +271,8 @@ jobs:
       container_ref: ${{ needs.build-linux-container.outputs.ref }}
     needs:
       - build-linux-container
-  #    - test
-  #    - lint
+      - test
+      - lint
     steps:
       - uses: actions/checkout@v4
 
