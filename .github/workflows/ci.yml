@@ -366,6 +366,12 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: playwright-trace
+          path: test-results/
+          retention-days: 30
+
       - name: Dump container logs
         run: |
           docker logs $(docker ps -q --filter ancestor=${{ env.container_ref }}) > logs/container.log
