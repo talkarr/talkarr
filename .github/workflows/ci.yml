@@ -18,8 +18,8 @@ on:
 
 env:
   NODE_VERSION: 23.x
-  PLATFORMS: linux/amd64,linux/arm64
-  # PLATFORMS: linux/amd64
+  # PLATFORMS: linux/amd64,linux/arm64
+  PLATFORMS: linux/amd64
 
 jobs:
   lint:
