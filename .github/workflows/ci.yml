@@ -287,7 +287,6 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive --prefer-offline
 
       - name: Install playwright dependencies
-        if: 0
         run: |
           yarn playwright install-deps
           yarn playwright install
@@ -360,7 +359,7 @@ jobs:
         id: e2e
         continue-on-error: true
         run: |
-          # yarn test:e2e:ci
+          yarn test:e2e:ci
           echo "Simulating running E2E tests"
           echo "TESTING_STATUS=$?" >> $GITHUB_ENV
 
