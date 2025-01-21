@@ -167,6 +167,9 @@ jobs:
           
           # wait for redis to be ready
           npx wait-on tcp:6379
+          
+          mkdir -p logs
+          chmod 777 -R logs
 
       - name: Run migrations
         run: yarn prisma db push --force-reset --accept-data-loss
