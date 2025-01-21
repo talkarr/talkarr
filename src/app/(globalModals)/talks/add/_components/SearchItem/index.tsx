@@ -163,6 +163,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
             <CardActionArea
                 onClick={() => (isAlreadyAdded ? null : openAddTalkModal(item))}
                 disabled={isAlreadyAdded}
+                data-testid="search-item-action"
             >
                 <CardMedia sx={{ maxWidth: '100%' }}>
                     <TalkImage

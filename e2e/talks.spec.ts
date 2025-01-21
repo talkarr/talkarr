@@ -343,9 +343,11 @@ test('should be able to search for a string', async ({
     expect(dateBadge).toBeGreaterThan(0);
 
     // click on the first search item
-    await selectedSearchItem.click({
-        position: { x: 10, y: 10 },
-    });
+    const selectedItemAction = selectedSearchItem.locator(
+        '[data-testid=search-item-action]',
+    );
+
+    await selectedItemAction.click();
 
     // expect add-talk-modal to be visible
     await expect(page.getByTestId('add-talk-modal')).toBeVisible();
