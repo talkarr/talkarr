@@ -349,7 +349,9 @@ jobs:
           
           touch e2e/e2e-test-folder/iwashere.txt
           
-          docker run -d --rm -v ./.env:/app/.env -v ./logs:/app/logs -v ./e2e/2e-test-folder:/app/e2e/e2e-test-folder --network host ${{ env.container_ref }}
+          ls -lah ./e2e/e2e-test-folder
+          
+          docker run -d --rm -v ./.env:/app/.env -v ./logs:/app/logs -v ./e2e/e2e-test-folder:/app/e2e/e2e-test-folder --network host ${{ env.container_ref }}
           
           # wait for the app to be ready
           npx wait-on http://localhost:3232
