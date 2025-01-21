@@ -10,7 +10,7 @@ import { expect, test as base } from '@playwright/test';
 
 const validSearchString = 'camp2023';
 
-const BASE_DIR = process.env.CI ? '/tmp' : __dirname;
+const BASE_DIR = process.env.CI ? '/app' : __dirname;
 
 export interface TestOptions {
     searchItemIndex: number;
