@@ -340,8 +340,8 @@ jobs:
           mkdir -p logs
           chmod 777 -R logs
           
-          mkdir -p ./e2e-test-folder
-          chmod 777 -R ./e2e-test-folder
+          mkdir -p e2e-test-folder
+          chmod 777 -R e2e-test-folder
           
           docker run -d --rm -v ./.env:/app/.env -v ./logs:/app/logs -v ./e2e-test-folder:/app/e2e-test-folder --network host ${{ env.container_ref }}
           
