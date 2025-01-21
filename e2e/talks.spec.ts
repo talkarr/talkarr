@@ -73,7 +73,12 @@ const e2eTestFolderName = (name: string | unknown): string => {
 
     console.log('Using folder for e2e tests:', path);
 
-    return path;
+    if (!process.env.CI) {
+        return path;
+    }
+
+    // replace BASE_DIR with "/app" for CI
+    return path.replace(BASE_DIR, '/app');
 };
 
 test.describe.configure({
