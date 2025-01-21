@@ -13,5 +13,18 @@ services:
     ports:
       - "6379:6379"
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    network_mode: host
+    volumes:
+      - ./.env:/app/.env
+      - ./logs:/app/logs
+      - ./e2e-test-folder:/app/e2e-test-folder
+    depends_on:
+      - db
+      - redis
+
 volumes:
   postgres_data_dev:

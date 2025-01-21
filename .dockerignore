@@ -6,3 +6,4 @@ docker-compose.*
 *.md
 Makefile
 playwright.config.ts
+e2e*
