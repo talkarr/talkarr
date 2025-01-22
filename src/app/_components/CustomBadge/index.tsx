@@ -110,7 +110,6 @@ const CustomBadge: FC<CustomBadgeProps> = ({
                     >
                         <Image
                             src={imageUrl}
-                            alt="badge"
                             sizes="64px"
                             fill
                             style={{
