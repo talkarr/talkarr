@@ -1,6 +1,6 @@
 import express from 'express';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import pathUtils from 'path';
 
 import { startScanAndImportExistingFiles } from '@backend/workers/scanAndImportExistingFiles';
 

@@ -1,7 +1,7 @@
 import type { File } from '@prisma/client';
 
-import fs_promises from 'fs/promises';
 import mime from 'mime-types';
+import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
 import type { ExistingFile } from '@backend/fs/index';

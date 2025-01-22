@@ -1,5 +1,5 @@
-import fs_promises from 'fs/promises';
 import mime from 'mime-types';
+import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
 import { isVideoFile, nfoFilename } from '@backend/fs';

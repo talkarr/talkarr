@@ -4,7 +4,7 @@ import next from 'next';
 
 import cookieParser from 'cookie-parser';
 import express from 'express';
-import fs from 'fs';
+import fs from 'node:fs';
 import swaggerUi from 'swagger-ui-express';
 
 import '@backend/workers/addTalk';

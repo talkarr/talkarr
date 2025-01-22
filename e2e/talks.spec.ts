@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention,playwright/no-wait-for-selector,playwright/no-wait-for-timeout */
-import fs from 'fs';
+import fs from 'node:fs';
 import pathUtils from 'path';
 
 import { stripInvalidCharsForDataAttribute } from '@/utils/string';

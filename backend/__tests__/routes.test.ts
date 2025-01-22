@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 const port = process.env.PORT || 3232;
 const host = process.env.HOST || 'localhost';
