@@ -111,6 +111,7 @@ const CustomBadge: FC<CustomBadgeProps> = ({
                         <Image
                             src={imageUrl}
                             sizes="64px"
+                            alt=""
                             fill
                             style={{
                                 objectFit: 'contain',
