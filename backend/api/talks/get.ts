@@ -1,6 +1,7 @@
 import { getTalkFromApiByGuid } from '@backend/helper';
 import rootLog from '@backend/rootLog';
 import {
+    checkEventForProblems,
     getSpecificTalkByGuid,
     getSpecificTalkBySlug,
     getTalkInfoByGuid,
@@ -11,6 +12,7 @@ import type {
     ExpressResponse,
     ExtendedDbEvent,
 } from '@backend/types';
+import { problemMap } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/get' });
 
@@ -71,6 +73,8 @@ const handleGetEventRequest = async (
         return;
     }
 
+    const hasProblems = await checkEventForProblems(event);
+
     res.json({
         success: true,
         data: {
@@ -78,6 +82,9 @@ const handleGetEventRequest = async (
                 ...(event as unknown as ConvertDateToStringType<ExtendedDbEvent>),
                 persons: event.persons.map(person => person.name),
                 tags: event.tags.map(tag => tag.name),
+                has_problems: hasProblems
+                    ? hasProblems.map(problem => problemMap[problem] ?? problem)
+                    : null,
             },
             talk: talkData,
             info: talkInfo,

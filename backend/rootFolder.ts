@@ -1,3 +1,5 @@
+import type { RootFolder } from '@prisma/client';
+
 import rootLog from '@backend/rootLog';
 import { deleteTalk } from '@backend/talks';
 
@@ -36,13 +38,11 @@ export const addRootFolder = async (
     return AddRootFolderResponse.Success;
 };
 
-export const listRootFolders = async (): Promise<string[]> => {
+export const listRootFolders = async (): Promise<RootFolder[]> => {
     const prisma = new PrismaClient();
 
     try {
-        const rootFolders = await prisma.rootFolder.findMany();
-
-        return rootFolders.map(folder => folder.path);
+        return await prisma.rootFolder.findMany();
     } catch (e) {
         log.error('Error listing root folders', { error: e });
         return [];
@@ -110,6 +110,100 @@ export const setRootFolderMarked = async (
         return true;
     } catch (e) {
         log.error('Error setting root folder marked', { error: e, rootFolder });
+
+        return false;
+    }
+};
+
+export const setRootFolderMarkExists = async (
+    rootFolder: string,
+): Promise<boolean> => {
+    const prisma = new PrismaClient();
+
+    try {
+        await prisma.rootFolder.update({
+            where: {
+                path: rootFolder,
+            },
+            data: {
+                did_not_find_mark: false,
+            },
+        });
+
+        return true;
+    } catch (e) {
+        log.error('Error setting root folder mark exists', {
+            error: e,
+            rootFolder,
+        });
+
+        return false;
+    }
+};
+
+export const clearRootFolderMark = async (
+    rootFolder: string,
+): Promise<boolean> => {
+    const prisma = new PrismaClient();
+
+    try {
+        await prisma.rootFolder.update({
+            where: {
+                path: rootFolder,
+            },
+            data: {
+                did_not_find_mark: true,
+            },
+        });
+
+        return true;
+    } catch (e) {
+        log.error('Error clearing root folder mark', {
+            error: e,
+            rootFolder,
+        });
+
+        return false;
+    }
+};
+
+export const wasMarkFoundForRootFolder = async (
+    rootFolder: string,
+): Promise<boolean> => {
+    const prisma = new PrismaClient();
+
+    try {
+        const folder = await prisma.rootFolder.findUnique({
+            where: {
+                path: rootFolder,
+            },
+        });
+
+        if (!folder) {
+            return false;
+        }
+
+        return !folder.did_not_find_mark;
+    } catch (e) {
+        log.error('Error checking if root folder has mark', { error: e });
+
+        return false;
+    }
+};
+
+export const clearAllRootFolderHasMarks = async (): Promise<boolean> => {
+    const prisma = new PrismaClient();
+
+    try {
+        await prisma.rootFolder.updateMany({
+            data: {
+                did_not_find_mark: true,
+            },
+        });
+
+        return true;
+    } catch (e) {
+        log.error('Error clearing all root folder has marks', { error: e });
 
         return false;
     }

@@ -1,6 +1,6 @@
 import type { Event as DbEvent, EventInfo, File } from '@prisma/client';
 
-import { getFolderPathForTalk, isVideoFile } from '@backend/fs';
+import { getFolderPathForTalk, isFolderMarked, isVideoFile } from '@backend/fs';
 import type { ExistingFileWithGuessedInformation } from '@backend/fs/scan';
 import type { components } from '@backend/generated/schema';
 import { getConferenceFromEvent } from '@backend/helper';
@@ -11,7 +11,7 @@ import type {
     ExtendedDbEvent,
     TalkInfo,
 } from '@backend/types';
-import { AddTalkFailure } from '@backend/types';
+import { AddTalkFailure, ProblemType } from '@backend/types';
 
 import { Prisma, PrismaClient } from '@prisma/client';
 
@@ -845,4 +845,34 @@ export const importExistingFileFromFilesystem = async (
     } finally {
         await prisma.$disconnect();
     }
+};
+
+export const checkEventForProblems = async (
+    event: ConvertDateToStringType<ExtendedDbEvent> | ExtendedDbEvent,
+): Promise<ProblemType[] | null> => {
+    const problems: ProblemType[] = [];
+
+    // ==== Start of problem checks ====
+
+    if (!event.root_folder) {
+        log.warn('Event has no root folder', { event });
+
+        problems.push(ProblemType.NoRootFolder);
+    }
+
+    const hasMark = await isFolderMarked(event.root_folder.path);
+
+    if (!hasMark) {
+        log.warn('Root folder is not marked', { event });
+
+        problems.push(ProblemType.RootFolderMarkNotFound);
+    }
+
+    // ==== End of problem checks ====
+
+    if (!problems.length) {
+        return null;
+    }
+
+    return problems;
 };

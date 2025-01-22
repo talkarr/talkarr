@@ -128,11 +128,13 @@ router.get(
             const folders = await listRootFolders();
 
             const mappedFolders = folders.map(folder => {
-                const stats = fs.statfsSync(folder);
+                const stats = fs.statfsSync(folder.path);
 
                 return {
-                    folder,
+                    folder: folder.path,
                     free_space: stats.bsize * stats.bfree,
+                    marked: folder.marked,
+                    did_not_find_mark: folder.did_not_find_mark,
                 };
             });
 

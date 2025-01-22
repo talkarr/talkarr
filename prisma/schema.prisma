@@ -100,7 +100,8 @@ model EventInfo {
 model RootFolder {
   path String @unique
 
-  marked Boolean @default(false)
+  marked            Boolean @default(false)
+  did_not_find_mark Boolean @default(true)
 
   events Event[]
 }

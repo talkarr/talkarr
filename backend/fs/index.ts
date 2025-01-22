@@ -151,48 +151,6 @@ export const doesEventHaveNfoFile = async (
     }
 };
 
-type GetFolderPathForTalkEvent = Pick<
-    ExtendedDbEvent,
-    'rootFolderPath' | 'slug' | 'conference'
->;
-
-export const getFolderPathForTalk = async (
-    event:
-        | GetFolderPathForTalkEvent
-        | ConvertDateToStringType<GetFolderPathForTalkEvent>,
-): Promise<string | null> => {
-    if (!event.rootFolderPath) {
-        return null;
-    }
-
-    try {
-        await fs_promises.access(event.rootFolderPath);
-    } catch {
-        return null;
-    }
-
-    if (!event.conference.acronym || !event.slug) {
-        return null;
-    }
-
-    const folderPath = pathUtils.join(
-        event.rootFolderPath,
-        event.conference.acronym,
-        event.slug,
-    );
-
-    await fs_promises.mkdir(folderPath, { recursive: true });
-
-    try {
-        await fs_promises.access(folderPath);
-    } catch {
-        log.error(`Could not create folder ${folderPath}`);
-        return null;
-    }
-
-    return folderPath;
-};
-
 // place a .talkarr file into the root folder to mark it as a root folder
 export const markRootFolder = async (
     rootFolderPath: string,
@@ -222,4 +180,57 @@ export const isFolderMarked = async (
     } catch {
         return false;
     }
+};
+
+type GetFolderPathForTalkEvent = Pick<
+    ExtendedDbEvent,
+    'rootFolderPath' | 'slug' | 'conference'
+>;
+
+export const getFolderPathForTalk = async (
+    event:
+        | GetFolderPathForTalkEvent
+        | ConvertDateToStringType<GetFolderPathForTalkEvent>,
+): Promise<string | null> => {
+    if (!event.rootFolderPath) {
+        return null;
+    }
+
+    if (!(await isFolderMarked(event.rootFolderPath))) {
+        log.warn(
+            'Cannot get folder path for talk, root folder does not have mark',
+            {
+                title: event.slug,
+                root_folder_path: event.rootFolderPath,
+            },
+        );
+        return null;
+    }
+
+    try {
+        await fs_promises.access(event.rootFolderPath);
+    } catch {
+        return null;
+    }
+
+    if (!event.conference.acronym || !event.slug) {
+        return null;
+    }
+
+    const folderPath = pathUtils.join(
+        event.rootFolderPath,
+        event.conference.acronym,
+        event.slug,
+    );
+
+    await fs_promises.mkdir(folderPath, { recursive: true });
+
+    try {
+        await fs_promises.access(folderPath);
+    } catch {
+        log.error(`Could not create folder ${folderPath}`);
+        return null;
+    }
+
+    return folderPath;
 };

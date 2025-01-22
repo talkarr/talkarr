@@ -1,3 +1,4 @@
+import { isFolderMarked } from '@backend/fs';
 import { scanForExistingFiles } from '@backend/fs/scan';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
@@ -19,7 +20,15 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
     for await (const rootFolder of rootFolders) {
         log.info('Scanning root folder...', { rootFolder });
 
-        const scanResult = await scanForExistingFiles(rootFolder);
+        const isMarked = await isFolderMarked(rootFolder.path);
+
+        if (!isMarked) {
+            log.error('Root folder does not have mark:', { rootFolder });
+
+            continue;
+        }
+
+        const scanResult = await scanForExistingFiles(rootFolder.path);
 
         if (!scanResult || !scanResult.length) {
             log.info('No files found in root folder:', { rootFolder });
@@ -42,7 +51,7 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
             log.info('Importing file...', { file: file.filename });
 
             const result = await importExistingFileFromFilesystem(
-                rootFolder,
+                rootFolder.path,
                 file,
             );
 

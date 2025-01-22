@@ -16,6 +16,7 @@ import { useApiStore } from '@/providers/apiStoreProvider';
 
 import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
 import InvisibleLink from '@components/InvisibleLink';
+import ProblemIcon from '@mui/icons-material/ReportProblem';
 import { Grid2, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -23,6 +24,8 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Skeleton from '@mui/material/Skeleton';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
 export interface MediaItemProps {
     talk: SuccessData<'/talks/list', 'get'>[0];
@@ -62,7 +65,11 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
             await getTalkInfo(talk.guid);
         };
 
-        const intervalMs = talkInfo?.is_downloading ? 1000 : 5000;
+        const intervalMs = talk.has_problems?.length
+            ? 20000
+            : talkInfo?.is_downloading
+              ? 1000
+              : 5000;
 
         const interval = isVisible ? setInterval(func, intervalMs) : null;
 
@@ -79,6 +86,7 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
         getTalkInfo,
         isVisible,
         talk.guid,
+        talk.has_problems?.length,
         talk.title,
         talkInfo?.is_downloading,
     ]);
@@ -102,8 +110,12 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
                     href={specificTalkPageLink(talk.slug)}
                     style={{ flex: 1 }}
                     tabIndex={-1}
+                    disabled={!!talk.has_problems?.length}
                 >
-                    <CardActionArea sx={{ height: '100%' }}>
+                    <CardActionArea
+                        sx={{ height: '100%' }}
+                        disabled={!!talk.has_problems?.length}
+                    >
                         <Box height="100%">
                             <CardMedia>
                                 {imageLoaded ? null : (
@@ -140,21 +152,6 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
                                         onLoad={() => setImageLoaded(true)}
                                     />
                                 </Box>
-                                {talkInfo?.is_downloading ? (
-                                    <Box
-                                        sx={{
-                                            position: 'absolute',
-                                            top: 0,
-                                            right: 0,
-                                            p: 1,
-                                        }}
-                                    >
-                                        <CircularProgressWithLabel
-                                            value={talkInfo.download_progress}
-                                            backgroundColor="rgb(42, 42, 42)"
-                                        />
-                                    </Box>
-                                ) : null}
                             </CardMedia>
                             <CardHeader
                                 title={talk.title}
@@ -163,6 +160,51 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
                         </Box>
                     </CardActionArea>
                 </InvisibleLink>
+                {talk.has_problems?.length ? (
+                    <Box
+                        sx={{
+                            borderBottomLeftRadius: 8,
+                            userSelect: 'none',
+                        }}
+                        bgcolor="common.white"
+                        position="absolute"
+                        top={0}
+                        right={0}
+                        boxShadow={1}
+                    >
+                        <Tooltip
+                            title={talk.has_problems.join(', ') || ''}
+                            arrow
+                            placement="top"
+                        >
+                            <Box
+                                display="flex"
+                                alignItems="center"
+                                gap={0.5}
+                                p={0.5}
+                            >
+                                <Typography variant="caption" color="error">
+                                    Problem
+                                </Typography>
+                                <ProblemIcon color="error" fontSize="small" />
+                            </Box>
+                        </Tooltip>
+                    </Box>
+                ) : talkInfo?.is_downloading ? (
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                            p: 1,
+                        }}
+                    >
+                        <CircularProgressWithLabel
+                            value={talkInfo.download_progress}
+                            backgroundColor="rgb(42, 42, 42)"
+                        />
+                    </Box>
+                ) : null}
             </Card>
         </StyledContainer>
     );

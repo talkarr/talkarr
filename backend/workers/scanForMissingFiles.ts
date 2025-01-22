@@ -44,6 +44,15 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
     const talks = job.data.event ? [job.data.event] : await listTalks();
 
     for await (const talk of talks) {
+        if (talk.root_folder.did_not_find_mark) {
+            log.warn('Root folder mark was not found', {
+                title: talk.title,
+                rootFolder: talk.root_folder,
+            });
+
+            continue;
+        }
+
         const hasFiles = await doesTalkHaveExistingFiles(talk);
 
         const hasNfo = await doesEventHaveNfoFile(talk);
