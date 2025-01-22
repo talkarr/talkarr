@@ -6,7 +6,11 @@ import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
 import { isFolderMarked } from '@backend/fs';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
-import { listRootFolders } from '@backend/rootFolder';
+import {
+    clearAllRootFolderHasMarks,
+    listRootFolders,
+    setRootFolderMarkExists,
+} from '@backend/rootFolder';
 import rootLog from '@backend/rootLog';
 
 export const taskName = 'checkForRootFolders';
@@ -31,10 +35,12 @@ const checkForRootFolders: TaskFunction<CheckForRootFoldersData> = async (
         throw new Error('Invalid data');
     }
 
+    await clearAllRootFolderHasMarks();
+
     const databaseRootFolders = await listRootFolders();
 
     for await (const rootFolder of databaseRootFolders) {
-        const hasMark = await isFolderMarked(rootFolder);
+        const hasMark = await isFolderMarked(rootFolder.path);
 
         if (!hasMark) {
             log.error('Root folder not marked:', { rootFolder });
@@ -42,6 +48,8 @@ const checkForRootFolders: TaskFunction<CheckForRootFoldersData> = async (
             throw new Error('Root folder not marked');
         } else {
             log.info('Root folder marked:', { rootFolder });
+
+            await setRootFolderMarkExists(rootFolder.path);
         }
     }
 

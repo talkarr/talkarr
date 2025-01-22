@@ -478,6 +478,28 @@
                         "type": "integer",
                         "example": 0,
                         "description": "Length in seconds"
+                    },
+                    "root_folder": {
+                        "type": "object",
+                        "properties": {
+                            "path": {
+                                "type": "string"
+                            },
+                            "marked": {
+                                "type": "boolean"
+                            },
+                            "did_not_find_mark": {
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "path",
+                            "marked",
+                            "did_not_find_mark"
+                        ]
+                    },
+                    "has_problems": {
+                        "$ref": "#/components/schemas/Problems"
                     }
                 },
                 "required": [
@@ -493,8 +515,26 @@
                     "poster_url",
                     "original_language",
                     "frontend_link",
-                    "duration"
+                    "duration",
+                    "root_folder",
+                    "root_folder_has_mark",
+                    "has_problems"
                 ]
+            },
+            "Problems": {
+                "oneOf": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "description": "Problem description"
+                        }
+                    },
+                    {
+                        "type": "null"
+                    }
+                ],
+                "description": "List of problems"
             },
             "ExtendedDbEvent": {
                 "allOf": [
@@ -1499,11 +1539,23 @@
                                                                         "type": "integer",
                                                                         "example": 0,
                                                                         "description": "Free space in bytes"
+                                                                    },
+                                                                    "marked": {
+                                                                        "type": "boolean",
+                                                                        "example": false,
+                                                                        "description": "True if folder has been marked as root folder (.talkarr file created)"
+                                                                    },
+                                                                    "did_not_find_mark": {
+                                                                        "type": "boolean",
+                                                                        "example": false,
+                                                                        "description": "True if folder does not have a .talkarr file when booting. (could indicate that the filesystem is not mounted) False if it does."
                                                                     }
                                                                 },
                                                                 "required": [
                                                                     "folder",
-                                                                    "free_space"
+                                                                    "free_space",
+                                                                    "marked",
+                                                                    "did_not_find_mark"
                                                                 ]
                                                             }
                                                         }

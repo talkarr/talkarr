@@ -596,6 +596,16 @@ export interface paths {
                                      * @example 0
                                      */
                                     free_space: number;
+                                    /**
+                                     * @description True if folder has been marked as root folder (.talkarr file created)
+                                     * @example false
+                                     */
+                                    marked: boolean;
+                                    /**
+                                     * @description True if folder does not have a .talkarr file when booting. (could indicate that the filesystem is not mounted) False if it does.
+                                     * @example false
+                                     */
+                                    did_not_find_mark: boolean;
                                 }[];
                             };
                         };
@@ -1023,7 +1033,15 @@ export interface components {
              * @example 0
              */
             duration: number;
+            root_folder: {
+                path: string;
+                marked: boolean;
+                did_not_find_mark: boolean;
+            };
+            has_problems: components["schemas"]["Problems"];
         };
+        /** @description List of problems */
+        Problems: string[] | null;
         ExtendedDbEvent: components["schemas"]["DbEvent"] & {
             persons: components["schemas"]["Persons"];
             tags: components["schemas"]["Tags"];

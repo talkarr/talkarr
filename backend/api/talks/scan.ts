@@ -9,7 +9,7 @@ const handleScanEventsRequest = async (
 ): Promise<void> => {
     const { root_folder: rootFolder } = req.body;
 
-    const rootFolders = await listRootFolders();
+    const rootFolders = (await listRootFolders()).map(folder => folder.path);
 
     if (!rootFolders || !rootFolders.length) {
         res.status(500).json({

@@ -8,12 +8,14 @@ export type InvisibleLinkProps = LinkProps & {
     children?: React.ReactNode | undefined;
     style?: React.CSSProperties | undefined;
     tabIndex?: HTMLAttributes<HTMLAnchorElement>['tabIndex'];
+    disabled?: boolean;
 };
 
 const InvisibleLink: FC<InvisibleLinkProps> = ({
     children,
     style,
     tabIndex,
+    disabled,
     ...props
 }) => (
     <Link
@@ -22,8 +24,10 @@ const InvisibleLink: FC<InvisibleLinkProps> = ({
             ...style,
             textDecoration: 'none',
             color: 'inherit',
+            pointerEvents: disabled ? 'none' : 'auto',
         }}
         tabIndex={tabIndex}
+        aria-disabled={disabled}
     >
         {children}
     </Link>

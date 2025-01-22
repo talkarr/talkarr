@@ -106,6 +106,17 @@ export type ApiConference = components['schemas']['Conference'];
 
 export type TalkInfo = components['schemas']['TalkInfo'];
 
+export enum ProblemType {
+    NoRootFolder,
+    RootFolderMarkNotFound,
+}
+
+export const problemMap: Record<ProblemType, string> = {
+    [ProblemType.NoRootFolder]: 'No root folder',
+    [ProblemType.RootFolderMarkNotFound]:
+        'Root folder mark not found, possibly unmounted filesystem',
+};
+
 export enum AddTalkFailure {
     Duplicate,
     Other,
