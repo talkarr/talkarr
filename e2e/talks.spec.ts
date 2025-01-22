@@ -520,6 +520,21 @@ test('should be able to search for a string', async ({
     // click on the button
     await deleteTalkButton.click();
 
+    // confirmation modal should be visible
+    await expect(page.getByTestId('confirmation-modal')).toBeVisible();
+
+    // click on the confirm button
+    const confirmButton = page.locator('[data-testid=confirm-button]');
+
+    await expect(confirmButton).toBeVisible();
+
+    await confirmButton.click({
+        delay: 80,
+    });
+
+    // expect confirmation modal to be hidden
+    await expect(page.getByTestId('confirmation-modal')).toBeHidden();
+
     // url should be talks
     await page.waitForURL('http://localhost:3232/');
 });
