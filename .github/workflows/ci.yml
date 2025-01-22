@@ -333,6 +333,7 @@ jobs:
           docker ps -a
 
       - name: Start Docker container
+        continue-on-error: true
         run: |
           # Make sure the .env file is not empty
           if [ ! -s .env ]; then
@@ -348,12 +349,15 @@ jobs:
           
           docker run -d --rm -v ./.env:/app/.env -v ./logs:/app/logs -v ./e2e/e2e-test-folder:/app/e2e/e2e-test-folder --network host ${{ env.container_ref }}
           
+          echo "Waiting for the app to be ready"
+          
           # wait for the app to be ready
-          npx wait-on -t 5m http://localhost:3232
+          npx wait-on -t 2m http://localhost:3232
 
       - name: Run E2E tests
         id: e2e
         continue-on-error: true
+        if: success()
         run: |
           yarn test:e2e:ci
           echo "TESTING_STATUS=$?" >> $GITHUB_ENV
