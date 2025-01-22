@@ -101,6 +101,7 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
                 <InvisibleLink
                     href={specificTalkPageLink(talk.slug)}
                     style={{ flex: 1 }}
+                    tabIndex={-1}
                 >
                     <CardActionArea sx={{ height: '100%' }}>
                         <Box height="100%">

@@ -96,10 +96,31 @@ const NavigationItem: FC<NavigationItemProps> = ({
             >
                 {'Icon' in item && item.Icon ? (
                     <ListItemIcon>
-                        <item.Icon />
+                        <item.Icon
+                            sx={{
+                                color:
+                                    (selected || subitemSelected) &&
+                                    !subitemSelected
+                                        ? theme.palette.primary.main
+                                        : undefined,
+                            }}
+                        />
                     </ListItemIcon>
                 ) : null}
-                <ListItemText primary={item.title} />
+                <ListItemText
+                    primary={item.title}
+                    slotProps={{
+                        primary: {
+                            sx: {
+                                color:
+                                    (selected || subitemSelected) &&
+                                    !subitemSelected
+                                        ? theme.palette.primary.main
+                                        : undefined,
+                            },
+                        },
+                    }}
+                />
             </ListItemButton>
         </>
     );

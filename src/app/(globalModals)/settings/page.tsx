@@ -23,6 +23,11 @@ const Page: NextPage = () => (
                         as={as}
                         // eg settings-media-management
                         data-testid={`settings-${item.slug}`}
+                        style={{
+                            textDecoration: 'underline',
+                            textDecorationColor: 'white',
+                            textDecorationThickness: '2px',
+                        }}
                     >
                         <Typography variant="h4">{item.title}</Typography>
                     </Link>
