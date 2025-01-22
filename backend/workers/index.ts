@@ -2,6 +2,10 @@ import rootLog from '@backend/rootLog';
 
 import { taskName as addTalk } from './addTalk';
 import {
+    check as validateCheckForRootFolders,
+    taskName as checkForRootFolders,
+} from './checkForRootFolders';
+import {
     check as validateGenerateMissingNfo,
     taskName as generateMissingNfo,
 } from './generateMissingNfo';
@@ -16,9 +20,13 @@ export const taskNames = [
     addTalk,
     generateMissingNfo,
     scanForMissingFiles,
+    checkForRootFolders,
 ] as const;
 
-export type TaskNames = 'generateMissingNfo' | 'scanForMissingFiles';
+export type TaskNames =
+    | 'generateMissingNfo'
+    | 'scanForMissingFiles'
+    | 'checkForRootFolders';
 
 export type UsableTaskNames = Extract<(typeof taskNames)[number], TaskNames>;
 
@@ -33,6 +41,7 @@ export type TaskValidator = {
 export const taskValidators: TaskValidator = {
     [generateMissingNfo]: validateGenerateMissingNfo,
     [scanForMissingFiles]: validateScanForMissingFiles,
+    [checkForRootFolders]: validateCheckForRootFolders,
 } as const;
 
 export const isValidData = <T extends InternalUseableTaskNames>(

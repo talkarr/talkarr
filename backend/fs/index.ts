@@ -14,6 +14,11 @@ export const validFileExtensions = [...validVideoFileExtensions, '.nfo'];
 
 export const nfoFilename = 'talk.nfo';
 
+export const rootFolderMarkName = '.talkarr';
+
+export const rootFolderMarkContent =
+    '!!! This is a Talkarr root folder. Please do not delete this file !!!';
+
 const log = rootLog.child({ label: 'fs' });
 
 export interface ExistingFile {
@@ -186,4 +191,35 @@ export const getFolderPathForTalk = async (
     }
 
     return folderPath;
+};
+
+// place a .talkarr file into the root folder to mark it as a root folder
+export const markRootFolder = async (
+    rootFolderPath: string,
+): Promise<boolean> => {
+    const filePath = pathUtils.join(rootFolderPath, rootFolderMarkName);
+
+    try {
+        await fs_promises.writeFile(filePath, rootFolderMarkContent);
+
+        return true;
+    } catch (error) {
+        log.error(`Could not create file ${filePath}`, error);
+
+        return false;
+    }
+};
+
+export const isFolderMarked = async (
+    rootFolderPath: string,
+): Promise<boolean> => {
+    const filePath = pathUtils.join(rootFolderPath, rootFolderMarkName);
+
+    try {
+        await fs_promises.access(filePath);
+
+        return true;
+    } catch {
+        return false;
+    }
 };

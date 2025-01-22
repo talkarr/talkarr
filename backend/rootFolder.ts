@@ -90,3 +90,27 @@ export const deleteRootFolder = async (
 
     return true;
 };
+
+export const setRootFolderMarked = async (
+    rootFolder: string,
+    marked: boolean,
+): Promise<boolean> => {
+    const prisma = new PrismaClient();
+
+    try {
+        await prisma.rootFolder.update({
+            where: {
+                path: rootFolder,
+            },
+            data: {
+                marked,
+            },
+        });
+
+        return true;
+    } catch (e) {
+        log.error('Error setting root folder marked', { error: e, rootFolder });
+
+        return false;
+    }
+};

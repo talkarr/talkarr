@@ -62,7 +62,7 @@ const generateMissingNfo: TaskFunction<GenerateMissingNfoData> = async (
 };
 
 export const startGenerateMissingNfo = (data: GenerateMissingNfoData): void => {
-    queue.add(taskName, data, { removeOnComplete: true }); // 1 minute
+    queue.add(taskName, data, { removeOnComplete: true });
 };
 
 queue.process(taskName, generateMissingNfo);

@@ -100,6 +100,8 @@ model EventInfo {
 model RootFolder {
   path String @unique
 
+  marked Boolean @default(false)
+
   events Event[]
 }
 

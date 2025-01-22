@@ -57,6 +57,7 @@ These are the features that will be implemented:
 
 (These are just the "advanced" features. Basic things like downloading talks are not needed to be listed here.)
 
+If there are any features missing, feel free to create an issue or discussion about it!
 
 ## Contributing
 

@@ -4,12 +4,14 @@ import pathUtils from 'path';
 
 import { startScanAndImportExistingFiles } from '@backend/workers/scanAndImportExistingFiles';
 
+import { markRootFolder } from '@backend/fs';
 import type { components } from '@backend/generated/schema';
 import {
     addRootFolder,
     AddRootFolderResponse,
     deleteRootFolder,
     listRootFolders,
+    setRootFolderMarked,
 } from '@backend/rootFolder';
 import rootLog from '@backend/rootLog';
 import { getSettings } from '@backend/settings';
@@ -29,7 +31,49 @@ export const listFoldersFromFs = async (
             withFileTypes: true,
             encoding: 'utf8',
         })
-        .filter(file => file.isDirectory());
+        .filter(file => {
+            if (!file.isDirectory()) {
+                return false;
+            }
+
+            if (file.name === '/proc' || file.name === '/sys') {
+                return false;
+            }
+
+            if (startFolderPath === '/') {
+                return true;
+            }
+
+            // check if folder can be read and written to
+            try {
+                fs.accessSync(
+                    pathUtils.join(startFolderPath, file.name),
+                    // eslint-disable-next-line no-bitwise
+                    fs.constants.R_OK | fs.constants.W_OK,
+                );
+            } catch (error) {
+                log.warn('Error accessing folder (READ_WRITE_CHECK):', {
+                    error,
+                    folder: pathUtils.join(startFolderPath, file.name),
+                });
+
+                return false;
+            }
+
+            return true;
+        })
+        .toSorted((a, b) => {
+            // do it alphabetically. make sure dotfiles / hidden files are at the end
+            if (a.name.startsWith('.')) {
+                return 1;
+            }
+
+            if (b.name.startsWith('.')) {
+                return -1;
+            }
+
+            return a.name.localeCompare(b.name);
+        });
 
     return folders.map(folder => folder.name);
 };
@@ -45,7 +89,7 @@ router.get(
         try {
             const files = await listFoldersFromFs(folder);
 
-            const separator = path.sep;
+            const separator = pathUtils.sep;
 
             res.json({ success: true, data: { files, separator } });
         } catch (error) {
@@ -199,6 +243,10 @@ router.post(
             });
 
             return;
+        }
+
+        if (await markRootFolder(folder)) {
+            await setRootFolderMarked(folder, true);
         }
 
         startScanAndImportExistingFiles();

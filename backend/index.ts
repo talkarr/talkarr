@@ -9,8 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import '@backend/workers/addTalk';
 import '@backend/workers/generateMissingNfo';
-import { startScanAndImportExistingFiles } from '@backend/workers/scanAndImportExistingFiles';
-import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
+import { startCheckForRootFolders } from '@backend/workers/checkForRootFolders';
 
 import api from '@backend/api';
 import rootLog from '@backend/rootLog';
@@ -79,9 +78,7 @@ app.prepare()
             });
         }
 
-        startScanForMissingFiles({});
-
-        startScanAndImportExistingFiles();
+        startCheckForRootFolders({ isInit: true });
     })
     .catch(err => {
         log.error('Catched Error', { stack: err.stack });
