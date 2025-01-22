@@ -24,10 +24,12 @@ export interface MediamanagementSettings {}
 const router = express.Router();
 
 export const listFoldersFromFs = async (
-    startFolderPath: string = '/',
+    startFolderPathArg: string = '/',
 ): Promise<string[]> => {
+    const startFolderPath = startFolderPathArg || '/';
+
     const folders = fs
-        .readdirSync(startFolderPath || '/', {
+        .readdirSync(startFolderPath, {
             withFileTypes: true,
             encoding: 'utf8',
         })
@@ -55,6 +57,7 @@ export const listFoldersFromFs = async (
                 log.warn('Error accessing folder (READ_WRITE_CHECK):', {
                     error,
                     folder: pathUtils.join(startFolderPath, file.name),
+                    startFolderPath,
                 });
 
                 return false;
