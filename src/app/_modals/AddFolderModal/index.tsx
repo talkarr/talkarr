@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { enqueueSnackbar } from 'notistack';
 
@@ -39,6 +39,8 @@ const AddFolderModal: FC = () => {
     const addFolderModal = useUiStore(state => state.addFolderModal);
     const close = useUiStore(state => state.closeAddFolderModal);
 
+    const listRef = useRef<HTMLUListElement | null>(null);
+
     const [folders, setFolders] = useState<string[]>([]);
 
     const [folderName, setFolderName] = useState<string>('');
@@ -60,6 +62,10 @@ const AddFolderModal: FC = () => {
                 if (response.success) {
                     setFolders(response.data.files);
                     setSeparator(response.data.separator);
+
+                    if (listRef.current) {
+                        listRef.current.scrollTop = 0;
+                    }
                 } else {
                     setError(response.error);
                 }
@@ -180,7 +186,7 @@ const AddFolderModal: FC = () => {
                 </form>
             </Box>
             <Box mb={2}>
-                <StyledList disablePadding>
+                <StyledList disablePadding ref={listRef}>
                     {folders.length ? (
                         <ListItem disablePadding>
                             <ListItemButton
