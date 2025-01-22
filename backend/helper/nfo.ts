@@ -16,16 +16,25 @@ const log = rootLog.child({ label: 'helper/nfo' });
 
 export const generateNfo = (
     data: NormalAndConvertedDate<ApiEvent | ExtendedDbEvent>,
-): string => `
+): string => {
+    const persons = data.persons.map(person =>
+        typeof person === 'string' ? person : person.name,
+    );
+    const tags = data.tags.map(tag =>
+        typeof tag === 'string' ? tag : tag.name,
+    );
+
+    return `
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
     <movie>
         <title>${data.title}</title>
         <plot>${data.description}</plot>
-        ${data.persons.map(person => `<actor>${person}</actor>`).join('\n')}
-        ${data.tags.map(tag => `<genre>${tag}</genre>`).join('\n')}
+        ${persons.map(person => `<actor>${person}</actor>`).join('\n')}
+        ${tags.map(tag => `<genre>${tag}</genre>`).join('\n')}
         <premiered>${data.date}</premiered>
     </movie>
     `;
+};
 
 export const handleNfoGeneration = async (
     folder: string,
