@@ -10,10 +10,8 @@ import { usePathname } from 'next/navigation';
 import type { FC, PropsWithChildren } from 'react';
 import { Fragment, useEffect, useState } from 'react';
 
-import { pageName } from '@/constants';
-
 import AnimatedArrowIcon from '@components/AnimatedArrowIcon';
-import Logo from '@components/Logo';
+import LogoWithText from '@components/LogoWithText';
 import { navigationItems } from '@components/Navigation/navigation';
 import NavigationItem from '@components/Navigation/NavigationItem';
 import NavigationSearch from '@components/Navigation/NavigationSearch';
@@ -25,7 +23,6 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 
 export const drawerWidth = 240;
 
@@ -78,23 +75,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                     anchor="left"
                     data-testid="desktop-navigation-drawer"
                 >
-                    <Box
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            alignItems: 'center',
-                            flexDirection: 'column',
-                        }}
-                    >
-                        <Logo />
-                        <Typography
-                            variant="h3"
-                            component="h1"
-                            fontWeight="bold"
-                        >
-                            {pageName}
-                        </Typography>
-                    </Box>
+                    <LogoWithText redirectToHome />
                     {splitItemsByDivider.map((items, index, { length }) => (
                         <Fragment key={`desktop-navigation-item-list-${index}`}>
                             <List
@@ -138,23 +119,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                     anchor="left"
                     data-testid="mobile-navigation-drawer"
                 >
-                    <Box
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            alignItems: 'center',
-                            flexDirection: 'column',
-                        }}
-                    >
-                        <Logo />
-                        <Typography
-                            variant="h3"
-                            component="h1"
-                            fontWeight="bold"
-                        >
-                            {pageName}
-                        </Typography>
-                    </Box>
+                    <LogoWithText redirectToHome />
                     {splitItemsByDivider.map((items, index, { length }) => (
                         <Fragment key={`mobile-navigation-item-list-${index}`}>
                             <List
