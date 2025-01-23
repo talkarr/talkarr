@@ -1,4 +1,4 @@
-import type { RootFolder } from '@prisma/client';
+import type { File, RootFolder } from '@prisma/client';
 
 import rootLog from '@backend/rootLog';
 import { deleteTalk } from '@backend/talks';
@@ -48,6 +48,31 @@ export const listRootFolders = async (): Promise<RootFolder[]> => {
         return [];
     } finally {
         await prisma.$disconnect();
+    }
+};
+
+export const listFilesForRootFolder = async (
+    rootFolder: string,
+): Promise<File[] | null> => {
+    const prisma = new PrismaClient();
+
+    try {
+        return await prisma.file.findMany({
+            where: {
+                event: {
+                    root_folder: {
+                        path: rootFolder,
+                    },
+                },
+            },
+        });
+    } catch (e) {
+        log.error('Error listing files for root folder', {
+            error: e,
+            rootFolder,
+        });
+
+        return null;
     }
 };
 

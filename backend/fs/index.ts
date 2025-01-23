@@ -151,6 +151,20 @@ export const doesEventHaveNfoFile = async (
     }
 };
 
+export const doesFileExist = async (filePath: string): Promise<boolean> => {
+    try {
+        await fs_promises.access(
+            filePath,
+            // eslint-disable-next-line no-bitwise
+            fs_promises.constants.F_OK | fs_promises.constants.R_OK,
+        );
+
+        return true;
+    } catch {
+        return false;
+    }
+};
+
 // place a .talkarr file into the root folder to mark it as a root folder
 export const markRootFolder = async (
     rootFolderPath: string,

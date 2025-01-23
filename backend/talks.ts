@@ -527,6 +527,34 @@ export const addDownloadedFile = async (
     return true;
 };
 
+export const removeFileFromDatabase = async (
+    eventGuid: DbEvent['guid'],
+    path: string,
+): Promise<boolean> => {
+    const prisma = new PrismaClient();
+
+    try {
+        await prisma.file.deleteMany({
+            where: {
+                eventGuid,
+                path,
+            },
+        });
+    } catch (error) {
+        log.error('Error removing file from database', {
+            error,
+            eventGuid,
+            path,
+        });
+
+        return false;
+    } finally {
+        await prisma.$disconnect();
+    }
+
+    return true;
+};
+
 export const checkIfFileIsInDb = async (
     eventGuid: DbEvent['guid'],
     path: string,
