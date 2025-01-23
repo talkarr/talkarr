@@ -610,21 +610,21 @@ export const setDownloadError = async (
 };
 
 export const clearDownloadError = async (
-    eventInfoGuid: EventInfo['guid'],
+    eventGuid: DbEvent['guid'],
 ): Promise<void> => {
     const prisma = new PrismaClient();
 
     try {
         await prisma.eventInfo.update({
             where: {
-                guid: eventInfoGuid,
+                eventGuid,
             },
             data: {
                 download_error: null,
             },
         });
     } catch (db_error) {
-        log.error('Error clearing download error', { db_error, eventInfoGuid });
+        log.error('Error clearing download error', { db_error, eventGuid });
     } finally {
         await prisma.$disconnect();
     }
