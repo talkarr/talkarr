@@ -51,24 +51,23 @@ RUN chown -R nextjs:nodejs /app/logs
 USER nextjs
 
 # use these for non-standalone output
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./next.config.ts
-COPY --from=builder --chown=nextjs:nodejs /app/src/constants.ts ./src/constants.ts
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
+
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/backend ./backend
+
+COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./next.config.ts
+COPY --from=builder --chown=nextjs:nodejs /app/src/constants.ts ./src/constants.ts
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 
 # use these for standalone output
 # COPY --from=builder /app/.next/standalone/.next ./.next
 # COPY --from=builder /app/.next/standalone/package.json ./package.json
 # COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/node_modules ./node_modules
-
-COPY --from=builder /app/backend ./backend
-
-COPY --from=builder /app/prisma ./prisma
-
-COPY --from=builder /app/public ./public
-
-COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
 
 # backend.json openapi file
 COPY --from=builder --chown=nextjs:nodejs /app/backend.json ./backend.json
