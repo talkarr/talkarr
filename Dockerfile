@@ -28,8 +28,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN yarn prisma generate && \
-    yarn build && \
-    npm prune --production
+    yarn build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -55,22 +54,20 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/backend ./backend
 
-COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./next.config.ts
-COPY --from=builder --chown=nextjs:nodejs /app/src/constants.ts ./src/constants.ts
+COPY --chown=nextjs:nodejs ./next.config.ts ./next.config.ts
+COPY --chown=nextjs:nodejs ./src/constants.ts ./src/constants.ts
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-
-# use these for standalone output
-# COPY --from=builder /app/.next/standalone/.next ./.next
-# COPY --from=builder /app/.next/standalone/package.json ./package.json
-# COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/node_modules ./node_modules
 
 # backend.json openapi file
 COPY --from=builder --chown=nextjs:nodejs /app/backend.json ./backend.json
 
 # node_modules last
-COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
-COPY --from=builder /app/node_modules ./node_modules
+COPY --chown=nextjs:nodejs ./package.json ./package.json
+COPY --from=deps /app/node_modules ./node_modules
+
+# copy the generated files from node_modules from builder
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 EXPOSE 3232
 
@@ -80,6 +77,6 @@ ENV HOSTNAME="0.0.0.0"
 # CMD yarn start:prod
 SHELL ["/bin/bash", "-c"]
 
-HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 CMD curl --fail http://localhost:3232/healthz || exit 1
+HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 CMD curl --fail http://localhost:3232/api/healthz || exit 1
 
 CMD ["yarn", "start:prod"]
