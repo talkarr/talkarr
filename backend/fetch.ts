@@ -26,8 +26,6 @@ const apiFetch = async (
               ? input.href
               : input.toString();
 
-    log.info(`Fetching ${url}`);
-
     if (cacheKey) {
         const cachedResponse = cache.get(cacheKey);
 
@@ -37,6 +35,8 @@ const apiFetch = async (
             return Promise.resolve(cachedResponse as FetchResponse);
         }
     }
+
+    log.info(`Fetching ${url}`);
 
     const response = await fetch(input, init);
 
@@ -54,7 +54,7 @@ const apiFetch = async (
             cacheStoreKeys.push(cacheKey);
         }
 
-        log.info(`Caching response for ${url}`);
+        log.debug(`Caching response for ${url}`);
 
         for (const key of cacheStoreKeys) {
             cache.put(key, fetchResponse, cacheTime);
