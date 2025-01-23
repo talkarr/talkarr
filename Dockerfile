@@ -4,11 +4,10 @@ FROM node:23-alpine AS base
 FROM base AS deps
 
 # https://github.com/nodejs/docker-node/issues/1335#issuecomment-1743914810
-RUN yarn config set network-timeout 500000 -g
-
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat ffmpeg python3 py3-pip
-RUN yarn global add node-gyp
+RUN yarn config set network-timeout 500000 -g && \
+    apk add --no-cache libc6-compat ffmpeg python3 py3-pip && \
+    yarn global add node-gyp
 
 WORKDIR /app
 
@@ -28,9 +27,8 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Prisma.io
-RUN yarn prisma generate
-
-RUN yarn build
+RUN yarn prisma generate && \
+    yarn build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -43,10 +41,9 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # create logs folder for the app
-RUN mkdir -p /app/logs
-
-# make sure the user has the right permissions
-RUN chown -R nextjs:nodejs /app/logs
+# and make sure the user has the right permissions
+RUN mkdir -p /app/logs && \
+    chown -R nextjs:nodejs /app/logs
 
 USER nextjs
 
