@@ -19,7 +19,7 @@ const dev = process.env.NODE_ENV !== 'production';
 
 const log = rootLog.child({ label: 'server' });
 
-log.info('Starting server...');
+log.info('Starting server...', { dev });
 
 const app = next({ dev, turbopack: true });
 const handle = app.getRequestHandler();
