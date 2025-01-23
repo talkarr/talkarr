@@ -1,8 +1,6 @@
 import typia from 'typia';
 
 import { startCheckIfFilesExist } from '@backend/workers/checkIfFilesExist';
-import { startScanAndImportExistingFiles } from '@backend/workers/scanAndImportExistingFiles';
-import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
 
 import { isFolderMarked } from '@backend/fs';
 import type { TaskFunction } from '@backend/queue';
