@@ -43,6 +43,8 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
         [data.db.duration],
     );
 
+    const hasVideoFiles = videoFiles.length > 0;
+
     return (
         <Box paddingX={2}>
             <Box mb={3}>
@@ -68,14 +70,14 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                         value={
                             data.info.is_downloading
                                 ? `Downloading (${data.info.download_progress}%)`
-                                : data.info.has_files
+                                : hasVideoFiles
                                   ? 'Downloaded'
                                   : 'Missing'
                         }
                         color={
                             data.info.is_downloading
                                 ? 'primary'
-                                : data.info.has_files
+                                : hasVideoFiles
                                   ? 'success'
                                   : 'error'
                         }
