@@ -24,6 +24,25 @@ log.info('Starting server...');
 const app = next({ dev, turbopack: true });
 const handle = app.getRequestHandler();
 
+const loadingServer = express();
+
+loadingServer.get('*', (req, res) => {
+    res.sendFile('loading.html', { root: __dirname });
+});
+
+const port = Number(process.env.PORT) || 3232;
+const host = process.env.HOST;
+
+let loadingHttpServer;
+
+if (host) {
+    log.info(`Startup server listening on http://${host}:${port}/`);
+    loadingHttpServer = loadingServer.listen(port, host);
+} else {
+    log.info(`Startup server listening on http://localhost:${port}/`);
+    loadingHttpServer = loadingServer.listen(port);
+}
+
 log.info('Preparing server...');
 
 app.prepare()
@@ -66,19 +85,33 @@ app.prepare()
             },
         );
 
-        const port = Number(process.env.PORT) || 3232;
-        const host = process.env.HOST;
-        if (host) {
-            server.listen(port, host, () => {
-                log.info(`Server ready on http://${host}:${port}/`);
-            });
-        } else {
-            server.listen(port, () => {
-                log.info(`Server ready on http://localhost:${port}/`);
-            });
-        }
+        log.info('Server ready, closing startup server...');
 
-        startCheckForRootFolders({ isInit: true });
+        server.on('error', err => {
+            log.error('Server error', { err });
+            process.exit(1);
+        });
+
+        loadingHttpServer.close(err => {
+            if (err) {
+                log.error('Error closing loading server', { err });
+                process.exit(1);
+            }
+
+            log.info('Startup server closed');
+
+            if (host) {
+                server.listen(port, host, () => {
+                    log.info(`Server ready on http://${host}:${port}/`);
+                });
+            } else {
+                server.listen(port, () => {
+                    log.info(`Server ready on http://localhost:${port}/`);
+                });
+            }
+
+            startCheckForRootFolders({ isInit: true });
+        });
     })
     .catch(err => {
         log.error('Catched Error', { stack: err.stack });

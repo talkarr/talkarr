@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Starting up...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        div {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin: 0;
+        }
+
+        p {
+            margin: 0.5em 0;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1>Starting up talkarr</h1>
+    <p>Please wait...</p>
+    <p>The page will automatically refresh when the server is ready.</p>
+</div>
+<script>
+    // try to fetch /api/healthz every 3 seconds
+    const check = () => {
+        fetch('/api/healthz')
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/';
+                } else {
+                    setTimeout(check, 3000);
+                }
+            })
+            .catch(() => {
+                setTimeout(check, 3000);
+            });
+    };
+
+    check();
+</script>
+</body>
+</html>
