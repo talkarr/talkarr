@@ -26,9 +26,9 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Prisma.io
 RUN yarn prisma generate && \
-    yarn build
+    yarn build && \
+    npm prune --production
 
 # Production image, copy all the files and run next
 FROM base AS runner
