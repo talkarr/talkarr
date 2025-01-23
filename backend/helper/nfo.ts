@@ -2,9 +2,9 @@ import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
+import { addDownloadedFile } from '@backend/events';
 import { defaultMimeType, isVideoFile, nfoFilename } from '@backend/fs';
 import rootLog from '@backend/rootLog';
-import { addDownloadedFile } from '@backend/talks';
 import type {
     ApiEvent,
     ConvertDateToStringType,
@@ -14,32 +14,37 @@ import type {
 
 const log = rootLog.child({ label: 'helper/nfo' });
 
-export const generateNfo = (
-    data: NormalAndConvertedDate<ApiEvent | ExtendedDbEvent>,
-): string => {
-    const persons = data.persons.map(person =>
+export const generateNfo = ({
+    event,
+}: {
+    event: NormalAndConvertedDate<ApiEvent | ExtendedDbEvent>;
+}): string => {
+    const persons = event.persons.map(person =>
         typeof person === 'string' ? person : person.name,
     );
-    const tags = data.tags.map(tag =>
+    const tags = event.tags.map(tag =>
         typeof tag === 'string' ? tag : tag.name,
     );
 
     return `
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
     <movie>
-        <title>${data.title}</title>
-        <plot>${data.description}</plot>
+        <title>${event.title}</title>
+        <plot>${event.description}</plot>
         ${persons.map(person => `<actor>${person}</actor>`).join('\n')}
         ${tags.map(tag => `<genre>${tag}</genre>`).join('\n')}
-        <premiered>${data.date}</premiered>
+        <premiered>${event.date}</premiered>
     </movie>
     `;
 };
 
-export const handleNfoGeneration = async (
-    folder: string,
-    talk: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>,
-): Promise<boolean> => {
+export const handleNfoGeneration = async ({
+    folder,
+    event,
+}: {
+    folder: string;
+    event: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>;
+}): Promise<boolean> => {
     log.info('Generating NFO file...');
 
     const nfoPath = pathUtils.join(folder, nfoFilename);
@@ -55,7 +60,7 @@ export const handleNfoGeneration = async (
         return true;
     }
 
-    const nfoContent = generateNfo(talk);
+    const nfoContent = generateNfo({ event });
 
     // write nfo file
     await fs_promises.writeFile(nfoPath, nfoContent);
@@ -64,13 +69,16 @@ export const handleNfoGeneration = async (
 
     const nfoStats = await fs_promises.stat(nfoPath);
 
-    return addDownloadedFile(talk, {
-        path: nfoPath,
-        filename: pathUtils.basename(nfoPath),
-        url: talk.frontend_link,
-        created: nfoStats.birthtime,
-        mime: mime.lookup(nfoPath) || defaultMimeType,
-        bytes: nfoStats.size,
-        is_video: isVideoFile(nfoPath),
+    return addDownloadedFile({
+        event,
+        file: {
+            path: nfoPath,
+            filename: pathUtils.basename(nfoPath),
+            url: event.frontend_link,
+            created: nfoStats.birthtime,
+            mime: mime.lookup(nfoPath) || defaultMimeType,
+            bytes: nfoStats.size,
+            is_video: isVideoFile(nfoPath),
+        },
     });
 };

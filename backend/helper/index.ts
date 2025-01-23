@@ -4,13 +4,16 @@ import { cccApiBaseUrl, conferenceCacheKey } from '@backend/constants';
 import apiFetch from '@backend/fetch';
 import type { ApiConference, ApiEvent } from '@backend/types';
 
-export const getTalkFromApiByGuid = async (
-    guid: string,
+export const getTalkFromApiByGuid = async ({
+    guid,
+    cache,
+}: {
+    guid: string;
     cache?: {
         cacheKey?: string;
         cacheDuration?: number;
-    },
-): Promise<ApiEvent | null> => {
+    };
+}): Promise<ApiEvent | null> => {
     const response = await apiFetch(
         `${cccApiBaseUrl}/events/${guid}`,
         undefined,
@@ -25,9 +28,11 @@ export const getTalkFromApiByGuid = async (
     return response.json() as ApiEvent;
 };
 
-export const getConferenceFromEvent = async (
-    event: ApiEvent | Pick<ApiEvent, 'conference_url'>,
-): Promise<ApiConference | null> => {
+export const getConferenceFromEvent = async ({
+    event,
+}: {
+    event: ApiEvent | Pick<ApiEvent, 'conference_url'>;
+}): Promise<ApiConference | null> => {
     if (!event.conference_url) {
         return null;
     }
@@ -41,9 +46,11 @@ export const getConferenceFromEvent = async (
     return response.json() as ApiConference;
 };
 
-export const getConferenceFromAcronym = async (
-    acronym: string,
-): Promise<ApiConference | null> => {
+export const getConferenceFromAcronym = async ({
+    acronym,
+}: {
+    acronym: string;
+}): Promise<ApiConference | null> => {
     const response = await apiFetch(
         `${cccApiBaseUrl}/conferences/${acronym}`,
         undefined,
@@ -61,13 +68,16 @@ export const getConferenceFromAcronym = async (
     }
 };
 
-export const getTalkFromApiBySlug = async (
-    slug: string,
+export const getTalkFromApiBySlug = async ({
+    slug,
+    cache,
+}: {
+    slug: string;
     cache?: {
         cacheKey?: string;
         cacheDuration?: number;
-    },
-): Promise<ApiEvent | null> => {
+    };
+}): Promise<ApiEvent | null> => {
     const response = await apiFetch(
         `${cccApiBaseUrl}/events/${slug}`,
         undefined,

@@ -1,7 +1,7 @@
 import type { File, RootFolder } from '@prisma/client';
 
+import { deleteTalk } from '@backend/events';
 import rootLog from '@backend/rootLog';
-import { deleteTalk } from '@backend/talks';
 
 import { Prisma, PrismaClient } from '@prisma/client';
 
@@ -13,19 +13,24 @@ export enum AddRootFolderResponse {
 
 const log = rootLog.child({ label: 'rootFolder' });
 
-export const addRootFolder = async (
-    rootFolder: string,
-): Promise<AddRootFolderResponse> => {
+export const addRootFolder = async ({
+    rootFolderPath,
+}: {
+    rootFolderPath: string;
+}): Promise<AddRootFolderResponse> => {
     const prisma = new PrismaClient();
 
     try {
         await prisma.rootFolder.create({
             data: {
-                path: rootFolder,
+                path: rootFolderPath,
             },
         });
     } catch (error) {
-        log.error('Error adding root folder', { error, rootFolder });
+        log.error('Error adding root folder', {
+            error,
+            rootFolderPath,
+        });
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === 'P2002') {
                 return AddRootFolderResponse.Duplicate;
@@ -51,9 +56,11 @@ export const listRootFolders = async (): Promise<RootFolder[]> => {
     }
 };
 
-export const listFilesForRootFolder = async (
-    rootFolder: string,
-): Promise<File[] | null> => {
+export const listFilesForRootFolder = async ({
+    rootFolderPath,
+}: {
+    rootFolderPath: string;
+}): Promise<File[] | null> => {
     const prisma = new PrismaClient();
 
     try {
@@ -61,7 +68,7 @@ export const listFilesForRootFolder = async (
             where: {
                 event: {
                     root_folder: {
-                        path: rootFolder,
+                        path: rootFolderPath,
                     },
                 },
             },
@@ -69,63 +76,73 @@ export const listFilesForRootFolder = async (
     } catch (e) {
         log.error('Error listing files for root folder', {
             error: e,
-            rootFolder,
+            rootFolderPath,
         });
 
         return null;
     }
 };
 
-export const deleteRootFolder = async (
-    rootFolder: string,
-): Promise<boolean> => {
+export const deleteRootFolder = async ({
+    rootFolderPath,
+}: {
+    rootFolderPath: string;
+}): Promise<boolean> => {
     const prisma = new PrismaClient();
 
     const events = await prisma.event.findMany({
         where: {
             root_folder: {
-                path: rootFolder,
+                path: rootFolderPath,
             },
         },
     });
 
     if (events.length > 0) {
         const promises = events.map(event =>
-            deleteTalk(event.guid, { deleteFiles: true }),
+            deleteTalk({ guid: event.guid, deleteFiles: true }),
         );
 
         await Promise.all(promises);
     } else {
-        log.info('No events found for root folder', { rootFolder });
+        log.info('No events found for root folder', {
+            rootFolderPath,
+        });
     }
 
     try {
         await prisma.rootFolder.delete({
             where: {
-                path: rootFolder,
+                path: rootFolderPath,
             },
             include: {
                 events: true,
             },
         });
     } catch (e) {
-        log.error('Error deleting root folder', { error: e, rootFolder });
+        log.error('Error deleting root folder', {
+            error: e,
+            rootFolderPath,
+        });
         return false;
     }
 
     return true;
 };
 
-export const setRootFolderMarked = async (
-    rootFolder: string,
-    marked: boolean,
-): Promise<boolean> => {
+export const setRootFolderMarked = async ({
+    rootFolderPath,
+    marked,
+}: {
+    rootFolderPath: string;
+    marked: boolean;
+}): Promise<boolean> => {
     const prisma = new PrismaClient();
 
     try {
         await prisma.rootFolder.update({
             where: {
-                path: rootFolder,
+                path: rootFolderPath,
             },
             data: {
                 marked,
@@ -134,21 +151,26 @@ export const setRootFolderMarked = async (
 
         return true;
     } catch (e) {
-        log.error('Error setting root folder marked', { error: e, rootFolder });
+        log.error('Error setting root folder marked', {
+            error: e,
+            rootFolderPath,
+        });
 
         return false;
     }
 };
 
-export const setRootFolderMarkExists = async (
-    rootFolder: string,
-): Promise<boolean> => {
+export const setRootFolderMarkExists = async ({
+    rootFolderPath,
+}: {
+    rootFolderPath: string;
+}): Promise<boolean> => {
     const prisma = new PrismaClient();
 
     try {
         await prisma.rootFolder.update({
             where: {
-                path: rootFolder,
+                path: rootFolderPath,
             },
             data: {
                 did_not_find_mark: false,
@@ -159,22 +181,24 @@ export const setRootFolderMarkExists = async (
     } catch (e) {
         log.error('Error setting root folder mark exists', {
             error: e,
-            rootFolder,
+            rootFolderPath,
         });
 
         return false;
     }
 };
 
-export const clearRootFolderMark = async (
-    rootFolder: string,
-): Promise<boolean> => {
+export const clearRootFolderMark = async ({
+    rootFolderPath,
+}: {
+    rootFolderPath: string;
+}): Promise<boolean> => {
     const prisma = new PrismaClient();
 
     try {
         await prisma.rootFolder.update({
             where: {
-                path: rootFolder,
+                path: rootFolderPath,
             },
             data: {
                 did_not_find_mark: true,
@@ -185,22 +209,24 @@ export const clearRootFolderMark = async (
     } catch (e) {
         log.error('Error clearing root folder mark', {
             error: e,
-            rootFolder,
+            rootFolderPath,
         });
 
         return false;
     }
 };
 
-export const wasMarkFoundForRootFolder = async (
-    rootFolder: string,
-): Promise<boolean> => {
+export const wasMarkFoundForRootFolder = async ({
+    rootFolderPath,
+}: {
+    rootFolderPath: string;
+}): Promise<boolean> => {
     const prisma = new PrismaClient();
 
     try {
         const folder = await prisma.rootFolder.findUnique({
             where: {
-                path: rootFolder,
+                path: rootFolderPath,
             },
         });
 
@@ -210,7 +236,10 @@ export const wasMarkFoundForRootFolder = async (
 
         return !folder.did_not_find_mark;
     } catch (e) {
-        log.error('Error checking if root folder has mark', { error: e });
+        log.error('Error checking if root folder has mark', {
+            error: e,
+            rootFolderPath,
+        });
 
         return false;
     }

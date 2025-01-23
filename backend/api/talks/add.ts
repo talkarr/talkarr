@@ -1,8 +1,8 @@
 import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
 
+import { addTalk } from '@backend/events';
 import { getTalkFromApiByGuid } from '@backend/helper';
 import rootLog from '@backend/rootLog';
-import { addTalk } from '@backend/talks';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import { AddTalkFailure } from '@backend/types';
 
@@ -36,9 +36,9 @@ const handleAddEventRequest = async (
         return;
     }
 
-    const talk = await getTalkFromApiByGuid(guid);
+    const event = await getTalkFromApiByGuid({ guid });
 
-    if (!talk) {
+    if (!event) {
         log.error('Talk not found.');
 
         res.status(404).json({
@@ -50,12 +50,12 @@ const handleAddEventRequest = async (
     }
 
     // Add talk to database
-    const result = await addTalk(talk, rootFolder);
+    const result = await addTalk({ event, rootFolder });
 
     if (typeof result !== 'object') {
         log.error('Error adding talk to database. Result:', {
             result,
-            guid: talk.guid,
+            guid: event.guid,
         });
 
         if (result === AddTalkFailure.Duplicate) {

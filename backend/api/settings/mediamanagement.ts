@@ -162,9 +162,9 @@ router.post(
         req: ExpressRequest<'/settings/mediamanagement/add', 'post'>,
         res: ExpressResponse<'/settings/mediamanagement/add', 'post'>,
     ) => {
-        const { folder } = req.body;
+        const { folder: rootFolderPath } = req.body;
 
-        if (!folder) {
+        if (!rootFolderPath) {
             res.status(400).json({
                 success: false,
                 error: 'Folder is required',
@@ -174,8 +174,8 @@ router.post(
         }
 
         // Check if folder exists
-        if (!fs.existsSync(folder)) {
-            log.error('Folder does not exist:', { folder });
+        if (!fs.existsSync(rootFolderPath)) {
+            log.error('Folder does not exist:', { rootFolderPath });
 
             res.status(404).json({
                 success: false,
@@ -187,11 +187,11 @@ router.post(
 
         // check if read permission is granted
         try {
-            fs.accessSync(folder, fs.constants.R_OK);
+            fs.accessSync(rootFolderPath, fs.constants.R_OK);
         } catch (error) {
             log.error('Error accessing folder (READ_CHECK):', {
                 error,
-                folder,
+                rootFolderPath,
             });
 
             res.status(403).json({
@@ -204,11 +204,11 @@ router.post(
 
         // check if write permission is granted
         try {
-            fs.accessSync(folder, fs.constants.W_OK);
+            fs.accessSync(rootFolderPath, fs.constants.W_OK);
         } catch (error) {
             log.error('Error accessing folder (WRITE_CHECK):', {
                 error,
-                folder,
+                rootFolderPath,
             });
 
             res.status(403).json({
@@ -220,7 +220,9 @@ router.post(
         }
 
         try {
-            const result = await addRootFolder(folder);
+            const result = await addRootFolder({
+                rootFolderPath,
+            });
 
             if (result === AddRootFolderResponse.Duplicate) {
                 res.status(409).json({
@@ -240,9 +242,12 @@ router.post(
                 return;
             }
 
-            log.info('Folder added:', { folder });
+            log.info('Folder added:', { rootFolderPath });
         } catch (error) {
-            log.error('Error adding folder:', { error, folder });
+            log.error('Error adding folder:', {
+                error,
+                rootFolderPath,
+            });
 
             res.status(500).json({
                 success: false,
@@ -252,9 +257,16 @@ router.post(
             return;
         }
 
-        if (await markRootFolder(folder)) {
-            if (!(await setRootFolderMarked(folder, true))) {
-                log.error('Error setting root folder marked:', { folder });
+        if (await markRootFolder({ rootFolderPath })) {
+            if (
+                !(await setRootFolderMarked({
+                    rootFolderPath,
+                    marked: true,
+                }))
+            ) {
+                log.error('Error setting root folder marked:', {
+                    rootFolderPath,
+                });
 
                 res.status(500).json({
                     success: false,
@@ -262,9 +274,9 @@ router.post(
                 });
             }
 
-            log.info('Folder marked:', { folder });
+            log.info('Folder marked:', { rootFolderPath });
         } else {
-            log.error('Error marking root folder:', { folder });
+            log.error('Error marking root folder:', { rootFolderPath });
 
             res.status(500).json({
                 success: false,
@@ -284,9 +296,9 @@ router.post(
         req: ExpressRequest<'/settings/mediamanagement/remove', 'post'>,
         res: ExpressResponse<'/settings/mediamanagement/remove', 'post'>,
     ) => {
-        const { folder } = req.body;
+        const { folder: rootFolderPath } = req.body;
 
-        if (!folder) {
+        if (!rootFolderPath) {
             res.status(400).json({
                 success: false,
                 error: 'Folder is required',
@@ -296,7 +308,9 @@ router.post(
         }
 
         try {
-            const result = await deleteRootFolder(folder);
+            const result = await deleteRootFolder({
+                rootFolderPath,
+            });
 
             if (!result) {
                 res.status(500).json({
@@ -317,7 +331,7 @@ router.post(
             return;
         }
 
-        log.info('Folder removed:', { folder });
+        log.info('Folder removed:', { rootFolderPath });
 
         res.json({ success: true, data: null });
     },

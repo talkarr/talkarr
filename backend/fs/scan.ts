@@ -4,6 +4,7 @@ import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
+import { getEventByFilePath } from '@backend/events';
 import type { ExistingFile } from '@backend/fs/index';
 import {
     defaultMimeType,
@@ -15,7 +16,6 @@ import {
     getTalkFromApiBySlug,
 } from '@backend/helper';
 import rootLog from '@backend/rootLog';
-import { getEventByFilePath } from '@backend/talks';
 import type {
     ApiConference,
     ApiEvent,
@@ -36,9 +36,11 @@ export interface ExistingFileWithGuessedInformation
     };
 }
 
-export const scanForExistingFiles = async (
-    rootFolderPath: string,
-): Promise<
+export const scanForExistingFiles = async ({
+    rootFolderPath,
+}: {
+    rootFolderPath: string;
+}): Promise<
     ConvertDateToStringType<ExistingFileWithGuessedInformation>[] | null
 > => {
     const existingFiles: ConvertDateToStringType<ExistingFileWithGuessedInformation>[] =
@@ -54,7 +56,9 @@ export const scanForExistingFiles = async (
         const conferenceAcronym = folder.name;
         let conferenceIsValid = true;
 
-        const conference = await getConferenceFromAcronym(conferenceAcronym);
+        const conference = await getConferenceFromAcronym({
+            acronym: conferenceAcronym,
+        });
 
         if (!conference) {
             log.warn(`Folder ${conferenceAcronym} is not a valid conference`);
@@ -81,7 +85,9 @@ export const scanForExistingFiles = async (
                 eventDir.name,
             );
 
-            const eventFromDbByFile = await getEventByFilePath(eventPath);
+            const eventFromDbByFile = await getEventByFilePath({
+                filePath: eventPath,
+            });
 
             if (eventFromDbByFile) {
                 log.info(
@@ -91,7 +97,7 @@ export const scanForExistingFiles = async (
                 continue;
             }
 
-            const event = await getTalkFromApiBySlug(eventSlug);
+            const event = await getTalkFromApiBySlug({ slug: eventSlug });
 
             if (!event) {
                 log.warn(`Event ${eventSlug} does not exist`);
