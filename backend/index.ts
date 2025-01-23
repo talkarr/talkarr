@@ -21,9 +21,6 @@ const log = rootLog.child({ label: 'server' });
 
 log.info('Starting server...', { dev });
 
-const app = next({ dev, turbopack: true });
-const handle = app.getRequestHandler();
-
 const loadingServer = express();
 
 loadingServer.get('*', (req, res) => {
@@ -42,6 +39,9 @@ if (host) {
     log.info(`Startup server listening on http://localhost:${port}/`);
     loadingHttpServer = loadingServer.listen(port);
 }
+
+const app = next({ dev, turbopack: true });
+const handle = app.getRequestHandler();
 
 log.info('Preparing server...');
 
