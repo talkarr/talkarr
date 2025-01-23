@@ -196,6 +196,13 @@ jobs:
     needs:
      - lint
     steps:
+      - name: Install numfmt if not installed
+        run: |
+          if ! command -v numfmt &> /dev/null; then
+              sudo apt-get update
+              sudo apt-get install -y numfmt
+          fi
+
       - uses: actions/checkout@v4
 
       - name: Log in into GitHub Container Registry
@@ -257,19 +264,21 @@ jobs:
           echo "ref=${ref}" >> $GITHUB_OUTPUT
 
       - name: Print statistics of container
+        continue-on-error: true
         run: |
           # print things like tags, labels, container size
           tags="${{ steps.meta.outputs.tags }}"
           labels="${{ steps.meta.outputs.labels }}"
           first_tag=$(echo $tags | cut -d ' ' -f 1)
-          layer_count=$(docker manifest inspect -v "$first_tag" | jq -r '.[0].Layers | length')
-          image_size=$(docker manifest inspect -v "$first_tag" | jq -r '.[0].Layers | map(.Size) | add')
+          layer_count=$(docker manifest inspect -v "$first_tag" | jq -r '.[0].OCIManifest.layers | length')
+          image_size=$(docker manifest inspect -v "$first_tag" | jq -r '.[0].OCIManifest.layers | map(.size) | add')
+          image_size_fmt=$(numfmt --to=iec-i --suffix=B $image_size)
           
           echo "===== Container statistics ====="
           echo "Tags: $tags"
           echo "Labels: $labels"
           echo "Layer count: $layer_count"
-          echo "Image size: $image_size"
+          echo "Image size: $image_size bytes ($image_size_fmt)"
           echo "================================"
 
     outputs:
