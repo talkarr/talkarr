@@ -210,9 +210,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
 
         if (stderrBuffer) {
             log.error('Error downloading video:', { stderrBuffer });
+            await setDownloadError(talk.guid, stderrBuffer);
         }
-
-        await setDownloadError(talk.guid, stderrBuffer);
 
         await setDownloadExitCode(talk.guid, exitCode);
 

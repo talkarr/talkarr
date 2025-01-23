@@ -239,6 +239,8 @@ router.post(
 
                 return;
             }
+
+            log.info('Folder added:', { folder });
         } catch (error) {
             log.error('Error adding folder:', { error, folder });
 
@@ -251,7 +253,23 @@ router.post(
         }
 
         if (await markRootFolder(folder)) {
-            await setRootFolderMarked(folder, true);
+            if (!(await setRootFolderMarked(folder, true))) {
+                log.error('Error setting root folder marked:', { folder });
+
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error',
+                });
+            }
+
+            log.info('Folder marked:', { folder });
+        } else {
+            log.error('Error marking root folder:', { folder });
+
+            res.status(500).json({
+                success: false,
+                error: 'Internal Server Error',
+            });
         }
 
         startScanAndImportExistingFiles();

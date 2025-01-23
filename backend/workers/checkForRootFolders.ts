@@ -34,9 +34,21 @@ const checkForRootFolders: TaskFunction<CheckForRootFoldersData> = async (
         throw new Error('Invalid data');
     }
 
-    await clearAllRootFolderHasMarks();
+    if (!(await clearAllRootFolderHasMarks())) {
+        log.error('Error clearing root folder marks');
+
+        throw new Error('Error clearing root folder marks');
+    }
 
     const databaseRootFolders = await listRootFolders();
+
+    if (!databaseRootFolders.length) {
+        log.info('No root folders found');
+
+        done();
+
+        return;
+    }
 
     for await (const rootFolder of databaseRootFolders) {
         const index = databaseRootFolders.indexOf(rootFolder);

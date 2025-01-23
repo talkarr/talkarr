@@ -66,6 +66,8 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
         if (!result) {
             log.error('Error creating new talk info:', { title: talk.title });
             continue;
+        } else {
+            log.info('Created new talk info:', { title: talk.title });
         }
 
         if (!hasFiles) {

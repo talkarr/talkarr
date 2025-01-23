@@ -224,12 +224,16 @@ const AddTalkModal: FC = () => {
                         <Typography variant="body1">
                             {addTalkModal?.original_language}
                         </Typography>
-                        <Typography variant="body1" fontWeight="bold">
-                            Tags:
-                        </Typography>
-                        <Typography variant="body1">
-                            {addTalkModal?.tags.join(', ')}
-                        </Typography>
+                        {addTalkModal?.tags.length ? (
+                            <>
+                                <Typography variant="body1" fontWeight="bold">
+                                    Tags:
+                                </Typography>
+                                <Typography variant="body1">
+                                    {addTalkModal?.tags.join(', ')}
+                                </Typography>
+                            </>
+                        ) : null}
                     </Box>
                     <Box mb={2}>
                         <FormControl fullWidth>
