@@ -6,7 +6,11 @@ import youtubeDl from 'youtube-dl-exec';
 
 import { startGenerateMissingNfo } from '@backend/workers/generateMissingNfo';
 
-import { getFolderPathForTalk, isVideoFile } from '@backend/fs';
+import {
+    defaultMimeType,
+    getFolderPathForTalk,
+    isVideoFile,
+} from '@backend/fs';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
@@ -189,7 +193,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
             filename: pathUtils.basename(path),
             url: talk.frontend_link,
             created: videoStats.birthtime,
-            mime: mime.lookup(path) || 'application/octet-stream',
+            mime: mime.lookup(path) || defaultMimeType,
             bytes: videoStats.size,
             is_video: isVideoFile(path),
         });

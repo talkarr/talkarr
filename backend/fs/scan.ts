@@ -5,7 +5,11 @@ import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
 import type { ExistingFile } from '@backend/fs/index';
-import { isVideoFile, validFileExtensions } from '@backend/fs/index';
+import {
+    defaultMimeType,
+    isVideoFile,
+    validFileExtensions,
+} from '@backend/fs/index';
 import {
     getConferenceFromAcronym,
     getTalkFromApiBySlug,
@@ -168,7 +172,7 @@ export const scanForExistingFiles = async (
                     size: fileStats.size,
                     createdAt: fileStats.birthtime.toISOString(),
                     path: filePath,
-                    mime: mime.lookup(file.name) || 'application/octet-stream',
+                    mime: mime.lookup(file.name) || defaultMimeType,
                     isVideo: isVideoFile(filePath),
                     filename: file.name,
                 });

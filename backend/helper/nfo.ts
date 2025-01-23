@@ -2,7 +2,7 @@ import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
-import { isVideoFile, nfoFilename } from '@backend/fs';
+import { defaultMimeType, isVideoFile, nfoFilename } from '@backend/fs';
 import rootLog from '@backend/rootLog';
 import { addDownloadedFile } from '@backend/talks';
 import type {
@@ -69,7 +69,7 @@ export const handleNfoGeneration = async (
         filename: pathUtils.basename(nfoPath),
         url: talk.frontend_link,
         created: nfoStats.birthtime,
-        mime: mime.lookup(nfoPath) || 'application/octet-stream',
+        mime: mime.lookup(nfoPath) || defaultMimeType,
         bytes: nfoStats.size,
         is_video: isVideoFile(nfoPath),
     });

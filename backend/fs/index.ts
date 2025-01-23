@@ -19,6 +19,8 @@ export const rootFolderMarkName = '.talkarr';
 export const rootFolderMarkContent =
     '!!! This is a Talkarr root folder. Please do not delete this file !!!';
 
+export const defaultMimeType = 'application/octet-stream';
+
 const log = rootLog.child({ label: 'fs' });
 
 export interface ExistingFile {
@@ -94,7 +96,7 @@ export const doesTalkHaveExistingFiles = async (
 
             existingFiles.push({
                 path: file,
-                mime: mime.lookup(file) || 'application/octet-stream',
+                mime: mime.lookup(file) || defaultMimeType,
                 size: stats.size,
                 isVideo: isVideoFile(file),
                 createdAt: stats.birthtime,
