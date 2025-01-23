@@ -256,6 +256,22 @@ jobs:
           # output sha
           echo "ref=${ref}" >> $GITHUB_OUTPUT
 
+      - name: Print statistics of container
+        run: |
+          # print things like tags, labels, container size
+          tags="${{ steps.meta.outputs.tags }}"
+          labels="${{ steps.meta.outputs.labels }}"
+          first_tag=$(echo $tags | cut -d ' ' -f 1)
+          layer_count=$(docker manifest inspect -v "$first_tag" | jq -r '.[0].Layers | length')
+          image_size=$(docker manifest inspect -v "$first_tag" | jq -r '.[0].Layers | map(.Size) | add')
+          
+          echo "===== Container statistics ====="
+          echo "Tags: $tags"
+          echo "Labels: $labels"
+          echo "Layer count: $layer_count"
+          echo "Image size: $image_size"
+          echo "================================"
+
     outputs:
       ref: ${{ steps.ref.outputs.ref }}
 

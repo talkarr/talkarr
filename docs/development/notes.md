@@ -22,3 +22,9 @@ Our main colors are:
 ## Why are there so many CI fix commits?
 
 Most of them are due to the fact that I am a bit new to Playwright (E2E-Testing) and also probably because I am doing things more complicated than they have to be.
+
+## Getting the minimum engine version
+
+```bash
+npx ls-engines --mode actual --save
+```
