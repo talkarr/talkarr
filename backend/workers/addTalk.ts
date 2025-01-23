@@ -7,14 +7,6 @@ import youtubeDl from 'youtube-dl-exec';
 import { startGenerateMissingNfo } from '@backend/workers/generateMissingNfo';
 
 import {
-    defaultMimeType,
-    getFolderPathForTalk,
-    isVideoFile,
-} from '@backend/fs';
-import type { TaskFunction } from '@backend/queue';
-import queue from '@backend/queue';
-import rootLog from '@backend/rootLog';
-import {
     addDownloadedFile,
     clearDownloadError,
     isEventDownloading,
@@ -22,7 +14,15 @@ import {
     setDownloadExitCode,
     setIsDownloading,
     updateDownloadProgress,
-} from '@backend/talks';
+} from '@backend/events';
+import {
+    defaultMimeType,
+    getFolderPathForTalk,
+    isVideoFile,
+} from '@backend/fs';
+import type { TaskFunction } from '@backend/queue';
+import queue from '@backend/queue';
+import rootLog from '@backend/rootLog';
 import type { ConvertDateToStringType, ExtendedDbEvent } from '@backend/types';
 
 export const taskName = 'addTalk';
@@ -30,13 +30,13 @@ export const taskName = 'addTalk';
 const log = rootLog.child({ label: 'workers/addTalk' });
 
 export interface AddTalkData {
-    talk: ConvertDateToStringType<ExtendedDbEvent>;
+    event: ConvertDateToStringType<ExtendedDbEvent>;
 }
 
 export const check = typia.createIs<AddTalkData>();
 
 const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
-    const { talk } = job.data;
+    const { event } = job.data;
 
     if (!check(job.data)) {
         log.error('Invalid data:', { data: job.data });
@@ -44,29 +44,36 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
         throw new Error('Invalid data');
     }
 
-    const isAlreadyDownloading = await isEventDownloading(talk.guid);
+    const isAlreadyDownloading = await isEventDownloading({
+        eventInfoGuid: event.guid,
+    });
 
     if (isAlreadyDownloading) {
-        log.warn('Talk is already downloading:', { title: talk.title });
+        log.warn('Talk is already downloading:', { title: event.title });
 
         done();
     }
 
-    log.info('Adding talk...', { slug: job.data.talk.slug });
+    log.info('Adding talk...', { slug: job.data.event.slug });
 
-    await clearDownloadError(talk.guid);
+    await clearDownloadError({ eventGuid: event.guid });
 
-    if (!talk.frontend_link) {
-        log.error('Talk does not have a frontend link:', { title: talk.title });
+    if (!event.frontend_link) {
+        log.error('Talk does not have a frontend link:', {
+            title: event.title,
+        });
 
-        await setDownloadError(talk.guid, 'Talk does not have a frontend link');
+        await setDownloadError({
+            eventInfoGuid: event.guid,
+            error: 'Talk does not have a frontend link',
+        });
 
         throw new Error('Talk does not have a frontend link');
     }
 
     try {
         const videoInfo = await youtubeDl(
-            talk.frontend_link,
+            event.frontend_link,
             {
                 dumpJson: true,
                 format: 'best',
@@ -80,45 +87,56 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
         if (!videoInfo || typeof videoInfo === 'string') {
             log.error('Error fetching video info:', { videoInfo });
 
-            await setDownloadError(talk.guid, videoInfo ?? 'Unknown error');
+            await setDownloadError({
+                eventInfoGuid: event.guid,
+                error: videoInfo ?? 'Unknown error',
+            });
 
             throw new Error('Error fetching video info');
         }
     } catch (error) {
         log.error('Error fetching video info:', {
             error,
-            title: talk.title,
-            frontend_url: talk.frontend_link,
+            title: event.title,
+            frontend_url: event.frontend_link,
         });
 
-        await setDownloadError(talk.guid, 'Error fetching video info');
+        await setDownloadError({
+            eventInfoGuid: event.guid,
+            error: 'Error fetching video info',
+        });
 
         throw new Error('Error fetching video info');
     }
 
-    const folder = await getFolderPathForTalk(talk);
+    const folder = await getFolderPathForTalk({ event });
 
     if (!folder) {
-        log.error('Error getting folder path for talk:', { title: talk.title });
+        log.error('Error getting folder path for talk:', {
+            title: event.title,
+        });
 
-        await setDownloadError(talk.guid, 'Error getting folder path for talk');
+        await setDownloadError({
+            eventInfoGuid: event.guid,
+            error: 'Error getting folder path for talk',
+        });
 
         throw new Error('Error getting folder path for talk');
     }
 
-    await setIsDownloading(talk.guid, true);
+    await setIsDownloading({ eventGuid: event.guid, isDownloading: true });
 
     let exitCode: number | null = null;
 
     let stderrBuffer = '';
 
     try {
-        log.info('Starting youtube-dl', { title: talk.title });
+        log.info('Starting youtube-dl', { title: event.title });
         // download video
         const videoSubprocess = youtubeDl.exec(
-            talk.frontend_link,
+            event.frontend_link,
             {
-                output: pathUtils.join(folder, `${talk.slug}.%(ext)s`),
+                output: pathUtils.join(folder, `${event.slug}.%(ext)s`),
             },
             {
                 stdio: 'pipe',
@@ -126,7 +144,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
         );
 
         videoSubprocess.on('spawn', () => {
-            log.info('Video download started:', { title: talk.title });
+            log.info('Video download started:', { title: event.title });
         });
 
         let lastProgress = 0;
@@ -157,7 +175,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
             if (rounded !== lastProgress) {
                 lastProgress = rounded;
                 await updateDownloadProgress({
-                    eventGuid: talk.guid,
+                    eventGuid: event.guid,
                     progress: rounded,
                 });
             }
@@ -172,11 +190,11 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
         });
 
         videoSubprocess.on('error', error => {
-            console.log(talk.title, 'error:', error);
+            console.log(event.title, 'error:', error);
         });
 
         videoSubprocess.on('close', code => {
-            console.log(talk.title, 'close:', code);
+            console.log(event.title, 'close:', code);
             exitCode = code;
         });
 
@@ -188,35 +206,43 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
 
         const videoStats = await fs_promises.stat(path);
 
-        const addFileToDbResult = await addDownloadedFile(talk, {
-            path,
-            filename: pathUtils.basename(path),
-            url: talk.frontend_link,
-            created: videoStats.birthtime,
-            mime: mime.lookup(path) || defaultMimeType,
-            bytes: videoStats.size,
-            is_video: isVideoFile(path),
+        const addFileToDbResult = await addDownloadedFile({
+            event,
+            file: {
+                path,
+                filename: pathUtils.basename(path),
+                url: event.frontend_link,
+                created: videoStats.birthtime,
+                mime: mime.lookup(path) || defaultMimeType,
+                bytes: videoStats.size,
+                is_video: isVideoFile(path),
+            },
         });
 
         if (!addFileToDbResult) {
-            log.error('Error adding file to db:', { title: talk.title });
+            log.error('Error adding file to db:', { title: event.title });
 
-            await setDownloadError(talk.guid, 'Error adding file to db');
+            await setDownloadError({
+                eventInfoGuid: event.guid,
+                error: 'Error adding file to db',
+            });
 
             throw new Error('Error adding file to db');
         }
 
-        startGenerateMissingNfo({ talk });
+        startGenerateMissingNfo({ event });
 
         if (stderrBuffer) {
             log.error('Error downloading video:', { stderrBuffer });
+            await setDownloadError({
+                eventInfoGuid: event.guid,
+                error: stderrBuffer,
+            });
         }
 
-        await setDownloadError(talk.guid, stderrBuffer);
+        await setDownloadExitCode({ eventInfoGuid: event.guid, exitCode });
 
-        await setDownloadExitCode(talk.guid, exitCode);
-
-        await setIsDownloading(talk.guid, false);
+        await setIsDownloading({ eventGuid: event.guid, isDownloading: false });
 
         done();
     } catch (error) {
@@ -232,9 +258,12 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
                 : typeof error === 'string'
                   ? error
                   : 'Unknown error';
-        await setDownloadError(talk.guid, errorAsString);
+        await setDownloadError({
+            eventInfoGuid: event.guid,
+            error: errorAsString,
+        });
 
-        await setIsDownloading(talk.guid, false);
+        await setIsDownloading({ eventGuid: event.guid, isDownloading: false });
 
         throw error;
     }

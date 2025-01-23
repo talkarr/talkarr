@@ -28,6 +28,7 @@ async function main(): Promise<void> {
         process.env.APPLY_PRESET === '1';
 
     if (applyLaptopPreset) {
+        console.log('Populating root folder');
         await prisma.rootFolder.create({
             data: {
                 path: '/Users/ccomm/Movies/talkarr',

@@ -1,5 +1,5 @@
+import { getTalkInfoByGuid, getTalkInfoBySlug } from '@backend/events';
 import rootLog from '@backend/rootLog';
-import { getTalkInfoByGuid, getTalkInfoBySlug } from '@backend/talks';
 import type { ExpressRequest, ExpressResponse, TalkInfo } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/info' });
@@ -24,9 +24,9 @@ const handleEventInfoRequest = async (
     let talk: TalkInfo | null = null;
 
     if (guid) {
-        talk = await getTalkInfoByGuid(guid);
+        talk = await getTalkInfoByGuid({ guid });
     } else if (slug) {
-        talk = await getTalkInfoBySlug(slug);
+        talk = await getTalkInfoBySlug({ slug });
     }
 
     if (!talk) {

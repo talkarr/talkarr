@@ -1,5 +1,5 @@
+import { deleteTalk } from '@backend/events';
 import rootLog from '@backend/rootLog';
-import { deleteTalk } from '@backend/talks';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/delete' });
@@ -33,7 +33,7 @@ const handleDeleteEventRequest = async (
     }
 
     // Add talk to database
-    const result = await deleteTalk(guid, { deleteFiles });
+    const result = await deleteTalk({ guid, deleteFiles });
 
     if (!result) {
         log.error('Error removing talk from database.', { guid, deleteFiles });

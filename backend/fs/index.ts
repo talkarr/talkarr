@@ -36,9 +36,11 @@ export const isVideoFile = (filename: string): boolean => {
 
     return validVideoFileExtensions.includes(ext);
 };
-export const doesTalkHaveExistingFiles = async (
-    event: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>,
-): Promise<ExistingFile[] | null> => {
+export const doesTalkHaveExistingFiles = async ({
+    event,
+}: {
+    event: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>;
+}): Promise<ExistingFile[] | null> => {
     if (!event.rootFolderPath) {
         log.debug('Event does not have a root folder path');
         return null;
@@ -109,9 +111,11 @@ export const doesTalkHaveExistingFiles = async (
     return existingFiles.length ? existingFiles : null;
 };
 
-export const doesEventHaveNfoFile = async (
-    event: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>,
-): Promise<boolean> => {
+export const doesEventHaveNfoFile = async ({
+    event,
+}: {
+    event: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>;
+}): Promise<boolean> => {
     if (!event.rootFolderPath) {
         return false;
     }
@@ -153,7 +157,11 @@ export const doesEventHaveNfoFile = async (
     }
 };
 
-export const doesFileExist = async (filePath: string): Promise<boolean> => {
+export const doesFileExist = async ({
+    filePath,
+}: {
+    filePath: string;
+}): Promise<boolean> => {
     try {
         await fs_promises.access(
             filePath,
@@ -168,9 +176,11 @@ export const doesFileExist = async (filePath: string): Promise<boolean> => {
 };
 
 // place a .talkarr file into the root folder to mark it as a root folder
-export const markRootFolder = async (
-    rootFolderPath: string,
-): Promise<boolean> => {
+export const markRootFolder = async ({
+    rootFolderPath,
+}: {
+    rootFolderPath: string;
+}): Promise<boolean> => {
     const filePath = pathUtils.join(rootFolderPath, rootFolderMarkName);
 
     try {
@@ -184,9 +194,11 @@ export const markRootFolder = async (
     }
 };
 
-export const isFolderMarked = async (
-    rootFolderPath: string,
-): Promise<boolean> => {
+export const isFolderMarked = async ({
+    rootFolderPath,
+}: {
+    rootFolderPath: string;
+}): Promise<boolean> => {
     const filePath = pathUtils.join(rootFolderPath, rootFolderMarkName);
 
     try {
@@ -203,16 +215,18 @@ type GetFolderPathForTalkEvent = Pick<
     'rootFolderPath' | 'slug' | 'conference'
 >;
 
-export const getFolderPathForTalk = async (
+export const getFolderPathForTalk = async ({
+    event,
+}: {
     event:
         | GetFolderPathForTalkEvent
-        | ConvertDateToStringType<GetFolderPathForTalkEvent>,
-): Promise<string | null> => {
+        | ConvertDateToStringType<GetFolderPathForTalkEvent>;
+}): Promise<string | null> => {
     if (!event.rootFolderPath) {
         return null;
     }
 
-    if (!(await isFolderMarked(event.rootFolderPath))) {
+    if (!(await isFolderMarked({ rootFolderPath: event.rootFolderPath }))) {
         log.warn(
             'Cannot get folder path for talk, root folder does not have mark',
             {

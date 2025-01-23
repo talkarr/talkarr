@@ -1,11 +1,11 @@
-import { getTalkFromApiByGuid } from '@backend/helper';
-import rootLog from '@backend/rootLog';
 import {
     checkEventForProblems,
     getSpecificTalkByGuid,
     getSpecificTalkBySlug,
     getTalkInfoByGuid,
-} from '@backend/talks';
+} from '@backend/events';
+import { getTalkFromApiByGuid } from '@backend/helper';
+import rootLog from '@backend/rootLog';
 import type {
     ConvertDateToStringType,
     ExpressRequest,
@@ -36,9 +36,9 @@ const handleGetEventRequest = async (
     let event: ExtendedDbEvent | null = null;
 
     if (guid) {
-        event = await getSpecificTalkByGuid(guid);
+        event = await getSpecificTalkByGuid({ guid });
     } else if (slug) {
-        event = await getSpecificTalkBySlug(slug);
+        event = await getSpecificTalkBySlug({ slug });
     }
 
     if (!event) {
@@ -52,11 +52,14 @@ const handleGetEventRequest = async (
         return;
     }
 
-    const talkData = await getTalkFromApiByGuid(event.guid, {
-        cacheKey: `talks/get/${event.guid}`,
+    const talkData = await getTalkFromApiByGuid({
+        guid: event.guid,
+        cache: {
+            cacheKey: `talks/get/${event.guid}`,
+        },
     });
 
-    const talkInfo = await getTalkInfoByGuid(event.guid);
+    const talkInfo = await getTalkInfoByGuid({ guid: event.guid });
 
     if (!talkData || !talkInfo) {
         log.error('Talk not found in API.', {
@@ -73,7 +76,7 @@ const handleGetEventRequest = async (
         return;
     }
 
-    const hasProblems = await checkEventForProblems(event);
+    const hasProblems = await checkEventForProblems({ event });
 
     res.json({
         success: true,

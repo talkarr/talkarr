@@ -3,12 +3,12 @@ import typia from 'typia';
 import { startScanAndImportExistingFiles } from '@backend/workers/scanAndImportExistingFiles';
 import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
 
+import { removeFileFromDatabase } from '@backend/events';
 import { doesFileExist } from '@backend/fs';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import { listFilesForRootFolder } from '@backend/rootFolder';
 import rootLog from '@backend/rootLog';
-import { removeFileFromDatabase } from '@backend/talks';
 
 export const taskName = 'checkIfFilesExist';
 
@@ -34,7 +34,9 @@ const checkIfFilesExist: TaskFunction<CheckIfFilesExistData> = async (
         throw new Error('Invalid data');
     }
 
-    const files = await listFilesForRootFolder(data.rootFolder);
+    const files = await listFilesForRootFolder({
+        rootFolderPath: data.rootFolder,
+    });
 
     if (files === null) {
         log.error('Error listing files for root folder:', {
@@ -59,7 +61,7 @@ const checkIfFilesExist: TaskFunction<CheckIfFilesExistData> = async (
             log.info('Checking file:', { filePath: file.path });
 
             // check if file exists
-            const exists = await doesFileExist(file.path);
+            const exists = await doesFileExist({ filePath: file.path });
 
             if (!exists) {
                 log.warn(
@@ -70,7 +72,10 @@ const checkIfFilesExist: TaskFunction<CheckIfFilesExistData> = async (
                 );
 
                 if (
-                    !(await removeFileFromDatabase(file.eventGuid, file.path))
+                    !(await removeFileFromDatabase({
+                        eventGuid: file.eventGuid,
+                        path: file.path,
+                    }))
                 ) {
                     log.error('Error removing file from database:', {
                         filePath: file.path,

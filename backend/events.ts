@@ -17,17 +17,20 @@ import { Prisma, PrismaClient } from '@prisma/client';
 
 const log = rootLog.child({ label: 'talks' });
 
-export const addTalk = async (
-    event: ApiEvent,
-    rootFolder: string,
-): Promise<
+export const addTalk = async ({
+    event,
+    rootFolder,
+}: {
+    event: ApiEvent;
+    rootFolder: string;
+}): Promise<
     ConvertDateToStringType<
         Omit<ExtendedDbEvent, 'recordings'> | AddTalkFailure
     >
 > => {
     const prisma = new PrismaClient();
 
-    const conference = await getConferenceFromEvent(event);
+    const conference = await getConferenceFromEvent({ event });
 
     try {
         const createdTalk = await prisma.event.create({
@@ -134,7 +137,7 @@ export const addTalk = async (
     }
 };
 
-export const listTalks = async (): Promise<
+export const listEvents = async (): Promise<
     ConvertDateToStringType<ExtendedDbEvent>[]
 > => {
     const prisma = new PrismaClient();
@@ -175,10 +178,13 @@ export const simpleListTalks = async (): Promise<DbEvent[]> => {
     }
 };
 
-export const updateTalk = async (
-    guid: string,
-    event: ApiEvent,
-): Promise<DbEvent | false> => {
+export const updateTalk = async ({
+    guid,
+    event,
+}: {
+    guid: string;
+    event: ApiEvent;
+}): Promise<DbEvent | false> => {
     const prisma = new PrismaClient();
 
     try {
@@ -225,10 +231,13 @@ export const updateTalk = async (
     }
 };
 
-export const deleteTalk = async (
-    guid: string,
-    { deleteFiles = false }: { deleteFiles: boolean },
-): Promise<boolean> => {
+export const deleteTalk = async ({
+    guid,
+    deleteFiles = false,
+}: {
+    guid: string;
+    deleteFiles: boolean;
+}): Promise<boolean> => {
     const prisma = new PrismaClient();
 
     if (deleteFiles) {
@@ -257,9 +266,11 @@ export const deleteTalk = async (
     }
 };
 
-export const getTalkInfoByGuid = async (
-    guid: string,
-): Promise<TalkInfo | null> => {
+export const getTalkInfoByGuid = async ({
+    guid,
+}: {
+    guid: string;
+}): Promise<TalkInfo | null> => {
     const prisma = new PrismaClient();
 
     try {
@@ -285,7 +296,7 @@ export const getTalkInfoByGuid = async (
             return null;
         }
 
-        const folder = await getFolderPathForTalk(result);
+        const folder = await getFolderPathForTalk({ event: result });
 
         if (!folder) {
             log.warn('Folder not found for talk', { title: result.title });
@@ -325,9 +336,11 @@ export const getTalkInfoByGuid = async (
     return null;
 };
 
-export const getTalkInfoBySlug = async (
-    slug: string,
-): Promise<TalkInfo | null> => {
+export const getTalkInfoBySlug = async ({
+    slug,
+}: {
+    slug: string;
+}): Promise<TalkInfo | null> => {
     const prisma = new PrismaClient();
 
     // get guid and call getTalkInfoByGuid
@@ -344,12 +357,14 @@ export const getTalkInfoBySlug = async (
         return null;
     }
 
-    return getTalkInfoByGuid(result.guid);
+    return getTalkInfoByGuid({ guid: result.guid });
 };
 
-export const createNewTalkInfo = async (
-    talk: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>,
-): Promise<EventInfo['guid'] | null> => {
+export const createNewTalkInfo = async ({
+    talk,
+}: {
+    talk: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>;
+}): Promise<EventInfo['guid'] | null> => {
     const prisma = new PrismaClient();
 
     // check if eventinfo already exists
@@ -436,10 +451,13 @@ export const updateDownloadProgress = async ({
     }
 };
 
-export const setIsDownloading = async (
-    eventGuid: DbEvent['guid'],
-    isDownloading: boolean,
-): Promise<void> => {
+export const setIsDownloading = async ({
+    eventGuid,
+    isDownloading,
+}: {
+    eventGuid: DbEvent['guid'];
+    isDownloading: boolean;
+}): Promise<void> => {
     const prisma = new PrismaClient();
 
     try {
@@ -462,9 +480,11 @@ export const setIsDownloading = async (
     }
 };
 
-export const isEventDownloading = async (
-    eventInfoGuid: EventInfo['guid'],
-): Promise<boolean> => {
+export const isEventDownloading = async ({
+    eventInfoGuid,
+}: {
+    eventInfoGuid: EventInfo['guid'];
+}): Promise<boolean> => {
     const prisma = new PrismaClient();
 
     try {
@@ -488,10 +508,13 @@ export const isEventDownloading = async (
     }
 };
 
-export const addDownloadedFile = async (
-    event: DbEvent | ConvertDateToStringType<DbEvent>,
-    file: Omit<File, 'eventGuid'>,
-): Promise<boolean> => {
+export const addDownloadedFile = async ({
+    event,
+    file,
+}: {
+    event: DbEvent | ConvertDateToStringType<DbEvent>;
+    file: Omit<File, 'eventGuid'>;
+}): Promise<boolean> => {
     const prisma = new PrismaClient();
 
     try {
@@ -527,10 +550,13 @@ export const addDownloadedFile = async (
     return true;
 };
 
-export const removeFileFromDatabase = async (
-    eventGuid: DbEvent['guid'],
-    path: string,
-): Promise<boolean> => {
+export const removeFileFromDatabase = async ({
+    eventGuid,
+    path,
+}: {
+    eventGuid: DbEvent['guid'];
+    path: string;
+}): Promise<boolean> => {
     const prisma = new PrismaClient();
 
     try {
@@ -555,10 +581,13 @@ export const removeFileFromDatabase = async (
     return true;
 };
 
-export const checkIfFileIsInDb = async (
-    eventGuid: DbEvent['guid'],
-    path: string,
-): Promise<boolean> => {
+export const checkIfFileIsInDb = async ({
+    eventGuid,
+    path,
+}: {
+    eventGuid: DbEvent['guid'];
+    path: string;
+}): Promise<boolean> => {
     const prisma = new PrismaClient();
 
     try {
@@ -583,10 +612,13 @@ export const checkIfFileIsInDb = async (
     }
 };
 
-export const setDownloadError = async (
-    eventInfoGuid: EventInfo['guid'],
-    error: string,
-): Promise<void> => {
+export const setDownloadError = async ({
+    eventInfoGuid,
+    error,
+}: {
+    eventInfoGuid: EventInfo['guid'];
+    error: string;
+}): Promise<void> => {
     const prisma = new PrismaClient();
 
     try {
@@ -609,31 +641,36 @@ export const setDownloadError = async (
     }
 };
 
-export const clearDownloadError = async (
-    eventInfoGuid: EventInfo['guid'],
-): Promise<void> => {
+export const clearDownloadError = async ({
+    eventGuid,
+}: {
+    eventGuid: DbEvent['guid'];
+}): Promise<void> => {
     const prisma = new PrismaClient();
 
     try {
         await prisma.eventInfo.update({
             where: {
-                guid: eventInfoGuid,
+                eventGuid,
             },
             data: {
                 download_error: null,
             },
         });
     } catch (db_error) {
-        log.error('Error clearing download error', { db_error, eventInfoGuid });
+        log.error('Error clearing download error', { db_error, eventGuid });
     } finally {
         await prisma.$disconnect();
     }
 };
 
-export const setDownloadExitCode = async (
-    eventInfoGuid: EventInfo['guid'],
-    exitCode: number | null,
-): Promise<void> => {
+export const setDownloadExitCode = async ({
+    eventInfoGuid,
+    exitCode,
+}: {
+    eventInfoGuid: EventInfo['guid'];
+    exitCode: number | null;
+}): Promise<void> => {
     const prisma = new PrismaClient();
 
     try {
@@ -656,9 +693,11 @@ export const setDownloadExitCode = async (
     }
 };
 
-export const getSpecificTalkByGuid = async (
-    guid: string,
-): Promise<ExtendedDbEvent | null> => {
+export const getSpecificTalkByGuid = async ({
+    guid,
+}: {
+    guid: string;
+}): Promise<ExtendedDbEvent | null> => {
     const prisma = new PrismaClient();
 
     try {
@@ -682,9 +721,11 @@ export const getSpecificTalkByGuid = async (
     }
 };
 
-export const getSpecificTalkBySlug = async (
-    slug: string,
-): Promise<ExtendedDbEvent | null> => {
+export const getSpecificTalkBySlug = async ({
+    slug,
+}: {
+    slug: string;
+}): Promise<ExtendedDbEvent | null> => {
     const prisma = new PrismaClient();
 
     try {
@@ -708,9 +749,11 @@ export const getSpecificTalkBySlug = async (
     }
 };
 
-export const getEventByFilePath = async (
-    filePath: string,
-): Promise<ExtendedDbEvent | null> => {
+export const getEventByFilePath = async ({
+    filePath,
+}: {
+    filePath: string;
+}): Promise<ExtendedDbEvent | null> => {
     const prisma = new PrismaClient();
 
     try {
@@ -747,12 +790,15 @@ export const getEventByFilePath = async (
     }
 };
 
-export const importExistingFileFromFilesystem = async (
-    rootFolder: string,
+export const importExistingFileFromFilesystem = async ({
+    rootFolder,
+    file,
+}: {
+    rootFolder: string;
     file:
         | ExistingFileWithGuessedInformation
-        | ConvertDateToStringType<ExistingFileWithGuessedInformation>,
-): Promise<boolean> => {
+        | ConvertDateToStringType<ExistingFileWithGuessedInformation>;
+}): Promise<boolean> => {
     // We need to follow these steps:
     // 1. Check if conference exists in db. If not, create it.
     // 2. Check if event exists in db. If not, create it.
@@ -794,7 +840,7 @@ export const importExistingFileFromFilesystem = async (
         if (!event) {
             log.warn('Event does not exist in db', { slug: file.guess.slug });
 
-            await addTalk(file.guess.event, rootFolder);
+            await addTalk({ event: file.guess.event, rootFolder });
         }
 
         conference = await prisma.conference.findFirst({
@@ -875,9 +921,11 @@ export const importExistingFileFromFilesystem = async (
     }
 };
 
-export const checkEventForProblems = async (
-    event: ConvertDateToStringType<ExtendedDbEvent> | ExtendedDbEvent,
-): Promise<ProblemType[] | null> => {
+export const checkEventForProblems = async ({
+    event,
+}: {
+    event: ConvertDateToStringType<ExtendedDbEvent> | ExtendedDbEvent;
+}): Promise<ProblemType[] | null> => {
     const problems: ProblemType[] = [];
 
     // ==== Start of problem checks ====
@@ -888,7 +936,9 @@ export const checkEventForProblems = async (
         problems.push(ProblemType.NoRootFolder);
     }
 
-    const hasMark = await isFolderMarked(event.root_folder.path);
+    const hasMark = await isFolderMarked({
+        rootFolderPath: event.root_folder.path,
+    });
 
     if (!hasMark) {
         log.warn('Root folder is not marked', { event });

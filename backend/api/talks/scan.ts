@@ -48,8 +48,8 @@ const handleScanEventsRequest = async (
 
     const mappedFiles: components['schemas']['ExtendedFileWithGuess'][] = [];
 
-    for await (const folder of foldersToScan) {
-        const files = (await scanForExistingFiles(folder)) ?? [];
+    for await (const rootFolderPath of foldersToScan) {
+        const files = (await scanForExistingFiles({ rootFolderPath })) ?? [];
 
         if (!files.length) {
             continue;
