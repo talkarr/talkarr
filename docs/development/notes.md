@@ -28,3 +28,9 @@ Most of them are due to the fact that I am a bit new to Playwright (E2E-Testing)
 ```bash
 npx ls-engines --mode actual --save
 ```
+
+## Using the actions/labeler action
+
+The `actions/labeler` action is used to automatically add labels to pull requests. The configuration is stored in `.github/labeler.yml`.
+
+You can find the documentation here: [actions/labeler](https://github.com/actions/labeler)
