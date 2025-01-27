@@ -14,7 +14,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock .npmrc* ./
-RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn NODE_ENV=production yarn --frozen-lockfile --prefer-offline
+RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn yarn --frozen-lockfile --prefer-offline
 
 # Rebuild the source code only when needed
 FROM deps AS builder
