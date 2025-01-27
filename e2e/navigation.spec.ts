@@ -5,7 +5,9 @@ import { expect, test } from '@playwright/test';
 test.setTimeout(60000);
 
 test('should be able to navigate to the home page', async ({ page }) => {
-    await page.goto('http://localhost:3232');
+    await page.goto('http://localhost:3232', {
+        waitUntil: 'domcontentloaded',
+    });
 
     // wait for data-testid="navigation" to be visible
     await page.waitForSelector('[data-testid="navigation"]');
@@ -39,7 +41,9 @@ test('should be able to navigate to each page', async ({ page }) => {
     }, []);
 
     for await (const pageSlug of pages) {
-        await page.goto(`http://localhost:3232${pageSlug}`);
+        await page.goto(`http://localhost:3232${pageSlug}`, {
+            waitUntil: 'domcontentloaded',
+        });
 
         await page.waitForSelector('[data-testid="navigation"]');
 
