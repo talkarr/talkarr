@@ -28,3 +28,7 @@ End-to-End:
 Unit-Tests:
   - changed-files:
       - any-glob-to-any-file: backend/__tests__/**
+
+API:
+  - changed-files:
+      - any-glob-to-any-file: ['backend/api/**', 'backend.json']
