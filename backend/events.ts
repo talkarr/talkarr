@@ -482,8 +482,10 @@ export const setIsDownloading = async ({
 
 export const isEventDownloading = async ({
     eventInfoGuid,
+    throwIfNotFound,
 }: {
     eventInfoGuid: EventInfo['guid'];
+    throwIfNotFound?: boolean;
 }): Promise<boolean> => {
     const prisma = new PrismaClient();
 
@@ -501,6 +503,12 @@ export const isEventDownloading = async ({
             error,
             eventInfoGuid,
         });
+
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2021' && throwIfNotFound) {
+                throw new Error('Event info not found');
+            }
+        }
 
         return false;
     } finally {

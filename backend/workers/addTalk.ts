@@ -46,6 +46,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
 
     const isAlreadyDownloading = await isEventDownloading({
         eventInfoGuid: event.guid,
+        throwIfNotFound: true,
     });
 
     if (isAlreadyDownloading) {
