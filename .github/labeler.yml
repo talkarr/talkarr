@@ -9,6 +9,9 @@ feature:
 bug:
   - head-branch: ['^bug', 'bug']
 
+bugfix:
+  - head-branch: ['^bug', 'bug']
+
 Dependencies:
   - changed-files:
       - any-glob-to-any-file: ['package.json', 'yarn.lock']
