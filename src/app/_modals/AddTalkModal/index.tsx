@@ -16,6 +16,7 @@ import {
     stripInvalidCharsForDataAttribute,
 } from '@/utils/string';
 
+import { yearOnlyFormat } from '@/constants';
 import { useUiStore } from '@/providers/uiStoreProvider';
 
 import BaseModal from '@components/CustomModal';
@@ -47,7 +48,7 @@ const AddTalkModal: FC = () => {
             return '';
         }
 
-        const year = moment(addTalkModal.date).format('YYYY');
+        const year = moment(addTalkModal.date).format(yearOnlyFormat);
 
         return `${addTalkModal.title} (${year})`;
     }, [addTalkModal]);

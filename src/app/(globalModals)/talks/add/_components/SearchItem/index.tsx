@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import { formatLanguageCode } from '@/utils/string';
 
-import { longDateFormat } from '@/constants';
+import { longDateFormat, yearOnlyFormat } from '@/constants';
 import { useUiStore } from '@/providers/uiStoreProvider';
 import type { TalkData } from '@/stores/uiStore';
 
@@ -90,7 +90,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
     const openAddTalkModal = useUiStore(state => state.openAddTalkModal);
 
     const title = useMemo(() => {
-        const year = moment(item.date).format('YYYY');
+        const year = moment(item.date).format(yearOnlyFormat);
 
         return `${item.title} (${year})`;
     }, [item]);

@@ -6,7 +6,7 @@ import type { SingleTalkData } from '@/app/(globalModals)/talks/[slug]/page';
 
 import { formatLanguageCode } from '@/utils/string';
 
-import { longDateFormat } from '@/constants';
+import { longDateFormat, yearOnlyFormat } from '@/constants';
 
 import SmallText from '@components/SmallText';
 import TalkImage from '@components/TalkImage';
@@ -31,7 +31,10 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => (
                 <TalkImage data={data.db} maxWidth="100%" height="auto" />
             </Box>
             <Box flex={2} display="flex" flexDirection="column" gap={2}>
-                <Typography variant="h2">{data.db.title}</Typography>
+                <Typography variant="h2">
+                    {data.db.title} (
+                    {moment(data.db.date).format(yearOnlyFormat)})
+                </Typography>
                 <Box>
                     <Typography variant="body1">
                         {data.db.description}

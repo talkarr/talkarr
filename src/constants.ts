@@ -39,3 +39,5 @@ export const getSearchExample = (): string =>
 export const longDateTimeFormat = 'DD.MM.yyyy HH:mm';
 
 export const longDateFormat = 'DD.MM.yyyy';
+
+export const yearOnlyFormat = 'yyyy';
