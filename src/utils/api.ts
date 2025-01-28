@@ -48,8 +48,6 @@ const api =
               baseUrl: '/api',
           });
 
-if (process.env.NODE_ENV === 'development') {
-    api.use(apiMiddleware);
-}
+api.use(apiMiddleware);
 
 export default api;
