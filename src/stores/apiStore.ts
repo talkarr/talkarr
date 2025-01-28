@@ -45,7 +45,7 @@ export const defaultApiState: ApiState = {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const createApiStore = (initialState?: PartialDeep<ApiState>) =>
-    createStore<ApiStore>(
+    createStore<ApiStore>()(
         devtools(
             set => ({
                 ...(deepmerge(defaultApiState, initialState || {}) as ApiState),
