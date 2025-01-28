@@ -2,6 +2,7 @@ import type { PartialDeep } from 'type-fest';
 
 import deepmerge from 'deepmerge';
 import { createStore } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 import type { DeleteEventResponse } from '@/app/_api/talks/delete';
 import { deleteEvent } from '@/app/_api/talks/delete';
@@ -44,53 +45,61 @@ export const defaultApiState: ApiState = {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const createApiStore = (initialState?: PartialDeep<ApiState>) =>
-    createStore<ApiStore>(set => ({
-        ...(deepmerge(defaultApiState, initialState || {}) as ApiState),
-        doSearch: async query => {
-            try {
-                const response = await searchEvents({ q: query });
+    createStore<ApiStore>()(
+        devtools(
+            set => ({
+                ...(deepmerge(defaultApiState, initialState || {}) as ApiState),
+                doSearch: async query => {
+                    try {
+                        const response = await searchEvents({ q: query });
 
-                set({ searchResults: response });
+                        set({ searchResults: response });
 
-                return response;
-            } catch (error) {
-                if (
-                    error instanceof DOMException &&
-                    error.name === 'AbortError'
-                ) {
-                    return false;
-                }
+                        return response;
+                    } catch (error) {
+                        if (
+                            error instanceof DOMException &&
+                            error.name === 'AbortError'
+                        ) {
+                            return false;
+                        }
 
-                throw error;
-            }
-        },
-        getTalkInfo: async guid => {
-            const response = await talkInfo({ guid, slug: '' });
-
-            set(state => ({
-                talkInfo: {
-                    ...state.talkInfo,
-                    [guid]: response,
+                        throw error;
+                    }
                 },
-            }));
+                getTalkInfo: async guid => {
+                    const response = await talkInfo({ guid, slug: '' });
 
-            return response;
-        },
-        getSingleTalkData: async data => {
-            const response = await getTalk({
-                guid: data.guid || '',
-                slug: data.slug || '',
-            });
+                    set(state => ({
+                        talkInfo: {
+                            ...state.talkInfo,
+                            [guid]: response,
+                        },
+                    }));
 
-            if (!response?.success) {
-                return response;
-            }
+                    return response;
+                },
+                getSingleTalkData: async data => {
+                    const response = await getTalk({
+                        guid: data.guid || '',
+                        slug: data.slug || '',
+                    });
 
-            set({ singleTalkData: response.data });
+                    if (!response?.success) {
+                        return response;
+                    }
 
-            return response;
-        },
-        clearSingleTalkData: () => set({ singleTalkData: null }),
-        handleDeleteTalk: async (guid, deleteFiles) =>
-            deleteEvent({ guid, delete_files: deleteFiles }),
-    }));
+                    set({ singleTalkData: response.data });
+
+                    return response;
+                },
+                clearSingleTalkData: () => set({ singleTalkData: null }),
+                handleDeleteTalk: async (guid, deleteFiles) =>
+                    deleteEvent({ guid, delete_files: deleteFiles }),
+            }),
+            {
+                name: 'apiStore',
+                enabled: process.env.NODE_ENV === 'development',
+            },
+        ),
+    );
