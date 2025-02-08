@@ -72,6 +72,7 @@
         "reflect-metadata": "^0.2.2",
         "swagger-ui-express": "^5.0.1",
         "ts-node": "^10.9.2",
+        "ts-patch": "^3.3.0",
         "tsconfig-paths": "^4.2.0",
         "type-fest": "^4.33.0",
         "typescript": "~5.7.2",
@@ -79,8 +80,7 @@
         "winston": "^3.17.0",
         "winston-daily-rotate-file": "^5.0.0",
         "youtube-dl-exec": "3.0.15",
-        "zustand": "^5.0.3",
-        "ts-patch": "^3.3.0"
+        "zustand": "^5.0.3"
     },
     "devDependencies": {
         "@eslint/compat": "^1.2.6",
