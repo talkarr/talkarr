@@ -22,6 +22,22 @@
             </SchemaInfo>
           </value>
         </entry>
+        <entry key="Pull Request Labeler">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Pull Request Labeler" />
+              <option name="relativePathToSchema" value="https://json.schemastore.org/pull-request-labeler.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value=".github/labeler.yml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
         <entry key="github-issue-forms">
           <value>
             <SchemaInfo>
