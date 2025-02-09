@@ -4,8 +4,6 @@ import type { Options } from '@ryoppippi/unplugin-typia';
 
 import type { NextConfig } from 'next';
 
-import { simpleGit } from 'simple-git';
-
 import { apiBaseUrl } from './src/constants';
 
 import unTypiaNext from '@ryoppippi/unplugin-typia/next';
@@ -32,28 +30,46 @@ export const unpluginTypiaOptions: Options = {
 };
 
 const nextConfig = async (): Promise<NextConfig> => {
-    const git = simpleGit();
-
-    const currentCommit =
-        process.env.OVERRIDE_CURRENT_COMMIT ||
-        (await git.revparse(['HEAD'])).trim();
-
-    const currentCommitTimestamp =
-        process.env.OVERRIDE_CURRENT_COMMIT_TS ||
-        (await git.raw(['show', '-s', '--format=%ct', currentCommit])).trim();
-
-    const currentBranch =
-        process.env.OVERRIDE_CURRENT_BRANCH ||
-        (await simpleGit().branch()).current;
-
-    const currentTag =
-        process.env.OVERRIDE_CURRENT_TAG || (await simpleGit().tags()).latest;
-
-    const currentVersion =
-        process.env.OVERRIDE_CURRENT_VERSION ||
-        (await simpleGit().raw(['describe', '--tags', '--always'])).trim();
-
     const isInsideDocker = process.env.IS_INSIDE_DOCKER === 'true';
+    let currentCommit: string | undefined = process.env.OVERRIDE_CURRENT_COMMIT;
+    let currentCommitTimestamp: string | undefined =
+        process.env.OVERRIDE_CURRENT_COMMIT_TS;
+    let currentBranch: string | undefined = process.env.OVERRIDE_CURRENT_BRANCH;
+    let currentTag: string | undefined = process.env.OVERRIDE_CURRENT_TAG;
+    let currentVersion: string | undefined =
+        process.env.OVERRIDE_CURRENT_VERSION;
+
+    if (!isInsideDocker) {
+        console.log('Running outside of Docker, fetching git info...');
+
+        const { simpleGit } = await import('simple-git');
+
+        const git = simpleGit();
+
+        if (!currentCommit) {
+            currentCommit = (await git.revparse(['HEAD'])).trim();
+        }
+
+        if (!currentCommitTimestamp) {
+            currentCommitTimestamp = (
+                await git.raw(['show', '-s', '--format=%ct', currentCommit])
+            ).trim();
+        }
+
+        if (!currentBranch) {
+            currentBranch = (await git.branch()).current;
+        }
+
+        if (!currentTag) {
+            currentTag = (await git.tags()).latest;
+        }
+
+        if (!currentVersion) {
+            currentVersion = (
+                await git.raw(['describe', '--tags', '--always'])
+            ).trim();
+        }
+    }
 
     console.dir({
         currentCommit,
@@ -78,7 +94,8 @@ const nextConfig = async (): Promise<NextConfig> => {
                 API_BASE_URL: apiBaseUrl,
                 NEXT_PUBLIC_CURRENT_COMMIT: currentCommit,
                 NEXT_PUBLIC_CURRENT_BRANCH: currentBranch,
-                NEXT_PUBLIC_CURRENT_TAG: currentTag,
+                NEXT_PUBLIC_CURRENT_TAG:
+                    currentTag === 'false' ? undefined : currentTag,
                 NEXT_PUBLIC_CURRENT_VERSION: currentVersion,
                 NEXT_PUBLIC_IS_INSIDE_DOCKER: isInsideDocker ? 'true' : 'false',
                 NEXT_PUBLIC_CURRENT_COMMIT_TIMESTAMP: currentCommitTimestamp,
