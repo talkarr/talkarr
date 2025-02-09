@@ -260,12 +260,12 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           # push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           push: true
-          build-args:
-            OVERRIDE_CURRENT_COMMIT: ${{ env.CURRENT_COMMIT }}
-            OVERRIDE_CURRENT_COMMIT_TS: ${{ env.CURRENT_COMMIT_TS }}
-            OVERRIDE_CURRENT_BRANCH: ${{ env.CURRENT_BRANCH }}
-            OVERRIDE_CURRENT_VERSION: ${{ env.CURRENT_VERSION }}
-            OVERRIDE_CURRENT_TAG: ${{ env.CURRENT_TAG }}
+          build-args: |
+            OVERRIDE_CURRENT_COMMIT=${{ env.CURRENT_COMMIT }}
+            OVERRIDE_CURRENT_COMMIT_TS=${{ env.CURRENT_COMMIT_TS }}
+            OVERRIDE_CURRENT_BRANCH=${{ env.CURRENT_BRANCH }}
+            OVERRIDE_CURRENT_VERSION=${{ env.CURRENT_VERSION }}
+            OVERRIDE_CURRENT_TAG=${{ env.CURRENT_TAG }}
 
       - name: Output sha of the container
         id: ref
