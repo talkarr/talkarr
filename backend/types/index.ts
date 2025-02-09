@@ -106,6 +106,8 @@ export type ApiConference = components['schemas']['Conference'];
 
 export type TalkInfo = components['schemas']['TalkInfo'];
 
+export type ImportJsonResponse = components['schemas']['ImportJsonResponse'];
+
 export enum ProblemType {
     NoRootFolder,
     RootFolderMarkNotFound,
@@ -127,4 +129,10 @@ export interface ExtendedDbEvent extends DbEvent {
     tags: Tag[];
     conference: Conference;
     root_folder: RootFolder;
+}
+
+export interface EventFahrplanJsonImport {
+    lectures: {
+        slug: string;
+    }[];
 }

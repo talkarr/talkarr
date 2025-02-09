@@ -10,10 +10,14 @@ import {
 
 import { createTheme } from '@mui/material/styles';
 
+export const normalFont = 'var(--font-geist-sans)';
+
+export const monoFont = 'var(--font-geist-mono)';
+
 const baseTheme = createTheme({
     cssVariables: true,
     typography: {
-        fontFamily: 'var(--font-geist-sans)',
+        fontFamily: normalFont,
         h1: {
             fontSize: '2.5rem',
             fontWeight: 700,

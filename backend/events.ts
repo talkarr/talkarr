@@ -3,12 +3,13 @@ import type { Event as DbEvent, EventInfo, File } from '@prisma/client';
 import { getFolderPathForTalk, isFolderMarked, isVideoFile } from '@backend/fs';
 import type { ExistingFileWithGuessedInformation } from '@backend/fs/scan';
 import type { components } from '@backend/generated/schema';
-import { getConferenceFromEvent } from '@backend/helper';
+import { getConferenceFromEvent, getTalkFromApiBySlug } from '@backend/helper';
 import rootLog from '@backend/rootLog';
 import type {
     ApiEvent,
     ConvertDateToStringType,
     ExtendedDbEvent,
+    ImportJsonResponse,
     TalkInfo,
 } from '@backend/types';
 import { AddTalkFailure, ProblemType } from '@backend/types';
@@ -961,4 +962,92 @@ export const checkEventForProblems = async ({
     }
 
     return problems;
+};
+
+export const importEventFahrplanJson = async ({
+    slugs,
+    rootFolder,
+}: {
+    slugs: string[];
+    rootFolder: string;
+}): Promise<ImportJsonResponse> => {
+    if (!slugs.length) {
+        return {
+            successful_imports: [],
+            existing_imports: [],
+            total_imports: 0,
+            parsed_slugs: [],
+            errors: [],
+        };
+    }
+
+    let slugsToImport = slugs.filter(Boolean);
+
+    const existingImports: ImportJsonResponse['existing_imports'] = [];
+
+    const successfulImports: ImportJsonResponse['successful_imports'] = [];
+
+    const errors: ImportJsonResponse['errors'] = [];
+
+    slugsToImport = Array.from(new Set(slugsToImport));
+
+    // check with getSpecificTalkBySlug if the talk already exists
+    for await (const slug of slugsToImport) {
+        const existingTalk = await getSpecificTalkBySlug({ slug });
+
+        if (existingTalk) {
+            existingImports.push(slug);
+        }
+    }
+
+    slugsToImport = slugsToImport.filter(
+        slug => !existingImports.includes(slug),
+    );
+
+    for await (const slug of slugsToImport) {
+        log.info('Importing talk', { slug });
+
+        // implement it like importExistingFileFromFilesystem
+        const apiEvent = await getTalkFromApiBySlug({ slug });
+
+        if (!apiEvent) {
+            log.error('Talk not found', { slug });
+
+            errors.push({
+                slug,
+                error: 'Talk not found',
+            });
+
+            continue;
+        }
+
+        const result = await addTalk({ event: apiEvent, rootFolder });
+
+        if (typeof result !== 'object') {
+            log.error('Error adding talk to database', {
+                result,
+                slug,
+            });
+
+            errors.push({
+                slug,
+                error: 'Error adding talk to database',
+            });
+
+            continue;
+        }
+
+        successfulImports.push({
+            slug,
+            title: result.title,
+        });
+    }
+
+    return {
+        existing_imports: existingImports,
+        parsed_slugs: slugs,
+        total_imports: slugsToImport.length,
+        successful_imports: successfulImports,
+        errors,
+    };
 };

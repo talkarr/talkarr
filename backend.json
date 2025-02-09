@@ -586,7 +586,7 @@
                         "type": "string",
                         "example": "/folder"
                     },
-                    "url":  {
+                    "url": {
                         "type": "string",
                         "example": "https://example.com/file.jpg"
                     },
@@ -595,7 +595,7 @@
                         "format": "date-time",
                         "example": "2022-01-01T00:00:00Z"
                     },
-                    "is_video":  {
+                    "is_video": {
                         "type": "boolean",
                         "example": false
                     }
@@ -784,6 +784,83 @@
                             "guess"
                         ]
                     }
+                ]
+            },
+            "ImportJsonResponse": {
+                "type": "object",
+                "properties": {
+                    "successful_imports": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "slug": {
+                                    "type": "string",
+                                    "example": "event-slug"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "example": "Event title"
+                                }
+                            },
+                            "required": [
+                                "slug",
+                                "title"
+                            ]
+                        },
+                        "description": "List of successful imports"
+                    },
+                    "existing_imports": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "event-slug"
+                        },
+                        "description": "List of events that already exist"
+                    },
+                    "total_imports": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "Total number of imports"
+                    },
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "slug": {
+                                    "type": "string",
+                                    "example": "event-slug"
+                                },
+                                "error": {
+                                    "type": "string",
+                                    "description": "Error message"
+                                }
+                            },
+                            "required": [
+                                "slug",
+                                "error"
+                            ]
+                        },
+                        "description": "List of errors",
+                        "nullable": true
+                    },
+                    "parsed_slugs": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "event-slug"
+                        },
+                        "description": "List of parsed slugs",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "successful_imports",
+                    "existing_imports",
+                    "total_imports",
+                    "errors",
+                    "parsed_slugs"
                 ]
             }
         }
@@ -1412,6 +1489,134 @@
                                             "$ref": "#/components/schemas/ErrorResponse"
                                         }
                                     ]
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/talks/import/verify": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "json": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "json"
+                                ]
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        },
+                        "description": "JSON can be parsed and has a valid structure"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Invalid JSON"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/talks/import": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "json": {
+                                        "type": "string"
+                                    },
+                                    "root_folder": {
+                                        "type": "string",
+                                        "example": "/folder"
+                                    }
+                                },
+                                "required": [
+                                    "json",
+                                    "root_folder"
+                                ]
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/ImportJsonResponse"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Invalid JSON"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         },

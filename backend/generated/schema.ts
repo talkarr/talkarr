@@ -502,6 +502,128 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/talks/import/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        json: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description JSON can be parsed and has a valid structure */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"];
+                    };
+                };
+                /** @description Invalid JSON */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/talks/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        json: string;
+                        /** @example /folder */
+                        root_folder: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["ImportJsonResponse"];
+                        };
+                    };
+                };
+                /** @description Invalid JSON */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/settings/mediamanagement/files": {
         parameters: {
             query?: never;
@@ -1135,6 +1257,31 @@ export interface components {
             /** @example file.jpg */
             filename: string;
             guess: components["schemas"]["FileGuess"];
+        };
+        ImportJsonResponse: {
+            /** @description List of successful imports */
+            successful_imports: {
+                /** @example event-slug */
+                slug: string;
+                /** @example Event title */
+                title: string;
+            }[];
+            /** @description List of events that already exist */
+            existing_imports: string[];
+            /**
+             * @description Total number of imports
+             * @example 0
+             */
+            total_imports: number;
+            /** @description List of errors */
+            errors: {
+                /** @example event-slug */
+                slug: string;
+                /** @description Error message */
+                error: string;
+            }[] | null;
+            /** @description List of parsed slugs */
+            parsed_slugs: string[] | null;
         };
     };
     responses: never;
