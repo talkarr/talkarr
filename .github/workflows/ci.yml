@@ -232,6 +232,21 @@ jobs:
           images: |
             ghcr.io/${{ github.repository }}
 
+      - name: Generate git stats for building
+        id: git-stats
+        run: |
+          CURRENT_COMMIT=$(git rev-parse HEAD)
+          CURRENT_COMMIT_TS=$(git show -s --format=%ct HEAD)
+          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          CURRENT_VERSION=$(git describe --tags --always)
+          CURRENT_TAG=$(git describe --tags --abbrev=0 --exact-match 2>/dev/null || echo "false")
+          
+          echo "CURRENT_COMMIT=${CURRENT_COMMIT}" >> $GITHUB_ENV
+          echo "CURRENT_COMMIT_TS=${CURRENT_COMMIT_TS}" >> $GITHUB_ENV
+          echo "CURRENT_BRANCH=${CURRENT_BRANCH}" >> $GITHUB_ENV
+          echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_ENV
+          echo "CURRENT_TAG=${CURRENT_TAG}" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         id: docker_build
         uses: docker/build-push-action@v6
@@ -245,6 +260,12 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           # push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           push: true
+          build-args:
+            OVERRIDE_CURRENT_COMMIT: ${{ env.CURRENT_COMMIT }}
+            OVERRIDE_CURRENT_COMMIT_TS: ${{ env.CURRENT_COMMIT_TS }}
+            OVERRIDE_CURRENT_BRANCH: ${{ env.CURRENT_BRANCH }}
+            OVERRIDE_CURRENT_VERSION: ${{ env.CURRENT_VERSION }}
+            OVERRIDE_CURRENT_TAG: ${{ env.CURRENT_TAG }}
 
       - name: Output sha of the container
         id: ref

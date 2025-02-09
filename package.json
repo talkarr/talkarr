@@ -70,6 +70,7 @@
         "react-dom": "^19.0.0",
         "react-markdown": "^9.0.3",
         "reflect-metadata": "^0.2.2",
+        "simple-git": "^3.27.0",
         "swagger-ui-express": "^5.0.1",
         "ts-node": "^10.9.2",
         "ts-patch": "^3.3.0",
@@ -126,7 +127,8 @@
     },
     "nodemonConfig": {
         "watch": [
-            "./backend"
+            "./backend",
+            "next.config.ts"
         ],
         "ignore": [
             ".next",
