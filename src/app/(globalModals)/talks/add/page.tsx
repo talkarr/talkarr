@@ -19,7 +19,7 @@ export const generateMetadata = async ({
     };
 };
 
-const Page: NextPage<PageProps> = async () => {
+const AddTalkPage: NextPage<PageProps> = async () => {
     const config = await getConfig();
 
     const data = config?.success ? config.data : null;
@@ -43,4 +43,4 @@ const Page: NextPage<PageProps> = async () => {
     );
 };
 
-export default Page;
+export default AddTalkPage;

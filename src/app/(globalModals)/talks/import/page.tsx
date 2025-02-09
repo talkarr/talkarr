@@ -1,16 +1,18 @@
 import type { NextPage } from 'next';
 
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
-const Page: NextPage = () => (
+const ImportPage: NextPage = () => (
     <Box
         sx={{
             paddingX: 4,
             paddingY: 2,
         }}
     >
-        <div>Import talks from c3 Fahrplan</div>
+        <Typography variant="h1">Import talks - Under construction</Typography>
+        <Typography>Import talks from c3 Fahrplan.</Typography>
     </Box>
 );
 
-export default Page;
+export default ImportPage;
