@@ -1,5 +1,7 @@
 import type { Event as DbEvent, EventInfo, File } from '@prisma/client';
 
+import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
+
 import { getFolderPathForTalk, isFolderMarked, isVideoFile } from '@backend/fs';
 import type { ExistingFileWithGuessedInformation } from '@backend/fs/scan';
 import type { components } from '@backend/generated/schema';
@@ -1040,6 +1042,10 @@ export const importEventFahrplanJson = async ({
         successfulImports.push({
             slug,
             title: result.title,
+        });
+
+        startScanForMissingFiles({
+            event: result,
         });
     }
 
