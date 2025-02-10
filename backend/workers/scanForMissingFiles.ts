@@ -1,6 +1,7 @@
 import pathUtils from 'path';
 import typia from 'typia';
 
+// eslint-disable-next-line import/no-cycle
 import { startAddTalk } from '@backend/workers/addTalk';
 import { startGenerateMissingNfo } from '@backend/workers/generateMissingNfo';
 

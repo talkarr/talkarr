@@ -4,6 +4,7 @@ import pathUtils from 'path';
 import typia from 'typia';
 import youtubeDl from 'youtube-dl-exec';
 
+// eslint-disable-next-line import/no-cycle
 import { startGenerateMissingNfo } from '@backend/workers/generateMissingNfo';
 
 import {

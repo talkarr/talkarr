@@ -1,5 +1,6 @@
 import type { Event as DbEvent, EventInfo, File } from '@prisma/client';
 
+// eslint-disable-next-line import/no-cycle
 import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
 
 import { getFolderPathForTalk, isFolderMarked, isVideoFile } from '@backend/fs';

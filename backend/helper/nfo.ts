@@ -2,6 +2,7 @@ import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
+// eslint-disable-next-line import/no-cycle
 import { addDownloadedFile } from '@backend/events';
 import { defaultMimeType, isVideoFile, nfoFilename } from '@backend/fs';
 import rootLog from '@backend/rootLog';
