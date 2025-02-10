@@ -5,8 +5,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import type { ExtractSuccessData } from '@backend/types';
 
+import { getConfig } from '@/app/_api/settings/mediamanagement';
 import type { ImportJsonResponse } from '@/app/_api/talks/import';
 import { importJson, verifyJsonImport } from '@/app/_api/talks/import';
+
+import { stripInvalidCharsForDataAttribute } from '@/utils/string';
 
 import { monoFont } from '@/theme';
 
@@ -18,11 +21,15 @@ import { alpha, styled, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
+import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Typography from '@mui/material/Typography';
 import { useDebounce } from '@uidotdev/usehooks';
@@ -52,6 +59,28 @@ const ImportJsonField: FC = () => {
     const [importResult, setImportResult] =
         useState<ExtractSuccessData<ImportJsonResponse> | null>(null);
     const [processing, setProcessing] = useState<boolean>(false);
+
+    const [availableRootFolders, setAvailableRootFolders] = useState<string[]>(
+        [],
+    );
+    const [rootFolder, setRootFolder] = useState<string>('');
+
+    useEffect(() => {
+        const func = async (): Promise<void> => {
+            const config = await getConfig();
+
+            const data = config?.success ? config.data : null;
+
+            if (data) {
+                setAvailableRootFolders(data.folders.map(f => f.folder));
+                if (data.folders.length > 0) {
+                    setRootFolder(data.folders[0].folder);
+                }
+            }
+        };
+
+        func();
+    }, []);
 
     const loadFile = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const file = event.target.files?.[0];
@@ -106,7 +135,7 @@ const ImportJsonField: FC = () => {
 
         const result = await importJson({
             json,
-            root_folder: '/Users/ccomm/Movies/talkarr',
+            root_folder: rootFolder,
         });
 
         if (result.success) {
@@ -116,7 +145,7 @@ const ImportJsonField: FC = () => {
         }
 
         setProcessing(false);
-    }, [json, error, hasCheckedJson]);
+    }, [json, error, hasCheckedJson, rootFolder]);
 
     return (
         <Box>
@@ -141,6 +170,30 @@ const ImportJsonField: FC = () => {
                         {error}
                     </FormHelperText>
                 ) : null}
+            </Box>
+            <Box mb={1}>
+                <FormControl fullWidth>
+                    <InputLabel id="root-folder-label">Root folder</InputLabel>
+                    <Select
+                        variant="outlined"
+                        fullWidth
+                        value={rootFolder}
+                        onChange={e => setRootFolder(e.target.value as string)}
+                        labelId="root-folder-label"
+                        label="Root folder"
+                        data-testid="root-folder-select"
+                    >
+                        {availableRootFolders.map(folder => (
+                            <MenuItem
+                                key={folder}
+                                value={folder}
+                                data-testid={`root-folder-${stripInvalidCharsForDataAttribute(folder)}`}
+                            >
+                                {folder}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
             </Box>
             <Box
                 display="flex"
@@ -167,7 +220,13 @@ const ImportJsonField: FC = () => {
                 <Button
                     variant="contained"
                     color="primary"
-                    disabled={!json || error !== null || !hasCheckedJson}
+                    disabled={
+                        !json ||
+                        error !== null ||
+                        !hasCheckedJson ||
+                        !rootFolder ||
+                        availableRootFolders.length === 0
+                    }
                     loading={processing}
                     sx={{
                         minWidth: 120,
