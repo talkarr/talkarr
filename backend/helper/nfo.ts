@@ -29,9 +29,9 @@ export const generateNfo = ({
 
     const conferenceName =
         'conference_data' in event
-            ? event.conference_data?.slug
+            ? event.conference_data?.title
             : 'conference' in event
-              ? event.conference.slug
+              ? event.conference.title
               : null;
 
     return `
