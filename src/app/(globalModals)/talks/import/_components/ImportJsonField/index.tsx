@@ -155,7 +155,7 @@ const ImportJsonField: FC = () => {
                 </Typography>
                 <Typography>Import talks from c3 Fahrplan.</Typography>
             </Box>
-            <Box mb={1}>
+            <Box mb={2}>
                 <StyledTextareaAutosize
                     value={json}
                     onChange={e => setJson(e.target.value)}
@@ -171,7 +171,7 @@ const ImportJsonField: FC = () => {
                     </FormHelperText>
                 ) : null}
             </Box>
-            <Box mb={1}>
+            <Box mb={2}>
                 <FormControl fullWidth>
                     <InputLabel id="root-folder-label">Root folder</InputLabel>
                     <Select
