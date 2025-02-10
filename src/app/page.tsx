@@ -11,6 +11,7 @@ import YourMediaGrid from '@components/YourMediaGrid';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import YourMediaColorExplanation from '@components/YourMediaColorExplaination';
 
 const Home: FC = async () => {
     const eventsResponse = await listEvents();
@@ -68,6 +69,7 @@ const Home: FC = async () => {
             }}
         >
             <YourMediaGrid initialData={events} />
+            <YourMediaColorExplanation />
         </Box>
     );
 };

@@ -1,5 +1,6 @@
 'use client';
 
+import type { Theme } from '@mui/material';
 import type { Property } from 'csstype';
 
 import Image from 'next/image';
@@ -38,6 +39,22 @@ const StyledContainer = styled(Grid2)(({ theme }) => ({
     borderRadius: theme.shape.borderRadius * 2,
     overflow: 'hidden',
 }));
+
+export enum MediaItemStatus {
+    Downloaded,
+    Missing,
+    Downloading,
+    Problem,
+}
+
+export const getMediaItemStatusColor = (
+    theme: Theme,
+): Record<MediaItemStatus, string> => ({
+    [MediaItemStatus.Downloaded]: theme.palette.success.main,
+    [MediaItemStatus.Missing]: theme.palette.warning.main,
+    [MediaItemStatus.Downloading]: theme.palette.info.main,
+    [MediaItemStatus.Problem]: theme.palette.error.main,
+});
 
 const MediaItem: FC<MediaItemProps> = ({ talk }) => {
     const theme = useTheme();
@@ -96,25 +113,30 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
     ]);
 
     const statusColor = useMemo((): Property.BorderColor | null => {
+        let status: MediaItemStatus | null;
+
+        if (typeof talkInfo?.files === 'undefined') {
+            return null;
+        }
+
+        const videoFiles = talkInfo?.files?.filter(file => file.is_video);
+
         if (talk.has_problems?.length) {
-            return theme.palette.error.main;
+            status = MediaItemStatus.Problem;
+        } else if (talkInfo?.is_downloading) {
+            status = MediaItemStatus.Downloading;
+        } else if (videoFiles?.length) {
+            status = MediaItemStatus.Downloaded;
+        } else {
+            status = MediaItemStatus.Missing;
         }
 
-        if (talkInfo?.is_downloading) {
-            return theme.palette.warning.main;
-        }
-
-        if (talkInfo?.files.filter(f => f.is_video).length) {
-            return theme.palette.success.main;
+        if (status !== null) {
+            return getMediaItemStatusColor(theme)[status];
         }
 
         return null;
-    }, [
-        talk.has_problems?.length,
-        talkInfo?.files,
-        talkInfo?.is_downloading,
-        theme,
-    ]);
+    }, [talk.has_problems?.length, talkInfo, theme]);
 
     return (
         <StyledContainer
