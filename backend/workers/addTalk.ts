@@ -13,8 +13,8 @@ import {
     isEventDownloading,
     setDownloadError,
     setDownloadExitCode,
-    setIsDownloading,
     setDownloadProgress,
+    setIsDownloading,
 } from '@backend/events';
 import {
     defaultMimeType,
