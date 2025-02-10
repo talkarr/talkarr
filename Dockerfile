@@ -86,6 +86,9 @@ COPY --from=deps /app/node_modules ./node_modules
 # copy the generated files from node_modules from builder
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
+# assets for backend
+COPY --from=builder /app/assets ./assets
+
 EXPOSE 3232
 
 ENV IS_INSIDE_DOCKER=true
