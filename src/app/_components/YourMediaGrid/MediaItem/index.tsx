@@ -1,9 +1,11 @@
 'use client';
 
+import type { Property } from 'csstype';
+
 import Image from 'next/image';
 
 import type { FC } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import moment from 'moment';
 
@@ -17,7 +19,7 @@ import { useApiStore } from '@/providers/apiStoreProvider';
 import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
 import InvisibleLink from '@components/InvisibleLink';
 import ProblemIcon from '@mui/icons-material/ReportProblem';
-import { Grid2, styled } from '@mui/material';
+import { Grid2, styled, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -38,6 +40,8 @@ const StyledContainer = styled(Grid2)(({ theme }) => ({
 }));
 
 const MediaItem: FC<MediaItemProps> = ({ talk }) => {
+    const theme = useTheme();
+
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -91,6 +95,27 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
         talkInfo?.is_downloading,
     ]);
 
+    const statusColor = useMemo((): Property.BorderColor | null => {
+        if (talk.has_problems?.length) {
+            return theme.palette.error.main;
+        }
+
+        if (talkInfo?.is_downloading) {
+            return theme.palette.warning.main;
+        }
+
+        if (talkInfo?.files.filter(f => f.is_video).length) {
+            return theme.palette.success.main;
+        }
+
+        return null;
+    }, [
+        talk.has_problems?.length,
+        talkInfo?.files,
+        talkInfo?.is_downloading,
+        theme,
+    ]);
+
     return (
         <StyledContainer
             size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
@@ -116,7 +141,18 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
                         sx={{ height: '100%' }}
                         disabled={!!talk.has_problems?.length}
                     >
-                        <Box height="100%">
+                        <Box
+                            height="100%"
+                            sx={{
+                                ...(statusColor
+                                    ? {
+                                          borderBottomColor: statusColor,
+                                          borderBottomWidth: 2,
+                                          borderBottomStyle: 'solid',
+                                      }
+                                    : {}),
+                            }}
+                        >
                             <CardMedia>
                                 {imageLoaded ? null : (
                                     <Skeleton
