@@ -5,6 +5,7 @@ import next from 'next';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import fs from 'node:fs';
+import pathUtils from 'path';
 import swaggerUi from 'swagger-ui-express';
 
 import '@backend/workers/addTalk';
@@ -22,6 +23,12 @@ const log = rootLog.child({ label: 'server' });
 log.info('Starting server...', { dev });
 
 const loadingServer = express();
+
+loadingServer.get('/logo.png', (req, res) => {
+    res.sendFile('logo_cropped.png', {
+        root: pathUtils.join(__dirname, '..', 'assets'),
+    });
+});
 
 loadingServer.get('*', (req, res) => {
     res.sendFile('loading.html', { root: __dirname });
