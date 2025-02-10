@@ -25,7 +25,7 @@ import Typography from '@mui/material/Typography';
 
 export interface AddTalksPageProps {
     hasRootFolder: boolean;
-    events: SuccessData<'/talks/list', 'get'> | null;
+    events: SuccessData<'/talks/list', 'get'>['events'] | null;
 }
 
 const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {

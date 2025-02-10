@@ -862,6 +862,42 @@
                     "errors",
                     "parsed_slugs"
                 ]
+            },
+            "MediaItemStatus": {
+                "type": "string",
+                "enum": [
+                    "Downloaded",
+                    "Missing",
+                    "Downloading",
+                    "Problem"
+                ]
+            },
+            "MediaItemStatusCount": {
+                "type": "object",
+                "properties": {
+                    "Downloaded": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "Missing": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "Downloading": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "Problem": {
+                        "type": "integer",
+                        "example": 0
+                    }
+                },
+                "required": [
+                    "Downloaded",
+                    "Missing",
+                    "Downloading",
+                    "Problem"
+                ]
             }
         }
     },
@@ -1188,10 +1224,22 @@
                                             "type": "object",
                                             "properties": {
                                                 "data": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "$ref": "#/components/schemas/ExtendedDbEvent"
-                                                    }
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "events": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/ExtendedDbEvent"
+                                                            }
+                                                        },
+                                                        "status": {
+                                                            "$ref": "#/components/schemas/MediaItemStatusCount"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "events",
+                                                        "status"
+                                                    ]
                                                 }
                                             },
                                             "required": [

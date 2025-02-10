@@ -2,30 +2,37 @@
 
 import type { FC } from 'react';
 
+import type { MediaItemStatus } from '@backend/talkUtils';
 import {
     getMediaItemStatusColor,
-    MediaItemStatus,
-} from '@components/YourMediaGrid/MediaItem';
+    mediaItemStatusTextMap,
+} from '@backend/talkUtils';
+import type { SuccessData } from '@backend/types';
+
 import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-const YourMediaColorExplanation: FC = () => {
+export interface YourMediaColorExplanationProps {
+    status: SuccessData<'/talks/list', 'get'>['status'];
+}
+
+const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
+    status,
+}) => {
     const theme = useTheme();
 
     const colors = getMediaItemStatusColor(theme);
 
-    const textMap: Record<MediaItemStatus, string> = {
-        [MediaItemStatus.Downloaded]: 'Downloaded videos',
-        [MediaItemStatus.Missing]: 'Missing videos',
-        [MediaItemStatus.Downloading]: 'Downloading files',
-        [MediaItemStatus.Problem]: 'Problem with event',
-    };
-
     return (
         <Box display="flex" flexDirection="column" mt={2}>
-            {Object.entries(colors).map(([status, color]) => (
-                <Box key={status} display="flex" alignItems="center" gap={1}>
+            {Object.entries(colors).map(([statusElement, color]) => (
+                <Box
+                    key={statusElement}
+                    display="flex"
+                    alignItems="center"
+                    gap={1}
+                >
                     <Box
                         sx={{
                             width: 24,
@@ -35,7 +42,12 @@ const YourMediaColorExplanation: FC = () => {
                         }}
                     />
                     <Typography sx={{ color }}>
-                        {textMap[status as unknown as MediaItemStatus]}
+                        {
+                            mediaItemStatusTextMap[
+                                statusElement as unknown as MediaItemStatus
+                            ]
+                        }
+                        : {status[statusElement as keyof typeof status]}
                     </Typography>
                 </Box>
             ))}

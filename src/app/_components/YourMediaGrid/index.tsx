@@ -6,13 +6,13 @@ import MediaItem from '@components/YourMediaGrid/MediaItem';
 import { Grid2 } from '@mui/material';
 
 export interface YourMediaGridProps {
-    initialData: SuccessData<'/talks/list', 'get'>;
+    initialData: SuccessData<'/talks/list', 'get'>['events'];
 }
 
 const YourMediaGrid: FC<YourMediaGridProps> = ({ initialData }) => (
     <Grid2 container spacing={2}>
         {initialData.map(talk => (
-            <MediaItem key={talk.guid} talk={talk} />
+            <MediaItem key={talk.guid} initialData={talk} />
         ))}
     </Grid2>
 );

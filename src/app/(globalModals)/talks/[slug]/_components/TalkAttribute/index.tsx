@@ -11,7 +11,7 @@ export interface TalkAttributeProps {
     name: string;
     value: string;
     title?: string;
-    color?: TypographyProps['color'];
+    color?: TypographyProps['color'] | null;
 }
 
 const TalkAttribute: FC<TalkAttributeProps> = ({

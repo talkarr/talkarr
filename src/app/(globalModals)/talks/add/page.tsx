@@ -26,7 +26,7 @@ const AddTalkPage: NextPage<PageProps> = async () => {
 
     const eventsResponse = await listEvents();
 
-    const events = eventsResponse?.success ? eventsResponse.data : null;
+    const eventsData = eventsResponse?.success ? eventsResponse.data : null;
 
     return (
         <Box
@@ -37,7 +37,7 @@ const AddTalkPage: NextPage<PageProps> = async () => {
         >
             <AddTalksPage
                 hasRootFolder={!!data?.folders.length}
-                events={events}
+                events={eventsData?.events || null}
             />
         </Box>
     );

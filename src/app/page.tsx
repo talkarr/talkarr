@@ -17,12 +17,12 @@ const Home: FC = async () => {
     const eventsResponse = await listEvents();
     const configResponse = await getConfig();
 
-    const events = eventsResponse?.success ? eventsResponse.data : null;
+    const eventData = eventsResponse?.success ? eventsResponse.data : null;
 
     const hasRootFolders =
         configResponse?.success && configResponse.data.folders.length > 0;
 
-    if (!events?.length) {
+    if (!eventData?.events.length) {
         return (
             <Box
                 sx={{
@@ -68,8 +68,8 @@ const Home: FC = async () => {
                 paddingY: 2,
             }}
         >
-            <YourMediaGrid initialData={events} />
-            <YourMediaColorExplanation />
+            <YourMediaGrid initialData={eventData.events} />
+            <YourMediaColorExplanation status={eventData.status} />
         </Box>
     );
 };

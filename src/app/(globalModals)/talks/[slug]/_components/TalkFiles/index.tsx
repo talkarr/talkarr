@@ -1,7 +1,15 @@
+'use client';
+
 import type { FC } from 'react';
 import { useMemo } from 'react';
 
 import prettyBytes from 'pretty-bytes';
+
+import {
+    generateMediaItemStatus,
+    getMediaItemStatusColor,
+    MediaItemStatus,
+} from '@backend/talkUtils';
 
 import TalkAttribute from '@/app/(globalModals)/talks/[slug]/_components/TalkAttribute';
 import type { SingleTalkData } from '@/app/(globalModals)/talks/[slug]/page';
@@ -10,6 +18,7 @@ import { formatVideoDuration } from '@/utils/string';
 
 import DescriptionIcon from '@mui/icons-material/Description';
 import VideoIcon from '@mui/icons-material/VideoLibrary';
+import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -23,6 +32,8 @@ export interface TalkFilesProps {
 }
 
 const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
+    const theme = useTheme();
+
     const videoFiles = useMemo(
         () => data.info.files.filter(file => file.is_video),
         [data.info.files],
@@ -43,7 +54,18 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
         [data.db.duration],
     );
 
-    const hasVideoFiles = videoFiles.length > 0;
+    const status = generateMediaItemStatus({
+        talk: {
+            has_problems: data.db.has_problems,
+        },
+        talkInfo: {
+            files: data.info.files,
+            is_downloading: data.info.is_downloading,
+        },
+    });
+
+    const statusColor =
+        status !== null ? getMediaItemStatusColor(theme)[status] : null;
 
     return (
         <Box paddingX={2}>
@@ -68,19 +90,17 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                     <TalkAttribute
                         name="Status"
                         value={
-                            data.info.is_downloading
+                            status === MediaItemStatus.Downloading
                                 ? `Downloading (${data.info.download_progress}%)`
-                                : hasVideoFiles
+                                : status === MediaItemStatus.Downloaded
                                   ? 'Downloaded'
-                                  : 'Missing'
+                                  : status === MediaItemStatus.Missing
+                                    ? 'Missing'
+                                    : status === MediaItemStatus.Problem
+                                      ? 'Problem'
+                                      : 'Unknown'
                         }
-                        color={
-                            data.info.is_downloading
-                                ? 'primary'
-                                : hasVideoFiles
-                                  ? 'success'
-                                  : 'error'
-                        }
+                        color={statusColor}
                     />
                 </Box>
             </Box>

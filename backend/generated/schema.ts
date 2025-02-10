@@ -283,7 +283,10 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["SuccessResponse"] & {
-                            data: components["schemas"]["ExtendedDbEvent"][];
+                            data: {
+                                events: components["schemas"]["ExtendedDbEvent"][];
+                                status: components["schemas"]["MediaItemStatusCount"];
+                            };
                         };
                     };
                 };
@@ -1282,6 +1285,18 @@ export interface components {
             }[] | null;
             /** @description List of parsed slugs */
             parsed_slugs: string[] | null;
+        };
+        /** @enum {string} */
+        MediaItemStatus: "Downloaded" | "Missing" | "Downloading" | "Problem";
+        MediaItemStatusCount: {
+            /** @example 0 */
+            Downloaded: number;
+            /** @example 0 */
+            Missing: number;
+            /** @example 0 */
+            Downloading: number;
+            /** @example 0 */
+            Problem: number;
         };
     };
     responses: never;

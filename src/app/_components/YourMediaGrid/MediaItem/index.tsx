@@ -1,15 +1,16 @@
 'use client';
 
-import type { Theme } from '@mui/material';
-import type { Property } from 'csstype';
-
 import Image from 'next/image';
 
 import type { FC } from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import moment from 'moment';
 
+import {
+    generateMediaItemStatus,
+    getMediaItemStatusColor,
+} from '@backend/talkUtils';
 import type { SuccessData } from '@backend/types';
 
 import useOnScreen from '@/hooks/useOnScreen';
@@ -31,7 +32,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 export interface MediaItemProps {
-    talk: SuccessData<'/talks/list', 'get'>[0];
+    initialData: SuccessData<'/talks/list', 'get'>['events'][0];
 }
 
 const StyledContainer = styled(Grid2)(({ theme }) => ({
@@ -40,23 +41,7 @@ const StyledContainer = styled(Grid2)(({ theme }) => ({
     overflow: 'hidden',
 }));
 
-export enum MediaItemStatus {
-    Downloaded,
-    Missing,
-    Downloading,
-    Problem,
-}
-
-export const getMediaItemStatusColor = (
-    theme: Theme,
-): Record<MediaItemStatus, string> => ({
-    [MediaItemStatus.Downloaded]: theme.palette.success.main,
-    [MediaItemStatus.Missing]: theme.palette.warning.main,
-    [MediaItemStatus.Downloading]: theme.palette.info.main,
-    [MediaItemStatus.Problem]: theme.palette.error.main,
-});
-
-const MediaItem: FC<MediaItemProps> = ({ talk }) => {
+const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
     const theme = useTheme();
 
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
@@ -68,8 +53,8 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
     const isVisible = useOnScreen(containerRef);
 
     const talkInfo = useApiStore(state => {
-        if (talk.guid in state.talkInfo) {
-            const res = state.talkInfo[talk.guid];
+        if (initialData.guid in state.talkInfo) {
+            const res = state.talkInfo[initialData.guid];
 
             if (res?.success) {
                 return res.data;
@@ -83,10 +68,10 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
 
     useEffect(() => {
         const func = async (): Promise<void> => {
-            await getTalkInfo(talk.guid);
+            await getTalkInfo(initialData.guid);
         };
 
-        const intervalMs = talk.has_problems?.length
+        const intervalMs = initialData.has_problems?.length
             ? 20000
             : talkInfo?.is_downloading
               ? 1000
@@ -106,43 +91,22 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
     }, [
         getTalkInfo,
         isVisible,
-        talk.guid,
-        talk.has_problems?.length,
-        talk.title,
+        initialData.guid,
+        initialData.has_problems?.length,
+        initialData.title,
         talkInfo?.is_downloading,
     ]);
 
-    const statusColor = useMemo((): Property.BorderColor | null => {
-        let status: MediaItemStatus | null;
-
-        if (typeof talkInfo?.files === 'undefined') {
-            return null;
-        }
-
-        const videoFiles = talkInfo?.files?.filter(file => file.is_video);
-
-        if (talk.has_problems?.length) {
-            status = MediaItemStatus.Problem;
-        } else if (talkInfo?.is_downloading) {
-            status = MediaItemStatus.Downloading;
-        } else if (videoFiles?.length) {
-            status = MediaItemStatus.Downloaded;
-        } else {
-            status = MediaItemStatus.Missing;
-        }
-
-        if (status !== null) {
-            return getMediaItemStatusColor(theme)[status];
-        }
-
-        return null;
-    }, [talk.has_problems?.length, talkInfo, theme]);
+    const status = generateMediaItemStatus({
+        talkInfo,
+        talk: initialData,
+    });
 
     return (
         <StyledContainer
             size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
             ref={containerRef}
-            data-media-item-slug={talk.slug}
+            data-media-item-slug={initialData.slug}
             data-testid="media-item"
         >
             <Card
@@ -154,21 +118,24 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
                 }}
             >
                 <InvisibleLink
-                    href={specificTalkPageLink(talk.slug)}
+                    href={specificTalkPageLink(initialData.slug)}
                     style={{ flex: 1 }}
                     tabIndex={-1}
-                    disabled={!!talk.has_problems?.length}
+                    disabled={!!initialData.has_problems?.length}
                 >
                     <CardActionArea
                         sx={{ height: '100%' }}
-                        disabled={!!talk.has_problems?.length}
+                        disabled={!!initialData.has_problems?.length}
                     >
                         <Box
                             height="100%"
                             sx={{
-                                ...(statusColor
+                                ...(status !== null
                                     ? {
-                                          borderBottomColor: statusColor,
+                                          borderBottomColor:
+                                              getMediaItemStatusColor(theme)[
+                                                  status
+                                              ],
                                           borderBottomWidth: 2,
                                           borderBottomStyle: 'solid',
                                       }
@@ -201,24 +168,24 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
                                     }}
                                 >
                                     <Image
-                                        src={talk.poster_url}
+                                        src={initialData.poster_url}
                                         fill
                                         style={{
                                             objectFit: 'cover',
                                         }}
-                                        alt={talk.title}
+                                        alt={initialData.title}
                                         onLoad={() => setImageLoaded(true)}
                                     />
                                 </Box>
                             </CardMedia>
                             <CardHeader
-                                title={talk.title}
-                                subheader={`${moment(talk.date).format(longDateFormat)} - ${talk.conference.title}`}
+                                title={initialData.title}
+                                subheader={`${moment(initialData.date).format(longDateFormat)} - ${initialData.conference.title}`}
                             />
                         </Box>
                     </CardActionArea>
                 </InvisibleLink>
-                {talk.has_problems?.length ? (
+                {initialData.has_problems?.length ? (
                     <Box
                         sx={{
                             borderBottomLeftRadius: 8,
@@ -231,7 +198,7 @@ const MediaItem: FC<MediaItemProps> = ({ talk }) => {
                         boxShadow={1}
                     >
                         <Tooltip
-                            title={talk.has_problems.join(', ') || ''}
+                            title={initialData.has_problems.join(', ') || ''}
                             arrow
                             placement="top"
                         >
