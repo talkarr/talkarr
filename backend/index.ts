@@ -13,6 +13,7 @@ import '@backend/workers/generateMissingNfo';
 import { startCheckForRootFolders } from '@backend/workers/checkForRootFolders';
 
 import api from '@backend/api';
+import { clearDownloadingFlagForAllTalks } from '@backend/events';
 import rootLog from '@backend/rootLog';
 import { loadSettings } from '@backend/settings';
 
@@ -99,7 +100,7 @@ app.prepare()
             process.exit(1);
         });
 
-        loadingHttpServer.close(err => {
+        loadingHttpServer.close(async err => {
             if (err) {
                 log.error('Error closing loading server', { err });
                 process.exit(1);
@@ -116,6 +117,9 @@ app.prepare()
                     log.info(`Server ready on http://localhost:${port}/`);
                 });
             }
+
+            // mark everything as not downloading
+            await clearDownloadingFlagForAllTalks();
 
             startCheckForRootFolders({ isInit: true });
         });

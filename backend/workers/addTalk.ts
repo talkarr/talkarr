@@ -14,7 +14,7 @@ import {
     setDownloadError,
     setDownloadExitCode,
     setIsDownloading,
-    updateDownloadProgress,
+    setDownloadProgress,
 } from '@backend/events';
 import {
     defaultMimeType,
@@ -176,7 +176,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
 
             if (rounded !== lastProgress) {
                 lastProgress = rounded;
-                await updateDownloadProgress({
+                await setDownloadProgress({
                     eventGuid: event.guid,
                     progress: rounded,
                 });
@@ -275,4 +275,4 @@ export const startAddTalk = (data: AddTalkData): void => {
     queue.add(taskName, data, { removeOnComplete: true, timeout: 60000 * 5 }); // 5 minutes
 };
 
-queue.process(taskName, 3, addTalk);
+queue.process(taskName, 1, addTalk);

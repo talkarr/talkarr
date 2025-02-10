@@ -426,7 +426,7 @@ export const createNewTalkInfo = async ({
     return null;
 };
 
-export const updateDownloadProgress = async ({
+export const setDownloadProgress = async ({
     eventGuid,
     progress,
 }: {
@@ -1057,4 +1057,20 @@ export const importEventFahrplanJson = async ({
         successful_imports: successfulImports,
         errors,
     };
+};
+
+export const clearDownloadingFlagForAllTalks = async (): Promise<void> => {
+    const prisma = new PrismaClient();
+
+    try {
+        await prisma.eventInfo.updateMany({
+            data: {
+                is_downloading: false,
+            },
+        });
+    } catch (error) {
+        log.error('Error clearing downloading flag for all talks', { error });
+    } finally {
+        await prisma.$disconnect();
+    }
 };
