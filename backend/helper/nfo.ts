@@ -27,6 +27,13 @@ export const generateNfo = ({
         typeof tag === 'string' ? tag : tag.name,
     );
 
+    const conferenceName =
+        'conference_data' in event
+            ? event.conference_data?.slug
+            : 'conference' in event
+              ? event.conference.slug
+              : null;
+
     return `
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
     <movie>
@@ -35,6 +42,7 @@ export const generateNfo = ({
         ${persons.map(person => `<actor>${person}</actor>`).join('\n')}
         ${tags.map(tag => `<genre>${tag}</genre>`).join('\n')}
         <premiered>${event.date}</premiered>
+        ${conferenceName ? `<studio>${conferenceName}</studio>` : ''}
     </movie>
     `;
 };
