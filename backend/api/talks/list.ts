@@ -1,10 +1,10 @@
 import {
     checkEventForProblems,
-    getTalkInfoByGuid,
     listEvents,
     mapResultFiles,
 } from '@backend/events';
 import { isFolderMarked } from '@backend/fs';
+import rootLog from '@backend/rootLog';
 import type { MediaItemStatus } from '@backend/talkUtils';
 import {
     generateMediaItemStatus,
@@ -18,6 +18,8 @@ import type {
 } from '@backend/types';
 import { problemMap } from '@backend/types';
 
+const log = rootLog.child({ label: 'api/talks/list' });
+
 const handleListEventsRequest = async (
     _req: ExpressRequest<'/talks/list', 'get'>,
     res: ExpressResponse<'/talks/list', 'get'>,
@@ -25,13 +27,37 @@ const handleListEventsRequest = async (
     const events = await listEvents();
 
     const mappedEvents = await Promise.all(
-        events.map(async event => {
+        events.map(async (event, index, { length }) => {
             const hasProblems =
                 (
                     await checkEventForProblems({
                         rootFolderPath: event.root_folder.path,
                     })
                 )?.map(problem => problemMap[problem] ?? problem) || null;
+
+            const status = generateMediaItemStatus({
+                talk: {
+                    has_problems: hasProblems,
+                },
+                talkInfo: {
+                    is_downloading: !!event.eventInfo?.is_downloading,
+                    files:
+                        event.file?.map(file =>
+                            mapResultFiles({
+                                file,
+                                rootFolderPath: event.root_folder.path,
+                            }),
+                        ) || [],
+                },
+            });
+
+            log.info('Processing event', {
+                index,
+                length,
+                title: event.title,
+                status,
+                hasProblems,
+            });
 
             return {
                 ...(event as unknown as ConvertDateToStringType<ExtendedDbEvent>),
@@ -41,21 +67,7 @@ const handleListEventsRequest = async (
                     rootFolderPath: event.rootFolderPath,
                 }),
                 has_problems: hasProblems,
-                status: generateMediaItemStatus({
-                    talk: {
-                        has_problems: hasProblems,
-                    },
-                    talkInfo: {
-                        is_downloading: !!event.eventInfo?.is_downloading,
-                        files:
-                            event.file?.map(file =>
-                                mapResultFiles({
-                                    file,
-                                    rootFolderPath: event.root_folder.path,
-                                }),
-                            ) || [],
-                    },
-                }),
+                status,
             };
         }),
     );
@@ -69,15 +81,8 @@ const handleListEventsRequest = async (
     ) as Record<MediaItemStatus, number>;
 
     for await (const event of mappedEvents) {
-        const talkInfo = await getTalkInfoByGuid({ guid: event.guid });
-
-        const status = generateMediaItemStatus({
-            talkInfo,
-            talk: event,
-        });
-
-        if (status !== null) {
-            statusMap[status] += 1;
+        if (event.status !== null) {
+            statusMap[event.status] += 1;
         }
     }
 
