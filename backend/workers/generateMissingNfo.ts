@@ -50,7 +50,7 @@ const generateMissingNfo: TaskFunction<GenerateMissingNfoData> = async (
             throw new Error('Error generating missing nfo');
         }
 
-        done();
+        return done();
     } catch (error) {
         log.error('Error generating missing nfo:', {
             error,

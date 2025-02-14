@@ -45,9 +45,7 @@ const checkForRootFolders: TaskFunction<CheckForRootFoldersData> = async (
     if (!databaseRootFolders.length) {
         log.info('No root folders found');
 
-        done();
-
-        return;
+        return done();
     }
 
     for await (const rootFolder of databaseRootFolders) {
@@ -81,7 +79,7 @@ const checkForRootFolders: TaskFunction<CheckForRootFoldersData> = async (
         }
     }
 
-    done();
+    return done();
 };
 
 export const startCheckForRootFolders = (

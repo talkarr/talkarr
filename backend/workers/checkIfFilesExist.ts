@@ -93,7 +93,7 @@ const checkIfFilesExist: TaskFunction<CheckIfFilesExistData> = async (
         startScanAndImportExistingFiles();
     }
 
-    done();
+    return done();
 };
 
 export const startCheckIfFilesExist = (data: CheckIfFilesExistData): void => {

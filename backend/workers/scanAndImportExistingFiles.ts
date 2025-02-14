@@ -70,7 +70,7 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
         }
     }
 
-    done();
+    return done();
 };
 
 export const startScanAndImportExistingFiles = (): void => {

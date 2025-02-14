@@ -53,7 +53,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
     if (isAlreadyDownloading) {
         log.warn('Talk is already downloading:', { title: event.title });
 
-        done();
+        return done();
     }
 
     log.info('Adding talk...', { slug: job.data.event.slug });
@@ -246,7 +246,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
 
         await setIsDownloading({ eventGuid: event.guid, isDownloading: false });
 
-        done();
+        return done();
     } catch (error) {
         log.error('Error downloading video:', {
             error,

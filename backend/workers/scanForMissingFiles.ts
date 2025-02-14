@@ -141,10 +141,10 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
 
     if (hasErrored) {
         log.error('Error scanning for missing files');
-        done(new Error('Error scanning for missing files'));
-    } else {
-        done();
+        return done(new Error('Error scanning for missing files'));
     }
+
+    return done();
 };
 
 queue.process(taskName, 1, scanForMissingFiles);
