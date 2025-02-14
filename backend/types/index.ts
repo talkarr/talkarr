@@ -1,5 +1,11 @@
-import type { Event as DbEvent } from '.prisma/client';
-import type { Conference, Person, RootFolder, Tag } from '@prisma/client';
+import type { Event as DbEvent, File as DbFile } from '.prisma/client';
+import type {
+    Conference,
+    EventInfo,
+    Person,
+    RootFolder,
+    Tag,
+} from '@prisma/client';
 import type express from 'express';
 import type * as core from 'express-serve-static-core';
 import type { Method } from 'openapi-typescript';
@@ -129,6 +135,8 @@ export interface ExtendedDbEvent extends DbEvent {
     tags: Tag[];
     conference: Conference;
     root_folder: RootFolder;
+    eventInfo: EventInfo | null;
+    file: DbFile[] | null;
 }
 
 export interface EventFahrplanJsonImport {

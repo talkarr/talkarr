@@ -21,6 +21,23 @@ import { Prisma, PrismaClient } from '@prisma/client';
 
 const log = rootLog.child({ label: 'talks' });
 
+export const mapResultFiles = ({
+    file,
+    rootFolderPath,
+}: {
+    file: File | ConvertDateToStringType<File>;
+    rootFolderPath: string;
+}): components['schemas']['DownloadedFile'] => ({
+    filename: file.filename,
+    root_folder: rootFolderPath,
+    path: file.path,
+    size: file.bytes,
+    mime_type: file.mime,
+    url: file.url,
+    created: file.created as unknown as string,
+    is_video: isVideoFile(file.path),
+});
+
 export const addTalk = async ({
     event,
     rootFolder,
@@ -110,6 +127,8 @@ export const addTalk = async ({
                 tags: true,
                 conference: true,
                 root_folder: true,
+                file: true,
+                eventInfo: true,
             },
         });
 
@@ -153,6 +172,8 @@ export const listEvents = async (): Promise<
                 tags: true,
                 conference: true,
                 root_folder: true,
+                eventInfo: true,
+                file: true,
             },
         });
 
@@ -307,19 +328,10 @@ export const getTalkInfoByGuid = async ({
             return null;
         }
 
-        const mappedFiles = await Promise.all(
-            result.file.map<Promise<components['schemas']['DownloadedFile']>>(
-                async file => ({
-                    filename: file.filename,
-                    root_folder: result.root_folder.path,
-                    path: file.path,
-                    size: file.bytes,
-                    mime_type: file.mime,
-                    url: file.url,
-                    created: file.created as unknown as string,
-                    is_video: isVideoFile(file.path),
-                }),
-            ),
+        const mappedFiles = result.file.map<
+            components['schemas']['DownloadedFile']
+        >(file =>
+            mapResultFiles({ file, rootFolderPath: result.root_folder.path }),
         );
 
         return {
@@ -722,6 +734,8 @@ export const getSpecificTalkByGuid = async ({
                 tags: true,
                 conference: true,
                 root_folder: true,
+                eventInfo: true,
+                file: true,
             },
         });
     } catch (error) {
@@ -750,6 +764,8 @@ export const getSpecificTalkBySlug = async ({
                 tags: true,
                 conference: true,
                 root_folder: true,
+                eventInfo: true,
+                file: true,
             },
         });
     } catch (error) {
@@ -782,6 +798,8 @@ export const getEventByFilePath = async ({
                         tags: true,
                         conference: true,
                         root_folder: true,
+                        file: true,
+                        eventInfo: true,
                     },
                 },
             },

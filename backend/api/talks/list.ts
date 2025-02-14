@@ -2,6 +2,7 @@ import {
     checkEventForProblems,
     getTalkInfoByGuid,
     listEvents,
+    mapResultFiles,
 } from '@backend/events';
 import { isFolderMarked } from '@backend/fs';
 import type { MediaItemStatus } from '@backend/talkUtils';
@@ -31,7 +32,6 @@ const handleListEventsRequest = async (
                         rootFolderPath: event.root_folder.path,
                     })
                 )?.map(problem => problemMap[problem] ?? problem) || null;
-            const talkInfo = await getTalkInfoByGuid({ guid: event.guid });
 
             return {
                 ...(event as unknown as ConvertDateToStringType<ExtendedDbEvent>),
@@ -45,7 +45,16 @@ const handleListEventsRequest = async (
                     talk: {
                         has_problems: hasProblems,
                     },
-                    talkInfo,
+                    talkInfo: {
+                        is_downloading: !!event.eventInfo?.is_downloading,
+                        files:
+                            event.file?.map(file =>
+                                mapResultFiles({
+                                    file,
+                                    rootFolderPath: event.root_folder.path,
+                                }),
+                            ) || [],
+                    },
                 }),
             };
         }),
