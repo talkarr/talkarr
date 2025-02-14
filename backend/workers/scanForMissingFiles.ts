@@ -42,7 +42,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
         throw new Error('Invalid data');
     }
 
-    await waitForTaskFinished(taskName, null);
+    await waitForTaskFinished(taskName, null, job.id);
 
     const events = job.data.event ? [job.data.event] : await listEvents();
 

@@ -15,7 +15,7 @@ export const check = (): boolean => true;
 const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
     log.info('Scanning and importing existing files...');
 
-    await waitForTaskFinished(taskName, null);
+    await waitForTaskFinished(taskName, null, job.id);
 
     const rootFolders = await listRootFolders();
 
