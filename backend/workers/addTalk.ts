@@ -272,7 +272,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
 };
 
 export const startAddTalk = (data: AddTalkData): void => {
-    queue.add(taskName, data, { removeOnComplete: true, timeout: 60000 * 5 }); // 5 minutes
+    queue.add(taskName, data, { removeOnComplete: true, timeout: 60000 * 30 }); // 30 minutes
 };
 
 queue.process(taskName, 1, addTalk);
