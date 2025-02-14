@@ -6,6 +6,7 @@ import {
 } from '@backend/events';
 import { getTalkFromApiByGuid } from '@backend/helper';
 import rootLog from '@backend/rootLog';
+import { generateMediaItemStatus } from '@backend/talkUtils';
 import type {
     ConvertDateToStringType,
     ExpressRequest,
@@ -76,7 +77,12 @@ const handleGetEventRequest = async (
         return;
     }
 
-    const hasProblems = await checkEventForProblems({ event });
+    const hasProblems =
+        (
+            await checkEventForProblems({
+                rootFolderPath: event.root_folder.path,
+            })
+        )?.map(problem => problemMap[problem] ?? problem) || null;
 
     res.json({
         success: true,
@@ -85,12 +91,21 @@ const handleGetEventRequest = async (
                 ...(event as unknown as ConvertDateToStringType<ExtendedDbEvent>),
                 persons: event.persons.map(person => person.name),
                 tags: event.tags.map(tag => tag.name),
-                has_problems: hasProblems
-                    ? hasProblems.map(problem => problemMap[problem] ?? problem)
-                    : null,
+                has_problems: hasProblems,
             },
             talk: talkData,
-            info: talkInfo,
+            info: {
+                ...talkInfo,
+                status: generateMediaItemStatus({
+                    talk: {
+                        has_problems: hasProblems,
+                    },
+                    talkInfo: {
+                        files: talkInfo.files,
+                        is_downloading: talkInfo.is_downloading,
+                    },
+                }),
+            },
         },
     });
 };

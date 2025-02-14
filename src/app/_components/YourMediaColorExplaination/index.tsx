@@ -14,11 +14,11 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 export interface YourMediaColorExplanationProps {
-    status: SuccessData<'/talks/list', 'get'>['status'];
+    statusCount: SuccessData<'/talks/list', 'get'>['statusCount'];
 }
 
 const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
-    status,
+    statusCount,
 }) => {
     const theme = useTheme();
 
@@ -47,7 +47,8 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
                                 statusElement as unknown as MediaItemStatus
                             ]
                         }
-                        : {status[statusElement as keyof typeof status]}
+                        :{' '}
+                        {statusCount[statusElement as keyof typeof statusCount]}
                     </Typography>
                 </Box>
             ))}

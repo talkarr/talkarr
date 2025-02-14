@@ -648,6 +648,16 @@
                     "folder": {
                         "type": "string",
                         "example": "/folder"
+                    },
+                    "status": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/MediaItemStatus"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
                     }
                 },
                 "required": [
@@ -657,7 +667,8 @@
                     "has_files",
                     "files",
                     "root_folder",
-                    "folder"
+                    "folder",
+                    "status"
                 ]
             },
             "GenericServerError": {
@@ -1229,16 +1240,38 @@
                                                         "events": {
                                                             "type": "array",
                                                             "items": {
-                                                                "$ref": "#/components/schemas/ExtendedDbEvent"
+                                                                "allOf": [
+                                                                    {
+                                                                        "$ref": "#/components/schemas/ExtendedDbEvent"
+                                                                    },
+                                                                    {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "status": {
+                                                                                "oneOf": [
+                                                                                    {
+                                                                                        "$ref": "#/components/schemas/MediaItemStatus"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "null"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "status"
+                                                                        ]
+                                                                    }
+                                                                ]
                                                             }
                                                         },
-                                                        "status": {
+                                                        "statusCount": {
                                                             "$ref": "#/components/schemas/MediaItemStatusCount"
                                                         }
                                                     },
                                                     "required": [
                                                         "events",
-                                                        "status"
+                                                        "statusCount"
                                                     ]
                                                 }
                                             },

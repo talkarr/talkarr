@@ -136,3 +136,5 @@ export interface EventFahrplanJsonImport {
         slug: string;
     }[];
 }
+
+export type TypeOrPick<T, K extends keyof T> = T | Pick<T, K>;

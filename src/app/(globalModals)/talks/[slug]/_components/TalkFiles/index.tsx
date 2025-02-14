@@ -5,11 +5,7 @@ import { useMemo } from 'react';
 
 import prettyBytes from 'pretty-bytes';
 
-import {
-    generateMediaItemStatus,
-    getMediaItemStatusColor,
-    MediaItemStatus,
-} from '@backend/talkUtils';
+import { getMediaItemStatusColor, MediaItemStatus } from '@backend/talkUtils';
 
 import TalkAttribute from '@/app/(globalModals)/talks/[slug]/_components/TalkAttribute';
 import type { SingleTalkData } from '@/app/(globalModals)/talks/[slug]/page';
@@ -54,15 +50,7 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
         [data.db.duration],
     );
 
-    const status = generateMediaItemStatus({
-        talk: {
-            has_problems: data.db.has_problems,
-        },
-        talkInfo: {
-            files: data.info.files,
-            is_downloading: data.info.is_downloading,
-        },
-    });
+    const { status } = data.info;
 
     const statusColor =
         status !== null ? getMediaItemStatusColor(theme)[status] : null;

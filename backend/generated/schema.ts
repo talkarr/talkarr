@@ -284,8 +284,10 @@ export interface paths {
                     content: {
                         "application/json": components["schemas"]["SuccessResponse"] & {
                             data: {
-                                events: components["schemas"]["ExtendedDbEvent"][];
-                                status: components["schemas"]["MediaItemStatusCount"];
+                                events: (components["schemas"]["ExtendedDbEvent"] & {
+                                    status: components["schemas"]["MediaItemStatus"] | null;
+                                })[];
+                                statusCount: components["schemas"]["MediaItemStatusCount"];
                             };
                         };
                     };
@@ -1220,6 +1222,7 @@ export interface components {
             root_folder: string;
             /** @example /folder */
             folder: string;
+            status: components["schemas"]["MediaItemStatus"] | null;
         };
         GenericServerError: {
             /**

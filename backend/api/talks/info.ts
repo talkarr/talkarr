@@ -1,6 +1,12 @@
-import { getTalkInfoByGuid, getTalkInfoBySlug } from '@backend/events';
+import {
+    checkEventForProblems,
+    getTalkInfoByGuid,
+    getTalkInfoBySlug,
+} from '@backend/events';
 import rootLog from '@backend/rootLog';
+import { generateMediaItemStatus } from '@backend/talkUtils';
 import type { ExpressRequest, ExpressResponse, TalkInfo } from '@backend/types';
+import { problemMap } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/info' });
 
@@ -21,7 +27,7 @@ const handleEventInfoRequest = async (
         return;
     }
 
-    let talk: TalkInfo | null = null;
+    let talk: Omit<TalkInfo, 'status'> | null = null;
 
     if (guid) {
         talk = await getTalkInfoByGuid({ guid });
@@ -40,9 +46,27 @@ const handleEventInfoRequest = async (
         return;
     }
 
+    const hasProblems =
+        (
+            await checkEventForProblems({
+                rootFolderPath: talk.root_folder,
+            })
+        )?.map(problem => problemMap[problem] ?? problem) || null;
+
     res.json({
         success: true,
-        data: talk,
+        data: {
+            ...talk,
+            status: generateMediaItemStatus({
+                talk: {
+                    has_problems: hasProblems,
+                },
+                talkInfo: {
+                    files: talk.files,
+                    is_downloading: talk.is_downloading,
+                },
+            }),
+        },
     });
 };
 

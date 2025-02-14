@@ -3,14 +3,11 @@
 import Image from 'next/image';
 
 import type { FC } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import moment from 'moment';
 
-import {
-    generateMediaItemStatus,
-    getMediaItemStatusColor,
-} from '@backend/talkUtils';
+import { getMediaItemStatusColor } from '@backend/talkUtils';
 import type { SuccessData } from '@backend/types';
 
 import useOnScreen from '@/hooks/useOnScreen';
@@ -97,10 +94,17 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
         talkInfo?.is_downloading,
     ]);
 
-    const status = generateMediaItemStatus({
-        talkInfo,
-        talk: initialData,
-    });
+    const status = useMemo(() => {
+        if (!talkInfo) {
+            if (initialData.status !== null) {
+                return initialData.status;
+            }
+
+            return null;
+        }
+
+        return talkInfo.status;
+    }, [initialData.status, talkInfo]);
 
     return (
         <StyledContainer

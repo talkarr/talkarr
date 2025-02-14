@@ -14,6 +14,7 @@ import type {
     ExtendedDbEvent,
     ImportJsonResponse,
     TalkInfo,
+    TypeOrPick,
 } from '@backend/types';
 import { AddTalkFailure, ProblemType } from '@backend/types';
 
@@ -274,7 +275,7 @@ export const getTalkInfoByGuid = async ({
     guid,
 }: {
     guid: string;
-}): Promise<TalkInfo | null> => {
+}): Promise<Omit<TalkInfo, 'status'> | null> => {
     const prisma = new PrismaClient();
 
     try {
@@ -344,7 +345,7 @@ export const getTalkInfoBySlug = async ({
     slug,
 }: {
     slug: string;
-}): Promise<TalkInfo | null> => {
+}): Promise<Omit<TalkInfo, 'status'> | null> => {
     const prisma = new PrismaClient();
 
     // get guid and call getTalkInfoByGuid
@@ -934,26 +935,26 @@ export const importExistingFileFromFilesystem = async ({
 };
 
 export const checkEventForProblems = async ({
-    event,
+    rootFolderPath,
 }: {
-    event: ConvertDateToStringType<ExtendedDbEvent> | ExtendedDbEvent;
+    rootFolderPath: string;
 }): Promise<ProblemType[] | null> => {
     const problems: ProblemType[] = [];
 
     // ==== Start of problem checks ====
 
-    if (!event.root_folder) {
-        log.warn('Event has no root folder', { event });
+    if (!rootFolderPath) {
+        log.warn('Event has no root folder', { rootFolderPath });
 
         problems.push(ProblemType.NoRootFolder);
     }
 
     const hasMark = await isFolderMarked({
-        rootFolderPath: event.root_folder.path,
+        rootFolderPath,
     });
 
     if (!hasMark) {
-        log.warn('Root folder is not marked', { event });
+        log.warn('Root folder is not marked', { rootFolderPath });
 
         problems.push(ProblemType.RootFolderMarkNotFound);
     }
