@@ -146,6 +146,8 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
         return done(new Error('Error scanning for missing files'));
     }
 
+    log.info('Finished scanning for missing files');
+
     return done();
 };
 
