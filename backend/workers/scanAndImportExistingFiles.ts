@@ -2,7 +2,7 @@ import { importExistingFileFromFilesystem } from '@backend/events';
 import { isFolderMarked } from '@backend/fs';
 import { scanForExistingFiles } from '@backend/fs/scan';
 import type { TaskFunction } from '@backend/queue';
-import queue from '@backend/queue';
+import queue, { waitForTaskFinished } from '@backend/queue';
 import { listRootFolders } from '@backend/rootFolder';
 import rootLog from '@backend/rootLog';
 
@@ -14,6 +14,8 @@ export const check = (): boolean => true;
 
 const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
     log.info('Scanning and importing existing files...');
+
+    await waitForTaskFinished(taskName, null);
 
     const rootFolders = await listRootFolders();
 
@@ -77,4 +79,4 @@ export const startScanAndImportExistingFiles = (): void => {
     queue.add(taskName, {}, { removeOnComplete: true });
 };
 
-queue.process(taskName, 1, scanAndImportExistingFiles);
+queue.process(taskName, scanAndImportExistingFiles);

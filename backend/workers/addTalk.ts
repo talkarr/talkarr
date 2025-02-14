@@ -36,7 +36,11 @@ export interface AddTalkData {
 
 export const check = typia.createIs<AddTalkData>();
 
-const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
+let runningInstances = 0;
+
+const maxRunningInstances = 1;
+
+const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     const { event } = job.data;
 
     if (!check(job.data)) {
@@ -44,6 +48,28 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
 
         throw new Error('Invalid data');
     }
+
+    // wait for other instances to finish
+    while (runningInstances >= maxRunningInstances) {
+        const runningInstancesCopy = runningInstances;
+
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise(resolve => {
+            log.warn('Waiting for other instances to finish...', {
+                runningInstancesCopy,
+                maxRunningInstances,
+            });
+            setTimeout(resolve, 5000);
+        });
+    }
+
+    const done = async (): Promise<void> => {
+        runningInstances -= 1;
+
+        actualDone();
+    };
+
+    runningInstances += 1;
 
     const isAlreadyDownloading = await isEventDownloading({
         eventInfoGuid: event.guid,
@@ -246,7 +272,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
 
         await setIsDownloading({ eventGuid: event.guid, isDownloading: false });
 
-        return done();
+        return await done();
     } catch (error) {
         log.error('Error downloading video:', {
             error,
@@ -272,7 +298,10 @@ const addTalk: TaskFunction<AddTalkData> = async (job, done) => {
 };
 
 export const startAddTalk = (data: AddTalkData): void => {
-    queue.add(taskName, data, { removeOnComplete: true, timeout: 60000 * 30 }); // 30 minutes
+    queue.add(taskName, data, {
+        removeOnComplete: true,
+        timeout: 1000 * 60 * 30, // 30 minutes
+    });
 };
 
-queue.process(taskName, 1, addTalk);
+queue.process(taskName, addTalk);

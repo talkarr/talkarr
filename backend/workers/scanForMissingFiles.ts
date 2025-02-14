@@ -14,7 +14,7 @@ import {
 } from '@backend/events';
 import { doesEventHaveNfoFile, doesTalkHaveExistingFiles } from '@backend/fs';
 import type { TaskFunction } from '@backend/queue';
-import queue from '@backend/queue';
+import queue, { waitForTaskFinished } from '@backend/queue';
 import rootLog from '@backend/rootLog';
 import type { ConvertDateToStringType, ExtendedDbEvent } from '@backend/types';
 
@@ -41,6 +41,8 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
 
         throw new Error('Invalid data');
     }
+
+    await waitForTaskFinished(taskName, null);
 
     const events = job.data.event ? [job.data.event] : await listEvents();
 
@@ -147,10 +149,12 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
     return done();
 };
 
-queue.process(taskName, 1, scanForMissingFiles);
+queue.process(taskName, scanForMissingFiles);
 
 export const startScanForMissingFiles = (
     data: ScanForMissingFilesData,
 ): void => {
-    queue.add(taskName, data, { removeOnComplete: true, timeout: 60000 * 3 }); // 3 minutes
+    queue.add(taskName, data, {
+        removeOnComplete: true /* , timeout: 60000 * 3 */,
+    }); // ~3 minutes~ no timeout
 };

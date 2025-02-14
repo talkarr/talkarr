@@ -39,4 +39,29 @@ export type TaskFunction<T extends object | undefined = undefined> = (
     done: DoneCallback,
 ) => Promise<void>;
 
+export const isTaskRunning = async (taskName: string): Promise<boolean> => {
+    const jobs = await queue.getJobs(['active', 'waiting', 'delayed']);
+
+    return jobs.some(job => job.name === taskName);
+};
+
+export const waitForTaskFinished = async (
+    taskName: string,
+    timeout: number | null = 30000,
+): Promise<void> => {
+    const start = Date.now();
+
+    // eslint-disable-next-line no-await-in-loop
+    while (await isTaskRunning(taskName)) {
+        if (timeout && Date.now() - start > timeout) {
+            throw new Error('Timeout waiting for task to finish');
+        }
+
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise(resolve => {
+            setTimeout(resolve, 1000);
+        });
+    }
+};
+
 export default queue;
