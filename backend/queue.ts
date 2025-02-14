@@ -67,7 +67,11 @@ export const waitForTaskFinished = async (
 
         // eslint-disable-next-line no-await-in-loop
         await new Promise(resolve => {
-            log.warn('Waiting for task to finish...', { taskName });
+            log.warn('Waiting for task to finish...', {
+                taskName,
+                timeout,
+                ownId,
+            });
             setTimeout(resolve, 5000);
         });
     }
