@@ -14,7 +14,6 @@ import type {
     ExtendedDbEvent,
     ImportJsonResponse,
     TalkInfo,
-    TypeOrPick,
 } from '@backend/types';
 import { AddTalkFailure, ProblemType } from '@backend/types';
 
