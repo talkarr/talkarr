@@ -5,11 +5,7 @@ import {
 } from '@backend/events';
 import { isFolderMarked } from '@backend/fs';
 import rootLog from '@backend/rootLog';
-import type { MediaItemStatus } from '@backend/talkUtils';
-import {
-    generateMediaItemStatus,
-    mediaItemStatusValues,
-} from '@backend/talkUtils';
+import { generateMediaItemStatus, generateStatusMap } from '@backend/talkUtils';
 import type {
     ConvertDateToStringType,
     ExpressRequest,
@@ -72,25 +68,11 @@ const handleListEventsRequest = async (
         }),
     );
 
-    const statusMap = mediaItemStatusValues.reduce(
-        (acc, status) => ({
-            ...acc,
-            [status]: 0,
-        }),
-        {},
-    ) as Record<MediaItemStatus, number>;
-
-    for await (const event of mappedEvents) {
-        if (event.status !== null) {
-            statusMap[event.status] += 1;
-        }
-    }
-
     res.json({
         success: true,
         data: {
             events: mappedEvents,
-            statusCount: statusMap,
+            statusCount: generateStatusMap(mappedEvents),
         },
     });
 };

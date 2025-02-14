@@ -1,6 +1,12 @@
 import type { Theme } from '@mui/material';
 
-import type { SuccessData, SuccessResponse } from '@backend/types';
+import type {
+    ConvertDateToStringType,
+    ExtendedDbEvent,
+    SuccessData,
+    SuccessResponse,
+    TypeOrPick,
+} from '@backend/types';
 
 export enum MediaItemStatus {
     Downloaded = 'Downloaded',
@@ -60,4 +66,31 @@ export const generateMediaItemStatus = ({
     }
 
     return status;
+};
+
+export const generateStatusMap = (
+    events: ConvertDateToStringType<
+        TypeOrPick<
+            ExtendedDbEvent & {
+                status: MediaItemStatus | null;
+            },
+            'status'
+        >
+    >[],
+): Record<MediaItemStatus, number> => {
+    const statusMap = mediaItemStatusValues.reduce(
+        (acc, status) => ({
+            ...acc,
+            [status]: 0,
+        }),
+        {},
+    ) as Record<MediaItemStatus, number>;
+
+    for (const event of events) {
+        if (event.status !== null) {
+            statusMap[event.status] += 1;
+        }
+    }
+
+    return statusMap;
 };

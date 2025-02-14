@@ -69,7 +69,9 @@ const Home: FC = async () => {
             }}
         >
             <YourMediaGrid initialData={eventData.events} />
-            <YourMediaColorExplanation statusCount={eventData.statusCount} />
+            <YourMediaColorExplanation
+                initialStatusCount={eventData.statusCount}
+            />
         </Box>
     );
 };

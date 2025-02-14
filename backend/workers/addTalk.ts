@@ -58,6 +58,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             log.warn('Waiting for other instances to finish...', {
                 runningInstancesCopy,
                 maxRunningInstances,
+                title: event.title,
             });
             setTimeout(resolve, 5000);
         });
