@@ -246,6 +246,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
                 bytes: videoStats.size,
                 is_video: isVideoFile(path),
             },
+            eventInfoGuid: event.eventInfo?.guid,
         });
 
         if (!addFileToDbResult) {

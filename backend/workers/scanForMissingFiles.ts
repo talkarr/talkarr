@@ -110,6 +110,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                                 bytes: file.size,
                                 is_video: file.isVideo,
                             },
+                            eventInfoGuid: event.eventInfo?.guid,
                         });
 
                         if (!addFileToDbResult) {

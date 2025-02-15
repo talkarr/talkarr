@@ -540,12 +540,66 @@ export const isEventDownloading = async ({
     }
 };
 
+export const setDownloadError = async ({
+    eventInfoGuid,
+    error,
+}: {
+    eventInfoGuid: EventInfo['guid'];
+    error: string;
+}): Promise<void> => {
+    const prisma = new PrismaClient();
+
+    try {
+        await prisma.eventInfo.update({
+            where: {
+                guid: eventInfoGuid,
+            },
+            data: {
+                download_error: error,
+            },
+        });
+    } catch (db_error) {
+        log.error('Error setting download error', {
+            db_error,
+            error,
+            eventInfoGuid,
+        });
+    } finally {
+        await prisma.$disconnect();
+    }
+};
+
+export const clearDownloadError = async ({
+    eventGuid,
+}: {
+    eventGuid: DbEvent['guid'];
+}): Promise<void> => {
+    const prisma = new PrismaClient();
+
+    try {
+        await prisma.eventInfo.update({
+            where: {
+                eventGuid,
+            },
+            data: {
+                download_error: null,
+            },
+        });
+    } catch (db_error) {
+        log.error('Error clearing download error', { db_error, eventGuid });
+    } finally {
+        await prisma.$disconnect();
+    }
+};
+
 export const addDownloadedFile = async ({
     event,
     file,
+    eventInfoGuid,
 }: {
     event: DbEvent | ConvertDateToStringType<DbEvent>;
     file: Omit<File, 'eventGuid'>;
+    eventInfoGuid: EventInfo['guid'] | undefined;
 }): Promise<boolean> => {
     const prisma = new PrismaClient();
 
@@ -575,6 +629,13 @@ export const addDownloadedFile = async ({
             title: event.title,
             guid: event.guid,
         });
+
+        if (eventInfoGuid) {
+            await setDownloadError({
+                eventInfoGuid,
+                error: 'Error adding downloaded file',
+            });
+        }
 
         throw error;
     } finally {
@@ -639,58 +700,6 @@ export const checkIfFileIsInDb = async ({
         });
 
         return false;
-    } finally {
-        await prisma.$disconnect();
-    }
-};
-
-export const setDownloadError = async ({
-    eventInfoGuid,
-    error,
-}: {
-    eventInfoGuid: EventInfo['guid'];
-    error: string;
-}): Promise<void> => {
-    const prisma = new PrismaClient();
-
-    try {
-        await prisma.eventInfo.update({
-            where: {
-                guid: eventInfoGuid,
-            },
-            data: {
-                download_error: error,
-            },
-        });
-    } catch (db_error) {
-        log.error('Error setting download error', {
-            db_error,
-            error,
-            eventInfoGuid,
-        });
-    } finally {
-        await prisma.$disconnect();
-    }
-};
-
-export const clearDownloadError = async ({
-    eventGuid,
-}: {
-    eventGuid: DbEvent['guid'];
-}): Promise<void> => {
-    const prisma = new PrismaClient();
-
-    try {
-        await prisma.eventInfo.update({
-            where: {
-                eventGuid,
-            },
-            data: {
-                download_error: null,
-            },
-        });
-    } catch (db_error) {
-        log.error('Error clearing download error', { db_error, eventGuid });
     } finally {
         await prisma.$disconnect();
     }

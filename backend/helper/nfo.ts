@@ -89,5 +89,6 @@ export const handleNfoGeneration = async ({
             bytes: nfoStats.size,
             is_video: isVideoFile(nfoPath),
         },
+        eventInfoGuid: event.eventInfo?.guid,
     });
 };
