@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Event" ALTER COLUMN "duration" SET DATA TYPE BIGINT;
+
+-- AlterTable
+ALTER TABLE "File" ALTER COLUMN "bytes" SET DATA TYPE BIGINT;

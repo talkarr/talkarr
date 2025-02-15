@@ -64,6 +64,8 @@ const handleListEventsRequest = async (
                 }),
                 has_problems: hasProblems,
                 status,
+                duration: Number(event.duration),
+                duration_str: event.duration.toString(),
             };
         }),
     );

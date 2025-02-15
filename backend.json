@@ -349,7 +349,11 @@
                     "duration": {
                         "type": "integer",
                         "example": 0,
-                        "description": "Length in seconds"
+                        "description": "Length in seconds, uses bigint"
+                    },
+                    "duration_str": {
+                        "type": "string",
+                        "example": "String representation of duration"
                     },
                     "thumb_url": {
                         "type": "string",
@@ -407,6 +411,7 @@
                     "updated_at",
                     "length",
                     "duration",
+                    "duration_str",
                     "thumb_url",
                     "poster_url",
                     "timeline_url",
@@ -477,7 +482,11 @@
                     "duration": {
                         "type": "integer",
                         "example": 0,
-                        "description": "Length in seconds"
+                        "description": "Length in seconds, uses bigint"
+                    },
+                    "duration_str": {
+                        "type": "string",
+                        "example": "String representation of duration"
                     },
                     "root_folder": {
                         "type": "object",
@@ -516,6 +525,7 @@
                     "original_language",
                     "frontend_link",
                     "duration",
+                    "duration_str",
                     "root_folder",
                     "root_folder_has_mark",
                     "has_problems"
@@ -575,7 +585,12 @@
                     },
                     "size": {
                         "type": "integer",
+                        "description": "Size in bytes. Uses bigint internally",
                         "example": 0
+                    },
+                    "size_str": {
+                        "type": "string",
+                        "example": "String representation of size"
                     },
                     "mime_type": {
                         "type": "string",
@@ -604,6 +619,7 @@
                     "path",
                     "filename",
                     "size",
+                    "size_str",
                     "mime_type",
                     "root_folder",
                     "url",
@@ -712,7 +728,12 @@
                     },
                     "size": {
                         "type": "integer",
+                        "description": "Size in bytes. Uses bigint internally",
                         "example": 0
+                    },
+                    "size_str": {
+                        "type": "string",
+                        "example": "String representation of size"
                     },
                     "is_video": {
                         "type": "boolean",
@@ -728,6 +749,7 @@
                     "path",
                     "mime",
                     "size",
+                    "size_str",
                     "is_video",
                     "created_at"
                 ]

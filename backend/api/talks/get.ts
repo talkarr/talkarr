@@ -92,6 +92,8 @@ const handleGetEventRequest = async (
                 persons: event.persons.map(person => person.name),
                 tags: event.tags.map(tag => tag.name),
                 has_problems: hasProblems,
+                duration: Number(event.duration),
+                duration_str: event.duration.toString(),
             },
             talk: talkData,
             info: {

@@ -1098,10 +1098,12 @@ export interface components {
             /** @example 0 */
             length: number;
             /**
-             * @description Length in seconds
+             * @description Length in seconds, uses bigint
              * @example 0
              */
             duration: number;
+            /** @example String representation of duration */
+            duration_str: string;
             /** @example https://example.com/thumb.jpg */
             thumb_url: string;
             /** @example https://example.com/poster.jpg */
@@ -1156,10 +1158,12 @@ export interface components {
             /** @example https://example.com */
             frontend_link: string;
             /**
-             * @description Length in seconds
+             * @description Length in seconds, uses bigint
              * @example 0
              */
             duration: number;
+            /** @example String representation of duration */
+            duration_str: string;
             root_folder: {
                 path: string;
                 marked: boolean;
@@ -1179,8 +1183,13 @@ export interface components {
             path: string;
             /** @example file.jpg */
             filename: string;
-            /** @example 0 */
+            /**
+             * @description Size in bytes. Uses bigint internally
+             * @example 0
+             */
             size: number;
+            /** @example String representation of size */
+            size_str: string;
             /** @example image/jpeg */
             mime_type: string | null;
             /** @example /folder */
@@ -1239,8 +1248,13 @@ export interface components {
             path: string;
             /** @example image/jpeg */
             mime: string | null;
-            /** @example 0 */
+            /**
+             * @description Size in bytes. Uses bigint internally
+             * @example 0
+             */
             size: number;
+            /** @example String representation of size */
+            size_str: string;
             /** @example false */
             is_video: boolean;
             /**

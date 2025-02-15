@@ -43,7 +43,7 @@ model File {
   url      String
   created  DateTime @default(now())
   mime     String
-  bytes    Int
+  bytes    BigInt
   is_video Boolean
 
   event     Event  @relation(fields: [eventGuid], references: [guid], onDelete: Cascade)
@@ -67,7 +67,7 @@ model Event {
   poster_url        String
   original_language String
   frontend_link     String
-  duration          Int
+  duration          BigInt
 
   // relations
   persons           Person[]

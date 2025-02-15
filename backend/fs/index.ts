@@ -26,7 +26,8 @@ const log = rootLog.child({ label: 'fs' });
 export interface ExistingFile {
     path: string;
     mime: string;
-    size: number;
+    size: bigint;
+    size_str: string;
     isVideo: boolean;
     createdAt: Date;
 }
@@ -94,12 +95,15 @@ export const doesTalkHaveExistingFiles = async ({
                 fs_promises.constants.F_OK | fs_promises.constants.R_OK,
             );
 
-            const stats = await fs_promises.stat(file);
+            const stats = await fs_promises.stat(file, {
+                bigint: true,
+            });
 
             existingFiles.push({
                 path: file,
                 mime: mime.lookup(file) || defaultMimeType,
                 size: stats.size,
+                size_str: stats.size.toString(),
                 isVideo: isVideoFile(file),
                 createdAt: stats.birthtime,
             });

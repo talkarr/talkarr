@@ -76,7 +76,9 @@ export const handleNfoGeneration = async ({
 
     log.info('NFO file generated.');
 
-    const nfoStats = await fs_promises.stat(nfoPath);
+    const nfoStats = await fs_promises.stat(nfoPath, {
+        bigint: true,
+    });
 
     return addDownloadedFile({
         event,

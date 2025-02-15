@@ -31,7 +31,8 @@ export const mapResultFiles = ({
     filename: file.filename,
     root_folder: rootFolderPath,
     path: file.path,
-    size: file.bytes,
+    size: Number(file.bytes), // deal with bigint
+    size_str: file.bytes.toString(),
     mime_type: file.mime,
     url: file.url,
     created: file.created as unknown as string,

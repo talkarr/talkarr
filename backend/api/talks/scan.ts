@@ -65,6 +65,7 @@ const handleScanEventsRequest = async (
                 ...file
             }) => ({
                 ...file,
+                size: Number(file.size),
                 guess: {
                     ...guess,
                     conference_acronym: conferenceAcronym,

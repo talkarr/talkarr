@@ -123,7 +123,9 @@ export const scanForExistingFiles = async ({
             for await (const file of files) {
                 const filePath = pathUtils.join(eventPath, file.name);
 
-                const fileStats = await fs_promises.stat(filePath);
+                const fileStats = await fs_promises.stat(filePath, {
+                    bigint: true,
+                });
 
                 const guessWithoutConfidence: Omit<
                     ExistingFileWithGuessedInformation['guess'],
@@ -176,6 +178,7 @@ export const scanForExistingFiles = async ({
                         confidence: Math.round(confidence),
                     },
                     size: fileStats.size,
+                    size_str: fileStats.size.toString(),
                     createdAt: fileStats.birthtime.toISOString(),
                     path: filePath,
                     mime: mime.lookup(file.name) || defaultMimeType,

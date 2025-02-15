@@ -233,7 +233,9 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             throw new Error('No path found');
         }
 
-        const videoStats = await fs_promises.stat(path);
+        const videoStats = await fs_promises.stat(path, {
+            bigint: true,
+        });
 
         const addFileToDbResult = await addDownloadedFile({
             event,
