@@ -16,26 +16,32 @@ export const initialSettings: Settings = {
 export const setSettingsIfNotSet = async (): Promise<Settings> => {
     const prisma = new PrismaClient();
 
-    const mediaManagementSettings = await prisma.settings.findMany({
-        select: {
-            key: true,
-        },
-        where: {
-            key: 'mediamanagement',
-        },
-    });
-
-    if (mediaManagementSettings.length === 0) {
-        log.info('Creating initial media management settings');
-        await prisma.settings.create({
-            data: {
+    try {
+        const mediaManagementSettings = await prisma.settings.findMany({
+            select: {
+                key: true,
+            },
+            where: {
                 key: 'mediamanagement',
-                value: JSON.stringify(initialSettings.mediamanagement),
             },
         });
-    }
 
-    await prisma.$disconnect();
+        if (mediaManagementSettings.length === 0) {
+            log.info('Creating initial media management settings');
+            await prisma.settings.create({
+                data: {
+                    key: 'mediamanagement',
+                    value: JSON.stringify(initialSettings.mediamanagement),
+                },
+            });
+        }
+    } catch (e) {
+        log.error('Error setting initial settings:', { e });
+
+        throw e;
+    } finally {
+        await prisma.$disconnect();
+    }
 
     return initialSettings;
 };
@@ -45,10 +51,10 @@ const settings: Settings = {} as Settings;
 let settingsLoaded = false;
 
 export const loadSettings = async (): Promise<void> => {
+    const prisma = new PrismaClient();
+
     try {
         await setSettingsIfNotSet();
-
-        const prisma = new PrismaClient();
 
         const settingsQuery = await prisma.settings.findMany({
             select: {
@@ -56,8 +62,6 @@ export const loadSettings = async (): Promise<void> => {
                 value: true,
             },
         });
-
-        await prisma.$disconnect();
 
         for (const setting of settingsQuery) {
             settings[setting.key as keyof Settings] = JSON.parse(
@@ -72,6 +76,8 @@ export const loadSettings = async (): Promise<void> => {
         log.error('Error loading settings:', { e });
 
         throw e;
+    } finally {
+        await prisma.$disconnect();
     }
 };
 

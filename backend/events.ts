@@ -51,9 +51,9 @@ export const addTalk = async ({
 > => {
     const prisma = new PrismaClient();
 
-    const conference = await getConferenceFromEvent({ event });
-
     try {
+        const conference = await getConferenceFromEvent({ event });
+
         const createdTalk = await prisma.event.create({
             data: {
                 guid: event.guid,
@@ -359,21 +359,29 @@ export const getTalkInfoBySlug = async ({
 }): Promise<Omit<TalkInfo, 'status'> | null> => {
     const prisma = new PrismaClient();
 
-    // get guid and call getTalkInfoByGuid
-    const result = await prisma.event.findFirst({
-        where: {
-            slug,
-        },
-        select: {
-            guid: true,
-        },
-    });
+    try {
+        // get guid and call getTalkInfoByGuid
+        const result = await prisma.event.findFirst({
+            where: {
+                slug,
+            },
+            select: {
+                guid: true,
+            },
+        });
 
-    if (!result) {
-        return null;
+        if (!result) {
+            return null;
+        }
+
+        return await getTalkInfoByGuid({ guid: result.guid });
+    } catch (error) {
+        log.error('Error getting talk info by slug', { error, slug });
+
+        throw error;
+    } finally {
+        await prisma.$disconnect();
     }
-
-    return getTalkInfoByGuid({ guid: result.guid });
 };
 
 export const createNewTalkInfo = async ({

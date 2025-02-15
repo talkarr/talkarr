@@ -38,6 +38,8 @@ export const addRootFolder = async ({
         }
 
         return AddRootFolderResponse.Other;
+    } finally {
+        await prisma.$disconnect();
     }
 
     return AddRootFolderResponse.Success;
@@ -80,6 +82,8 @@ export const listFilesForRootFolder = async ({
         });
 
         return null;
+    } finally {
+        await prisma.$disconnect();
     }
 };
 
@@ -90,27 +94,27 @@ export const deleteRootFolder = async ({
 }): Promise<boolean> => {
     const prisma = new PrismaClient();
 
-    const events = await prisma.event.findMany({
-        where: {
-            root_folder: {
-                path: rootFolderPath,
-            },
-        },
-    });
-
-    if (events.length > 0) {
-        const promises = events.map(event =>
-            deleteTalk({ guid: event.guid, deleteFiles: true }),
-        );
-
-        await Promise.all(promises);
-    } else {
-        log.info('No events found for root folder', {
-            rootFolderPath,
-        });
-    }
-
     try {
+        const events = await prisma.event.findMany({
+            where: {
+                root_folder: {
+                    path: rootFolderPath,
+                },
+            },
+        });
+
+        if (events.length > 0) {
+            const promises = events.map(event =>
+                deleteTalk({ guid: event.guid, deleteFiles: true }),
+            );
+
+            await Promise.all(promises);
+        } else {
+            log.info('No events found for root folder', {
+                rootFolderPath,
+            });
+        }
+
         await prisma.rootFolder.delete({
             where: {
                 path: rootFolderPath,
@@ -125,6 +129,8 @@ export const deleteRootFolder = async ({
             rootFolderPath,
         });
         return false;
+    } finally {
+        await prisma.$disconnect();
     }
 
     return true;
@@ -157,6 +163,8 @@ export const setRootFolderMarked = async ({
         });
 
         return false;
+    } finally {
+        await prisma.$disconnect();
     }
 };
 
@@ -185,6 +193,8 @@ export const setRootFolderMarkExists = async ({
         });
 
         return false;
+    } finally {
+        await prisma.$disconnect();
     }
 };
 
@@ -213,6 +223,8 @@ export const clearRootFolderMark = async ({
         });
 
         return false;
+    } finally {
+        await prisma.$disconnect();
     }
 };
 
@@ -242,6 +254,8 @@ export const wasMarkFoundForRootFolder = async ({
         });
 
         return false;
+    } finally {
+        await prisma.$disconnect();
     }
 };
 
@@ -260,5 +274,7 @@ export const clearAllRootFolderHasMarks = async (): Promise<boolean> => {
         log.error('Error clearing all root folder has marks', { error: e });
 
         return false;
+    } finally {
+        await prisma.$disconnect();
     }
 };
