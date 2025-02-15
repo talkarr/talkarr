@@ -47,7 +47,7 @@ const handleListEventsRequest = async (
                 },
             });
 
-            log.info('Processing event', {
+            log.debug('Processing event', {
                 index,
                 length,
                 title: event.title,
