@@ -64,30 +64,30 @@ RUN mkdir -p /app/logs && \
 
 USER nextjs
 
-# use these for non-standalone output
-COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
-
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/backend ./backend
-
-COPY --chown=nextjs:nodejs ./next.config.ts ./next.config.ts
-COPY --chown=nextjs:nodejs ./src/constants.ts ./src/constants.ts
-
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-
-# backend.json openapi file
-COPY --from=builder --chown=nextjs:nodejs /app/backend.json ./backend.json
-
-# node_modules last
+# node_modules first
 COPY --chown=nextjs:nodejs ./package.json ./package.json
 COPY --from=deps /app/node_modules ./node_modules
 
 # copy the generated files from node_modules from builder
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
+# use these for non-standalone output
+COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
+
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/public ./public
+
+COPY --chown=nextjs:nodejs ./next.config.ts ./next.config.ts
+COPY --chown=nextjs:nodejs ./src/constants.ts ./src/constants.ts
+
+# backend.json openapi file
+COPY --from=builder --chown=nextjs:nodejs /app/backend.json ./backend.json
+
 # assets for backend
 COPY --from=builder /app/assets ./assets
+
+COPY --from=builder /app/backend ./backend
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 
 EXPOSE 3232
 
