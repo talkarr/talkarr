@@ -19,7 +19,7 @@ import { AddTalkFailure, ProblemType } from '@backend/types';
 
 import { Prisma, PrismaClient } from '@prisma/client';
 
-const log = rootLog.child({ label: 'talks' });
+const log = rootLog.child({ label: 'events' });
 
 export const mapResultFiles = ({
     file,
@@ -550,7 +550,7 @@ export const addDownloadedFile = async ({
     const prisma = new PrismaClient();
 
     try {
-        await prisma.file.create({
+        const res = await prisma.file.create({
             data: {
                 event: {
                     connect: {
@@ -566,6 +566,8 @@ export const addDownloadedFile = async ({
                 is_video: file.is_video,
             },
         });
+
+        return !!res;
     } catch (error) {
         log.error('Error adding downloaded file', {
             error,
@@ -574,12 +576,10 @@ export const addDownloadedFile = async ({
             guid: event.guid,
         });
 
-        return false;
+        throw error;
     } finally {
         await prisma.$disconnect();
     }
-
-    return true;
 };
 
 export const removeFileFromDatabase = async ({
