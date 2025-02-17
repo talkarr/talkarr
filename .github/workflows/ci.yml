@@ -42,7 +42,7 @@ jobs:
           cache-dependency-path: 'yarn.lock'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive --prefer-offline
+        run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
 
       - name: Run ESLint for frontend
         continue-on-error: true
@@ -152,7 +152,7 @@ jobs:
           cache-dependency-path: 'yarn.lock'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive --prefer-offline
+        run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
 
       - name: Prepare for tests
         id: prepare
@@ -330,7 +330,7 @@ jobs:
           cache-dependency-path: 'yarn.lock'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive --prefer-offline
+        run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
 
       - name: Install playwright dependencies
         run: |
