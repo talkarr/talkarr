@@ -146,6 +146,7 @@ export const addTalk = async ({
                     : error,
             title: event.title,
             guid: event.guid,
+            isKnownError: error instanceof Prisma.PrismaClientKnownRequestError,
         });
 
         if (
