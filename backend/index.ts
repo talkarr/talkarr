@@ -11,6 +11,8 @@ import swaggerUi from 'swagger-ui-express';
 import '@backend/workers/addTalk';
 import '@backend/workers/generateMissingNfo';
 import { startCheckForRootFolders } from '@backend/workers/checkForRootFolders';
+import { removeAllScanAndImportExistingFiles } from '@backend/workers/scanAndImportExistingFiles';
+import { removeAllScanForMissingFilesTasks } from '@backend/workers/scanForMissingFiles';
 
 import api from '@backend/api';
 import { clearDownloadingFlagForAllTalks } from '@backend/events';
@@ -116,6 +118,13 @@ app.prepare()
                 server.listen(port, () => {
                     log.info(`Server ready on http://localhost:${port}/`);
                 });
+            }
+
+            try {
+                await removeAllScanForMissingFilesTasks();
+                await removeAllScanAndImportExistingFiles();
+            } catch {
+                log.warn('Error when trying to remove existing tasks');
             }
 
             // mark everything as not downloading

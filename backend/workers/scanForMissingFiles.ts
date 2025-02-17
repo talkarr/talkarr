@@ -161,3 +161,11 @@ export const startScanForMissingFiles = (
         removeOnComplete: true /* , timeout: 60000 * 3 */,
     }); // ~3 minutes~ no timeout
 };
+
+export const removeAllScanForMissingFilesTasks = async (): Promise<void> => {
+    const jobs = await queue.getJobs(['active', 'waiting', 'delayed']);
+
+    const scanForMissingFilesJobs = jobs.filter(job => job.name === taskName);
+
+    await Promise.all(scanForMissingFilesJobs.map(job => job.remove()));
+};

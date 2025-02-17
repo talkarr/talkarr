@@ -15,12 +15,43 @@ config({
 
 const hformat = winston.format.printf(
     ({ level, label, message, timestamp, ...metadata }) => {
+        let actualMessage = message;
+
+        if (typeof message === 'bigint') {
+            actualMessage = message.toString();
+        }
+
         let msg = `${timestamp} [${level}]${
             label ? `[${label}]` : ''
-        }: ${message} `;
-        if (Object.keys(metadata).length > 0) {
-            msg += JSON.stringify(metadata);
+        }: ${actualMessage} `;
+
+        // improve above to special case error objects
+        const meta = { ...metadata };
+
+        for (const key of Object.keys(meta)) {
+            // recursively check for error objects
+            if (meta[key] instanceof Error) {
+                meta[key] = {
+                    message: meta[key].message,
+                    stack: meta[key].stack,
+                };
+            }
+
+            if (typeof meta[key] === 'bigint') {
+                meta[key] = meta[key].toString();
+            }
+
+            if (typeof meta[key] === 'object') {
+                meta[key] = JSON.stringify(meta[key], (k, v) =>
+                    typeof v === 'bigint' ? v.toString() : v,
+                );
+            }
         }
+
+        if (Object.keys(meta).length > 0) {
+            msg += JSON.stringify(meta);
+        }
+
         return msg;
     },
 );
@@ -67,7 +98,9 @@ const rootLog = winston.createLogger({
             format: winston.format.combine(
                 winston.format.splat(),
                 winston.format.timestamp(),
-                winston.format.json(),
+                winston.format.json({
+                    bigint: true,
+                }),
             ),
         }),
     ],
