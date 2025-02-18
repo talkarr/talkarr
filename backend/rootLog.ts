@@ -42,8 +42,10 @@ const hformat = winston.format.printf(
             }
 
             if (typeof meta[key] === 'object') {
-                meta[key] = JSON.stringify(meta[key], (k, v) =>
-                    typeof v === 'bigint' ? v.toString() : v,
+                meta[key] = JSON.parse(
+                    JSON.stringify(meta[key], (k, v) =>
+                        typeof v === 'bigint' ? v.toString() : v,
+                    ),
                 );
             }
         }
