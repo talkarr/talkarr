@@ -31,19 +31,20 @@ const handleListEventsRequest = async (
                     })
                 )?.map(problem => problemMap[problem] ?? problem) || null;
 
+            const file = event.file?.map(f =>
+                mapResultFiles({
+                    file: f,
+                    rootFolderPath: event.root_folder.path,
+                }),
+            );
+
             const status = generateMediaItemStatus({
                 talk: {
                     has_problems: hasProblems,
                 },
                 talkInfo: {
                     is_downloading: !!event.eventInfo?.is_downloading,
-                    files:
-                        event.file?.map(file =>
-                            mapResultFiles({
-                                file,
-                                rootFolderPath: event.root_folder.path,
-                            }),
-                        ) || [],
+                    files: file || [],
                 },
             });
 
@@ -57,6 +58,7 @@ const handleListEventsRequest = async (
 
             return {
                 ...(event as unknown as ConvertDateToStringType<ExtendedDbEvent>),
+                file,
                 persons: event.persons.map(person => person.name),
                 tags: event.tags.map(tag => tag.name),
                 root_folder_has_mark: await isFolderMarked({
