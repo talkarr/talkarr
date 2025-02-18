@@ -50,7 +50,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
 
     for await (const event of events) {
         try {
-            if (event.root_folder.did_not_find_mark) {
+            if (event.root_folder?.did_not_find_mark) {
                 log.warn('Root folder mark was not found', {
                     title: event.title,
                     rootFolder: event.root_folder,

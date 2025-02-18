@@ -130,13 +130,16 @@ export enum AddTalkFailure {
     Other,
 }
 
-export interface ExtendedDbEvent extends DbEvent {
+export type DbEventWithFolder = DbEvent & {
+    root_folder: RootFolder;
+};
+
+export interface ExtendedDbEvent extends DbEventWithFolder {
     persons: Person[];
     tags: Tag[];
     conference: Conference;
-    root_folder: RootFolder;
-    eventInfo: EventInfo | null;
-    file: DbFile[] | null;
+    eventInfo?: EventInfo | null;
+    file?: DbFile[] | null;
 }
 
 export interface EventFahrplanJsonImport {
