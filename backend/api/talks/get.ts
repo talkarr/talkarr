@@ -37,9 +37,9 @@ const handleGetEventRequest = async (
     let event: ExtendedDbEvent | null = null;
 
     if (guid) {
-        event = await getSpecificTalkByGuid({ guid });
+        event = await getSpecificTalkByGuid({ guid, withFiles: false });
     } else if (slug) {
-        event = await getSpecificTalkBySlug({ slug });
+        event = await getSpecificTalkBySlug({ slug, withFiles: false });
     }
 
     if (!event) {

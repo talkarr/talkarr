@@ -64,7 +64,7 @@ export type RequestBody<
 export type ExpressPostRequest<
     P extends PathsWithMethod<paths, M>,
     M extends Method = 'post',
-> = express.Request<core.ParamsDictionary, unknown, Partial<RequestBody<P, M>>>;
+> = express.Request<core.ParamsDictionary, unknown, RequestBody<P, M>>;
 
 export type ExpressGetRequest<
     P extends PathsWithMethod<paths, M>,

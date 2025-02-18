@@ -736,11 +736,20 @@ export const setDownloadExitCode = async ({
     }
 };
 
-export const getSpecificTalkByGuid = async ({
+export const getSpecificTalkByGuid = async <
+    TEnableWithFiles extends boolean | undefined,
+>({
     guid,
+    withFiles = false,
 }: {
     guid: string;
-}): Promise<ExtendedDbEvent | null> => {
+    withFiles?: TEnableWithFiles;
+}): Promise<
+    | (TEnableWithFiles extends true
+          ? ExtendedDbEvent
+          : Omit<ExtendedDbEvent, 'file'>)
+    | null
+> => {
     const prisma = new PrismaClient();
 
     try {
@@ -754,7 +763,7 @@ export const getSpecificTalkByGuid = async ({
                 conference: true,
                 root_folder: true,
                 eventInfo: true,
-                file: true,
+                file: withFiles,
             },
         });
     } catch (error) {
@@ -766,11 +775,20 @@ export const getSpecificTalkByGuid = async ({
     }
 };
 
-export const getSpecificTalkBySlug = async ({
+export const getSpecificTalkBySlug = async <
+    TEnableWithFiles extends boolean | undefined,
+>({
     slug,
+    withFiles = false,
 }: {
     slug: string;
-}): Promise<ExtendedDbEvent | null> => {
+    withFiles?: TEnableWithFiles;
+}): Promise<
+    | (TEnableWithFiles extends true
+          ? ExtendedDbEvent
+          : Omit<ExtendedDbEvent, 'file'>)
+    | null
+> => {
     const prisma = new PrismaClient();
 
     try {
@@ -784,7 +802,7 @@ export const getSpecificTalkBySlug = async ({
                 conference: true,
                 root_folder: true,
                 eventInfo: true,
-                file: true,
+                file: withFiles,
             },
         });
     } catch (error) {

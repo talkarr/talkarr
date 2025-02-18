@@ -56,9 +56,11 @@ const handleListEventsRequest = async (
                 hasProblems,
             });
 
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            const { file: _, ...eventWithoutFile } = event;
+
             return {
-                ...(event as unknown as ConvertDateToStringType<ExtendedDbEvent>),
-                file,
+                ...(eventWithoutFile as unknown as ConvertDateToStringType<ExtendedDbEvent>),
                 persons: event.persons.map(person => person.name),
                 tags: event.tags.map(tag => tag.name),
                 root_folder_has_mark: await isFolderMarked({
