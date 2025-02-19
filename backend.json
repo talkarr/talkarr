@@ -674,6 +674,11 @@
                                 "type": "null"
                             }
                         ]
+                    },
+                    "download_error": {
+                        "type": "string",
+                        "example": "Error message",
+                        "nullable": true
                     }
                 },
                 "required": [

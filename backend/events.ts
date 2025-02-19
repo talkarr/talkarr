@@ -10,9 +10,11 @@ import { getConferenceFromEvent, getTalkFromApiBySlug } from '@backend/helper';
 import rootLog from '@backend/rootLog';
 import type {
     ApiEvent,
+    ConvertBigintToNumberType,
     ConvertDateToStringType,
     ExtendedDbEvent,
     ImportJsonResponse,
+    NormalAndConvertedDate,
     TalkInfo,
 } from '@backend/types';
 import { AddTalkFailure, ProblemType } from '@backend/types';
@@ -37,6 +39,20 @@ export const mapResultFiles = ({
     url: file.url,
     created: file.created as unknown as string,
     is_video: isVideoFile(file.path),
+});
+
+export const fixBigintInExtendedDbEvent = (
+    data: ConvertDateToStringType<Omit<ExtendedDbEvent, 'recordings'>>,
+): ConvertBigintToNumberType<typeof data & { duration_str: string }> => ({
+    ...data,
+    file:
+        data.file?.map(file => ({
+            ...file,
+            bytes: Number(file.bytes),
+            bytes_str: file.bytes.toString(),
+        })) || null,
+    duration: Number(data.duration),
+    duration_str: data.duration.toString(),
 });
 
 export const addTalk = async ({
@@ -342,6 +358,7 @@ export const getTalkInfoByGuid = async ({
             root_folder: result.root_folder.path,
             download_progress: result.eventInfo.download_progress,
             is_downloading: result.eventInfo.is_downloading,
+            download_error: result.eventInfo.download_error,
             has_files: result.file.length > 0,
             folder,
         };
@@ -389,7 +406,7 @@ export const getTalkInfoBySlug = async ({
 export const createNewTalkInfo = async ({
     talk,
 }: {
-    talk: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>;
+    talk: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
 }): Promise<EventInfo['guid'] | null> => {
     const prisma = new PrismaClient();
 
@@ -508,19 +525,32 @@ export const setIsDownloading = async ({
 
 export const isEventDownloading = async ({
     eventInfoGuid,
+    eventGuid,
     throwIfNotFound,
-}: {
-    eventInfoGuid: EventInfo['guid'];
-    throwIfNotFound?: boolean;
-}): Promise<boolean> => {
+}:
+    | {
+          eventInfoGuid: EventInfo['guid'];
+          eventGuid?: never;
+          throwIfNotFound?: boolean;
+      }
+    | {
+          eventGuid: DbEvent['guid'];
+          eventInfoGuid?: never;
+          throwIfNotFound?: boolean;
+      }): Promise<boolean> => {
     const prisma = new PrismaClient();
 
     try {
         const result = await prisma.eventInfo.findFirst({
-            where: {
-                guid: eventInfoGuid,
-                is_downloading: true,
-            },
+            where: eventGuid
+                ? {
+                      eventGuid,
+                      is_downloading: true,
+                  }
+                : {
+                      guid: eventInfoGuid,
+                      is_downloading: true,
+                  },
         });
 
         return !!result;
@@ -528,6 +558,7 @@ export const isEventDownloading = async ({
         log.error('Error checking if event is downloading', {
             error,
             eventInfoGuid,
+            eventGuid,
         });
 
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -543,19 +574,31 @@ export const isEventDownloading = async ({
 };
 
 export const setDownloadError = async ({
-    eventInfoGuid,
     error,
-}: {
-    eventInfoGuid: EventInfo['guid'];
-    error: string;
-}): Promise<void> => {
+    eventGuid,
+    eventInfoGuid,
+}:
+    | {
+          eventInfoGuid: EventInfo['guid'];
+          eventGuid?: never;
+          error: string;
+      }
+    | {
+          eventGuid: DbEvent['guid'];
+          eventInfoGuid?: never;
+          error: string;
+      }): Promise<void> => {
     const prisma = new PrismaClient();
 
     try {
         await prisma.eventInfo.update({
-            where: {
-                guid: eventInfoGuid,
-            },
+            where: eventGuid
+                ? {
+                      eventGuid,
+                  }
+                : {
+                      guid: eventInfoGuid,
+                  },
             data: {
                 download_error: error,
             },
@@ -565,7 +608,56 @@ export const setDownloadError = async ({
             db_error,
             error,
             eventInfoGuid,
+            eventGuid,
         });
+
+        if (db_error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (db_error.code === 'P2021') {
+                log.error('Event info not found', { eventInfoGuid });
+            }
+        }
+    } finally {
+        await prisma.$disconnect();
+    }
+};
+
+export const getDownloadError = async ({
+    eventGuid,
+    eventInfoGuid,
+}:
+    | {
+          eventGuid: DbEvent['guid'];
+          eventInfoGuid?: never;
+      }
+    | {
+          eventInfoGuid: EventInfo['guid'];
+          eventGuid?: never;
+      }): Promise<string | null> => {
+    const prisma = new PrismaClient();
+
+    try {
+        const result = await prisma.eventInfo.findFirst({
+            where: eventGuid
+                ? {
+                      eventGuid,
+                  }
+                : {
+                      guid: eventInfoGuid,
+                  },
+            select: {
+                download_error: true,
+            },
+        });
+
+        return result?.download_error || null;
+    } catch (db_error) {
+        log.error('Error getting download error', {
+            db_error,
+            eventGuid,
+            eventInfoGuid,
+        });
+
+        return null;
     } finally {
         await prisma.$disconnect();
     }
@@ -573,22 +665,39 @@ export const setDownloadError = async ({
 
 export const clearDownloadError = async ({
     eventGuid,
-}: {
-    eventGuid: DbEvent['guid'];
-}): Promise<void> => {
+    eventInfoGuid,
+}:
+    | {
+          eventGuid: DbEvent['guid'];
+          eventInfoGuid?: never;
+      }
+    | {
+          eventInfoGuid: EventInfo['guid'];
+          eventGuid?: never;
+      }): Promise<void> => {
     const prisma = new PrismaClient();
 
     try {
         await prisma.eventInfo.update({
-            where: {
-                eventGuid,
-            },
+            where: eventGuid
+                ? {
+                      eventGuid,
+                  }
+                : {
+                      guid: eventInfoGuid,
+                  },
             data: {
                 download_error: null,
             },
         });
     } catch (db_error) {
         log.error('Error clearing download error', { db_error, eventGuid });
+
+        if (db_error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (db_error.code === 'P2021') {
+                log.error('Event info not found', { eventGuid });
+            }
+        }
     } finally {
         await prisma.$disconnect();
     }
@@ -599,7 +708,7 @@ export const addDownloadedFile = async ({
     file,
     eventInfoGuid,
 }: {
-    event: DbEvent | ConvertDateToStringType<DbEvent>;
+    event: ConvertBigintToNumberType<NormalAndConvertedDate<DbEvent>>;
     file: Omit<File, 'eventGuid'>;
     eventInfoGuid: EventInfo['guid'] | undefined;
 }): Promise<boolean> => {
@@ -709,18 +818,24 @@ export const checkIfFileIsInDb = async ({
 
 export const setDownloadExitCode = async ({
     eventInfoGuid,
+    eventGuid,
     exitCode,
-}: {
-    eventInfoGuid: EventInfo['guid'];
-    exitCode: number | null;
-}): Promise<void> => {
+}:
+    | {
+          eventInfoGuid: EventInfo['guid'];
+          eventGuid?: never;
+          exitCode: number | null;
+      }
+    | {
+          eventInfoGuid?: never;
+          eventGuid: DbEvent['guid'];
+          exitCode: number | null;
+      }): Promise<void> => {
     const prisma = new PrismaClient();
 
     try {
         await prisma.eventInfo.update({
-            where: {
-                guid: eventInfoGuid,
-            },
+            where: eventGuid ? { eventGuid } : { guid: eventInfoGuid },
             data: {
                 download_exit_code: exitCode,
             },
@@ -990,17 +1105,34 @@ export const importExistingFileFromFilesystem = async ({
 
 export const checkEventForProblems = async ({
     rootFolderPath,
+    eventInfoGuid,
+    downloadError,
 }: {
     rootFolderPath: string;
-}): Promise<ProblemType[] | null> => {
+} & (
+    | {
+          eventInfoGuid: EventInfo['guid'] | undefined;
+          downloadError?: never;
+      }
+    | {
+          eventInfoGuid?: never;
+          downloadError: string | null | undefined;
+      }
+)): Promise<ProblemType[] | null> => {
     const problems: ProblemType[] = [];
 
     // ==== Start of problem checks ====
 
     if (!rootFolderPath) {
-        log.warn('Event has no root folder', { rootFolderPath });
+        log.debug('Event has no root folder', { rootFolderPath });
 
         problems.push(ProblemType.NoRootFolder);
+    }
+
+    if (!eventInfoGuid && typeof downloadError === 'undefined') {
+        log.debug('Event has no event info', { eventInfoGuid });
+
+        problems.push(ProblemType.NoEventInfoGuid);
     }
 
     const hasMark = await isFolderMarked({
@@ -1008,9 +1140,23 @@ export const checkEventForProblems = async ({
     });
 
     if (!hasMark) {
-        log.warn('Root folder is not marked', { rootFolderPath });
+        log.debug('Root folder is not marked', { rootFolderPath });
 
         problems.push(ProblemType.RootFolderMarkNotFound);
+    }
+
+    const downloadErrorResult =
+        downloadError ||
+        (eventInfoGuid
+            ? await getDownloadError({
+                  eventInfoGuid,
+              })
+            : null);
+
+    if (downloadErrorResult) {
+        log.debug('Download error found', { downloadErrorResult });
+
+        problems.push(ProblemType.HasDownloadError);
     }
 
     // ==== End of problem checks ====
@@ -1100,8 +1246,8 @@ export const importEventFahrplanJson = async ({
             title: result.title,
         });
 
-        startScanForMissingFiles({
-            event: result,
+        await startScanForMissingFiles({
+            event: fixBigintInExtendedDbEvent(result),
         });
     }
 

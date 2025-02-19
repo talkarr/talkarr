@@ -6,14 +6,18 @@ import { handleNfoGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
-import type { ConvertDateToStringType, ExtendedDbEvent } from '@backend/types';
+import type {
+    ConvertBigintToNumberType,
+    ExtendedDbEvent,
+    NormalAndConvertedDate,
+} from '@backend/types';
 
 export const taskName = 'generateMissingNfo';
 
 const log = rootLog.child({ label: 'workers/generateMissingNfo' });
 
 export interface GenerateMissingNfoData {
-    event: ConvertDateToStringType<ExtendedDbEvent>;
+    event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
 }
 
 export const check = typia.createIs<GenerateMissingNfoData>();

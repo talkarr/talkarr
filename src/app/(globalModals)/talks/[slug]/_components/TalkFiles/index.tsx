@@ -90,6 +90,13 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                         }
                         color={statusColor}
                     />
+                    {data.info.download_error ? (
+                        <TalkAttribute
+                            name="Download Error"
+                            value={data.info.download_error}
+                            color={theme.palette.error.main}
+                        />
+                    ) : null}
                 </Box>
             </Box>
             <Box mb={3}>

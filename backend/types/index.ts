@@ -104,6 +104,12 @@ export type ConvertDateToStringType<T> = T extends Date
       ? { [K in keyof T]: ConvertDateToStringType<T[K]> }
       : T;
 
+export type BigintToNumber<T> = T extends bigint ? number : T;
+
+export type ConvertBigintToNumberType<T> = T extends object
+    ? { [K in keyof T]: ConvertBigintToNumberType<T[K]> }
+    : BigintToNumber<T>;
+
 export type NormalAndConvertedDate<T> = T | ConvertDateToStringType<T>;
 
 export type ApiEvent = components['schemas']['Event'];
@@ -116,13 +122,17 @@ export type ImportJsonResponse = components['schemas']['ImportJsonResponse'];
 
 export enum ProblemType {
     NoRootFolder,
+    NoEventInfoGuid,
     RootFolderMarkNotFound,
+    HasDownloadError,
 }
 
 export const problemMap: Record<ProblemType, string> = {
     [ProblemType.NoRootFolder]: 'No root folder',
+    [ProblemType.NoEventInfoGuid]: 'No event info guid',
     [ProblemType.RootFolderMarkNotFound]:
         'Root folder mark not found, possibly unmounted filesystem',
+    [ProblemType.HasDownloadError]: 'Has download error, check media item page',
 };
 
 export enum AddTalkFailure {

@@ -125,12 +125,8 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                     href={specificTalkPageLink(initialData.slug)}
                     style={{ flex: 1 }}
                     tabIndex={-1}
-                    disabled={!!initialData.has_problems?.length}
                 >
-                    <CardActionArea
-                        sx={{ height: '100%' }}
-                        disabled={!!initialData.has_problems?.length}
-                    >
+                    <CardActionArea sx={{ height: '100%' }}>
                         <Box
                             height="100%"
                             sx={{

@@ -1,3 +1,5 @@
+import type { DoneCallback } from 'bull';
+
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
@@ -24,14 +26,18 @@ import {
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
-import type { ConvertDateToStringType, ExtendedDbEvent } from '@backend/types';
+import type {
+    ConvertBigintToNumberType,
+    ConvertDateToStringType,
+    ExtendedDbEvent,
+} from '@backend/types';
 
 export const taskName = 'addTalk';
 
 const log = rootLog.child({ label: 'workers/addTalk' });
 
 export interface AddTalkData {
-    event: ConvertDateToStringType<ExtendedDbEvent>;
+    event: ConvertBigintToNumberType<ConvertDateToStringType<ExtendedDbEvent>>;
 }
 
 export const check = typia.createIs<AddTalkData>();
@@ -64,16 +70,16 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         });
     }
 
-    const done = async (): Promise<void> => {
+    const done = async (...args: Parameters<DoneCallback>): Promise<void> => {
         runningInstances -= 1;
 
-        actualDone();
+        actualDone(...args);
     };
 
     runningInstances += 1;
 
     const isAlreadyDownloading = await isEventDownloading({
-        eventInfoGuid: event.guid,
+        eventGuid: event.guid,
         throwIfNotFound: true,
     });
 
@@ -93,11 +99,11 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         });
 
         await setDownloadError({
-            eventInfoGuid: event.guid,
+            eventGuid: event.guid,
             error: 'Talk does not have a frontend link',
         });
 
-        throw new Error('Talk does not have a frontend link');
+        return done(new Error('Talk does not have a frontend link'));
     }
 
     try {
@@ -114,10 +120,13 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         );
 
         if (!videoInfo || typeof videoInfo === 'string') {
-            log.error('Error fetching video info:', { videoInfo });
+            log.error(
+                'Error fetching video info (!videoInfo || typeof videoInfo === string):',
+                { videoInfo },
+            );
 
             await setDownloadError({
-                eventInfoGuid: event.guid,
+                eventGuid: event.guid,
                 error: videoInfo ?? 'Unknown error',
             });
 
@@ -126,16 +135,17 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     } catch (error) {
         log.error('Error fetching video info:', {
             error,
+            eventInfoGuid: event.guid,
             title: event.title,
             frontend_url: event.frontend_link,
         });
 
         await setDownloadError({
-            eventInfoGuid: event.guid,
+            eventGuid: event.guid,
             error: 'Error fetching video info',
         });
 
-        throw new Error('Error fetching video info');
+        return done(new Error('Error fetching video info (catch)'));
     }
 
     const folder = await getFolderPathForTalk({ event });
@@ -146,7 +156,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         });
 
         await setDownloadError({
-            eventInfoGuid: event.guid,
+            eventGuid: event.guid,
             error: 'Error getting folder path for talk',
         });
 
@@ -255,7 +265,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             log.error('Error adding file to db:', { title: event.title });
 
             await setDownloadError({
-                eventInfoGuid: event.guid,
+                eventGuid: event.guid,
                 error: 'Error adding file to db',
             });
 
@@ -267,14 +277,16 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         if (stderrBuffer) {
             log.error('Error downloading video:', { stderrBuffer });
             await setDownloadError({
-                eventInfoGuid: event.guid,
+                eventGuid: event.guid,
                 error: stderrBuffer,
             });
         }
 
-        await setDownloadExitCode({ eventInfoGuid: event.guid, exitCode });
+        await setDownloadExitCode({ eventGuid: event.guid, exitCode });
 
         await setIsDownloading({ eventGuid: event.guid, isDownloading: false });
+
+        await clearDownloadError({ eventGuid: event.guid });
 
         return await done();
     } catch (error) {
@@ -291,7 +303,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
                   ? error
                   : 'Unknown error';
         await setDownloadError({
-            eventInfoGuid: event.guid,
+            eventGuid: event.guid,
             error: errorAsString,
         });
 

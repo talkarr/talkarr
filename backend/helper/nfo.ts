@@ -8,7 +8,7 @@ import { defaultMimeType, isVideoFile, nfoFilename } from '@backend/fs';
 import rootLog from '@backend/rootLog';
 import type {
     ApiEvent,
-    ConvertDateToStringType,
+    ConvertBigintToNumberType,
     ExtendedDbEvent,
     NormalAndConvertedDate,
 } from '@backend/types';
@@ -18,7 +18,9 @@ const log = rootLog.child({ label: 'helper/nfo' });
 export const generateNfo = ({
     event,
 }: {
-    event: NormalAndConvertedDate<ApiEvent | ExtendedDbEvent>;
+    event: ConvertBigintToNumberType<
+        NormalAndConvertedDate<ApiEvent | ExtendedDbEvent>
+    >;
 }): string => {
     const persons = event.persons.map(person =>
         typeof person === 'string' ? person : person.name,
@@ -52,7 +54,7 @@ export const handleNfoGeneration = async ({
     event,
 }: {
     folder: string;
-    event: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>;
+    event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
 }): Promise<boolean> => {
     log.info('Generating NFO file...');
 

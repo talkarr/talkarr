@@ -28,6 +28,7 @@ const handleListEventsRequest = async (
                 (
                     await checkEventForProblems({
                         rootFolderPath: event.root_folder.path,
+                        eventInfoGuid: event.eventInfo?.guid,
                     })
                 )?.map(problem => problemMap[problem] ?? problem) || null;
 

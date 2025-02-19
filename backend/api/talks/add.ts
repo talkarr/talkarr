@@ -1,6 +1,6 @@
 import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
 
-import { addTalk } from '@backend/events';
+import { addTalk, fixBigintInExtendedDbEvent } from '@backend/events';
 import { getTalkFromApiByGuid } from '@backend/helper';
 import rootLog from '@backend/rootLog';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
@@ -75,8 +75,8 @@ const handleAddEventRequest = async (
         return;
     }
 
-    startScanForMissingFiles({
-        event: result,
+    await startScanForMissingFiles({
+        event: fixBigintInExtendedDbEvent(result),
     });
 
     res.json({

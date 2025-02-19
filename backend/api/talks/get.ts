@@ -81,6 +81,7 @@ const handleGetEventRequest = async (
         (
             await checkEventForProblems({
                 rootFolderPath: event.root_folder.path,
+                downloadError: talkInfo.download_error,
             })
         )?.map(problem => problemMap[problem] ?? problem) || null;
 

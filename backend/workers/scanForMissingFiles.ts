@@ -9,21 +9,26 @@ import {
     addDownloadedFile,
     checkIfFileIsInDb,
     createNewTalkInfo,
+    fixBigintInExtendedDbEvent,
     listEvents,
     setIsDownloading,
 } from '@backend/events';
 import { doesEventHaveNfoFile, doesTalkHaveExistingFiles } from '@backend/fs';
 import type { TaskFunction } from '@backend/queue';
-import queue, { waitForTaskFinished } from '@backend/queue';
+import queue, { isTaskRunning, waitForTaskFinished } from '@backend/queue';
 import rootLog from '@backend/rootLog';
-import type { ConvertDateToStringType, ExtendedDbEvent } from '@backend/types';
+import type {
+    ConvertBigintToNumberType,
+    ConvertDateToStringType,
+    ExtendedDbEvent,
+} from '@backend/types';
 
 export const taskName = 'scanForMissingFiles';
 
 const log = rootLog.child({ label: 'workers/scanForMissingFiles' });
 
 export interface ScanForMissingFilesData {
-    event?: ConvertDateToStringType<ExtendedDbEvent>;
+    event?: ConvertBigintToNumberType<ConvertDateToStringType<ExtendedDbEvent>>;
 }
 
 export const check = typia.createIs<ScanForMissingFilesData>();
@@ -44,7 +49,9 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
 
     await waitForTaskFinished(taskName, null, job.id);
 
-    const events = job.data.event ? [job.data.event] : await listEvents();
+    const events = job.data.event
+        ? [job.data.event]
+        : (await listEvents()).map(e => fixBigintInExtendedDbEvent(e));
 
     let hasErrored = false;
 
@@ -78,7 +85,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                 log.info('Created new talk info:', { title: event.title });
             }
 
-            if (!hasFiles) {
+            if (!hasFiles?.find(f => f.isVideo)) {
                 startAddTalk({ event });
             } else {
                 await setIsDownloading({
@@ -154,9 +161,15 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
 
 queue.process(taskName, scanForMissingFiles);
 
-export const startScanForMissingFiles = (
+export const startScanForMissingFiles = async (
     data: ScanForMissingFilesData,
-): void => {
+): Promise<void> => {
+    if (await isTaskRunning(taskName)) {
+        log.warn('Task is already running, skipping...');
+
+        return;
+    }
+
     queue.add(taskName, data, {
         removeOnComplete: true /* , timeout: 60000 * 3 */,
     }); // ~3 minutes~ no timeout

@@ -3,7 +3,12 @@ import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
 import rootLog from '@backend/rootLog';
-import type { ConvertDateToStringType, ExtendedDbEvent } from '@backend/types';
+import type {
+    ConvertBigintToNumberType,
+    ConvertDateToStringType,
+    ExtendedDbEvent,
+    NormalAndConvertedDate,
+} from '@backend/types';
 
 // filePath: `${USER_DEFINED_ROOT_FOLDER}/${CONFERENCE}/${FILENAME}`
 
@@ -40,7 +45,7 @@ export const isVideoFile = (filename: string): boolean => {
 export const doesTalkHaveExistingFiles = async ({
     event,
 }: {
-    event: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>;
+    event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
 }): Promise<ExistingFile[] | null> => {
     if (!event.rootFolderPath) {
         log.debug('Event does not have a root folder path');
@@ -118,7 +123,7 @@ export const doesTalkHaveExistingFiles = async ({
 export const doesEventHaveNfoFile = async ({
     event,
 }: {
-    event: ExtendedDbEvent | ConvertDateToStringType<ExtendedDbEvent>;
+    event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
 }): Promise<boolean> => {
     if (!event.rootFolderPath) {
         return false;
@@ -222,9 +227,9 @@ type GetFolderPathForTalkEvent = Pick<
 export const getFolderPathForTalk = async ({
     event,
 }: {
-    event:
-        | GetFolderPathForTalkEvent
-        | ConvertDateToStringType<GetFolderPathForTalkEvent>;
+    event: ConvertBigintToNumberType<
+        NormalAndConvertedDate<GetFolderPathForTalkEvent>
+    >;
 }): Promise<string | null> => {
     if (!event.rootFolderPath) {
         return null;

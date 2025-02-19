@@ -1232,6 +1232,8 @@ export interface components {
             /** @example /folder */
             folder: string;
             status: components["schemas"]["MediaItemStatus"] | null;
+            /** @example Error message */
+            download_error?: string | null;
         };
         GenericServerError: {
             /**
