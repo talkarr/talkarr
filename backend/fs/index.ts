@@ -5,7 +5,6 @@ import pathUtils from 'path';
 import rootLog from '@backend/rootLog';
 import type {
     ConvertBigintToNumberType,
-    ConvertDateToStringType,
     ExtendedDbEvent,
     NormalAndConvertedDate,
 } from '@backend/types';
