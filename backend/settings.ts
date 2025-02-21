@@ -1,7 +1,6 @@
 import type { MediamanagementSettings } from '@backend/api/settings/mediamanagement';
+import { prisma } from '@backend/prisma';
 import rootLog from '@backend/rootLog';
-
-import { PrismaClient } from '@prisma/client';
 
 const log = rootLog.child({ label: 'settings' });
 
@@ -14,8 +13,6 @@ export const initialSettings: Settings = {
 };
 
 export const setSettingsIfNotSet = async (): Promise<Settings> => {
-    const prisma = new PrismaClient();
-
     try {
         const mediaManagementSettings = await prisma.settings.findMany({
             select: {
@@ -39,8 +36,6 @@ export const setSettingsIfNotSet = async (): Promise<Settings> => {
         log.error('Error setting initial settings:', { e });
 
         throw e;
-    } finally {
-        await prisma.$disconnect();
     }
 
     return initialSettings;
@@ -51,8 +46,6 @@ const settings: Settings = {} as Settings;
 let settingsLoaded = false;
 
 export const loadSettings = async (): Promise<void> => {
-    const prisma = new PrismaClient();
-
     try {
         await setSettingsIfNotSet();
 
@@ -76,14 +69,10 @@ export const loadSettings = async (): Promise<void> => {
         log.error('Error loading settings:', { e });
 
         throw e;
-    } finally {
-        await prisma.$disconnect();
     }
 };
 
 export const saveSettings = async (): Promise<void> => {
-    const prisma = new PrismaClient();
-
     try {
         for await (const key of Object.keys(settings) as (keyof Settings)[]) {
             await prisma.settings.update({
@@ -101,8 +90,6 @@ export const saveSettings = async (): Promise<void> => {
         log.error('Error saving settings:', { e });
 
         throw e;
-    } finally {
-        await prisma.$disconnect();
     }
 };
 
