@@ -161,6 +161,45 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
 
         await ytdlInstance;
 
+        // await exit code not being null
+        const tries = 0;
+
+        const waitForExitCode = async (): Promise<Error | number> => {
+            if (exitCode === null) {
+                await new Promise(resolve => {
+                    setTimeout(resolve, 1000);
+                });
+
+                if (tries > 10) {
+                    log.error('Error fetching video info (exitCode null)', {
+                        title: event.title,
+                        frontend_url: event.frontend_link,
+                    });
+
+                    await setDownloadError({
+                        eventGuid: event.guid,
+                        error: 'Error fetching video info (exitCode null)',
+                    });
+
+                    return new Error(
+                        'Error fetching video info (exitCode null)',
+                    );
+                }
+
+                return waitForExitCode();
+            }
+
+            return exitCode;
+        };
+
+        const exitCodeResult = await waitForExitCode();
+
+        if (exitCodeResult instanceof Error) {
+            return await done(exitCodeResult);
+        }
+
+        exitCode = exitCodeResult;
+
         if (exitCode !== 0) {
             log.error('Error fetching video info (exitCode != 0)', {
                 exitCode,
