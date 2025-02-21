@@ -118,8 +118,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             event.frontend_link,
             {
                 dumpSingleJson: true,
-                format: 'best',
                 skipDownload: true,
+                noWarnings: true,
             },
             {
                 stdio: 'pipe',
@@ -235,6 +235,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             event.frontend_link,
             {
                 output: pathUtils.join(folder, `${event.slug}.%(ext)s`),
+                noWarnings: true,
             },
             {
                 stdio: 'pipe',
