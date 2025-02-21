@@ -62,6 +62,10 @@ RUN adduser --system --uid 1001 nextjs
 RUN mkdir -p /app/logs && \
     chown -R nextjs:nodejs /app/logs
 
+# same for the .next/cache/images folder
+RUN mkdir -p /app/.next/cache/images && \
+    chown -R nextjs:nodejs /app/.next/cache/images
+
 USER nextjs
 
 # node_modules first
