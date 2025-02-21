@@ -51,6 +51,9 @@ model File {
 }
 
 model Event {
+  // general fields
+  date_added DateTime @default(now())
+
   // media.ccc.de specific fields
   // datetimes
   guid         String   @id

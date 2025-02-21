@@ -188,6 +188,9 @@ export const listEvents = async (): Promise<
                 eventInfo: true,
                 file: true,
             },
+            orderBy: {
+                date_added: 'desc',
+            },
         });
 
         return result as unknown as ConvertDateToStringType<
