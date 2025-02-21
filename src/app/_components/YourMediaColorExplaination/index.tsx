@@ -9,7 +9,7 @@ import {
     getMediaItemStatusColor,
     mediaItemStatusTextMap,
 } from '@backend/talkUtils';
-import type { SuccessData } from '@backend/types';
+import type { SuccessData, SuccessResponse } from '@backend/types';
 
 import { useApiStore } from '@/providers/apiStoreProvider';
 
@@ -33,18 +33,40 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
     const talkInfoMap = useApiStore(state => state.talkInfo);
 
     const updatedStatusCount = useMemo(() => {
-        const arr = Object.values(talkInfoMap);
+        const initial = initialData.map(({ status, guid }) => ({
+            status: status as MediaItemStatus,
+            key: guid,
+        }));
 
-        const merged = [];
+        const updated = (
+            Object.entries(talkInfoMap).filter(
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                ([_, t]) => t?.success,
+            ) as [string, SuccessResponse<'/talks/info', 'get'>][]
+        ).map(([key, { data }]) => ({
+            status: data.status,
+            key,
+        }));
 
-        for (let i = 0; i < initialData.length; i += 1) {
-            merged.push({ ...initialData[i], ...arr[i] });
+        if (!updated.length) {
+            return generateStatusMap(initial);
         }
 
+        const merged: Record<string, MediaItemStatus | null> = {};
+
+        initial.forEach(({ status, key }) => {
+            merged[key] = status;
+        });
+
+        updated.forEach(({ status, key }) => {
+            merged[key] = status as MediaItemStatus | null;
+        });
+
         return generateStatusMap(
-            merged
-                .map(data => (data ? { status: data.status } : null))
-                .filter(Boolean) as Array<{ status: MediaItemStatus }>,
+            Object.entries(merged).map(([key, status]) => ({
+                status,
+                key,
+            })),
         );
     }, [initialData, talkInfoMap]);
 
