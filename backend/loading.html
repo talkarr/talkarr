@@ -27,32 +27,92 @@
         p {
             margin: 0.5em 0;
         }
+
+        #logo {
+            width: 160px;
+            height: 160px;
+        }
     </style>
 </head>
 <body>
 <div>
-    <img src="/logo.png" alt="talkarr logo" width="120">
+    <img src="/small_logo.png" alt="" id="logo">
     <h1>Starting up talkarr</h1>
     <p>Please wait...</p>
     <p>The page will automatically refresh when the server is ready.</p>
+    <pre id="retryMsg"></pre>
 </div>
 <script>
+    const setRetryMsg = (msg) => {
+        document.getElementById('retryMsg').textContent = msg;
+    };
+
+    let retryInterval = null;
+    let lastStatus = null;
+    let retryMillis = 3000;
+
+    const updateRetryMsg = () => {
+        setRetryMsg(`Retrying in ${retryMillis / 1000} seconds...` + (lastStatus ? `\n(Last status: ${lastStatus})` : ''));
+        if (retryMillis <= 0) {
+            setRetryMsg('Retrying...');
+            lastStatus = null;
+            clearInterval(retryInterval);
+            setTimeout(() => {
+                check();
+            }, 1000);
+            return;
+        }
+        retryMillis -= 1000;
+    };
+
+    const doRetry = () => {
+        if (retryInterval !== null) {
+            clearInterval(retryInterval);
+        }
+        retryMillis = 3000;
+        retryInterval = setInterval(() => {
+            updateRetryMsg();
+        }, 1000);
+        updateRetryMsg();
+    };
+
+    doRetry();
+
     // try to fetch /api/healthz every 3 seconds
     const check = () => {
+        if (retryInterval !== null) {
+            clearInterval(retryInterval);
+        }
         fetch('/api/healthz')
             .then(response => {
-                if (response.ok) {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+
+                if (isJson && response.ok) {
                     window.location.href = '/';
                 } else {
-                    setTimeout(check, 3000);
+                    if (response.status === 503) {
+                        lastStatus = '503 Service Unavailable';
+                    } else {
+                        lastStatus = `HTTP ${response.status}`;
+                    }
+
+                    doRetry();
                 }
             })
             .catch(() => {
-                setTimeout(check, 3000);
+                doRetry();
             });
     };
 
-    setTimeout(check, 3000);
+    // try to reload image if it fails to load
+    const logo = document.getElementById('logo');
+
+    const setImageUrl = () => {
+        logo.src = '/logo.png';
+    };
+
+    logo.addEventListener('error', setImageUrl);
+    document.addEventListener('DOMContentLoaded', setImageUrl);
 </script>
 </body>
 </html>

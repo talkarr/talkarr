@@ -23,7 +23,7 @@ router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
 router.get('/healthz', (_req, res) => {
-    res.sendStatus(200);
+    res.status(200).json({ status: 'ok' });
 });
 
 router.use('/talks', talksRouter);

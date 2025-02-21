@@ -33,7 +33,35 @@ loadingServer.get('/logo.png', (req, res) => {
     });
 });
 
+loadingServer.get('/favicon.ico', (req, res) => {
+    res.sendFile('favicon.ico', {
+        root: pathUtils.join(__dirname, '..', 'assets'),
+    });
+});
+
+loadingServer.get('/small_logo.png', (req, res) => {
+    res.sendFile('logo_cropped_small.png', {
+        root: pathUtils.join(__dirname, '..', 'assets'),
+    });
+});
+
 loadingServer.get('*', (req, res) => {
+    if (req.path.startsWith('/api')) {
+        res.status(521).json({
+            message: 'Service not available',
+        });
+
+        return;
+    }
+
+    if (req.path.startsWith('/_next')) {
+        res.status(521).json({
+            message: 'Service not available',
+        });
+
+        return;
+    }
+
     res.sendFile('loading.html', { root: __dirname });
 });
 
@@ -50,93 +78,96 @@ if (host) {
     loadingHttpServer = loadingServer.listen(port);
 }
 
-const app = next({ dev, turbopack: true });
-const handle = app.getRequestHandler();
+loadingHttpServer.on('listening', () => {
+    const app = next({ dev, turbopack: true });
+    const handle = app.getRequestHandler();
 
-log.info('Preparing server...');
+    log.info('Preparing server...');
 
-app.prepare()
-    .then(async () => {
-        log.info('Server prepared');
-        const server = express();
+    app.prepare()
+        .then(async () => {
+            log.info('Server prepared');
+            const server = express();
 
-        await loadSettings();
+            await loadSettings();
 
-        if (process.env.NODE_ENV === 'production') {
-            server.set('trust proxy', 1);
-        }
+            if (process.env.NODE_ENV === 'production') {
+                server.set('trust proxy', 1);
+            }
 
-        server.use(cookieParser());
-        server.use(express.json({ limit: '50mb' }));
-        server.use(express.urlencoded({ extended: true }));
+            server.use(cookieParser());
+            server.use(express.json({ limit: '50mb' }));
+            server.use(express.urlencoded({ extended: true }));
 
-        server.use('/api', api);
+            server.use('/api', api);
 
-        const apiDocs = fs.readFileSync('./backend.json', 'utf-8');
-        server.use(
-            '/api-docs',
-            swaggerUi.serve,
-            swaggerUi.setup(JSON.parse(apiDocs)),
-        );
+            const apiDocs = fs.readFileSync('./backend.json', 'utf-8');
+            server.use(
+                '/api-docs',
+                swaggerUi.serve,
+                swaggerUi.setup(JSON.parse(apiDocs)),
+            );
 
-        server.all('*', (req, res) => handle(req, res));
-        server.use(
-            (
-                err: { status: number; message: string; errors: string[] },
-                _req: Request,
-                res: Response,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                _next: NextFunction,
-            ) => {
-                res.status(err.status || 500).json({
-                    message: err.message,
-                    errors: err.errors,
-                });
-            },
-        );
+            server.all('*', (req, res) => handle(req, res));
+            server.use(
+                (
+                    err: { status: number; message: string; errors: string[] },
+                    _req: Request,
+                    res: Response,
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    _next: NextFunction,
+                ) => {
+                    res.status(err.status || 500).json({
+                        message: err.message,
+                        errors: err.errors,
+                    });
+                },
+            );
 
-        log.info('Server ready, closing startup server...');
+            log.info('Server ready, closing startup server...');
 
-        server.on('error', err => {
-            log.error('Server error', { err });
+            server.on('error', err => {
+                log.error('Server error', { err });
+                process.exit(1);
+            });
+
+            // close loading server
+            loadingHttpServer.close(async err => {
+                if (err) {
+                    log.error('Error closing loading server', { err });
+                    process.exit(1);
+                }
+
+                log.info('Startup server closed');
+
+                if (host) {
+                    server.listen(port, host, () => {
+                        log.info(`Server ready on http://${host}:${port}/`);
+                    });
+                } else {
+                    server.listen(port, () => {
+                        log.info(`Server ready on http://localhost:${port}/`);
+                    });
+                }
+
+                try {
+                    await removeAllScanForMissingFilesTasks();
+                    await removeAllScanAndImportExistingFiles();
+                } catch {
+                    log.warn('Error when trying to remove existing tasks');
+                }
+
+                // mark everything as not downloading
+                await clearDownloadingFlagForAllTalks();
+
+                startCheckForRootFolders({ isInit: true });
+            });
+        })
+        .catch(err => {
+            log.error('Catched Error', { stack: err.stack });
             process.exit(1);
         });
-
-        loadingHttpServer.close(async err => {
-            if (err) {
-                log.error('Error closing loading server', { err });
-                process.exit(1);
-            }
-
-            log.info('Startup server closed');
-
-            if (host) {
-                server.listen(port, host, () => {
-                    log.info(`Server ready on http://${host}:${port}/`);
-                });
-            } else {
-                server.listen(port, () => {
-                    log.info(`Server ready on http://localhost:${port}/`);
-                });
-            }
-
-            try {
-                await removeAllScanForMissingFilesTasks();
-                await removeAllScanAndImportExistingFiles();
-            } catch {
-                log.warn('Error when trying to remove existing tasks');
-            }
-
-            // mark everything as not downloading
-            await clearDownloadingFlagForAllTalks();
-
-            startCheckForRootFolders({ isInit: true });
-        });
-    })
-    .catch(err => {
-        log.error('Catched Error', { stack: err.stack });
-        process.exit(1);
-    });
+});
 
 process.on('uncaughtException', err => {
     log.error('Uncaught Exception:', { err });
