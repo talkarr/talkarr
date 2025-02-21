@@ -107,7 +107,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     }
 
     try {
-        const videoInfo = await youtubeDl(
+        const ytdlInstance = await youtubeDl(
             event.frontend_link,
             {
                 dumpJson: true,
@@ -119,15 +119,29 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             },
         );
 
+        let stderrBuffer = '';
+
+        ytdlInstance.stderr?.on('data', data => {
+            try {
+                const stderr = data.toString();
+
+                stderrBuffer += stderr;
+            } catch (error) {
+                log.error('Error handling ytdl stderr:', { error });
+            }
+        });
+
+        const videoInfo = await ytdlInstance;
+
         if (!videoInfo || typeof videoInfo === 'string') {
             log.error(
                 'Error fetching video info (!videoInfo || typeof videoInfo === string):',
-                { videoInfo },
+                { videoInfo, stderrBuffer },
             );
 
             await setDownloadError({
                 eventGuid: event.guid,
-                error: videoInfo ?? 'Unknown error',
+                error: videoInfo || stderrBuffer || 'Unknown error',
             });
 
             throw new Error('Error fetching video info');
