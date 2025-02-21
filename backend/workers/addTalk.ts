@@ -107,10 +107,10 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     }
 
     try {
-        const ytdlInstance = await youtubeDl(
+        const ytdlInstance = youtubeDl.exec(
             event.frontend_link,
             {
-                dumpJson: true,
+                dumpSingleJson: true,
                 format: 'best',
                 skipDownload: true,
             },
@@ -119,7 +119,19 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             },
         );
 
+        let stdoutBuffer = '';
         let stderrBuffer = '';
+        let exitCode: number | null = null;
+
+        ytdlInstance.stdout?.on('data', data => {
+            try {
+                const stdout = data.toString();
+
+                stdoutBuffer += stdout;
+            } catch (error) {
+                log.error('Error handling ytdl stdout:', { error });
+            }
+        });
 
         ytdlInstance.stderr?.on('data', data => {
             try {
@@ -131,20 +143,46 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             }
         });
 
-        const videoInfo = await ytdlInstance;
+        ytdlInstance.on('close', code => {
+            exitCode = code;
+        });
 
-        if (!videoInfo || typeof videoInfo === 'string') {
-            log.error(
-                'Error fetching video info (!videoInfo || typeof videoInfo === string):',
-                { videoInfo, stderrBuffer },
-            );
+        ytdlInstance.on('error', error => {
+            log.error('Error with ytdl:', { error });
+        });
+
+        await ytdlInstance;
+
+        if (exitCode !== 0) {
+            log.error('Error fetching video info:', {
+                exitCode,
+                stderrBuffer,
+                title: event.title,
+                frontend_url: event.frontend_link,
+            });
 
             await setDownloadError({
                 eventGuid: event.guid,
-                error: videoInfo || stderrBuffer || 'Unknown error',
+                error: 'Error fetching video info',
             });
 
-            throw new Error('Error fetching video info');
+            return await done(new Error('Error fetching video info'));
+        }
+
+        const videoInfo = JSON.parse(stdoutBuffer);
+
+        if (!videoInfo) {
+            log.error('No video info:', {
+                title: event.title,
+                frontend_url: event.frontend_link,
+            });
+
+            await setDownloadError({
+                eventGuid: event.guid,
+                error: 'No video info',
+            });
+
+            return await done(new Error('No video info'));
         }
     } catch (error) {
         log.error('Error fetching video info:', {
