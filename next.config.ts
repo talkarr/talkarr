@@ -133,14 +133,39 @@ const nextConfig = async (): Promise<NextConfig> => {
                         search: '',
                     },
                 ],
+                minimumCacheTTL: 24 * 60 * 60, // 24 hours
             },
+            /*
+            // for some reason, this does not work :(
+            async headers() {
+                return [
+                    {
+                        source: '/_next/image',
+                        has: [
+                            {
+                                type: 'query',
+                                key: 'url',
+                                value: '(?<static>.*static\\.media\\.ccc\\.de.*)',
+                            },
+                        ],
+                        headers: [
+                            {
+                                // set cache control to 30d
+                                key: 'Cache-Control',
+                                value: 'public, max-age=2592000',
+                            },
+                        ],
+                    },
+                ];
+            },
+            */
             eslint: {
                 ignoreDuringBuilds: true,
             },
             typescript: {
                 ignoreBuildErrors: true,
             },
-        },
+        } as NextConfig,
         unpluginTypiaOptions,
     );
 };
