@@ -151,6 +151,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         });
 
         ytdlInstance.on('close', code => {
+            log.warn('ytdl info-only close:', { code });
             exitCode = code;
         });
 
@@ -161,7 +162,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         await ytdlInstance;
 
         if (exitCode !== 0) {
-            log.error('Error fetching video info:', {
+            log.error('Error fetching video info (exitCode != 0)', {
                 exitCode,
                 stderrBuffer,
                 title: event.title,
@@ -170,10 +171,12 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
 
             await setDownloadError({
                 eventGuid: event.guid,
-                error: `Error fetching video info (${stderrBuffer})`,
+                error: `Error fetching video info (${stderrBuffer || 'stderr empty'})`,
             });
 
-            return await done(new Error('Error fetching video info'));
+            return await done(
+                new Error('Error fetching video info (incorrect exit code)'),
+            );
         }
 
         const videoInfo = JSON.parse(stdoutBuffer);
