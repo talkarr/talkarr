@@ -1170,6 +1170,11 @@ export interface components {
                 did_not_find_mark: boolean;
             };
             has_problems: components["schemas"]["Problems"];
+            /**
+             * Format: date-time
+             * @example 2022-01-01T00:00:00Z
+             */
+            date_added: string;
         };
         /** @description List of problems */
         Problems: string[] | null;

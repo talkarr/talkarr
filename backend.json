@@ -509,6 +509,11 @@
                     },
                     "has_problems": {
                         "$ref": "#/components/schemas/Problems"
+                    },
+                    "date_added": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-01-01T00:00:00Z"
                     }
                 },
                 "required": [
@@ -528,7 +533,8 @@
                     "duration_str",
                     "root_folder",
                     "root_folder_has_mark",
-                    "has_problems"
+                    "has_problems",
+                    "date_added"
                 ]
             },
             "Problems": {
