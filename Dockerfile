@@ -62,6 +62,12 @@ RUN adduser --system --uid 1001 nextjs
 RUN mkdir -p /app/logs && \
     chown -R nextjs:nodejs /app/logs
 
+# https://github.com/vercel/next.js/discussions/36935#discussioncomment-2757861
+RUN mkdir -p /app/.next/cache/images && \
+    chown -R nextjs:nodejs /app/.next/cache/images
+
+VOLUME ["/app/.next/cache/images"]
+
 USER nextjs
 
 # node_modules first
