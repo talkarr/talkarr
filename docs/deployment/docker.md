@@ -55,12 +55,16 @@ services:
       - "6379:6379"
   
   app:
-    image: ghcr.io/talkarr/talkarr:latest
+    image: ghcr.io/talkarr/talkarr:latest # from github
+    # image: talkarr/talkarr:latest # from docker hub
     restart: unless-stopped
     env_file:
       - .env
     ports:
       - "3232:3232"
+    volumes:
+      - /path/to/your/media:/media # in theory, you can mount it wherever you like
+      - ./logs:/app/logs # Store the logs in "./logs" directory
     depends_on:
       - db
       - redis
@@ -162,10 +166,15 @@ Then you can run the application using the following docker-compose file:
 services:
   app:
     image: ghcr.io/talkarr/talkarr:latest
+    # image: talkarr/talkarr:latest
+    restart: unless-stopped
     env_file:
       - .env
     ports:
       - "3232:3232"
+    volumes:
+      - /path/to/your/media:/media # in theory, you can mount it wherever you like
+      - ./logs:/app/logs # Store the logs in "./logs" directory
 ```
 
 Or you can run the application using the following command:
