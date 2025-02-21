@@ -99,6 +99,7 @@ const nextConfig = async (): Promise<NextConfig> => {
                 NEXT_PUBLIC_CURRENT_VERSION: currentVersion,
                 NEXT_PUBLIC_IS_INSIDE_DOCKER: isInsideDocker ? 'true' : 'false',
                 NEXT_PUBLIC_CURRENT_COMMIT_TIMESTAMP: currentCommitTimestamp,
+                YTDLP_PATH_OVERRIDE: process.env.YTDLP_PATH_OVERRIDE,
             },
             devIndicators: {
                 appIsrStatus: true,

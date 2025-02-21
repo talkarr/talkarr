@@ -4,7 +4,10 @@ import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 import typia from 'typia';
-import youtubeDl from 'youtube-dl-exec';
+import {
+    create as createYoutubeDl,
+    youtubeDl as normalYoutubeDl,
+} from 'youtube-dl-exec';
 
 // eslint-disable-next-line import/no-cycle
 import { startGenerateMissingNfo } from '@backend/workers/generateMissingNfo';
@@ -31,6 +34,10 @@ import type {
     ConvertDateToStringType,
     ExtendedDbEvent,
 } from '@backend/types';
+
+const youtubeDl = process.env.YTDLP_PATH_OVERRIDE
+    ? createYoutubeDl(process.env.YTDLP_PATH_OVERRIDE)
+    : normalYoutubeDl;
 
 export const taskName = 'addTalk';
 
@@ -163,7 +170,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
 
             await setDownloadError({
                 eventGuid: event.guid,
-                error: 'Error fetching video info',
+                error: `Error fetching video info (${stderrBuffer})`,
             });
 
             return await done(new Error('Error fetching video info'));
