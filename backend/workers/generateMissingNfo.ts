@@ -2,7 +2,7 @@ import typia from 'typia';
 
 import { getFolderPathForTalk } from '@backend/fs';
 // eslint-disable-next-line import/no-cycle
-import { handleNfoGeneration } from '@backend/helper/nfo';
+import { handleEventNfoGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
@@ -45,7 +45,7 @@ const generateMissingNfo: TaskFunction<GenerateMissingNfoData> = async (
             throw new Error('Error getting folder path for talk');
         }
 
-        if (!(await handleNfoGeneration({ folder, event }))) {
+        if (!(await handleEventNfoGeneration({ folder, event }))) {
             log.error('Error generating missing nfo:', {
                 title: event.title,
                 guid: event.guid,

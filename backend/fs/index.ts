@@ -1,9 +1,12 @@
+import type { Conference as DbConference } from '@prisma/client';
+
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
 import rootLog from '@backend/rootLog';
 import type {
+    ApiConference,
     ConvertBigintToNumberType,
     ExtendedDbEvent,
     NormalAndConvertedDate,
@@ -16,7 +19,9 @@ export const validVideoFileExtensions = ['.mp4', '.webm'];
 
 export const validFileExtensions = [...validVideoFileExtensions, '.nfo'];
 
-export const nfoFilename = 'talk.nfo';
+export const eventNfoFilename = 'talk.nfo';
+
+export const conferenceNfoFilename = 'tvshow.nfo';
 
 export const rootFolderMarkName = '.talkarr';
 
@@ -154,7 +159,53 @@ export const doesEventHaveNfoFile = async ({
 
     try {
         await fs_promises.access(
-            pathUtils.join(filePath, nfoFilename),
+            pathUtils.join(filePath, eventNfoFilename),
+            // eslint-disable-next-line no-bitwise
+            fs_promises.constants.F_OK | fs_promises.constants.R_OK,
+        );
+
+        return true;
+    } catch {
+        return false;
+    }
+};
+
+export const doesConferenceHaveNfoFile = async ({
+    rootFolderPath,
+    conference,
+}: {
+    rootFolderPath: string;
+    conference: ConvertBigintToNumberType<
+        NormalAndConvertedDate<ApiConference | DbConference>
+    >;
+}): Promise<boolean> => {
+    if (!rootFolderPath) {
+        return false;
+    }
+
+    try {
+        await fs_promises.access(rootFolderPath);
+    } catch {
+        return false;
+    }
+
+    if (!conference.acronym) {
+        return false;
+    }
+
+    try {
+        await fs_promises.access(
+            pathUtils.join(rootFolderPath, conference.acronym),
+        );
+    } catch {
+        return false;
+    }
+
+    const filePath = pathUtils.join(rootFolderPath, conference.acronym);
+
+    try {
+        await fs_promises.access(
+            pathUtils.join(filePath, conferenceNfoFilename),
             // eslint-disable-next-line no-bitwise
             fs_promises.constants.F_OK | fs_promises.constants.R_OK,
         );

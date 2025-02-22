@@ -1,12 +1,20 @@
+import type { Conference as DbConference } from '@prisma/client';
+
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
 // eslint-disable-next-line import/no-cycle
 import { addDownloadedFile } from '@backend/events';
-import { defaultMimeType, isVideoFile, nfoFilename } from '@backend/fs';
+import {
+    conferenceNfoFilename,
+    defaultMimeType,
+    eventNfoFilename,
+    isVideoFile,
+} from '@backend/fs';
 import rootLog from '@backend/rootLog';
 import type {
+    ApiConference,
     ApiEvent,
     ConvertBigintToNumberType,
     ExtendedDbEvent,
@@ -15,7 +23,7 @@ import type {
 
 const log = rootLog.child({ label: 'helper/nfo' });
 
-export const generateNfo = ({
+export const generateEventNfo = ({
     event,
 }: {
     event: ConvertBigintToNumberType<
@@ -49,50 +57,101 @@ export const generateNfo = ({
     `;
 };
 
-export const handleNfoGeneration = async ({
+export const generateConferenceNfo = ({
+    conference,
+}: {
+    conference: ConvertBigintToNumberType<
+        NormalAndConvertedDate<ApiConference | DbConference>
+    >;
+}): string => `
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <movie>
+        <title>${conference.title}</title>
+        ${conference.description ? `<plot>${conference.description}</plot>` : ''}
+        <studio>${conference.title}</studio>
+    </movie>
+    `;
+
+export const handleEventNfoGeneration = async ({
     folder,
     event,
 }: {
     folder: string;
     event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
 }): Promise<boolean> => {
-    log.info('Generating NFO file...');
+    log.info('Generating event NFO file...');
 
-    const nfoPath = pathUtils.join(folder, nfoFilename);
+    const eventNfoPath = pathUtils.join(folder, eventNfoFilename);
 
-    const nfoExists = await fs_promises
-        .access(nfoPath)
+    const eventNfoExists = await fs_promises
+        .access(eventNfoPath)
         .then(() => true)
         .catch(() => false);
 
-    if (nfoExists) {
-        log.info('NFO file already exists.');
+    if (eventNfoExists) {
+        log.info('Event NFO file already exists.');
 
         return true;
     }
 
-    const nfoContent = generateNfo({ event });
+    const eventNfoContent = generateEventNfo({ event });
 
     // write nfo file
-    await fs_promises.writeFile(nfoPath, nfoContent);
+    await fs_promises.writeFile(eventNfoPath, eventNfoContent);
 
-    log.info('NFO file generated.');
+    log.info('Event NFO file generated.');
 
-    const nfoStats = await fs_promises.stat(nfoPath, {
+    const eventNfoStats = await fs_promises.stat(eventNfoPath, {
         bigint: true,
     });
 
     return addDownloadedFile({
         event,
         file: {
-            path: nfoPath,
-            filename: pathUtils.basename(nfoPath),
+            path: eventNfoPath,
+            filename: pathUtils.basename(eventNfoPath),
             url: event.frontend_link,
-            created: nfoStats.birthtime,
-            mime: mime.lookup(nfoPath) || defaultMimeType,
-            bytes: nfoStats.size,
-            is_video: isVideoFile(nfoPath),
+            created: eventNfoStats.birthtime,
+            mime: mime.lookup(eventNfoPath) || defaultMimeType,
+            bytes: eventNfoStats.size,
+            is_video: isVideoFile(eventNfoPath),
         },
         eventInfoGuid: event.eventInfo?.guid,
     });
+};
+
+export const handleConferenceNfoGeneration = async ({
+    rootFolderPath,
+    conference,
+}: {
+    rootFolderPath: string;
+    conference: ConvertBigintToNumberType<
+        NormalAndConvertedDate<ApiConference | DbConference>
+    >;
+}): Promise<void> => {
+    log.info('Generating conference NFO file...');
+
+    const conferenceNfoPath = pathUtils.join(
+        rootFolderPath,
+        conference.acronym,
+        conferenceNfoFilename,
+    );
+
+    const conferenceNfoExists = await fs_promises
+        .access(conferenceNfoPath)
+        .then(() => true)
+        .catch(() => false);
+
+    if (conferenceNfoExists) {
+        log.info('Conference NFO file already exists.');
+
+        return;
+    }
+
+    const conferenceNfoContent = generateConferenceNfo({ conference });
+
+    // write nfo file
+    await fs_promises.writeFile(conferenceNfoPath, conferenceNfoContent);
+
+    log.info('Conference NFO file generated.');
 };

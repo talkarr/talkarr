@@ -26,6 +26,7 @@ import {
     getFolderPathForTalk,
     isVideoFile,
 } from '@backend/fs';
+import { handleConferenceNfoGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
@@ -334,6 +335,11 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
 
             throw new Error('Error adding file to db');
         }
+
+        await handleConferenceNfoGeneration({
+            rootFolderPath: folder,
+            conference: event.conference,
+        });
 
         startGenerateMissingNfo({ event });
 
