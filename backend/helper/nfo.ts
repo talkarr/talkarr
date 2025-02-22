@@ -67,11 +67,12 @@ export const generateConferenceNfo = ({
     >;
 }): string => `
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-    <movie>
+    <tvshow>
         <title>${conference.title}</title>
         ${conference.description ? `<plot>${conference.description}</plot>` : ''}
         <studio>${conference.title}</studio>
-    </movie>
+        <namedseason number="1">Videos</namedseason>
+    </tvshow>
     `;
 
 export const handleEventNfoGeneration = async ({
