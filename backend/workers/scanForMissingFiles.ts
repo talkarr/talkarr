@@ -13,12 +13,8 @@ import {
     listEvents,
     setIsDownloading,
 } from '@backend/events';
-import {
-    doesConferenceHaveNfoFile,
-    doesEventHaveNfoFile,
-    doesTalkHaveExistingFiles,
-} from '@backend/fs';
-import { handleConferenceNfoGeneration } from '@backend/helper/nfo';
+import { doesEventHaveNfoFile, doesTalkHaveExistingFiles } from '@backend/fs';
+import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue, { isTaskRunning, waitForTaskFinished } from '@backend/queue';
 import rootLog from '@backend/rootLog';
@@ -74,11 +70,6 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
             const hasFiles = await doesTalkHaveExistingFiles({ event });
 
             const hasNfo = await doesEventHaveNfoFile({ event });
-
-            const conferenceHasNfo = await doesConferenceHaveNfoFile({
-                rootFolderPath: event.rootFolderPath,
-                conference: event.conference,
-            });
 
             log.info(
                 `${event.title} ${hasFiles ? 'has files' : 'is missing files'}`,
@@ -145,12 +136,10 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                 startGenerateMissingNfo({ event });
             }
 
-            if (!conferenceHasNfo) {
-                await handleConferenceNfoGeneration({
-                    rootFolderPath: event.rootFolderPath,
-                    conference: event.conference,
-                });
-            }
+            await handleConferenceMetadataGeneration({
+                rootFolderPath: event.rootFolderPath,
+                conference: event.conference,
+            });
         } catch (error) {
             log.error('Error scanning for missing files:', {
                 error,

@@ -26,7 +26,7 @@ import {
     getFolderPathForTalk,
     isVideoFile,
 } from '@backend/fs';
-import { handleConferenceNfoGeneration } from '@backend/helper/nfo';
+import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
@@ -336,7 +336,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             throw new Error('Error adding file to db');
         }
 
-        await handleConferenceNfoGeneration({
+        await handleConferenceMetadataGeneration({
             rootFolderPath: folder,
             conference: event.conference,
         });

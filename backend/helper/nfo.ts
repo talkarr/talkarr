@@ -8,6 +8,7 @@ import pathUtils from 'path';
 import { addDownloadedFile } from '@backend/events';
 import {
     conferenceNfoFilename,
+    conferenceThumbFilename,
     defaultMimeType,
     eventNfoFilename,
     isVideoFile,
@@ -120,7 +121,7 @@ export const handleEventNfoGeneration = async ({
     });
 };
 
-export const handleConferenceNfoGeneration = async ({
+export const handleConferenceMetadataGeneration = async ({
     rootFolderPath,
     conference,
 }: {
@@ -137,21 +138,56 @@ export const handleConferenceNfoGeneration = async ({
         conferenceNfoFilename,
     );
 
+    const conferencePosterPath = pathUtils.join(
+        rootFolderPath,
+        conference.acronym,
+        conferenceThumbFilename,
+    );
+
     const conferenceNfoExists = await fs_promises
         .access(conferenceNfoPath)
         .then(() => true)
         .catch(() => false);
 
+    const conferencePosterExists = await fs_promises
+        .access(conferencePosterPath)
+        .then(() => true)
+        .catch(() => false);
+
     if (conferenceNfoExists) {
         log.info('Conference NFO file already exists.');
+    } else {
+        const conferenceNfoContent = generateConferenceNfo({ conference });
 
-        return;
+        // write nfo file
+        await fs_promises.writeFile(conferenceNfoPath, conferenceNfoContent);
+
+        log.info('Conference NFO file generated.');
     }
 
-    const conferenceNfoContent = generateConferenceNfo({ conference });
+    if (conferencePosterExists) {
+        log.info('Conference poster already exists.');
+    } else {
+        log.info('Generating conference poster...');
 
-    // write nfo file
-    await fs_promises.writeFile(conferenceNfoPath, conferenceNfoContent);
+        const url = conference.logo_url;
 
-    log.info('Conference NFO file generated.');
+        if (!url) {
+            log.error('No conference poster URL found.');
+
+            return;
+        }
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            log.error('Error fetching conference poster:', { url });
+
+            return;
+        }
+
+        const buffer = await response.arrayBuffer();
+
+        await fs_promises.writeFile(conferencePosterPath, Buffer.from(buffer));
+    }
 };
