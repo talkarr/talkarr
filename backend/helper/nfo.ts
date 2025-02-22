@@ -46,17 +46,16 @@ export const generateEventNfo = ({
               : null;
 
     return `
-    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-    <episodedetails>
-        <title>${event.title}</title>
-        <plot>${event.description}</plot>
-        ${persons.map(person => `<actor>${person}</actor>`).join('\n')}
-        ${tags.map(tag => `<genre>${tag}</genre>`).join('\n')}
-        <premiered>${event.date}</premiered>
-        ${conferenceName ? `<studio>${conferenceName}</studio>` : ''}
-        <season>1</season>
-    </episodedetails>
-    `;
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<episodedetails>
+    <title>${event.title}</title>
+    <plot>${event.description}</plot>
+    ${persons.map(person => `<actor>${person}</actor>`).join('\n')}
+    ${tags.map(tag => `<genre>${tag}</genre>`).join('\n')}
+    <premiered>${event.date}</premiered>
+    ${conferenceName ? `<studio>${conferenceName}</studio>` : ''}
+</episodedetails>
+    `.trim();
 };
 
 export const generateConferenceNfo = ({
@@ -65,15 +64,15 @@ export const generateConferenceNfo = ({
     conference: ConvertBigintToNumberType<
         NormalAndConvertedDate<ApiConference | DbConference>
     >;
-}): string => `
-    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-    <tvshow>
-        <title>${conference.title}</title>
-        ${conference.description ? `<plot>${conference.description}</plot>` : ''}
-        <studio>${conference.title}</studio>
-        <namedseason number="1">Videos</namedseason>
-    </tvshow>
-    `;
+}): string =>
+    `
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<tvshow>
+    <title>${conference.title}</title>
+    ${conference.description ? `<plot>${conference.description}</plot>` : ''}
+    <studio>${conference.title}</studio>
+</tvshow>
+`.trim();
 
 export const handleEventNfoGeneration = async ({
     folder,
