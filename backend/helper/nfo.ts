@@ -3,6 +3,7 @@ import type { Conference as DbConference } from '@prisma/client';
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
+import sharp from 'sharp';
 
 // eslint-disable-next-line import/no-cycle
 import { addDownloadedFile, removeFileFromDatabase } from '@backend/events';
@@ -207,8 +208,15 @@ export const handleConferenceMetadataGeneration = async ({
             return;
         }
 
-        const buffer = await response.arrayBuffer();
+        let buffer: Buffer = Buffer.from(await response.arrayBuffer());
 
-        await fs_promises.writeFile(conferencePosterPath, Buffer.from(buffer));
+        // check if image is SVG. If so, convert it to JPG
+        if (mime.lookup(conferencePosterPath) !== 'image/jpeg') {
+            const image = sharp(Buffer.from(buffer));
+
+            buffer = await image.jpeg().toBuffer();
+        }
+
+        await fs_promises.writeFile(conferencePosterPath, buffer);
     }
 };
