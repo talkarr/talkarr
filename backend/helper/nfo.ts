@@ -208,15 +208,12 @@ export const handleConferenceMetadataGeneration = async ({
             return;
         }
 
-        let buffer: Buffer = Buffer.from(await response.arrayBuffer());
+        const buffer = Buffer.from(await response.arrayBuffer());
 
-        // check if image is SVG. If so, convert it to JPG
-        if (mime.lookup(conferencePosterPath) !== 'image/jpeg') {
-            const image = sharp(Buffer.from(buffer));
+        const image = sharp(buffer);
 
-            buffer = await image.jpeg().toBuffer();
-        }
+        const jpegBuffer = await image.jpeg().toBuffer();
 
-        await fs_promises.writeFile(conferencePosterPath, buffer);
+        await fs_promises.writeFile(conferencePosterPath, jpegBuffer);
     }
 };
