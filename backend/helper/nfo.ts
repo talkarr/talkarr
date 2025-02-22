@@ -5,7 +5,7 @@ import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
 // eslint-disable-next-line import/no-cycle
-import { addDownloadedFile } from '@backend/events';
+import { addDownloadedFile, removeFileFromDatabase } from '@backend/events';
 import {
     conferenceNfoFilename,
     conferenceThumbFilename,
@@ -54,6 +54,7 @@ export const generateEventNfo = ({
         ${tags.map(tag => `<genre>${tag}</genre>`).join('\n')}
         <premiered>${event.date}</premiered>
         ${conferenceName ? `<studio>${conferenceName}</studio>` : ''}
+        <season>1</season>
     </movie>
     `;
 };
@@ -76,9 +77,11 @@ export const generateConferenceNfo = ({
 export const handleEventNfoGeneration = async ({
     folder,
     event,
+    force,
 }: {
     folder: string;
     event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
+    force?: boolean;
 }): Promise<boolean> => {
     log.info('Generating event NFO file...');
 
@@ -89,10 +92,28 @@ export const handleEventNfoGeneration = async ({
         .then(() => true)
         .catch(() => false);
 
-    if (eventNfoExists) {
+    if (eventNfoExists && !force) {
         log.info('Event NFO file already exists.');
 
         return true;
+    }
+    if (eventNfoExists && force) {
+        log.info('Event NFO file already exists, but force is set.');
+
+        await fs_promises.unlink(eventNfoPath);
+
+        if (
+            !(await removeFileFromDatabase({
+                eventGuid: event.guid,
+                path: eventNfoPath,
+            }))
+        ) {
+            log.error('Error removing file from database:', {
+                title: event.title,
+            });
+
+            return false;
+        }
     }
 
     const eventNfoContent = generateEventNfo({ event });

@@ -18,6 +18,7 @@ const log = rootLog.child({ label: 'workers/generateMissingNfo' });
 
 export interface GenerateMissingNfoData {
     event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
+    force?: boolean;
 }
 
 export const check = typia.createIs<GenerateMissingNfoData>();
