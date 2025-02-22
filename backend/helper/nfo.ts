@@ -47,7 +47,7 @@ export const generateEventNfo = ({
 
     return `
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-    <movie>
+    <episodedetails>
         <title>${event.title}</title>
         <plot>${event.description}</plot>
         ${persons.map(person => `<actor>${person}</actor>`).join('\n')}
@@ -55,7 +55,7 @@ export const generateEventNfo = ({
         <premiered>${event.date}</premiered>
         ${conferenceName ? `<studio>${conferenceName}</studio>` : ''}
         <season>1</season>
-    </movie>
+    </episodedetails>
     `;
 };
 
