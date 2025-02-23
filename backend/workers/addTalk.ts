@@ -24,6 +24,7 @@ import {
 import {
     defaultMimeType,
     doesTalkHaveExistingFiles,
+    getEventFilename,
     getFolderPathForTalk,
     isVideoFile,
 } from '@backend/fs';
@@ -252,7 +253,10 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     let stderrBuffer = '';
 
     try {
-        const outputPath = pathUtils.join(folder, `${event.slug}.%(ext)s`);
+        const outputPath = pathUtils.join(
+            folder,
+            getEventFilename({ event, extension: '%(ext)s' }),
+        );
 
         log.info('Starting youtube-dl', { title: event.title, outputPath });
         // download video

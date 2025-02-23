@@ -11,6 +11,7 @@ import {
     conferenceNfoFilename,
     conferenceThumbFilename,
     defaultMimeType,
+    getEventFilename,
     isVideoFile,
 } from '@backend/fs';
 import rootLog from '@backend/rootLog';
@@ -94,7 +95,13 @@ export const handleEventNfoGeneration = async ({
     event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
     force?: boolean;
 }): Promise<boolean> => {
-    const eventNfoPath = pathUtils.join(folder, `${event.slug}.nfo`);
+    const eventNfoPath = pathUtils.join(
+        folder,
+        getEventFilename({
+            event,
+            extension: 'nfo',
+        }),
+    );
 
     log.info('Generating event NFO file...', { eventNfoPath });
 

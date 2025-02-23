@@ -126,6 +126,32 @@ export const doesTalkHaveExistingFiles = async ({
     return existingFiles.length ? existingFiles : null;
 };
 
+export const getEventFilename = ({
+    event,
+    extension,
+}: {
+    event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
+    extension: string;
+}): string => {
+    const ext = extension.replace(/^\./, '');
+
+    // remove all numbers etc. from the slug. only allow letters, dashes and underscores. replace all spaces with dashes
+    const slugWithoutConference = event.slug.replace(
+        `${event.conference.acronym}-`,
+        '',
+    );
+
+    const slug = slugWithoutConference
+        .replace(/ /g, '-')
+        .replace(/[^a-zA-Z-_]/g, '')
+        .toLowerCase()
+        .trim()
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+
+    return `${slug}.${ext}`;
+};
+
 export const doesEventHaveNfoFile = async ({
     event,
 }: {
@@ -166,7 +192,13 @@ export const doesEventHaveNfoFile = async ({
 
     try {
         await fs_promises.access(
-            pathUtils.join(filePath, `${event.slug}.nfo`),
+            pathUtils.join(
+                filePath,
+                getEventFilename({
+                    event,
+                    extension: 'nfo',
+                }),
+            ),
             // eslint-disable-next-line no-bitwise
             fs_promises.constants.F_OK | fs_promises.constants.R_OK,
         );
