@@ -69,7 +69,11 @@ export const doesTalkHaveExistingFiles = async ({
 
     try {
         await fs_promises.access(
-            pathUtils.join(event.rootFolderPath, event.conference.acronym),
+            pathUtils.join(
+                event.rootFolderPath,
+                event.conference.acronym,
+                videoFolder,
+            ),
         );
     } catch {
         log.debug('Conference folder does not exist');
@@ -145,7 +149,11 @@ export const doesEventHaveNfoFile = async ({
 
     try {
         await fs_promises.access(
-            pathUtils.join(event.rootFolderPath, event.conference.acronym),
+            pathUtils.join(
+                event.rootFolderPath,
+                event.conference.acronym,
+                videoFolder,
+            ),
         );
     } catch {
         return false;

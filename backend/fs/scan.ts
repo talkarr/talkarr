@@ -5,12 +5,13 @@ import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
 import { getEventByFilePath } from '@backend/events';
-import type { ExistingFile } from '@backend/fs/index';
 import {
     defaultMimeType,
     isVideoFile,
     validFileExtensions,
-} from '@backend/fs/index';
+    videoFolder,
+} from '@backend/fs';
+import type { ExistingFile } from '@backend/fs/index';
 import {
     getConferenceFromAcronym,
     getTalkFromApiBySlug,
@@ -70,7 +71,7 @@ export const scanForExistingFiles = async ({
 
         const events = (
             await fs_promises.readdir(
-                pathUtils.join(rootFolderPath, conferenceAcronym),
+                pathUtils.join(rootFolderPath, conferenceAcronym, videoFolder),
                 { withFileTypes: true },
             )
         ).filter(dirent => dirent.isDirectory());
@@ -81,8 +82,9 @@ export const scanForExistingFiles = async ({
 
             const eventPath = pathUtils.join(
                 rootFolderPath,
-                folder.name,
-                eventDir.name,
+                conferenceAcronym,
+                videoFolder,
+                eventSlug,
             );
 
             const eventFromDbByFile = await getEventByFilePath({

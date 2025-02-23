@@ -53,6 +53,7 @@ export const check = typia.createIs<AddTalkData>();
 let runningInstances = 0;
 
 const maxRunningInstances = 1;
+let instances: string[] = [];
 
 const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     const { event } = job.data;
@@ -66,6 +67,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     // wait for other instances to finish
     while (runningInstances >= maxRunningInstances) {
         const runningInstancesCopy = runningInstances;
+        const instancesCopy = instances.slice();
 
         // eslint-disable-next-line no-await-in-loop
         await new Promise(resolve => {
@@ -73,6 +75,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
                 runningInstancesCopy,
                 maxRunningInstances,
                 title: event.title,
+                instancesCopy,
             });
             setTimeout(resolve, 5000);
         });
@@ -81,10 +84,13 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     const done = async (...args: Parameters<DoneCallback>): Promise<void> => {
         runningInstances -= 1;
 
+        instances = instances.filter(i => i !== event.title);
+
         actualDone(...args);
     };
 
     runningInstances += 1;
+    instances.push(event.title);
 
     const isAlreadyDownloading = await isEventDownloading({
         eventGuid: event.guid,
@@ -233,12 +239,14 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     let stderrBuffer = '';
 
     try {
-        log.info('Starting youtube-dl', { title: event.title });
+        const outputPath = pathUtils.join(folder, `${event.slug}.%(ext)s`);
+
+        log.info('Starting youtube-dl', { title: event.title, outputPath });
         // download video
         const videoSubprocess = youtubeDl.exec(
             event.frontend_link,
             {
-                output: pathUtils.join(folder, `${event.slug}.%(ext)s`),
+                output: outputPath,
                 noWarnings: true,
             },
             {
@@ -304,7 +312,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         exitCode = (await videoSubprocess).exitCode;
 
         if (!path) {
-            throw new Error('No path found');
+            return await done(new Error('No path found'));
         }
 
         const videoStats = await fs_promises.stat(path, {
