@@ -23,6 +23,7 @@ import {
 } from '@backend/events';
 import {
     defaultMimeType,
+    doesTalkHaveExistingFiles,
     getFolderPathForTalk,
     isVideoFile,
 } from '@backend/fs';
@@ -46,6 +47,7 @@ const log = rootLog.child({ label: 'workers/addTalk' });
 
 export interface AddTalkData {
     event: ConvertBigintToNumberType<ConvertDateToStringType<ExtendedDbEvent>>;
+    force?: boolean;
 }
 
 export const check = typia.createIs<AddTalkData>();
@@ -99,6 +101,17 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
 
     if (isAlreadyDownloading) {
         log.warn('Talk is already downloading:', { title: event.title });
+
+        return done();
+    }
+
+    const wasAlreadyDownloaded = await doesTalkHaveExistingFiles({ event });
+
+    if (
+        wasAlreadyDownloaded?.filter(f => f.isVideo).length &&
+        !job.data.force
+    ) {
+        log.warn('Talk was already downloaded:', { title: event.title });
 
         return done();
     }

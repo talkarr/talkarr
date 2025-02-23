@@ -95,9 +95,9 @@ export const handleEventNfoGeneration = async ({
     event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
     force?: boolean;
 }): Promise<boolean> => {
-    log.info('Generating event NFO file...');
-
     const eventNfoPath = pathUtils.join(folder, eventNfoFilename);
+
+    log.info('Generating event NFO file...', { eventNfoPath });
 
     await fs_promises.mkdir(pathUtils.dirname(eventNfoPath), {
         recursive: true,
@@ -167,8 +167,6 @@ export const handleConferenceMetadataGeneration = async ({
         NormalAndConvertedDate<ApiConference | DbConference>
     >;
 }): Promise<void> => {
-    log.info('Generating conference NFO file...');
-
     const conferenceNfoPath = pathUtils.join(
         rootFolderPath,
         conference.acronym,
@@ -180,6 +178,11 @@ export const handleConferenceMetadataGeneration = async ({
         conference.acronym,
         conferenceThumbFilename,
     );
+
+    log.info('Generating conference NFO file...', {
+        conferenceNfoPath,
+        conferencePosterPath,
+    });
 
     await fs_promises.mkdir(
         pathUtils.join(rootFolderPath, conference.acronym),

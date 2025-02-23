@@ -37,12 +37,12 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
         });
 
         if (!scanResult || !scanResult.length) {
-            log.info('No files found in root folder:', { rootFolder });
+            log.info('No new files found in root folder:', { rootFolder });
 
             continue;
         }
 
-        log.info('Found files:', { files: scanResult.length });
+        log.info('Found new files:', { files: scanResult.length });
 
         for await (const file of scanResult) {
             if (file.guess.confidence !== 100) {
