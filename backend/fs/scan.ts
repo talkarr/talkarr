@@ -67,13 +67,26 @@ export const scanForExistingFiles = async ({
             // continue; // we will proceed the files so that the user can manually correct this
         }
 
+        const scanPath = pathUtils.join(
+            rootFolderPath,
+            conferenceAcronym,
+            videoFolder,
+        );
+
+        const scanPathExists = await fs_promises
+            .access(scanPath)
+            .then(() => true)
+            .catch(() => false);
+
+        if (!scanPathExists) {
+            log.warn(`Folder ${scanPath} does not exist`);
+            continue;
+        }
+
         log.info(`Scanning ${conferenceAcronym}...`);
 
         const events = (
-            await fs_promises.readdir(
-                pathUtils.join(rootFolderPath, conferenceAcronym, videoFolder),
-                { withFileTypes: true },
-            )
+            await fs_promises.readdir(scanPath, { withFileTypes: true })
         ).filter(dirent => dirent.isDirectory());
 
         for await (const eventDir of events) {
