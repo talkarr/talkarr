@@ -358,7 +358,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         }
 
         await handleConferenceMetadataGeneration({
-            rootFolderPath: folder,
+            rootFolderPath: event.root_folder.path,
             conference: event.conference,
         });
 
