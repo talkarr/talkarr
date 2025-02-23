@@ -99,6 +99,10 @@ export const handleEventNfoGeneration = async ({
 
     const eventNfoPath = pathUtils.join(folder, eventNfoFilename);
 
+    await fs_promises.mkdir(pathUtils.dirname(eventNfoPath), {
+        recursive: true,
+    });
+
     const eventNfoExists = await fs_promises
         .access(eventNfoPath)
         .then(() => true)
@@ -175,6 +179,13 @@ export const handleConferenceMetadataGeneration = async ({
         rootFolderPath,
         conference.acronym,
         conferenceThumbFilename,
+    );
+
+    await fs_promises.mkdir(
+        pathUtils.join(rootFolderPath, conference.acronym),
+        {
+            recursive: true,
+        },
     );
 
     const conferenceNfoExists = await fs_promises
