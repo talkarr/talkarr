@@ -65,6 +65,7 @@ export const generateEventNfo = ({
     <id>${event.guid}</id>
     <uniqueid type="url">${event.frontend_link}</uniqueid>
     <season>1</season>
+    <episode>1</episode>
     ${year ? `<year>${year}</year>` : ''}
     <displayseason>-1</displayseason>
     <displayepisode>-1</displayepisode>
@@ -87,7 +88,7 @@ export const generateConferenceNfo = ({
     <studio>${conference.title}</studio>
     <id>${conference.acronym}</id>
     <season>1</season>
-    <namedseason number="1">Conference</namedseason>
+    <namedseason number="1">Season 1</namedseason>
     <displayseason>-1</displayseason>
     <displayepisode>-1</displayepisode>
 </tvshow>
