@@ -55,6 +55,7 @@ export const generateEventNfo = ({
     ${tags.map(tag => `<genre>${tag}</genre>`).join('\n')}
     <premiered>${event.date}</premiered>
     ${conferenceName ? `<studio>${conferenceName}</studio>` : ''}
+    <season>${1}</season>
 </episodedetails>
     `.trim();
 };
