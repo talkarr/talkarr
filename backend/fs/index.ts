@@ -9,8 +9,6 @@ import type {
     NormalAndConvertedDate,
 } from '@backend/types';
 
-// filePath: `${USER_DEFINED_ROOT_FOLDER}/${CONFERENCE}/${FILENAME}`
-
 // These file extensions are the ones provided by media.ccc.de.
 export const validVideoFileExtensions = ['.mp4', '.webm'];
 
@@ -28,6 +26,8 @@ export const rootFolderMarkContent =
     '!!! This is a Talkarr root folder. Please do not delete this file !!!';
 
 export const defaultMimeType = 'application/octet-stream';
+
+export const videoFolder = 'Events';
 
 const log = rootLog.child({ label: 'fs' });
 
@@ -79,6 +79,7 @@ export const doesTalkHaveExistingFiles = async ({
     const filePath = pathUtils.join(
         event.rootFolderPath,
         event.conference.acronym,
+        videoFolder,
         event.slug,
     );
 
@@ -153,6 +154,7 @@ export const doesEventHaveNfoFile = async ({
     const filePath = pathUtils.join(
         event.rootFolderPath,
         event.conference.acronym,
+        videoFolder,
         event.slug,
     );
 
@@ -262,6 +264,7 @@ export const getFolderPathForTalk = async ({
     const folderPath = pathUtils.join(
         event.rootFolderPath,
         event.conference.acronym,
+        videoFolder,
         event.slug,
     );
 

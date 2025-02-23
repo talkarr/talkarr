@@ -64,11 +64,7 @@ export const generateEventNfo = ({
     ${conferenceName ? `<studio>${conferenceName}</studio>` : ''}
     <id>${event.guid}</id>
     <uniqueid type="url">${event.frontend_link}</uniqueid>
-    <season>1</season>
-    <episode>1</episode>
     ${year ? `<year>${year}</year>` : ''}
-    <displayseason>-1</displayseason>
-    <displayepisode>-1</displayepisode>
 </episodedetails>
     `.trim();
 };
@@ -87,10 +83,6 @@ export const generateConferenceNfo = ({
     ${conference.description ? `<plot>${conference.description}</plot>` : ''}
     <studio>${conference.title}</studio>
     <id>${conference.acronym}</id>
-    <season>1</season>
-    <namedseason number="1">Season 1</namedseason>
-    <displayseason>-1</displayseason>
-    <displayepisode>-1</displayepisode>
 </tvshow>
 `.trim();
 
