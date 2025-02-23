@@ -14,8 +14,6 @@ export const validVideoFileExtensions = ['.mp4', '.webm'];
 
 export const validFileExtensions = [...validVideoFileExtensions, '.nfo'];
 
-export const eventNfoFilename = 'talk.nfo';
-
 export const conferenceNfoFilename = 'tvshow.nfo';
 
 export const conferenceThumbFilename = 'poster.jpg';
@@ -168,7 +166,7 @@ export const doesEventHaveNfoFile = async ({
 
     try {
         await fs_promises.access(
-            pathUtils.join(filePath, eventNfoFilename),
+            pathUtils.join(filePath, `${event.slug}.nfo`),
             // eslint-disable-next-line no-bitwise
             fs_promises.constants.F_OK | fs_promises.constants.R_OK,
         );
