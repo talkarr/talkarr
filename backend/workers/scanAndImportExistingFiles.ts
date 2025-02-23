@@ -37,12 +37,12 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
         });
 
         if (!scanResult || !scanResult.length) {
-            log.info('No files found in root folder:', { rootFolder });
+            log.info('No new files found in root folder:', { rootFolder });
 
             continue;
         }
 
-        log.info('Found files:', { files: scanResult.length });
+        log.info('Found new files:', { files: scanResult.length });
 
         for await (const file of scanResult) {
             if (file.guess.confidence !== 100) {
@@ -79,14 +79,4 @@ queue.process(taskName, scanAndImportExistingFiles);
 
 export const startScanAndImportExistingFiles = (): void => {
     queue.add(taskName, {}, { removeOnComplete: true });
-};
-
-export const removeAllScanAndImportExistingFiles = async (): Promise<void> => {
-    const jobs = await queue.getJobs(['active', 'waiting', 'delayed']);
-
-    const scanAndImportExistingFilesJobs = jobs.filter(
-        job => job.name === taskName,
-    );
-
-    await Promise.all(scanAndImportExistingFilesJobs.map(job => job.remove()));
 };

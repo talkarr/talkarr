@@ -318,9 +318,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
-      contents: read
+      contents: write
       attestations: write
       id-token: write
+      pull-requests: write
     env:
       container_ref: ${{ needs.build-linux-container.outputs.ref }}
     needs:

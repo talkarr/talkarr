@@ -77,4 +77,8 @@ export const waitForTaskFinished = async (
     }
 };
 
+export const removeAllJobs = async (): Promise<void> => {
+    await queue.empty();
+};
+
 export default queue;

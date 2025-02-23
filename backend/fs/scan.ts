@@ -5,12 +5,13 @@ import fs_promises from 'node:fs/promises';
 import pathUtils from 'path';
 
 import { getEventByFilePath } from '@backend/events';
-import type { ExistingFile } from '@backend/fs/index';
 import {
     defaultMimeType,
     isVideoFile,
     validFileExtensions,
-} from '@backend/fs/index';
+    videoFolder,
+} from '@backend/fs';
+import type { ExistingFile } from '@backend/fs/index';
 import {
     getConferenceFromAcronym,
     getTalkFromApiBySlug,
@@ -66,13 +67,26 @@ export const scanForExistingFiles = async ({
             // continue; // we will proceed the files so that the user can manually correct this
         }
 
+        const scanPath = pathUtils.join(
+            rootFolderPath,
+            conferenceAcronym,
+            videoFolder,
+        );
+
+        const scanPathExists = await fs_promises
+            .access(scanPath)
+            .then(() => true)
+            .catch(() => false);
+
+        if (!scanPathExists) {
+            log.warn(`Folder ${scanPath} does not exist`);
+            continue;
+        }
+
         log.info(`Scanning ${conferenceAcronym}...`);
 
         const events = (
-            await fs_promises.readdir(
-                pathUtils.join(rootFolderPath, conferenceAcronym),
-                { withFileTypes: true },
-            )
+            await fs_promises.readdir(scanPath, { withFileTypes: true })
         ).filter(dirent => dirent.isDirectory());
 
         for await (const eventDir of events) {
@@ -81,8 +95,9 @@ export const scanForExistingFiles = async ({
 
             const eventPath = pathUtils.join(
                 rootFolderPath,
-                folder.name,
-                eventDir.name,
+                conferenceAcronym,
+                videoFolder,
+                eventSlug,
             );
 
             const eventFromDbByFile = await getEventByFilePath({

@@ -70,6 +70,7 @@
         "react-dom": "^19.0.0",
         "react-markdown": "^9.0.3",
         "reflect-metadata": "^0.2.2",
+        "sharp": "^0.33.5",
         "simple-git": "^3.27.0",
         "swagger-ui-express": "^5.0.1",
         "ts-node": "^10.9.2",

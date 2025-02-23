@@ -14,6 +14,7 @@ import {
     setIsDownloading,
 } from '@backend/events';
 import { doesEventHaveNfoFile, doesTalkHaveExistingFiles } from '@backend/fs';
+import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue, { isTaskRunning, waitForTaskFinished } from '@backend/queue';
 import rootLog from '@backend/rootLog';
@@ -134,6 +135,11 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
             if (!hasNfo) {
                 startGenerateMissingNfo({ event });
             }
+
+            await handleConferenceMetadataGeneration({
+                rootFolderPath: event.rootFolderPath,
+                conference: event.conference,
+            });
         } catch (error) {
             log.error('Error scanning for missing files:', {
                 error,
@@ -173,12 +179,4 @@ export const startScanForMissingFiles = async (
     queue.add(taskName, data, {
         removeOnComplete: true /* , timeout: 60000 * 3 */,
     }); // ~3 minutes~ no timeout
-};
-
-export const removeAllScanForMissingFilesTasks = async (): Promise<void> => {
-    const jobs = await queue.getJobs(['active', 'waiting', 'delayed']);
-
-    const scanForMissingFilesJobs = jobs.filter(job => job.name === taskName);
-
-    await Promise.all(scanForMissingFilesJobs.map(job => job.remove()));
 };

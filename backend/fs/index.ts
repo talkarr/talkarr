@@ -9,14 +9,14 @@ import type {
     NormalAndConvertedDate,
 } from '@backend/types';
 
-// filePath: `${USER_DEFINED_ROOT_FOLDER}/${CONFERENCE}/${FILENAME}`
-
 // These file extensions are the ones provided by media.ccc.de.
 export const validVideoFileExtensions = ['.mp4', '.webm'];
 
 export const validFileExtensions = [...validVideoFileExtensions, '.nfo'];
 
-export const nfoFilename = 'talk.nfo';
+export const conferenceNfoFilename = 'tvshow.nfo';
+
+export const conferenceThumbFilename = 'poster.jpg';
 
 export const rootFolderMarkName = '.talkarr';
 
@@ -24,6 +24,8 @@ export const rootFolderMarkContent =
     '!!! This is a Talkarr root folder. Please do not delete this file !!!';
 
 export const defaultMimeType = 'application/octet-stream';
+
+export const videoFolder = 'Events';
 
 const log = rootLog.child({ label: 'fs' });
 
@@ -65,7 +67,11 @@ export const doesTalkHaveExistingFiles = async ({
 
     try {
         await fs_promises.access(
-            pathUtils.join(event.rootFolderPath, event.conference.acronym),
+            pathUtils.join(
+                event.rootFolderPath,
+                event.conference.acronym,
+                videoFolder,
+            ),
         );
     } catch {
         log.debug('Conference folder does not exist');
@@ -75,6 +81,7 @@ export const doesTalkHaveExistingFiles = async ({
     const filePath = pathUtils.join(
         event.rootFolderPath,
         event.conference.acronym,
+        videoFolder,
         event.slug,
     );
 
@@ -119,6 +126,32 @@ export const doesTalkHaveExistingFiles = async ({
     return existingFiles.length ? existingFiles : null;
 };
 
+export const getEventFilename = ({
+    event,
+    extension,
+}: {
+    event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
+    extension: string;
+}): string => {
+    const ext = extension.replace(/^\./, '');
+
+    // remove all numbers etc. from the slug. only allow letters, dashes and underscores. replace all spaces with dashes
+    const slugWithoutConference = event.slug.replace(
+        `${event.conference.acronym}-`,
+        '',
+    );
+
+    const slug = slugWithoutConference
+        .replace(/ /g, '-')
+        .replace(/[^a-zA-Z-_]/g, '')
+        .toLowerCase()
+        .trim()
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+
+    return `${slug}.${ext}`;
+};
+
 export const doesEventHaveNfoFile = async ({
     event,
 }: {
@@ -140,7 +173,11 @@ export const doesEventHaveNfoFile = async ({
 
     try {
         await fs_promises.access(
-            pathUtils.join(event.rootFolderPath, event.conference.acronym),
+            pathUtils.join(
+                event.rootFolderPath,
+                event.conference.acronym,
+                videoFolder,
+            ),
         );
     } catch {
         return false;
@@ -149,12 +186,19 @@ export const doesEventHaveNfoFile = async ({
     const filePath = pathUtils.join(
         event.rootFolderPath,
         event.conference.acronym,
+        videoFolder,
         event.slug,
     );
 
     try {
         await fs_promises.access(
-            pathUtils.join(filePath, nfoFilename),
+            pathUtils.join(
+                filePath,
+                getEventFilename({
+                    event,
+                    extension: 'nfo',
+                }),
+            ),
             // eslint-disable-next-line no-bitwise
             fs_promises.constants.F_OK | fs_promises.constants.R_OK,
         );
@@ -258,6 +302,7 @@ export const getFolderPathForTalk = async ({
     const folderPath = pathUtils.join(
         event.rootFolderPath,
         event.conference.acronym,
+        videoFolder,
         event.slug,
     );
 
