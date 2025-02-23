@@ -46,6 +46,13 @@ export const generateEventNfo = ({
               ? event.conference.title
               : null;
 
+    const year =
+        event.date instanceof Date
+            ? event.date.getFullYear()
+            : typeof event.date === 'string'
+              ? new Date(event.date).getFullYear()
+              : null;
+
     return `
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <episodedetails>
@@ -55,7 +62,12 @@ export const generateEventNfo = ({
     ${tags.map(tag => `<genre>${tag}</genre>`).join('\n')}
     <premiered>${event.date}</premiered>
     ${conferenceName ? `<studio>${conferenceName}</studio>` : ''}
-    <season>${1}</season>
+    <id>${event.guid}</id>
+    <uniqueid type="url">${event.frontend_link}</uniqueid>
+    <season>1</season>
+    ${year ? `<year>${year}</year>` : ''}
+    <displayseason>-1</displayseason>
+    <displayepisode>-1</displayepisode>
 </episodedetails>
     `.trim();
 };
@@ -73,6 +85,11 @@ export const generateConferenceNfo = ({
     <title>${conference.title}</title>
     ${conference.description ? `<plot>${conference.description}</plot>` : ''}
     <studio>${conference.title}</studio>
+    <id>${conference.acronym}</id>
+    <season>1</season>
+    <namedseason number="1">Conference</namedseason>
+    <displayseason>-1</displayseason>
+    <displayepisode>-1</displayepisode>
 </tvshow>
 `.trim();
 
