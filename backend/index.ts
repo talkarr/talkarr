@@ -11,11 +11,10 @@ import swaggerUi from 'swagger-ui-express';
 import '@backend/workers/addTalk';
 import '@backend/workers/generateMissingNfo';
 import { startCheckForRootFolders } from '@backend/workers/checkForRootFolders';
-import { removeAllScanAndImportExistingFiles } from '@backend/workers/scanAndImportExistingFiles';
-import { removeAllScanForMissingFilesTasks } from '@backend/workers/scanForMissingFiles';
 
 import api from '@backend/api';
 import { clearDownloadingFlagForAllTalks } from '@backend/events';
+import { removeAllJobs } from '@backend/queue';
 import rootLog from '@backend/rootLog';
 import { loadSettings } from '@backend/settings';
 
@@ -151,8 +150,8 @@ loadingHttpServer.on('listening', () => {
                 }
 
                 try {
-                    await removeAllScanForMissingFilesTasks();
-                    await removeAllScanAndImportExistingFiles();
+                    await removeAllJobs();
+                    log.info('Removed all existing tasks');
                 } catch {
                     log.warn('Error when trying to remove existing tasks');
                 }

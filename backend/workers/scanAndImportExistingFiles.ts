@@ -80,13 +80,3 @@ queue.process(taskName, scanAndImportExistingFiles);
 export const startScanAndImportExistingFiles = (): void => {
     queue.add(taskName, {}, { removeOnComplete: true });
 };
-
-export const removeAllScanAndImportExistingFiles = async (): Promise<void> => {
-    const jobs = await queue.getJobs(['active', 'waiting', 'delayed']);
-
-    const scanAndImportExistingFilesJobs = jobs.filter(
-        job => job.name === taskName,
-    );
-
-    await Promise.all(scanAndImportExistingFilesJobs.map(job => job.remove()));
-};
