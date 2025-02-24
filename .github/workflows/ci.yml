@@ -213,6 +213,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log in into Docker Hub
+        if: github.actor != 'dependabot[bot]'
         uses: docker/login-action@v3
         with:
           registry: docker.io
