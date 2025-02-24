@@ -232,9 +232,11 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                         }
                     />
                     <CardContent style={{ marginBottom: 4 }}>
-                        <Markdown skipHtml className={searchItemCss.markdown}>
-                            {item.description || ''}
-                        </Markdown>
+                        <div className={searchItemCss.markdown}>
+                            <Markdown skipHtml>
+                                {item.description || ''}
+                            </Markdown>
+                        </div>
                     </CardContent>
                 </Box>
             </CardActionArea>
