@@ -239,7 +239,7 @@ jobs:
 
           images: |
             ghcr.io/${{ github.repository }}
-            docker.io/${{ secrets.DOCKER_USERNAME }}/talkarr
+            docker.io/${{ secrets.DOCKER_USERNAME }}/talkarr,enable=${{ github.actor != 'dependabot[bot]' }}
 
       - name: Generate git stats for building
         id: git-stats
