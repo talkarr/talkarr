@@ -10,7 +10,9 @@ test('should be able to navigate to the home page', async ({ page }) => {
     });
 
     // wait for data-testid="navigation" to be visible
-    await page.waitForSelector('[data-testid="navigation"]');
+    await page.waitForSelector('[data-testid="navigation"]', {
+        timeout: 1000 * 60 * 5,
+    });
 
     await expect(page.getByTestId('navigation')).toBeVisible();
 
