@@ -78,5 +78,9 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
 queue.process(taskName, scanAndImportExistingFiles);
 
 export const startScanAndImportExistingFiles = (): void => {
-    queue.add(taskName, {}, { removeOnComplete: true });
+    queue.add(
+        taskName,
+        {},
+        { removeOnComplete: true, timeout: 60 * 1000 * 20 },
+    );
 };

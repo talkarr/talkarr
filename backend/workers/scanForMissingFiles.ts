@@ -177,6 +177,7 @@ export const startScanForMissingFiles = async (
     }
 
     queue.add(taskName, data, {
-        removeOnComplete: true /* , timeout: 60000 * 3 */,
-    }); // ~3 minutes~ no timeout
+        removeOnComplete: true,
+        timeout: 60 * 1000 * 20, // 20 minutes
+    });
 };
