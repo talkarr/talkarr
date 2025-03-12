@@ -43,7 +43,7 @@
         "@mui/material": "^6.4.6",
         "@mui/material-nextjs": "^6.4.2",
         "@prisma/client": "6.4.1",
-        "@ryoppippi/unplugin-typia": "^1.2.0",
+        "@ryoppippi/unplugin-typia": "^2.0.3",
         "@uidotdev/usehooks": "^2.4.1",
         "bull": "^4.16.5",
         "cookie-parser": "^1.4.7",
