@@ -20,13 +20,14 @@ import searchItemCss from './searchitem.module.css';
 import TalkImage from '@components/TalkImage';
 import VideoMetaBadge from '@components/VideoMetaBadge';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { capitalize, Grid2, styled } from '@mui/material';
+import { capitalize, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 
@@ -195,7 +196,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                                     ) : null}
                                 </Box>
                                 {badges.length ? (
-                                    <Grid2
+                                    <Grid
                                         container
                                         spacing={1}
                                         mb={item.subtitle ? 1 : undefined}
@@ -203,7 +204,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                                         gridAutoRows="1fr"
                                     >
                                         {badges.map((badge, index) => (
-                                            <Grid2
+                                            <Grid
                                                 key={`badge-${index}-${badge.type}`}
                                             >
                                                 <VideoMetaBadge
@@ -217,9 +218,9 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                                                         height: 32,
                                                     }}
                                                 />
-                                            </Grid2>
+                                            </Grid>
                                         ))}
-                                    </Grid2>
+                                    </Grid>
                                 ) : null}
                             </Box>
                         }

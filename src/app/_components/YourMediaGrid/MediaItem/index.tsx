@@ -18,12 +18,13 @@ import { useApiStore } from '@/providers/apiStoreProvider';
 import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
 import InvisibleLink from '@components/InvisibleLink';
 import ProblemIcon from '@mui/icons-material/ReportProblem';
-import { Grid2, styled, useTheme } from '@mui/material';
+import { styled, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -32,7 +33,7 @@ export interface MediaItemProps {
     initialData: SuccessData<'/talks/list', 'get'>['events'][0];
 }
 
-const StyledContainer = styled(Grid2)(({ theme }) => ({
+const StyledContainer = styled(Grid)(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius * 2,
     overflow: 'hidden',
