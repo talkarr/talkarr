@@ -108,7 +108,7 @@ loadingHttpServer.on('listening', () => {
                 swaggerUi.setup(JSON.parse(apiDocs)),
             );
 
-            server.all('*', (req, res) => handle(req, res));
+            server.all('*_', (req, res) => handle(req, res));
             server.use(
                 (
                     err: { status: number; message: string; errors: string[] },
