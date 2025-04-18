@@ -1,4 +1,4 @@
-import type SvgIcon from '@mui/material/SvgIcon/SvgIcon';
+import type SvgIcon from '@mui/material/SvgIcon';
 
 import {
     addTalksPageLink,

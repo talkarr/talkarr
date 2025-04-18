@@ -44,7 +44,8 @@ loadingServer.get('/small_logo.png', (req, res) => {
     });
 });
 
-loadingServer.get('*', (req, res) => {
+// with express 5, everything needs a name now, even wildcards.
+loadingServer.get('*_', (req, res) => {
     if (req.path.startsWith('/api')) {
         res.status(521).json({
             message: 'Service not available',
@@ -107,7 +108,7 @@ loadingHttpServer.on('listening', () => {
                 swaggerUi.setup(JSON.parse(apiDocs)),
             );
 
-            server.all('*', (req, res) => handle(req, res));
+            server.all('*_', (req, res) => handle(req, res));
             server.use(
                 (
                     err: { status: number; message: string; errors: string[] },
