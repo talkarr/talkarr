@@ -160,13 +160,13 @@ jobs:
           yarn dev:db
           
           # wait for the database to be ready
-          npx wait-on -t 5m tcp:5432
+          npx wait-on -t 3m tcp:5432
           
           # redis
           yarn dev:redis
           
           # wait for redis to be ready
-          npx wait-on -t 5m tcp:6379
+          npx wait-on -t 3m tcp:6379
           
           mkdir -p logs
           chmod 777 -R logs
@@ -179,7 +179,7 @@ jobs:
 
       - name: Wait for the app to be ready
         run: |
-          npx wait-on -t 5m http://localhost:3232
+          npx wait-on -t 3m http://localhost:3232
 
       - name: Run backend tests
         run: yarn test:backend
@@ -383,7 +383,7 @@ jobs:
           docker compose -f docker-compose.dev.yml up -d db redis
           
           # wait for the database to be ready
-          npx wait-on -t 5m tcp:5432 tcp:6379
+          npx wait-on -t 3m tcp:5432 tcp:6379
           
           # print container status
           docker ps -a
