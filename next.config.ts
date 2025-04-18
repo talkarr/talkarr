@@ -103,9 +103,7 @@ const nextConfig = async (): Promise<NextConfig> => {
                 YTDLP_PATH_OVERRIDE: process.env.YTDLP_PATH_OVERRIDE,
             },
             devIndicators: {
-                appIsrStatus: true,
-                buildActivity: true,
-                buildActivityPosition: 'bottom-right',
+                position: 'bottom-right',
             },
             compiler: {
                 ...(process.env.NODE_ENV === 'production'
