@@ -14,6 +14,7 @@ import { startCheckForRootFolders } from '@backend/workers/checkForRootFolders';
 
 import api from '@backend/api';
 import { clearDownloadingFlagForAllTalks } from '@backend/events';
+import { releaseAllLocks } from '@backend/locks';
 import { removeAllJobs } from '@backend/queue';
 import rootLog from '@backend/rootLog';
 import { loadSettings } from '@backend/settings';
@@ -156,6 +157,8 @@ loadingHttpServer.on('listening', () => {
                 } catch {
                     log.warn('Error when trying to remove existing tasks');
                 }
+
+                await releaseAllLocks();
 
                 // mark everything as not downloading
                 await clearDownloadingFlagForAllTalks();
