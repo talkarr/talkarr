@@ -2,8 +2,3 @@ name: Internal Issue
 description: DO NOT USE THIS. ISSUES USING THIS WILL BE CLOSED.
 assignees:
   - CommanderRedYT
-body:
-  - type: markdown
-    attributes:
-        value: |
-            DO NOT USE THIS.
