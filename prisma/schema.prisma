@@ -113,3 +113,7 @@ model Settings {
   key   String @id
   value String
 }
+
+model Locks {
+  name String @id
+}

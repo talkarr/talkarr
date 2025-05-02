@@ -123,6 +123,10 @@ export const doesTalkHaveExistingFiles = async ({
         }
     }
 
+    log.debug(`Found ${existingFiles.length} existing files`, {
+        existingFiles,
+    });
+
     return existingFiles.length ? existingFiles : null;
 };
 

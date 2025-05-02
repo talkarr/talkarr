@@ -1,3 +1,4 @@
+import type { Locks } from '@prisma/client';
 import type { DoneCallback } from 'bull';
 
 import mime from 'mime-types';
@@ -29,6 +30,7 @@ import {
     isVideoFile,
 } from '@backend/fs';
 import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
+import { acquireLockAndReturn, releaseLock } from '@backend/locks';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
@@ -53,10 +55,9 @@ export interface AddTalkData {
 
 export const check = typia.createIs<AddTalkData>();
 
-let runningInstances = 0;
-
-const maxRunningInstances = 1;
-let instances: string[] = [];
+const lock: Locks = {
+    name: 'addTalk',
+};
 
 const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     const { event } = job.data;
@@ -67,33 +68,17 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         throw new Error('Invalid data');
     }
 
-    // wait for other instances to finish
-    while (runningInstances >= maxRunningInstances) {
-        const runningInstancesCopy = runningInstances;
-        const instancesCopy = instances.slice();
+    if (!(await acquireLockAndReturn(lock))) {
+        log.error('Could not acquire lock, early returning', { lock });
 
-        // eslint-disable-next-line no-await-in-loop
-        await new Promise(resolve => {
-            log.warn('Waiting for other instances to finish...', {
-                runningInstancesCopy,
-                maxRunningInstances,
-                title: event.title,
-                instancesCopy,
-            });
-            setTimeout(resolve, 5000);
-        });
+        return actualDone(); // do not throw error
     }
 
     const done = async (...args: Parameters<DoneCallback>): Promise<void> => {
-        runningInstances -= 1;
-
-        instances = instances.filter(i => i !== event.title);
+        await releaseLock(lock, false);
 
         actualDone(...args);
     };
-
-    runningInstances += 1;
-    instances.push(event.title);
 
     const isAlreadyDownloading = await isEventDownloading({
         eventGuid: event.guid,
@@ -329,6 +314,16 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         exitCode = (await videoSubprocess).exitCode;
 
         if (!path) {
+            await setIsDownloading({
+                eventGuid: event.guid,
+                isDownloading: false,
+            });
+
+            await setDownloadError({
+                eventGuid: event.guid,
+                error: 'No path found',
+            });
+
             return await done(new Error('No path found'));
         }
 
