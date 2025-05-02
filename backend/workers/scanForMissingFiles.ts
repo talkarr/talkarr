@@ -13,7 +13,10 @@ import {
     listEvents,
     setIsDownloading,
 } from '@backend/events';
-import { doesEventHaveNfoFile, doesTalkHaveExistingFiles } from '@backend/fs';
+import {
+    doesEventHaveNfoFile,
+    doesTalkHaveExistingFilesOnDisk,
+} from '@backend/fs';
 import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue, { isTaskRunning, waitForTaskFinished } from '@backend/queue';
@@ -67,7 +70,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                 continue;
             }
 
-            const hasFiles = await doesTalkHaveExistingFiles({ event });
+            const hasFiles = await doesTalkHaveExistingFilesOnDisk({ event });
 
             const hasNfo = await doesEventHaveNfoFile({ event });
 

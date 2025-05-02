@@ -1187,3 +1187,25 @@ export const clearDownloadingFlagForAllTalks = async (): Promise<void> => {
         log.error('Error clearing downloading flag for all talks', { error });
     }
 };
+
+export const listTalkFiles = async ({
+    eventGuid,
+}: {
+    eventGuid: DbEvent['guid'];
+}): Promise<components['schemas']['DownloadedFile'][]> => {
+    try {
+        const result = await prisma.file.findMany({
+            where: {
+                eventGuid,
+            },
+        });
+
+        return result.map(file =>
+            mapResultFiles({ file, rootFolderPath: file.path }),
+        );
+    } catch (error) {
+        log.error('Error listing talk files', { error, eventGuid });
+
+        return [];
+    }
+};
