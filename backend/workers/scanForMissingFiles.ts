@@ -13,7 +13,10 @@ import {
     listEvents,
     setIsDownloading,
 } from '@backend/events';
-import { doesEventHaveNfoFile, doesTalkHaveExistingFilesOnDisk } from '@backend/fs';
+import {
+    doesEventHaveNfoFile,
+    doesTalkHaveExistingFilesOnDisk,
+} from '@backend/fs';
 import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue, { isTaskRunning, waitForTaskFinished } from '@backend/queue';
