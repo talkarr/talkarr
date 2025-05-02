@@ -17,6 +17,7 @@ import {
     addDownloadedFile,
     clearDownloadError,
     isEventDownloading,
+    listTalkFiles,
     setDownloadError,
     setDownloadExitCode,
     setDownloadProgress,
@@ -24,7 +25,7 @@ import {
 } from '@backend/events';
 import {
     defaultMimeType,
-    doesTalkHaveExistingFiles,
+    doesTalkHaveExistingFilesOnDisk,
     getEventFilename,
     getFolderPathForTalk,
     isVideoFile,
@@ -91,13 +92,38 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         return done();
     }
 
-    const wasAlreadyDownloaded = await doesTalkHaveExistingFiles({ event });
+    const wasAlreadyDownloaded = await doesTalkHaveExistingFilesOnDisk({
+        event,
+    });
 
     if (
         wasAlreadyDownloaded?.filter(f => f.isVideo).length &&
         !job.data.force
     ) {
         log.warn('Talk was already downloaded:', { title: event.title });
+
+        return done();
+    }
+
+    const hasKnownFiles = await listTalkFiles({
+        eventGuid: event.guid,
+    });
+
+    if (
+        hasKnownFiles?.filter(f => {
+            if (!f.is_video) {
+                return false;
+            }
+
+            // check if file exists on disk
+            return fs_promises
+                .access(f.path)
+                .then(() => true)
+                .catch(() => false);
+        }).length &&
+        !job.data.force
+    ) {
+        log.warn('Talk has known files:', { title: event.title });
 
         return done();
     }

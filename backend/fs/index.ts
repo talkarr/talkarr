@@ -43,7 +43,7 @@ export const isVideoFile = (filename: string): boolean => {
 
     return validVideoFileExtensions.includes(ext);
 };
-export const doesTalkHaveExistingFiles = async ({
+export const doesTalkHaveExistingFilesOnDisk = async ({
     event,
 }: {
     event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
