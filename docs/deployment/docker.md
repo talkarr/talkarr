@@ -49,7 +49,7 @@ services:
       - "5432:5432"
 
   redis:
-    image: redis:7-alpine
+    image: valkey:8-alpine
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -135,7 +135,7 @@ If you prefer to deploy the application without using Docker Compose, you can us
 
 ```bash
 docker run -d --name db --env-file .env -v ./data:/var/lib/postgresql/data -p 5432:5432 postgres:16-alpine
-docker run -d --name redis -p 6379:6379 redis:7-alpine
+docker run -d --name redis -p 6379:6379 valkey/valkey:8-alpine
 docker run -d --name app --env-file .env -p 3232:3232 --link db:db --link redis:redis ghcr.io/talkarr/talkarr:latest
 ```
 
