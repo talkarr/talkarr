@@ -408,7 +408,10 @@ jobs:
           echo "Waiting for the app to be ready"
           
           # wait for the app to be ready
-          npx wait-on -t 2m http://localhost:3232
+          npx wait-on -t 2m http://localhost:3232/api/healthz
+          
+          # open / page
+          npx wait-on -t 2m http://localhost:3232/
 
       - name: Run E2E tests
         id: e2e
