@@ -290,9 +290,13 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
 
         let path: string | null = null;
 
+        let stdoutBuffer = '';
+
         // create buffer for stdout
         videoSubprocess.stdout?.on('data', async data => {
             const stdout = data.toString();
+
+            stdoutBuffer += stdout;
 
             const hasDestination = stdout.includes('Destination:');
 
@@ -348,6 +352,12 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             await setDownloadError({
                 eventGuid: event.guid,
                 error: 'No path found',
+            });
+
+            log.debug('No path found:', {
+                title: event.title,
+                all_stdout: stdoutBuffer,
+                stderrBuffer,
             });
 
             return await done(new Error('No path found'));
