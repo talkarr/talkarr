@@ -13,6 +13,8 @@ config({
     ],
 });
 
+const logLevel = process.env.LOG_LEVEL?.toLowerCase();
+
 const hformat = winston.format.printf(
     ({ level, label, message, timestamp, ...metadata }) => {
         let actualMessage = message;
@@ -60,10 +62,7 @@ const hformat = winston.format.printf(
 
 const rootLog = winston.createLogger({
     level:
-        process.env.LOG_LEVEL?.toLowerCase() ||
-        process.env.NODE_ENV === 'production'
-            ? 'info'
-            : 'debug',
+        logLevel || (process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
     format: winston.format.combine(
         winston.format.splat(),
         winston.format.timestamp(),
@@ -123,7 +122,7 @@ try {
 }
 
 rootLog.info(
-    `Logger configured with level: ${rootLog.level}. 'process.env.LOG_LEVEL=${process.env.LOG_LEVEL}'`,
+    `Logger configured with level: ${rootLog.level}. 'process.env.LOG_LEVEL=${process.env.LOG_LEVEL}' 'logLevel=${logLevel}'`,
 );
 
 export default rootLog;
