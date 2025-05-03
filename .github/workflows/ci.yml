@@ -389,7 +389,6 @@ jobs:
           docker ps -a
 
       - name: Start Docker container
-        continue-on-error: true
         run: |
           # Make sure the .env file is not empty
           if [ ! -s .env ]; then
@@ -407,11 +406,11 @@ jobs:
           
           echo "Waiting for the app to be ready"
           
-          # wait for the app to be ready
-          npx wait-on -t 2m http://localhost:3232/api/healthz
+          # wait for the app to be ready on /api/healthz
+          npx wait-on -t 2m -v http://localhost:3232/api/healthz
           
           # open / page
-          npx wait-on -t 2m http://localhost:3232/
+          npx wait-on -t 2m -v http://localhost:3232/
 
       - name: Run E2E tests
         id: e2e
