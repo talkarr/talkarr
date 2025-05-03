@@ -254,6 +254,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             error: 'Error getting folder path for talk',
         });
 
+        await releaseLock(lock, false);
+
         throw new Error('Error getting folder path for talk');
     }
 
@@ -389,6 +391,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
                 error: 'Error adding file to db',
             });
 
+            await releaseLock(lock, false);
+
             throw new Error('Error adding file to db');
         }
 
@@ -433,6 +437,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         });
 
         await setIsDownloading({ eventGuid: event.guid, isDownloading: false });
+
+        await releaseLock(lock, false);
 
         throw error;
     }
