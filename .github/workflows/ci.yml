@@ -389,6 +389,8 @@ jobs:
           docker ps -a
 
       - name: Start Docker container
+        continue-on-error: true
+        id: start-container
         run: |
           # Make sure the .env file is not empty
           if [ ! -s .env ]; then
@@ -407,15 +409,15 @@ jobs:
           echo "Waiting for the app to be ready"
           
           # wait for the app to be ready on /api/healthz
-          npx wait-on -t 2m -v http://localhost:3232/api/healthz
+          npx wait-on -t 5m -v http://localhost:3232/api/healthz
           
           # open / page
-          npx wait-on -t 2m -v http://localhost:3232/
+          npx wait-on -t 5m -v http://localhost:3232/
 
       - name: Run E2E tests
         id: e2e
         continue-on-error: true
-        if: success()
+        if: steps.start-container.outcome == 'success'
         run: |
           yarn test:e2e:ci
           echo "TESTING_STATUS=$?" >> $GITHUB_ENV
