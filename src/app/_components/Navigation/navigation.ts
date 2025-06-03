@@ -5,6 +5,7 @@ import {
     homePageLink,
     importTalksPageLink,
     mediaManagementSettingsPageLink,
+    authManagementSettingsPageLink,
     scanFilesPageLink,
     settingsPageLink,
 } from '@/constants';
@@ -33,6 +34,13 @@ export const settings: (SimpleNavigationItem & { description: string })[] = [
         title: 'Media Management',
         path: mediaManagementSettingsPageLink,
         description: 'Naming and management of media files.',
+        slug: 'media-management',
+    },
+    {
+        title: 'Auth & SSO',
+        path: authManagementSettingsPageLink,
+        description:
+            'Management of authentication (SSO) and authorization (admin access & roles).',
         slug: 'media-management',
     },
 ];

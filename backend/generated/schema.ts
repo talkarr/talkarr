@@ -1250,6 +1250,7 @@ export interface components {
             error: string;
         };
         MediaManagementConfig: Record<string, never>;
+        AuthManagementConfig: Record<string, never>;
         ExistingFile: {
             /** @example /path/to/file.jpg */
             path: string;

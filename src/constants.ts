@@ -20,6 +20,7 @@ export const importTalksPageLink = '/talks/import';
 export const specificTalkPageLink = (slug: string): string => `/talks/${slug}`;
 export const settingsPageLink = '/settings';
 export const mediaManagementSettingsPageLink = '/settings/mediamanagement';
+export const authManagementSettingsPageLink = '/settings/authmanagement';
 
 // === API ===
 export const apiBaseUrl = `http://${process.env.HOST || 'localhost'}:${process.env.PORT || 3232}`;
