@@ -13,6 +13,10 @@ Please change the values of the environment variables to match your environment.
 > For the latest commit, use the `nightly` tag.
 > For a specific version, use the version number as the tag, e.g. `v1.0.0`. You can find the releases [here](https://github.com/talkarr/talkarr/releases).
 
+> [!NOTE]
+> We do not support using the docker.io registry anymore.
+> In case you are using the docker.io image, please migrate to the GitHub Container Registry (ghcr.io).
+
 ## Deploying via Docker Compose (Recommended)
 
 For more information about Docker Compose itself, please refer to the [official documentation](https://docs.docker.com/compose/).

@@ -212,17 +212,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Log in into Docker Hub
-        if: github.actor != 'dependabot[bot]' && env.DOCKER_USERNAME && env.DOCKER_PASSWORD
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        uses: docker/login-action@v3
-        with:
-          registry: docker.io
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
-
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -234,9 +223,6 @@ jobs:
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         with:
           flavor: latest=false
           # create a tag "nightly" which works like "latest" but is updated with every commit instead of only for git tags
@@ -245,7 +231,6 @@ jobs:
 
           images: |
             ghcr.io/${{ github.repository }}
-            docker.io/${{ env.DOCKER_USERNAME }}/talkarr,enable=${{ github.actor != 'dependabot[bot]' && env.DOCKER_USERNAME && env.DOCKER_PASSWORD }}
 
       - name: Generate git stats for building
         id: git-stats
@@ -499,13 +484,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Log in into Docker Hub
-        uses: docker/login-action@v3
-        with:
-          registry: docker.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
@@ -546,20 +524,3 @@ jobs:
           docker buildx imagetools create "${{ env.container_ref }}" --tag "ghcr.io/${{ github.repository }}:${{ github.ref }}"
           
           echo "Successfully tagged the ghcr container with the tag: ${{ github.ref }}"
-
-      - name: Tag docker.io container with latest using buildx
-        continue-on-error: true
-        run: |
-          # tag the container as latest
-          docker buildx imagetools create "${{ env.container_ref }}" --tag "docker.io/${{ secrets.DOCKER_USERNAME }}/talkarr:latest"
-          
-          echo "Successfully tagged the docker.io container with the tag: latest"
-
-      - name: Tag docker.io container with git tag using buildx
-        if: startsWith(github.ref, 'refs/tags/v')
-        continue-on-error: true
-        run: |
-          # tag the container with the git tag
-          docker buildx imagetools create "${{ env.container_ref }}" --tag "docker.io/${{ secrets.DOCKER_USERNAME }}/talkarr:${{ github.ref }}"
-          
-          echo "Successfully tagged the docker.io container with the tag: ${{ github.ref }}"
