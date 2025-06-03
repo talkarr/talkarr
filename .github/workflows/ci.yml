@@ -213,12 +213,15 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log in into Docker Hub
-        if: github.actor != 'dependabot[bot]' && secrets.DOCKER_USERNAME && secrets.DOCKER_PASSWORD
+        if: github.actor != 'dependabot[bot]' && env.DOCKER_USERNAME && env.DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         uses: docker/login-action@v3
         with:
           registry: docker.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v3
@@ -231,6 +234,9 @@ jobs:
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         with:
           flavor: latest=false
           # create a tag "nightly" which works like "latest" but is updated with every commit instead of only for git tags
@@ -239,7 +245,7 @@ jobs:
 
           images: |
             ghcr.io/${{ github.repository }}
-            docker.io/${{ secrets.DOCKER_USERNAME }}/talkarr,enable=${{ github.actor != 'dependabot[bot]' && secrets.DOCKER_USERNAME && secrets.DOCKER_PASSWORD }}
+            docker.io/${{ env.DOCKER_USERNAME }}/talkarr,enable=${{ github.actor != 'dependabot[bot]' && env.DOCKER_USERNAME && env.DOCKER_PASSWORD }}
 
       - name: Generate git stats for building
         id: git-stats
