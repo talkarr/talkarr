@@ -1,6 +1,7 @@
 {
     "name": "talkarr",
     "version": "0.1.0",
+    "license": "AGPL-3.0-only",
     "private": true,
     "scripts": {
         "dev:tsnd": "ts-node-dev --respawn --transpile-only --no-notify --project backend/tsconfig.json -r tsconfig-paths/register --watch backend --ignore-watch .next --ignore-watch src backend/index.ts",
