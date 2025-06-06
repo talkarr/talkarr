@@ -30,10 +30,6 @@ POSTGRES_DB=talkarr
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 
-REDIS_HOST=redis
-REDIS_PORT=6379
-REDIS_PASSWORD=
-
 # postgresql://<username>:<password>@<host>:<port>/<database>?schema=<schema>
 DATABASE_URL="postgresql://talkarr:talkarr@db:5432/talkarr?schema=public"
 ```
@@ -51,12 +47,6 @@ services:
       - ./data:/var/lib/postgresql/data # Store the data from postgres in "./data" directory
     ports:
       - "5432:5432"
-
-  redis:
-    image: valkey:8-alpine
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
   
   app:
     image: ghcr.io/talkarr/talkarr:latest # from github
@@ -71,7 +61,6 @@ services:
       - ./logs:/app/logs # Store the logs in "./logs" directory
     depends_on:
       - db
-      - redis
 ```
 
 To run the application, you can use the following command:
@@ -127,10 +116,6 @@ POSTGRES_DB=talkarr
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 
-REDIS_HOST=localhost
-REDIS_PORT=6379
-REDIS_PASSWORD=
-
 # postgresql://<username>:<password>@<host>:<port>/<database>?schema=<schema>
 DATABASE_URL="postgresql://talkarr:talkarr@localhost:5432/talkarr?schema=public"
 ```
@@ -139,15 +124,14 @@ If you prefer to deploy the application without using Docker Compose, you can us
 
 ```bash
 docker run -d --name db --env-file .env -v ./data:/var/lib/postgresql/data -p 5432:5432 postgres:16-alpine
-docker run -d --name redis -p 6379:6379 valkey/valkey:8-alpine
-docker run -d --name app --env-file .env -p 3232:3232 --link db:db --link redis:redis ghcr.io/talkarr/talkarr:latest
+docker run -d --name app --env-file .env -p 3232:3232 --link db:db ghcr.io/talkarr/talkarr:latest
 ```
 
 However, this method is not recommended as it is more difficult to manage the containers and their dependencies.
 
-## Deploying to with existing PostgreSQL and Redis instances
+## Deploying to with existing PostgreSQL
 
-If you already have a PostgreSQL and Redis instance running, you can just set the environment variables accordingly:
+If you already have a PostgreSQL instance running, you can just set the environment variables accordingly:
 
 ```bash
 POSTGRES_USER=talkarr
@@ -155,10 +139,6 @@ POSTGRES_PASSWORD=talkarr # Change this to a more secure password
 POSTGRES_DB=talkarr
 POSTGRES_HOST=localhost # Change this to the hostname of your PostgreSQL instance
 POSTGRES_PORT=5432 # Change this to the port of your PostgreSQL instance
-
-REDIS_HOST=localhost # Change this to the hostname of your Redis instance
-REDIS_PORT=6379 # Change this to the port of your Redis instance
-REDIS_PASSWORD=
 
 # postgresql://<username>:<password>@<host>:<port>/<database>?schema=<schema>
 DATABASE_URL="postgresql://talkarr:talkarr@localhost:5432/talkarr?schema=public"

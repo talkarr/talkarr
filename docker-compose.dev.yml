@@ -8,11 +8,6 @@ services:
     ports:
       - "5432:5432"
 
-  redis:
-    image: valkey/valkey:alpine
-    ports:
-      - "6379:6379"
-
   app:
     build:
       context: .
@@ -24,7 +19,6 @@ services:
       - ./e2e-test-folder:/app/e2e-test-folder
     depends_on:
       - db
-      - redis
 
 volumes:
   postgres_data_dev:

@@ -162,12 +162,6 @@ jobs:
           # wait for the database to be ready
           npx wait-on -t 3m tcp:5432
           
-          # redis
-          yarn dev:redis
-          
-          # wait for redis to be ready
-          npx wait-on -t 3m tcp:6379
-          
           mkdir -p logs
           chmod 777 -R logs
 
@@ -369,12 +363,12 @@ jobs:
         run: |
           docker pull ${{ env.container_ref }}
 
-      - name: Start Database and Redis
+      - name: Start Database
         run: |
-          docker compose -f docker-compose.dev.yml up -d db redis
+          docker compose -f docker-compose.dev.yml up -d db
           
           # wait for the database to be ready
-          npx wait-on -t 3m tcp:5432 tcp:6379
+          npx wait-on -t 3m tcp:5432
           
           # print container status
           docker ps -a
