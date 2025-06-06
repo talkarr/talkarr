@@ -15,7 +15,7 @@ import { startCheckForRootFolders } from '@backend/workers/checkForRootFolders';
 import api from '@backend/api';
 import { clearDownloadingFlagForAllTalks } from '@backend/events';
 import { releaseAllLocks } from '@backend/locks';
-import { removeAllJobs } from '@backend/queue';
+import { printQueueStatus } from '@backend/queue';
 import rootLog from '@backend/rootLog';
 import { loadSettings } from '@backend/settings';
 
@@ -72,14 +72,18 @@ const host = process.env.HOST;
 let loadingHttpServer;
 
 if (host) {
-    log.info(`Startup server listening on http://${host}:${port}/`);
-    loadingHttpServer = loadingServer.listen(port, host);
+    log.info(`Starting startup server on http://${host}:${port}/ ...`);
+    loadingHttpServer = loadingServer.listen(port, host, () => {
+        log.info(`Startup server listening on http://${host}:${port}/`);
+    });
 } else {
-    log.info(`Startup server listening on http://localhost:${port}/`);
-    loadingHttpServer = loadingServer.listen(port);
+    log.info(`Starting startup server on http://localhost:${port}/ ...`);
+    loadingHttpServer = loadingServer.listen(port, () => {
+        log.info(`Startup server listening on http://localhost:${port}/`);
+    });
 }
 
-loadingHttpServer.on('listening', () => {
+loadingHttpServer.on('listening', async () => {
     const app = next({ dev, turbopack: true });
     const handle = app.getRequestHandler();
 
@@ -150,26 +154,28 @@ loadingHttpServer.on('listening', () => {
                         log.info(`Server ready on http://localhost:${port}/`);
                     });
                 }
-
-                try {
-                    await removeAllJobs();
-                    log.info('Removed all existing tasks');
-                } catch {
-                    log.warn('Error when trying to remove existing tasks');
-                }
-
-                await releaseAllLocks();
-
-                // mark everything as not downloading
-                await clearDownloadingFlagForAllTalks();
-
-                startCheckForRootFolders({ isInit: true });
             });
         })
         .catch(err => {
             log.error('Catched Error', { stack: err.stack });
             process.exit(1);
         });
+
+    await printQueueStatus();
+
+    try {
+        const locksReleased = await releaseAllLocks();
+        log.info('Released all existing locks', {
+            locksReleased,
+        });
+    } catch {
+        log.warn('Error when trying to release existing locks');
+    }
+
+    // mark everything as not downloading
+    await clearDownloadingFlagForAllTalks();
+
+    startCheckForRootFolders({ isInit: true });
 });
 
 process.on('uncaughtException', err => {

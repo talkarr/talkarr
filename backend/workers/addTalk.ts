@@ -57,7 +57,7 @@ export interface AddTalkData {
 export const check = typia.createIs<AddTalkData>();
 
 const lock: Locks = {
-    name: 'addTalk',
+    name: taskName,
 };
 
 const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
@@ -70,7 +70,12 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     }
 
     if (!(await acquireLockAndReturn(lock))) {
-        log.error('Could not acquire lock, early returning', { lock });
+        log.error('Could not acquire lock, early returning', {
+            lock,
+            jobId: job.id,
+            eventGuid: event.guid,
+            title: event.title,
+        });
 
         return actualDone(); // do not throw error
     }
@@ -81,10 +86,26 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         actualDone(...args);
     };
 
-    const isAlreadyDownloading = await isEventDownloading({
-        eventGuid: event.guid,
-        throwIfNotFound: true,
-    });
+    let isAlreadyDownloading = false;
+    try {
+        isAlreadyDownloading = await isEventDownloading({
+            eventGuid: event.guid,
+            throwIfNotFound: true,
+        });
+    } catch (error) {
+        log.error('Error checking if event is downloading:', {
+            error,
+            eventGuid: event.guid,
+            title: event.title,
+        });
+
+        await setDownloadError({
+            eventGuid: event.guid,
+            error: 'Error checking if event is downloading',
+        });
+
+        return done(new Error('Error checking if event is downloading'));
+    }
 
     if (isAlreadyDownloading) {
         log.warn('Talk is already downloading:', { title: event.title });

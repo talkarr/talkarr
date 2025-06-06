@@ -78,7 +78,8 @@ const nextConfig = async (): Promise<NextConfig> => {
         currentVersion,
         isInsideDocker,
         currentCommitTimestamp,
-        YTDLP_PATH_OVERRIDE: process.env.YTDLP_PATH_OVERRIDE ?? 'not set',
+        YTDLP_PATH_OVERRIDE:
+            process.env.YTDLP_PATH_OVERRIDE ?? '<hardcoded_not_set>',
     });
 
     return unTypiaNext(

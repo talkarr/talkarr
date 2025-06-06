@@ -58,7 +58,7 @@ const checkIfFilesExist: TaskFunction<CheckIfFilesExistData> = async (
 
         // check if files exist
         for await (const file of files) {
-            log.info('Checking file:', { filePath: file.path });
+            log.debug('Checking file:', { filePath: file.path });
 
             // check if file exists
             const exists = await doesFileExist({ filePath: file.path });
@@ -82,7 +82,7 @@ const checkIfFilesExist: TaskFunction<CheckIfFilesExistData> = async (
                     });
                 }
             } else {
-                log.info('File exists:', { filePath: file.path });
+                log.debug('File exists:', { filePath: file.path });
             }
         }
     }

@@ -2,6 +2,7 @@ import type { DoneCallback, Job } from 'bull';
 
 import Queue from 'bull';
 
+import { releaseLock } from '@backend/locks';
 import { redisConnection } from '@backend/redis';
 import rootLog from '@backend/rootLog';
 
@@ -15,11 +16,19 @@ queue.on('error', err => {
     log.error('Queue error:', { error: err });
 });
 
-queue.on('failed', (job, err) => {
+queue.on('failed', async (job, err) => {
     log.error(`Job ${job.id} (${job.name}) failed:`, {
         error: err,
         data: job.data,
     });
+
+    // try to unlock the lock of the job
+    await releaseLock(
+        {
+            name: job.name,
+        },
+        false,
+    );
 });
 
 queue.on('progress', (job, progress) => {
@@ -77,8 +86,30 @@ export const waitForTaskFinished = async (
     }
 };
 
-export const removeAllJobs = async (): Promise<void> => {
+export const removeAllJobs = async (): Promise<number> => {
+    const jobsCount = await queue.getJobCounts();
     await queue.empty();
+
+    log.info('Removed all jobs from the queue', {
+        active: jobsCount.active,
+        completed: jobsCount.completed,
+        delayed: jobsCount.delayed,
+        failed: jobsCount.failed,
+        waiting: jobsCount.waiting,
+    });
+
+    return jobsCount.active + jobsCount.waiting + jobsCount.delayed;
+};
+
+export const printQueueStatus = async (): Promise<void> => {
+    const jobsCount = await queue.getJobCounts();
+    log.info('Queue status:', {
+        active: jobsCount.active,
+        completed: jobsCount.completed,
+        delayed: jobsCount.delayed,
+        failed: jobsCount.failed,
+        waiting: jobsCount.waiting,
+    });
 };
 
 export default queue;

@@ -1,14 +1,18 @@
 import type { Locks } from '@prisma/client';
 
 import { prisma } from '@backend/prisma';
+import rootLog from '@backend/rootLog';
 
 import { Prisma } from '@prisma/client';
+
+const log = rootLog.child({ label: 'locks' });
 
 export const acquireLock = async (data: Locks): Promise<void> => {
     try {
         await prisma.locks.create({
             data,
         });
+        log.info('Lock acquired', { lock: data.name });
     } catch (error) {
         if (
             error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -26,7 +30,7 @@ export const acquireLockAndReturn = async (data: Locks): Promise<boolean> => {
         await prisma.locks.create({
             data,
         });
-
+        log.info('Lock acquired', { lock: data.name });
         return true;
     } catch {
         return false;
@@ -43,6 +47,7 @@ export const releaseLock = async (
                 name: data.name,
             },
         });
+        log.info('Lock released', { lock: data.name });
     } catch (error) {
         if (
             error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -69,12 +74,9 @@ export const isLocked = async (data: Locks): Promise<boolean> => {
     return !!lock;
 };
 
-export const releaseAllLocks = async (): Promise<void> => {
-    await prisma.locks.deleteMany({
-        where: {
-            name: {
-                not: 'docker',
-            },
-        },
-    });
+export const releaseAllLocks = async (): Promise<number> => {
+    const res = await prisma.locks.deleteMany({});
+    log.info('All locks released', { count: res.count });
+
+    return res.count;
 };

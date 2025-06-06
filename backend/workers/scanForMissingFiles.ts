@@ -1,3 +1,5 @@
+import type { Locks } from '@prisma/client';
+
 import pathUtils from 'path';
 import typia from 'typia';
 
@@ -10,6 +12,7 @@ import {
     checkIfFileIsInDb,
     createNewTalkInfo,
     fixBigintInExtendedDbEvent,
+    isEventDownloading,
     listEvents,
     setIsDownloading,
 } from '@backend/events';
@@ -18,8 +21,9 @@ import {
     doesTalkHaveExistingFilesOnDisk,
 } from '@backend/fs';
 import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
+import { acquireLockAndReturn, releaseLock } from '@backend/locks';
 import type { TaskFunction } from '@backend/queue';
-import queue, { isTaskRunning, waitForTaskFinished } from '@backend/queue';
+import queue, { isTaskRunning } from '@backend/queue';
 import rootLog from '@backend/rootLog';
 import type {
     ConvertBigintToNumberType,
@@ -37,9 +41,13 @@ export interface ScanForMissingFilesData {
 
 export const check = typia.createIs<ScanForMissingFilesData>();
 
+const lock: Locks = {
+    name: taskName,
+};
+
 const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
     job,
-    done,
+    actualDone,
 ): Promise<void> => {
     log.info('Scanning for missing files...');
 
@@ -51,7 +59,19 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
         throw new Error('Invalid data');
     }
 
-    await waitForTaskFinished(taskName, null, job.id);
+    if (!(await acquireLockAndReturn(lock))) {
+        log.error('Could not acquire lock, early returning', {
+            lock,
+            jobId: job.id,
+        });
+
+        return actualDone(); // do not throw error
+    }
+
+    const done = async (error?: Error): Promise<void> => {
+        await releaseLock(lock, false);
+        actualDone(error);
+    };
 
     const events = job.data.event
         ? [job.data.event]
@@ -90,7 +110,17 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
             }
 
             if (!hasFiles?.find(f => f.isVideo)) {
-                startAddTalk({ event });
+                // check if the event is downloading already
+                const isDownloading = await isEventDownloading({
+                    eventGuid: event.guid,
+                });
+                if (!isDownloading) {
+                    startAddTalk({ event });
+                } else {
+                    log.info('Event is already downloading', {
+                        title: event.title,
+                    });
+                }
             } else {
                 await setIsDownloading({
                     eventGuid: event.guid,
