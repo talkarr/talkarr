@@ -3,14 +3,9 @@ import type { DoneCallback, Job } from 'bull';
 import Queue from 'bull';
 
 import { releaseLock } from '@backend/locks';
-import { redisConnection } from '@backend/redis';
 import rootLog from '@backend/rootLog';
 
 const log = rootLog.child({ label: 'queue' });
-
-const queue = new Queue('talkarr', {
-    redis: redisConnection,
-});
 
 queue.on('error', err => {
     log.error('Queue error:', { error: err });

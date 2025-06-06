@@ -22,7 +22,6 @@
 ## Task Queue
 
 - [Bull](https://optimalbits.github.io/bull/) - A Node.js job and message queue library
-- [Redis](https://redis.io/) - An open source, in-memory data structure store, used as a database, cache, and message broker
 
 ## Deployment
 
