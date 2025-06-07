@@ -117,3 +117,22 @@ model Settings {
 model Locks {
   name String @id
 }
+
+enum Role {
+  GUEST
+  USER
+  ADMIN
+}
+
+// User model backed by an OpenID Connect IDP
+// We assume that everything is subject to change, except for the sub (subject identifier).
+model User {
+  sub String @id // Immutable
+  name String? // Mutable & subject to change at runtime
+  email String? // Mutable & subject to change at runtime
+  picture String? // TODO implement pictures
+
+  // The IDP will get us either USER or ADMIN for signed in users.
+  // GUEST is the default role for unauthenticated users (empty session cookie)
+  role Role @default(GUEST)
+}

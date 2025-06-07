@@ -725,6 +725,13 @@
                 "required": [
                 ]
             },
+            "AuthManagementConfig": {
+                "type": "object",
+                "properties": {
+                },
+                "required": [
+                ]
+            },
             "ExistingFile": {
                 "type": "object",
                 "properties": {
