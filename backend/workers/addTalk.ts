@@ -1,5 +1,4 @@
 import type { Locks } from '@prisma/client';
-import type { DoneCallback } from 'bull';
 
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
@@ -37,9 +36,10 @@ import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
 import type {
     ConvertBigintToNumberType,
-    ConvertDateToStringType,
     ExtendedDbEvent,
+    NormalAndConvertedDate,
 } from '@backend/types';
+import DoneCallback = jest.DoneCallback;
 
 const youtubeDl = process.env.YTDLP_PATH_OVERRIDE
     ? createYoutubeDl(process.env.YTDLP_PATH_OVERRIDE)
@@ -50,7 +50,7 @@ export const taskName = 'addTalk';
 const log = rootLog.child({ label: 'workers/addTalk' });
 
 export interface AddTalkData {
-    event: ConvertBigintToNumberType<ConvertDateToStringType<ExtendedDbEvent>>;
+    event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
     force?: boolean;
 }
 
@@ -64,7 +64,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     const { event } = job.data;
 
     if (!check(job.data)) {
-        log.error('Invalid data:', { data: job.data });
+        log.error('Invalid data:', job.data);
 
         throw new Error('Invalid data');
     }
@@ -83,7 +83,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     const done = async (...args: Parameters<DoneCallback>): Promise<void> => {
         await releaseLock(lock, false);
 
-        actualDone(...args);
+        return actualDone(...args);
     };
 
     let isAlreadyDownloading = false;
@@ -466,10 +466,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
 };
 
 export const startAddTalk = (data: AddTalkData): void => {
-    queue.add(taskName, data, {
-        removeOnComplete: true,
-        timeout: 1000 * 60 * 30, // 30 minutes
-    });
+    queue.enqueueJob(taskName, data);
 };
 
-queue.process(taskName, addTalk);
+queue.addWorker(taskName, { handler: addTalk });

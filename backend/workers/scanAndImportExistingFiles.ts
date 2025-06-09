@@ -89,12 +89,10 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
     return done();
 };
 
-queue.process(taskName, scanAndImportExistingFiles);
+queue.addWorker(taskName, {
+    handler: scanAndImportExistingFiles,
+});
 
 export const startScanAndImportExistingFiles = (): void => {
-    queue.add(
-        taskName,
-        {},
-        { removeOnComplete: true, timeout: 60 * 1000 * 20 },
-    );
+    queue.enqueueJob(taskName, {});
 };

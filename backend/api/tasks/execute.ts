@@ -39,9 +39,16 @@ const handleExecuteTaskRequest = async (
         return;
     }
 
-    const result = await queue.add(verifiedTaskName, data, {
-        removeOnComplete: true,
-    });
+    const result = queue.enqueueJob(verifiedTaskName, data);
+
+    if (!result) {
+        res.status(500).json({
+            success: false,
+            error: 'Failed to enqueue task.',
+        });
+
+        return;
+    }
 
     res.json({
         success: true,
