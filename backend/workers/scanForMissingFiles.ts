@@ -204,5 +204,5 @@ queue.addWorker(taskName, { handler: scanForMissingFiles });
 export const startScanForMissingFiles = async (
     data: ScanForMissingFilesData,
 ): Promise<void> => {
-    queue.enqueueJob(taskName, data);
+    await queue.enqueueJob(taskName, data);
 };

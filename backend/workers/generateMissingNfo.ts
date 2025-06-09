@@ -67,8 +67,10 @@ const generateMissingNfo: TaskFunction<GenerateMissingNfoData> = async (
     }
 };
 
-export const startGenerateMissingNfo = (data: GenerateMissingNfoData): void => {
-    queue.enqueueJob(taskName, data);
+export const startGenerateMissingNfo = async (
+    data: GenerateMissingNfoData,
+): Promise<void> => {
+    await queue.enqueueJob(taskName, data);
 };
 
 queue.addWorker(taskName, { handler: generateMissingNfo, concurrency: 10 });

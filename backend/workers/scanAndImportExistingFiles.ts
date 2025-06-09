@@ -93,6 +93,6 @@ queue.addWorker(taskName, {
     handler: scanAndImportExistingFiles,
 });
 
-export const startScanAndImportExistingFiles = (): void => {
-    queue.enqueueJob(taskName, {});
+export const startScanAndImportExistingFiles = async (): Promise<void> => {
+    await queue.enqueueJob(taskName, {});
 };

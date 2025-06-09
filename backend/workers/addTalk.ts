@@ -344,6 +344,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
                     eventGuid: event.guid,
                     progress: rounded,
                 });
+                job.setProgress(rounded);
             }
         });
 
@@ -465,8 +466,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
     }
 };
 
-export const startAddTalk = (data: AddTalkData): void => {
-    queue.enqueueJob(taskName, data);
+export const startAddTalk = async (data: AddTalkData): Promise<void> => {
+    await queue.enqueueJob(taskName, data);
 };
 
 queue.addWorker(taskName, { handler: addTalk });

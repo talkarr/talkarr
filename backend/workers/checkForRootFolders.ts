@@ -82,10 +82,10 @@ const checkForRootFolders: TaskFunction<CheckForRootFoldersData> = async (
     return done();
 };
 
-export const startCheckForRootFolders = (
+export const startCheckForRootFolders = async (
     data: CheckForRootFoldersData,
-): void => {
-    queue.enqueueJob(taskName, data);
+): Promise<void> => {
+    await queue.enqueueJob(taskName, data);
 };
 
 queue.addWorker(taskName, { handler: checkForRootFolders });

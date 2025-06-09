@@ -39,7 +39,7 @@ const handleExecuteTaskRequest = async (
         return;
     }
 
-    const result = queue.enqueueJob(verifiedTaskName, data);
+    const result = await queue.enqueueJob(verifiedTaskName, data);
 
     if (!result) {
         res.status(500).json({
