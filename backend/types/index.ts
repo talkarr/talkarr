@@ -159,3 +159,24 @@ export interface EventFahrplanJsonImport {
 }
 
 export type TypeOrPick<T, K extends keyof T> = T | Pick<T, K>;
+
+export type JSONPrimitive = string | number | boolean | null | undefined;
+
+export type JSONValue =
+    | JSONPrimitive
+    | JSONValue[]
+    | {
+          [key: string]: JSONValue;
+      };
+
+export type NotAssignableToJson = bigint | symbol | Function | Date | RegExp;
+
+export type JSONCompatible<T> = unknown extends T
+    ? never
+    : {
+          [P in keyof T]: T[P] extends JSONValue
+              ? T[P]
+              : T[P] extends NotAssignableToJson
+                ? never
+                : JSONCompatible<T[P]>;
+      };

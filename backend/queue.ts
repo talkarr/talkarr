@@ -1,11 +1,12 @@
 import rootLog from '@backend/rootLog';
+import type { JSONCompatible } from '@backend/types';
 
 const log = rootLog.child({ label: 'queue' });
 
-type Job<T extends object | undefined = undefined> = {
+type Job<T> = {
     id: string;
     name: string;
-    data: T;
+    data: JSONCompatible<T>;
     status: 'active' | 'waiting' | 'completed' | 'failed';
     setProgress: (number: number) => void;
     progress: number;
@@ -13,32 +14,41 @@ type Job<T extends object | undefined = undefined> = {
     keepAfterSuccess: boolean;
 };
 
+type UnknownJob = Exclude<Job<any>, 'data'> & {
+    data: any;
+};
+
 type QueueEventHandlers = {
-    enqueued: (job: Job) => void;
+    enqueued: (job: UnknownJob) => void;
     error: (error: Error) => void;
-    failed: (job: Job, error: Error) => void;
-    progress: (job: Job, progress: number) => void;
-    stalled: (job: Job) => void;
-    completed: (job: Job) => void;
-    processing: (job: Job) => void;
+    failed: (job: UnknownJob, error: Error) => void;
+    progress: (job: UnknownJob, progress: number) => void;
+    stalled: (job: UnknownJob) => void;
+    completed: (job: UnknownJob) => void;
+    processing: (job: UnknownJob) => void;
 };
 
 type QueueEvents = keyof QueueEventHandlers;
 
 type DoneCallback = (error?: Error | null) => void;
 
-export type TaskFunction<T extends object | undefined = undefined> = (
+export type TaskFunction<T = {}> = (
     job: Job<T>,
     done: DoneCallback,
 ) => Promise<void>;
 
-export interface JobHandler<T extends object | undefined = undefined> {
-    handler: TaskFunction<T>;
+export type UnknownTaskFunction = (
+    job: UnknownJob,
+    done: DoneCallback,
+) => Promise<void>;
+
+export interface JobHandler {
+    handler: UnknownTaskFunction;
     concurrency?: number; // Default is 1
 }
 
 export class Queue {
-    private jobQueue: Job[] = [];
+    private jobQueue: UnknownJob[] = [];
     private listeners: Record<QueueEvents, QueueEventHandlers[QueueEvents][]> =
         {
             enqueued: [],
@@ -75,9 +85,9 @@ export class Queue {
         }
     }
 
-    public enqueueJob<T extends object | undefined>(
+    public enqueueJob<T = {}>(
         name: string,
-        data: T,
+        data: JSONCompatible<T>,
         options?: {
             addIfOverConcurrencyLimit?: boolean; // Default true. If false, the job will not be added if the concurrency limit is reached.
             keepAfterSuccess?: boolean; // Default false. If true, the job will not be removed from the queue after completion.
@@ -120,23 +130,20 @@ export class Queue {
                     throw new Error('Progress must be between 0 and 100');
                 }
                 job.progress = progress;
-                this.emit('progress', job as Job, progress);
+                this.emit('progress', job as UnknownJob, progress);
             },
             progress: 0,
             startedAt: null,
             keepAfterSuccess: options?.keepAfterSuccess || false,
         };
 
-        this.jobQueue.push(job as Job);
-        this.emit('enqueued', job as Job);
+        this.jobQueue.push(job as UnknownJob);
+        this.emit('enqueued', job as UnknownJob);
 
         return job;
     }
 
-    public addWorker<T extends object | undefined>(
-        name: string,
-        worker: JobHandler<T>,
-    ): void {
+    public addWorker(name: string, worker: JobHandler): void {
         if (this.jobHandlers[name]) {
             throw new Error(`Worker for job ${name} already exists`);
         }
