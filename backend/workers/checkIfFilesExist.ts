@@ -96,8 +96,10 @@ const checkIfFilesExist: TaskFunction<CheckIfFilesExistData> = async (
     return done();
 };
 
-export const startCheckIfFilesExist = (data: CheckIfFilesExistData): void => {
-    queue.add(taskName, data, { removeOnComplete: true });
+export const startCheckIfFilesExist = async (
+    data: CheckIfFilesExistData,
+): Promise<void> => {
+    await queue.enqueueJob(taskName, data);
 };
 
-queue.process(taskName, checkIfFilesExist);
+queue.addWorker(taskName, { handler: checkIfFilesExist });

@@ -23,12 +23,12 @@ import {
 import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
 import { acquireLockAndReturn, releaseLock } from '@backend/locks';
 import type { TaskFunction } from '@backend/queue';
-import queue, { isTaskRunning } from '@backend/queue';
+import queue from '@backend/queue';
 import rootLog from '@backend/rootLog';
 import type {
     ConvertBigintToNumberType,
-    ConvertDateToStringType,
     ExtendedDbEvent,
+    NormalAndConvertedDate,
 } from '@backend/types';
 
 export const taskName = 'scanForMissingFiles';
@@ -36,7 +36,7 @@ export const taskName = 'scanForMissingFiles';
 const log = rootLog.child({ label: 'workers/scanForMissingFiles' });
 
 export interface ScanForMissingFilesData {
-    event?: ConvertBigintToNumberType<ConvertDateToStringType<ExtendedDbEvent>>;
+    event?: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
 }
 
 export const check = typia.createIs<ScanForMissingFilesData>();
@@ -115,6 +115,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                     eventGuid: event.guid,
                 });
                 if (!isDownloading) {
+                    console.log('\n\n\n\nevent', hasFiles);
                     startAddTalk({ event });
                 } else {
                     log.info('Event is already downloading', {
@@ -198,19 +199,10 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
     return done();
 };
 
-queue.process(taskName, scanForMissingFiles);
+queue.addWorker(taskName, { handler: scanForMissingFiles });
 
 export const startScanForMissingFiles = async (
     data: ScanForMissingFilesData,
 ): Promise<void> => {
-    if (await isTaskRunning(taskName)) {
-        log.warn('Task is already running, skipping...');
-
-        return;
-    }
-
-    queue.add(taskName, data, {
-        removeOnComplete: true,
-        timeout: 60 * 1000 * 20, // 20 minutes
-    });
+    await queue.enqueueJob(taskName, data);
 };

@@ -117,3 +117,20 @@ model Settings {
 model Locks {
   name String @id
 }
+
+enum JobStatus {
+  Active
+  Waiting
+  Completed
+  Failed
+}
+
+model Job {
+  id               String    @id @default(cuid())
+  name             String
+  data             Json
+  status           JobStatus
+  progress         Float     @default(0)
+  startedAt        DateTime?
+  keepAfterSuccess Boolean   @default(false)
+}

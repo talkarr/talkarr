@@ -15,7 +15,6 @@ import { startCheckForRootFolders } from '@backend/workers/checkForRootFolders';
 import api from '@backend/api';
 import { clearDownloadingFlagForAllTalks } from '@backend/events';
 import { releaseAllLocks } from '@backend/locks';
-import { printQueueStatus } from '@backend/queue';
 import rootLog from '@backend/rootLog';
 import { loadSettings } from '@backend/settings';
 
@@ -160,8 +159,6 @@ loadingHttpServer.on('listening', async () => {
             log.error('Catched Error', { stack: err.stack });
             process.exit(1);
         });
-
-    await printQueueStatus();
 
     try {
         const locksReleased = await releaseAllLocks();
