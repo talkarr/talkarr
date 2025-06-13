@@ -116,7 +116,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                 });
                 if (!isDownloading) {
                     console.log('\n\n\n\nevent', hasFiles);
-                    startAddTalk({ event });
+                    await startAddTalk({ event });
                 } else {
                     log.info('Event is already downloading', {
                         title: event.title,
@@ -167,7 +167,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
             }
 
             if (!hasNfo) {
-                startGenerateMissingNfo({ event });
+                await startGenerateMissingNfo({ event });
             }
 
             await handleConferenceMetadataGeneration({

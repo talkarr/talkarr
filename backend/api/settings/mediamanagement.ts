@@ -284,7 +284,7 @@ router.post(
             });
         }
 
-        startScanAndImportExistingFiles();
+        await startScanAndImportExistingFiles();
 
         res.json({ success: true, data: null });
     },
