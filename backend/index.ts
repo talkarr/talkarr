@@ -172,7 +172,7 @@ loadingHttpServer.on('listening', async () => {
     // mark everything as not downloading
     await clearDownloadingFlagForAllTalks();
 
-    startCheckForRootFolders({ isInit: true });
+    await startCheckForRootFolders({ isInit: true });
 });
 
 process.on('uncaughtException', err => {

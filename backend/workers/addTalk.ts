@@ -344,7 +344,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
                     eventGuid: event.guid,
                     progress: rounded,
                 });
-                job.setProgress(rounded);
+                await job.setProgress(rounded);
             }
         });
 
@@ -423,7 +423,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             conference: event.conference,
         });
 
-        startGenerateMissingNfo({ event });
+        await startGenerateMissingNfo({ event });
 
         if (stderrBuffer) {
             log.error('Error downloading video:', { stderrBuffer });

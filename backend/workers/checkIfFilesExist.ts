@@ -90,7 +90,7 @@ const checkIfFilesExist: TaskFunction<CheckIfFilesExistData> = async (
     if (data.startScanForMissing) {
         await startScanForMissingFiles({});
 
-        startScanAndImportExistingFiles();
+        await startScanAndImportExistingFiles();
     }
 
     return done();
