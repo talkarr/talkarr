@@ -488,6 +488,11 @@ test('should be able to search for a string', async ({
     // wait for the page to load
     await page.waitForURL('http://localhost:3232/');
 
+    // wait for media-item to be visible
+    await page.waitForSelector('[data-testid=media-item]', {
+        timeout: 60 * 1000, // wait up to 60 seconds
+    });
+
     // expect media-item to be visible
     const items = page.getByTestId('media-item');
 
