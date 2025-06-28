@@ -374,13 +374,13 @@ test('should be able to search for a string', async ({
 
     await expect(addTalkButton).toBeVisible();
 
-    // check if the modal has a close button
-    const closeButton = page.locator('[data-testid=add-talk-modal-close]');
+    // check if the modal has a cancel button
+    const cancelButton = page.locator('[data-testid=cancel-button]');
 
-    await expect(closeButton).toBeVisible();
+    await expect(cancelButton).toBeVisible();
 
-    // click the close button
-    await closeButton.click();
+    // click the cancel button
+    await cancelButton.click();
 
     // expect add-talk-modal to be hidden
     await expect(page.getByTestId('add-talk-modal')).toBeHidden();

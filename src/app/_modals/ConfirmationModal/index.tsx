@@ -11,11 +11,10 @@ import { useUiStore } from '@/providers/uiStoreProvider';
 import BaseModal from '@components/CustomModal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
 export interface ConfirmationModalConfig<OptionKeys extends string = string> {
@@ -30,7 +29,9 @@ export interface ConfirmationModalConfig<OptionKeys extends string = string> {
     onCancel?: () => void;
     alignMessage?: TypographyProps['textAlign'];
     confirmColor?: ButtonProps['color'];
+    confirmIcon?: ButtonProps['startIcon'];
     cancelColor?: ButtonProps['color'];
+    cancelIcon?: ButtonProps['startIcon'];
 }
 
 const ConfirmationModal: FC = () => {
@@ -79,49 +80,49 @@ const ConfirmationModal: FC = () => {
             testID="confirmation-modal"
         >
             <Box>
-                <Typography
-                    variant="body1"
-                    textAlign={alignMessage || 'center'}
-                >
+                <Typography variant="body1" textAlign={alignMessage || 'left'}>
                     {message}
                 </Typography>
                 {options ? (
                     <Box mt={2}>
-                        <List>
+                        <List disablePadding>
                             {Object.entries(options).map(([key, value]) => (
-                                <ListItem key={key}>
-                                    <ListItemButton
-                                        onClick={() => toggleKey(key)}
-                                    >
-                                        <ListItemText primary={value} />
-                                        <Checkbox
-                                            checked={modalState[key]}
-                                            onChange={e => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                toggleKey(key);
-                                            }}
-                                        />
-                                    </ListItemButton>
+                                <ListItem key={key} disableGutters>
+                                    <ListItemText primary={value} />
+                                    <Switch
+                                        checked={modalState[key]}
+                                        onChange={e => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            toggleKey(key);
+                                        }}
+                                    />
                                 </ListItem>
                             ))}
                         </List>
                     </Box>
                 ) : null}
-                <Box mt={2} display="flex" justifyContent="flex-end" gap={2}>
+                <Box mt={2} display="flex" justifyContent="flex-end" gap={1}>
                     <Button
                         onClick={handleCancel}
-                        variant="contained"
-                        color="secondary"
+                        variant="text"
                         data-testid="cancel-button"
+                        startIcon={confirmationModal?.cancelIcon}
+                        sx={{
+                            minWidth: '120px',
+                        }}
                     >
                         Cancel
                     </Button>
                     <Button
                         onClick={handleConfirm}
-                        variant="contained"
+                        variant="text"
                         color={confirmationModal?.confirmColor || 'primary'}
+                        startIcon={confirmationModal?.confirmIcon}
                         data-testid="confirm-button"
+                        sx={{
+                            minWidth: '120px',
+                        }}
                     >
                         Confirm
                     </Button>

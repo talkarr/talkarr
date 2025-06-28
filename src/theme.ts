@@ -79,6 +79,9 @@ const baseTheme = createTheme({
         },
         divider: pageBorderColor,
     },
+    shape: {
+        borderRadius: 8,
+    },
 });
 
 const theme = createTheme(
@@ -97,7 +100,10 @@ const theme = createTheme(
         components: {
             MuiButton: {
                 styleOverrides: {
-                    root: { borderRadius: baseTheme.shape.borderRadius * 2 },
+                    root: {
+                        borderRadius: baseTheme.shape.borderRadius * 2.5,
+                        padding: baseTheme.spacing(1, 2),
+                    },
                 },
             },
             MuiFilledInput: {

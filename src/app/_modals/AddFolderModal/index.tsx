@@ -10,6 +10,7 @@ import { addFolder, listFiles } from '@/app/_api/settings/mediamanagement';
 import { useUiStore } from '@/providers/uiStoreProvider';
 
 import BaseModal from '@components/CustomModal';
+import AddIcon from '@mui/icons-material/Add';
 import { alpha, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -155,7 +156,6 @@ const AddFolderModal: FC = () => {
             onClose={close}
             title="Add a root folder"
             moreWidth
-            closeButtonDisabled={addFolderLoading}
             testID="add-folder-modal"
         >
             <Box mb={2}>
@@ -215,17 +215,15 @@ const AddFolderModal: FC = () => {
             </Box>
             <Box display="flex" justifyContent="flex-end" gap={1}>
                 <Button
-                    color="secondary"
                     onClick={close}
-                    variant="contained"
+                    variant="text"
                     disabled={addFolderLoading}
                 >
                     Cancel
                 </Button>
                 <Button
-                    color="primary"
                     onClick={handleAddFolder}
-                    variant="contained"
+                    variant="text"
                     disabled={addFolderLoading}
                     data-testid="add-folder-button"
                     endIcon={
@@ -237,6 +235,7 @@ const AddFolderModal: FC = () => {
                             />
                         ) : null
                     }
+                    startIcon={<AddIcon />}
                 >
                     Add
                 </Button>

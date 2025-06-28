@@ -1,11 +1,9 @@
 import type { FC, ReactElement, ReactNode } from 'react';
 import React from 'react';
 
-import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 
@@ -21,7 +19,6 @@ export interface ModalProps {
     keepMounted?: boolean;
     title?: string;
     testID: string;
-    closeButtonDisabled?: boolean;
     divider?: boolean;
 }
 
@@ -51,21 +48,19 @@ const OuterWrapper = styled(Box, {
     height: '100%',
     flexDirection: 'column',
     zIndex: 1301,
-
     pointerEvents: 'none',
-
-    [theme.breakpoints.up('md')]: {
-        maxWidth: moreWidth ? 1200 : 696,
-        maxHeight: 'calc(100vh - 120px)',
-        top: '60px',
-        left: 0,
-        right: 0,
-    },
 
     [theme.breakpoints.down('md')]: {
         maxWidth: moreWidth ? 'calc(100vw - 40px)' : 'calc(100vw - 80px)',
         maxHeight: 'calc(100vh - 80px)',
         top: '40px',
+        left: 0,
+        right: 0,
+    },
+    [theme.breakpoints.up('md')]: {
+        maxWidth: `min(${moreWidth ? 1200 : 696}px, calc(100vw - 40px))`,
+        maxHeight: 'calc(100vh - 120px)',
+        top: '60px',
         left: 0,
         right: 0,
     },
@@ -76,11 +71,8 @@ const InnerWrapper = styled(Box)(({ theme }) => ({
     maxHeight: 'inherit',
     maxWidth: 'inherit',
     backgroundColor: theme.palette.background.paper,
-    padding: theme.shape.borderRadius * 4,
-    [theme.breakpoints.down('md')]: {
-        padding: theme.shape.borderRadius * 2,
-    },
-    borderRadius: theme.shape.borderRadius * 6,
+    padding: theme.shape.borderRadius * 3,
+    borderRadius: theme.shape.borderRadius * 4,
     pointerEvents: 'auto',
 }));
 
@@ -89,12 +81,10 @@ const BaseModal: FC<ModalProps> = ({
     onClose,
     children,
     disableAutoFocus,
-    showCloseButton = true,
     moreWidth,
     keepMounted,
     title,
     testID,
-    closeButtonDisabled,
     divider,
 }) => {
     const handleClose = (
@@ -131,39 +121,19 @@ const BaseModal: FC<ModalProps> = ({
                             width="100%"
                             minHeight="fit-content"
                         >
-                            {showCloseButton ? (
-                                <IconButton
-                                    onClick={() => onClose?.()}
-                                    sx={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        right: 0,
-                                    }}
-                                    data-testid={
-                                        testID ? `${testID}-close` : undefined
-                                    }
-                                    disabled={closeButtonDisabled}
-                                >
-                                    <CloseIcon />
-                                </IconButton>
-                            ) : null}
                             {title ? (
                                 <Typography
                                     variant="h4"
-                                    textAlign="center"
-                                    fontWeight={600}
+                                    fontWeight={400}
                                     width="100%"
                                     mt={0.5}
-                                    paddingX={showCloseButton ? '40px' : 0}
                                 >
                                     {title}
                                 </Typography>
                             ) : null}
                         </Box>
                         {divider ? <Divider /> : null}
-                        <Box p={1} data-testid={testID}>
-                            {children}
-                        </Box>
+                        <Box data-testid={testID}>{children}</Box>
                     </Box>
                 </InnerWrapper>
             </OuterWrapper>
