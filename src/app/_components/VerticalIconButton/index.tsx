@@ -19,7 +19,7 @@ export interface VerticalIconButtonProps
 
 const StyledButtonBase = styled(ButtonBase)(({ theme }) => ({
     padding: theme.spacing(1),
-    borderRadius: theme.shape.borderRadius * 3,
+    borderRadius: theme.shape.borderRadius * 2,
     '&:hover': {
         backgroundColor: theme.palette.action.hover,
         color: theme.palette.primary.main,

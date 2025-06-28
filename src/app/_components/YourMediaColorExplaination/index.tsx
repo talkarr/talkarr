@@ -79,7 +79,7 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
                 flexDirection="row"
                 flexWrap="wrap"
                 gap={2}
-                mt={1}
+                mt={2}
             >
                 {Object.entries(colors).map(([statusElement, color]) => (
                     <Box

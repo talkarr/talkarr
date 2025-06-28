@@ -29,6 +29,9 @@ const AddFolderButton: FC = () => {
             startIcon={<AddFolderIcon />}
             onClick={showModal}
             data-testid="show-add-folder-button"
+            sx={{
+                minWidth: '170px',
+            }}
         >
             Add Folder
         </Button>

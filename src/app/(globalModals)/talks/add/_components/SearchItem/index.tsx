@@ -46,7 +46,7 @@ export const searchItemMaxImageWidth = Math.floor(
 const StyledCard = styled(Card)(({ theme }) => ({
     minHeight: searchItemMinHeight,
     maxHeight: '500px',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('lg')]: {
         maxHeight: 'none',
     },
     borderRadius: theme.shape.borderRadius * 4,
@@ -65,7 +65,8 @@ const StyledCard = styled(Card)(({ theme }) => ({
         padding: theme.spacing(2),
         display: 'flex',
         flexDirection: 'row',
-        [theme.breakpoints.down('sm')]: {
+        // flexWrap: 'wrap',
+        [theme.breakpoints.down('lg')]: {
             flexDirection: 'column',
         },
         height: '100%',
@@ -232,13 +233,13 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                                   : item.subtitle
                         }
                     />
-                    <CardContent style={{ marginBottom: 4 }}>
-                        <div className={searchItemCss.markdown}>
-                            <Markdown skipHtml>
-                                {item.description || ''}
-                            </Markdown>
-                        </div>
-                    </CardContent>
+                    {item.description ? (
+                        <CardContent style={{ marginBottom: 4 }}>
+                            <div className={searchItemCss.markdown}>
+                                <Markdown skipHtml>{item.description}</Markdown>
+                            </div>
+                        </CardContent>
+                    ) : null}
                 </Box>
             </CardActionArea>
         </StyledCard>

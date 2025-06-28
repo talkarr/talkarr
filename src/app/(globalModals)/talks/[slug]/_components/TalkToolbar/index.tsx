@@ -14,7 +14,6 @@ import { useUiStore } from '@/providers/uiStoreProvider';
 
 import VerticalIconButton from '@components/VerticalIconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { alpha, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 
@@ -50,6 +49,7 @@ const TalkToolbar: FC<TalkToolbarProps> = ({ data }) => {
             title: 'Delete Talk',
             message: 'Are you sure you want to delete this talk?',
             confirmColor: 'error',
+            confirmIcon: <DeleteIcon />,
             options: {
                 deleteFiles: 'Delete Files',
             },
@@ -70,9 +70,9 @@ const TalkToolbar: FC<TalkToolbarProps> = ({ data }) => {
 
     return (
         <StyledContainer>
-            <VerticalIconButton icon={<EditIcon />} square>
+            {/* "TODO: HIDE until edit is properly implemented" VerticalIconButton icon={<EditIcon />} square>
                 Edit
-            </VerticalIconButton>
+            </VerticalIconButton> */}
             <VerticalIconButton
                 icon={<DeleteIcon />}
                 square

@@ -15,6 +15,7 @@ import {
 import type { TalkData } from '@/stores/uiStore';
 
 import ImageFallback from '@components/ImageFallback';
+import { useTheme } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 
 export interface TalkImageProps {
@@ -30,6 +31,8 @@ const TalkImage: FC<TalkImageProps> = ({
     height,
     maxHeight,
 }) => {
+    const theme = useTheme();
+
     const [showFallback, setShowFallback] = useState<boolean>(false);
     const [imageLoading, setImageLoading] = useState<boolean>(true);
 
@@ -49,7 +52,7 @@ const TalkImage: FC<TalkImageProps> = ({
                 height: height ?? `${searchItemMinHeight}px`,
                 maxHeight: maxHeight ?? undefined,
                 aspectRatio: '16 / 9',
-                borderRadius: '4px',
+                borderRadius: theme.shape.borderRadius * 2,
                 overflow: 'hidden',
             }}
         >

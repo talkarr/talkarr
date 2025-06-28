@@ -119,6 +119,7 @@ const AddTalkModal: FC = () => {
             testID="add-talk-modal"
         >
             <Box
+                mt={2}
                 display="flex"
                 justifyContent="center"
                 gap={2}
@@ -159,10 +160,10 @@ const AddTalkModal: FC = () => {
                             variant="body2"
                             mb={1}
                             height="100%"
-                            p={1}
+                            p={1.2}
                             border={1}
                             borderColor={alpha(theme.palette.divider, 0.2)}
-                            borderRadius={4}
+                            borderRadius={3}
                             bgcolor="background.default"
                             boxShadow={2}
                             sx={{
@@ -266,7 +267,14 @@ const AddTalkModal: FC = () => {
                     </Box>
                     <Box display="flex" justifyContent="flex-end">
                         <Button
-                            variant="contained"
+                            onClick={close}
+                            variant="text"
+                            data-testid="cancel-button"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="text"
                             color="primary"
                             startIcon={<AddIcon />}
                             onClick={handleAddTalk}
