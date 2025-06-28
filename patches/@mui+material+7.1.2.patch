@@ -1,5 +1,5 @@
 diff --git a/node_modules/@mui/material/InputBase/InputBase.d.ts b/node_modules/@mui/material/InputBase/InputBase.d.ts
-index fca9a60..1c8bfeb 100644
+index fca9a60..4e91616 100644
 --- a/node_modules/@mui/material/InputBase/InputBase.d.ts
 +++ b/node_modules/@mui/material/InputBase/InputBase.d.ts
 @@ -102,7 +102,9 @@ export interface InputBaseProps extends StandardProps<React.HTMLAttributes<HTMLD
@@ -14,7 +14,7 @@ index fca9a60..1c8bfeb 100644
     * Pass a ref to the `input` element.
     */
 diff --git a/node_modules/@mui/material/esm/InputBase/InputBase.d.ts b/node_modules/@mui/material/esm/InputBase/InputBase.d.ts
-index fca9a60..1c8bfeb 100644
+index fca9a60..4e91616 100644
 --- a/node_modules/@mui/material/esm/InputBase/InputBase.d.ts
 +++ b/node_modules/@mui/material/esm/InputBase/InputBase.d.ts
 @@ -102,7 +102,9 @@ export interface InputBaseProps extends StandardProps<React.HTMLAttributes<HTMLD
