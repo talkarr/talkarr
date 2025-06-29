@@ -18,9 +18,9 @@ export interface CustomBadgeProps extends Omit<BadgeProps, 'children'> {
 }
 
 const FontSizeMap: Record<Size, number> = {
-    small: 10,
-    medium: 12,
-    large: 14,
+    small: 12,
+    medium: 14,
+    large: 16,
 };
 
 type Key = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning';
@@ -121,7 +121,7 @@ const CustomBadge: FC<CustomBadgeProps> = ({
                     </Box>
                 </Box>
             ) : null}
-            <Typography variant="body1" noWrap fontSize={FontSizeMap[size]}>
+            <Typography noWrap fontSize={FontSizeMap[size]}>
                 {badgeContent}
             </Typography>
         </StyledBox>
