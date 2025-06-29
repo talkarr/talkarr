@@ -134,3 +134,31 @@ model Job {
   startedAt        DateTime?
   keepAfterSuccess Boolean   @default(false)
 }
+
+enum Permission {
+  None
+  ViewEvents
+  AddEvents
+  EditDeleteEvents
+  Admin
+}
+
+model UserPermission {
+  userId     String     @id
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permission Permission @default(None)
+}
+
+model User {
+  id String @id @default(cuid())
+
+  email    String @unique
+  password String // argon2
+
+  displayName String
+  permissions UserPermission[]
+  isActive    Boolean          @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
