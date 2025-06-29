@@ -18,6 +18,8 @@ export interface TalkHeaderProps {
     data: SingleTalkData;
 }
 
+const bottomPadding = 1;
+
 const TalkHeader: FC<TalkHeaderProps> = ({ data }) => (
     <Box paddingX={2} paddingTop={1}>
         <Box
@@ -40,10 +42,15 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => (
                         {data.db.description}
                     </Typography>
                 </Box>
-                <Box display="flex" flexDirection="row" gap={2} flexWrap="wrap">
+                <Box
+                    display="flex"
+                    flexDirection="row"
+                    gap={1.5}
+                    flexWrap="wrap"
+                >
                     {data.db.conference.title ? (
                         <Box>
-                            <SmallText mb={0.5}>Conference</SmallText>
+                            <SmallText mb={bottomPadding}>Conference</SmallText>
                             <VideoMetaBadge
                                 badgeType="conference"
                                 badgeContent={data.db.conference.title}
@@ -53,7 +60,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => (
                     ) : null}
                     {data.db.date ? (
                         <Box>
-                            <SmallText mb={0.5}>Date</SmallText>
+                            <SmallText mb={bottomPadding}>Date</SmallText>
                             <VideoMetaBadge
                                 badgeType="date"
                                 badgeContent={moment(data.db.date).format(
@@ -66,7 +73,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => (
                     ) : null}
                     {data.db.original_language ? (
                         <Box>
-                            <SmallText mb={0.5}>Language</SmallText>
+                            <SmallText mb={bottomPadding}>Language</SmallText>
                             <VideoMetaBadge
                                 badgeType="language"
                                 badgeContent={formatLanguageCode(
@@ -79,7 +86,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => (
                     ) : null}
                     {data.db.persons.length ? (
                         <Box>
-                            <SmallText mb={0.5}>Speaker</SmallText>
+                            <SmallText mb={bottomPadding}>Speaker</SmallText>
                             <Box
                                 display="flex"
                                 flexDirection="row"
@@ -99,7 +106,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => (
                     ) : null}
                     {data.db.tags.length ? (
                         <Box>
-                            <SmallText mb={0.5}>Tags</SmallText>
+                            <SmallText mb={bottomPadding}>Tags</SmallText>
                             <Box
                                 display="flex"
                                 flexDirection="row"
