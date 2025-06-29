@@ -30,13 +30,13 @@ const apiFetch = async (
         const cachedResponse = cache.get(cacheKey);
 
         if (cachedResponse) {
-            log.info(`Returning cached response for ${url}`);
+            log.debug(`Returning cached response for ${url}`);
 
             return Promise.resolve(cachedResponse as FetchResponse);
         }
     }
 
-    log.info(`Fetching ${url}`);
+    log.debug(`Fetching ${url}`);
 
     const response = await fetch(input, init);
 
