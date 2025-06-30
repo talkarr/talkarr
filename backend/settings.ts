@@ -1,3 +1,6 @@
+import typia from 'typia';
+
+import type { GeneralSettings } from '@backend/api/settings/general';
 import type { MediamanagementSettings } from '@backend/api/settings/mediamanagement';
 import type { SecuritySettings } from '@backend/api/settings/security';
 import { prisma } from '@backend/prisma';
@@ -6,15 +9,21 @@ import rootLog from '@backend/rootLog';
 const log = rootLog.child({ label: 'settings' });
 
 export interface Settings {
+    general: GeneralSettings;
     mediamanagement: MediamanagementSettings;
     security: SecuritySettings;
 }
+
+const check = typia.createIs<Settings>();
 
 export type SettingsKey = keyof Settings;
 
 export type SettingsValue<K extends SettingsKey> = Settings[K];
 
 export const initialSettings: Settings = {
+    general: {
+        allowLibravatar: false, // Make this opt-in
+    },
     mediamanagement: {},
     security: {},
 };
@@ -71,7 +80,48 @@ const settings: Settings = {} as Settings;
 
 let settingsLoaded = false;
 
-export const loadSettings = async (): Promise<void> => {
+const recoverSettings = async (): Promise<void> => {
+    const existingSettings = await prisma.settings.findMany({
+        select: {
+            key: true,
+            value: true,
+        },
+    });
+
+    const existingSettingsMap: Record<string, object> = {};
+
+    for (const setting of existingSettings) {
+        existingSettingsMap[setting.key] = JSON.parse(setting.value);
+    }
+
+    const mergedSettings: Settings = {
+        ...initialSettings,
+        ...existingSettingsMap,
+    };
+
+    if (!check(mergedSettings)) {
+        log.warn('Recovered settings validation failed', { mergedSettings });
+        throw new Error('Recovered settings validation failed');
+    }
+
+    // now save the merged settings
+    for await (const key of Object.keys(mergedSettings) as (keyof Settings)[]) {
+        await prisma.settings.upsert({
+            where: { key },
+            create: {
+                key,
+                value: JSON.stringify(mergedSettings[key]),
+            },
+            update: {
+                value: JSON.stringify(mergedSettings[key]),
+            },
+        });
+    }
+
+    log.info('Recovered settings:', { mergedSettings });
+};
+
+export const loadSettings = async (recursive?: boolean): Promise<void> => {
     try {
         await setSettingsIfNotSet();
 
@@ -85,7 +135,16 @@ export const loadSettings = async (): Promise<void> => {
         for (const setting of settingsQuery) {
             settings[setting.key as keyof Settings] = JSON.parse(
                 setting.value,
-            ) as Settings[keyof Settings];
+            ) as never;
+        }
+
+        // check if all settings are loaded
+        if (!check(settings)) {
+            log.warn('Settings validation failed', { settings });
+            await recoverSettings();
+            if (!recursive) {
+                await loadSettings(true);
+            }
         }
 
         log.info('Settings loaded:', { settings });

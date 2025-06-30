@@ -24,7 +24,7 @@ const Page: NextPage = async () => {
     return (
         <Box data-testid="media-management-settings">
             <Box>
-                <Typography variant="h3">Root Folders</Typography>
+                <Typography variant="h4">Root Folders</Typography>
                 <Typography variant="body1">
                     Root folders are the base directories where media files are
                     stored.

@@ -21,6 +21,7 @@ export const specificTalkPageLink = (slug: string): string => `/talks/${slug}`;
 
 // === Settings ===
 export const settingsPageLink = '/settings';
+export const generalSettingsPageLink = '/settings/general';
 export const mediaManagementSettingsPageLink = '/settings/mediamanagement';
 export const securitySettingsPageLink = '/settings/security';
 

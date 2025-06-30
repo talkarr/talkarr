@@ -926,6 +926,84 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/settings/general/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["GeneralConfig"];
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["GeneralConfig"];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/tasks/execute": {
         parameters: {
             query?: never;
@@ -1412,6 +1490,19 @@ export interface components {
              * @example 2022-01-01T00:00:00Z
              */
             updatedAt: string;
+            /**
+             * Format: data-url
+             * @description Avatar URL of user. Needs to be encoded data url
+             * @example data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...
+             */
+            avatarUrl: string;
+        };
+        GeneralConfig: {
+            /**
+             * @description Allow Libravatar for user avatars
+             * @example false
+             */
+            allowLibravatar: boolean;
         };
     };
     responses: never;
