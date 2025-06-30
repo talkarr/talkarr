@@ -996,6 +996,12 @@
                         "format": "date-time",
                         "description": "Last update date of user",
                         "example": "2022-01-01T00:00:00Z"
+                    },
+                    "avatarUrl": {
+                        "type": "string",
+                        "description": "Avatar URL of user. Needs to be encoded data url",
+                        "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...",
+                        "format": "data-url"
                     }
                 },
                 "required": [
@@ -1005,7 +1011,21 @@
                     "permissions",
                     "isActive",
                     "createdAt",
-                    "updatedAt"
+                    "updatedAt",
+                    "avatarUrl"
+                ]
+            },
+            "GeneralConfig": {
+                "type": "object",
+                "properties": {
+                    "allowLibravatar": {
+                        "type": "boolean",
+                        "description": "Allow Libravatar for user avatars",
+                        "example": false
+                    }
+                },
+                "required": [
+                    "allowLibravatar"
                 ]
             }
         }
@@ -2152,6 +2172,81 @@
                                             ]
                                         }
                                     ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/settings/general/config": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/GeneralConfig"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GeneralConfig"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
                                 }
                             }
                         },
