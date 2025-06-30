@@ -35,7 +35,7 @@ export interface MediaItemProps {
 
 const StyledContainer = styled(Grid)(({ theme }) => ({
     position: 'relative',
-    borderRadius: theme.shape.borderRadius * 2,
+    borderRadius: theme.shape.borderRadius * 3,
     overflow: 'hidden',
 }));
 
@@ -155,7 +155,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                             position: 'absolute',
                                             top: 0,
                                             left: 0,
-                                            borderRadius: 2,
+                                            borderRadius: 3,
                                         }}
                                     />
                                 )}
@@ -163,7 +163,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                     sx={{
                                         position: 'relative',
                                         aspectRatio: '16/9',
-                                        borderRadius: 2,
+                                        borderRadius: 3,
                                         overflow: 'hidden',
                                         boxShadow: 1,
                                     }}
