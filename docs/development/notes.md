@@ -17,7 +17,7 @@ Sometimes, the word "event" is used to refer to a talk. This is because the API 
 Our main colors are:
 
 - Main: <span style="background-color: #9b69ff; color: white; padding: 2px 4px; border-radius: 8px;" width="10" height="10">#9b69ff</span>
-- Secondary: <span style="background-color: #390a96; color: white; padding: 2px 4px; border-radius: 8px;">#390a96</span>
+- Secondary: <span style="background-color: #5710e6; color: white; padding: 2px 4px; border-radius: 8px;">#5710e6</span>
 
 ## Why are there so many CI fix commits?
 

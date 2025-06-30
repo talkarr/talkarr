@@ -6,6 +6,7 @@ import {
     importTalksPageLink,
     mediaManagementSettingsPageLink,
     scanFilesPageLink,
+    securitySettingsPageLink,
     settingsPageLink,
 } from '@/constants';
 
@@ -34,6 +35,12 @@ export const settings: (SimpleNavigationItem & { description: string })[] = [
         path: mediaManagementSettingsPageLink,
         description: 'Naming and management of media files.',
         slug: 'media-management',
+    },
+    {
+        title: 'Security',
+        path: securitySettingsPageLink,
+        description: 'Manage users, permissions and security settings.',
+        slug: 'security',
     },
 ];
 

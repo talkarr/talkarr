@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const Page: NextPage = () => (
-    <Box data-testid="settings">
+    <Box display="flex" flexDirection="column" data-testid="settings" gap={3}>
         {settings.map(item => {
             const href =
                 typeof item.path === 'string' ? item.path : item.path.href;
