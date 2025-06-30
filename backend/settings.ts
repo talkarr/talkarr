@@ -1,4 +1,5 @@
 import type { MediamanagementSettings } from '@backend/api/settings/mediamanagement';
+import type { SecuritySettings } from '@backend/api/settings/security';
 import { prisma } from '@backend/prisma';
 import rootLog from '@backend/rootLog';
 
@@ -6,10 +7,16 @@ const log = rootLog.child({ label: 'settings' });
 
 export interface Settings {
     mediamanagement: MediamanagementSettings;
+    security: SecuritySettings;
 }
+
+export type SettingsKey = keyof Settings;
+
+export type SettingsValue<K extends SettingsKey> = Settings[K];
 
 export const initialSettings: Settings = {
     mediamanagement: {},
+    security: {},
 };
 
 export const setSettingsIfNotSet = async (): Promise<Settings> => {
@@ -29,6 +36,25 @@ export const setSettingsIfNotSet = async (): Promise<Settings> => {
                 data: {
                     key: 'mediamanagement',
                     value: JSON.stringify(initialSettings.mediamanagement),
+                },
+            });
+        }
+
+        const securitySettings = await prisma.settings.findMany({
+            select: {
+                key: true,
+            },
+            where: {
+                key: 'security',
+            },
+        });
+
+        if (securitySettings.length === 0) {
+            log.info('Creating initial security settings');
+            await prisma.settings.create({
+                data: {
+                    key: 'security',
+                    value: JSON.stringify(initialSettings.security),
                 },
             });
         }
@@ -101,11 +127,13 @@ export const getSettings = (): Readonly<Settings> => {
     return settings;
 };
 
-export const setSettings = async (
-    key: keyof Settings,
+export const setSettings = async <TSettingsKey extends SettingsKey>(
+    key: TSettingsKey,
     value:
-        | ((current: Settings[keyof Settings]) => Settings[keyof Settings])
-        | Settings[keyof Settings],
+        | ((
+              current: SettingsValue<TSettingsKey>,
+          ) => SettingsValue<TSettingsKey>)
+        | SettingsValue<TSettingsKey>,
     save = true,
 ): Promise<void> => {
     if (!settingsLoaded) {
@@ -118,7 +146,7 @@ export const setSettings = async (
         newSettings = value(settings[key]);
     }
 
-    settings[key] = newSettings as Settings[keyof Settings];
+    settings[key] = newSettings as SettingsValue<TSettingsKey>;
 
     if (save) {
         await saveSettings();

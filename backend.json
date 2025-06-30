@@ -942,6 +942,71 @@
                     "Downloading",
                     "Problem"
                 ]
+            },
+            "UserPermission": {
+                "type": "string",
+                "enum": [
+                    "None",
+                    "ViewEvents",
+                    "AddEvents",
+                    "EditDeleteEvents",
+                    "Admin"
+                ],
+                "description": "User permissions"
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "CUID of user",
+                        "example": "ckx1234567890abcdef123456"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Email of user",
+                        "example": "email@example.com"
+                    },
+                    "displayName": {
+                        "type": "string",
+                        "description": "Display name of user",
+                        "example": "John Doe"
+                    },
+                    "permissions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserPermission"
+                        },
+                        "description": "Permissions of user"
+                    },
+                    "isActive": {
+                        "type": "boolean",
+                        "description": "Is user active",
+                        "example": true
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Creation date of user",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Last update date of user",
+                        "example": "2022-01-01T00:00:00Z"
+                    }
+                },
+                "required": [
+                    "id",
+                    "email",
+                    "displayName",
+                    "permissions",
+                    "isActive",
+                    "createdAt",
+                    "updatedAt"
+                ]
             }
         }
     },
@@ -2038,6 +2103,65 @@
                                             "$ref": "#/components/schemas/ErrorResponse"
                                         }
                                     ]
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/settings/security/users": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "users": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/User"
+                                                            }
+                                                        },
+                                                        "available_permissions": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "users",
+                                                        "available_permissions"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         },
