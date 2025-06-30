@@ -64,8 +64,8 @@ const Home: FC = async () => {
     return (
         <Box
             sx={{
-                paddingX: 4,
-                paddingY: 2,
+                paddingX: 3,
+                paddingY: 3,
             }}
         >
             <YourMediaGrid initialData={eventData.events} />

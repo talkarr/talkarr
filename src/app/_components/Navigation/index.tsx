@@ -70,7 +70,8 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                         '& .MuiDrawer-paper': {
                             width: drawerWidth,
                             boxSizing: 'border-box',
-                            borderRight: `1px solid rgba(255, 255, 255, 0.05)`,
+                            backgroundColor: theme.palette.background.paper,
+                            borderRight: 'none',
                         },
                     }}
                     anchor="left"
@@ -157,22 +158,25 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                     ))}
                 </Drawer>
             </Box>
-            <Box>
+            <Box bgcolor="background.paper">
                 <AppBar
                     position="fixed"
                     sx={{
                         height: appbarHeight,
                         [theme.breakpoints.up('md')]: {
+                            marginLeft: `${drawerWidth}px`,
                             width: `calc(100% - ${drawerWidth}px)`,
-                            ml: `${drawerWidth}px`,
                         },
                         width: '100%',
+                        boxShadow: 'none',
                     }}
                 >
                     <Toolbar
-                        sx={{
+                        style={{
                             height: '100%',
+                            backgroundColor: theme.palette.background.paper,
                         }}
+                        disableGutters
                     >
                         <Box
                             display={{ xs: 'flex', md: 'none' }}
@@ -191,6 +195,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                     </Toolbar>
                 </AppBar>
                 <Box
+                    bgcolor="background.default"
                     sx={{
                         // make that above only happens for everything above md
                         [theme.breakpoints.up('md')]: {
@@ -200,6 +205,8 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                         width: '100%',
                         marginLeft: 0,
                         marginTop: `${appbarHeight}px`,
+                        borderTopLeftRadius: theme.shape.borderRadius * 4,
+                        borderTopRightRadius: theme.shape.borderRadius * 4,
                     }}
                 >
                     {children}

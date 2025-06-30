@@ -7,9 +7,10 @@ import React, { useState } from 'react';
 
 import { addTalksPageWithSearchLink } from '@/constants';
 
+import MaterialSearchBar from '@components/MaterialSearchBar';
 import SearchIcon from '@mui/icons-material/SearchRounded';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
 
 const NavigationSearch: FC = () => {
     const router = useRouter();
@@ -23,16 +24,34 @@ const NavigationSearch: FC = () => {
     };
 
     return (
-        <form onSubmit={handleSearch}>
-            <Box display="flex" alignItems="flex-end" gap={1}>
-                <SearchIcon />
-                <TextField
+        <form onSubmit={handleSearch} style={{ width: '100%' }}>
+            <Box
+                display="flex"
+                alignItems="flex-end"
+                gap={1}
+                width="100%"
+                maxWidth="400px"
+            >
+                <MaterialSearchBar
                     size="small"
-                    label="Search"
-                    variant="standard"
+                    fullWidth
+                    placeholder="Search"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                     slotProps={{
+                        input: {
+                            sx: {
+                                padding: 0,
+                            },
+                            startAdornment: (
+                                <IconButton size="small" sx={{ marginX: 1 }}>
+                                    <SearchIcon
+                                        color="action"
+                                        fontSize="small"
+                                    />
+                                </IconButton>
+                            ),
+                        },
                         htmlInput: {
                             'data-testid': 'navigation-search',
                         },
