@@ -82,7 +82,7 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
     };
 
     return (
-        <Container sx={{ ml: 0 }} maxWidth="md">
+        <Container sx={{ ml: 0 }} maxWidth="md" disableGutters>
             <Box
                 mb={3}
                 display="flex"
