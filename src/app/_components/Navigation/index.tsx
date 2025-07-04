@@ -176,7 +176,6 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                             height: '100%',
                             backgroundColor: theme.palette.background.paper,
                         }}
-                        disableGutters
                     >
                         <Box
                             display={{ xs: 'flex', md: 'none' }}
