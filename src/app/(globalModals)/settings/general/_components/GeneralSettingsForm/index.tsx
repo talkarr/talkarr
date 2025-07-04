@@ -102,6 +102,9 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
             <form onSubmit={handleSubmit}>
                 <Box mb={2}>
                     <Typography variant="h6">External Services</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        Configure external services for this software.
+                    </Typography>
                 </Box>
                 <Box>
                     <SettingsItem
