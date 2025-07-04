@@ -21,6 +21,19 @@
             nodePackages_latest.prisma
             postgresql
             openssl
+            libuuid
+            (pkgs.buildFHSEnv {
+              name = "fhs";
+              targetPkgs = pkgs: (with pkgs; [
+                libuuid
+              ]);
+              extraOutputsToInstall = [
+                "include"
+                "dev"
+                "lib"
+              ];
+              runScript = "\"$@\"";
+            })
           ];
           # shellHook = ''
           #   		ln -sf $(pwd)/node_modules/.pnpm/@prisma+client@5.0.0_prisma@5.0.0/node_modules/.prisma/client/libquery_engine.node node_modules/.pnpm/@prisma+client@5.0.0_prisma@5.0.0/node_modules/.prisma/client/libquery_engine-linux-nixos.so.node
@@ -31,6 +44,7 @@
             PRISMA_SCHEMA_ENGINE_BINARY = "${pkgs.prisma-engines}/bin/schema-engine";
             DATABASE_URL = "postgresql://talkarr:talkarr@localhost:5432/talkarr?sslmode=disable";
           };
+          
         };
       });
 }
