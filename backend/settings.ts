@@ -12,6 +12,13 @@ export interface Settings {
     general: GeneralSettings;
     mediamanagement: MediamanagementSettings;
     security: SecuritySettings;
+    oidc: OIDCSettings;
+}
+
+export interface OIDCSettings {
+    wellKnownUrl: string;
+    clientId: string;
+    clientSecret: string;
 }
 
 const check = typia.createIs<Settings>();
@@ -26,6 +33,11 @@ export const initialSettings: Settings = {
     },
     mediamanagement: {},
     security: {},
+    oidc: {
+        wellKnownUrl: '',
+        clientId: '',
+        clientSecret: '',
+    },
 };
 
 export const setSettingsIfNotSet = async (): Promise<Settings> => {
@@ -64,6 +76,25 @@ export const setSettingsIfNotSet = async (): Promise<Settings> => {
                 data: {
                     key: 'security',
                     value: JSON.stringify(initialSettings.security),
+                },
+            });
+        }
+
+        const oidcSettings = await prisma.settings.findMany({
+            select: {
+                key: true,
+            },
+            where: {
+                key: 'oidc',
+            },
+        });
+
+        if (oidcSettings.length === 0) {
+            log.info('Creating initial OIDC settings');
+            await prisma.settings.create({
+                data: {
+                    key: 'oidc',
+                    value: JSON.stringify(initialSettings.oidc),
                 },
             });
         }

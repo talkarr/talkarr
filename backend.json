@@ -2355,6 +2355,68 @@
                     }
                 }
             }
+        },
+        "/settings/oidc": {
+            "post": {
+                "summary": "Update OIDC settings",
+                "description": "Allows updating OIDC settings such as well-known URL, client ID, and client secret.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "wellKnownUrl": {
+                                        "type": "string",
+                                        "description": "OIDC well-known URL"
+                                    },
+                                    "clientId": {
+                                        "type": "string",
+                                        "description": "OIDC client ID"
+                                    },
+                                    "clientSecret": {
+                                        "type": "string",
+                                        "description": "OIDC client secret"
+                                    }
+                                },
+                                "required": ["wellKnownUrl", "clientId", "clientSecret"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Settings updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing required fields",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
