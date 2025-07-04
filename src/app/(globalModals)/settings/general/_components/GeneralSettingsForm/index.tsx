@@ -84,11 +84,11 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
     return (
         <Container sx={{ ml: 0 }} maxWidth="md" disableGutters>
             <Box
-                mb={3}
+                mb={2}
                 display="flex"
                 flexDirection="row"
                 justifyContent="space-between"
-                alignItems="center"
+                alignItems="flex-start"
             >
                 <Typography variant="h4">General</Typography>
                 <IconButton
