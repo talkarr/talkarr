@@ -4,6 +4,8 @@ import type { NextPage } from 'next';
 
 import { useState } from 'react';
 
+import { useSnackbar } from 'notistack';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -13,6 +15,7 @@ const Page: NextPage = () => {
     const [wellKnownUrl, setWellKnownUrl] = useState('');
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleSubmit = async (): Promise<void> => {
         const response = await fetch('/api/settings/oidc', {
@@ -24,9 +27,14 @@ const Page: NextPage = () => {
         });
 
         if (response.ok) {
-            console.log('Settings saved successfully');
+            enqueueSnackbar('Settings saved successfully', {
+                variant: 'success',
+                preventDuplicate: true,
+            });
         } else {
-            console.log('Failed to save settings');
+            enqueueSnackbar('Failed to save settings', {
+                variant: 'error',
+            });
         }
     };
 
