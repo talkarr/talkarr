@@ -49,6 +49,12 @@ export const settings: (SimpleNavigationItem & { description: string })[] = [
         description: 'Naming and management of media files.',
         slug: 'media-management',
     },
+    {
+        title: 'OIDC Settings',
+        path: '/settings/oidc',
+        description: 'Configure OIDC settings.',
+        slug: 'oidc',
+    },
 ];
 
 export const navigationItems: NavigationItemType[] = [
