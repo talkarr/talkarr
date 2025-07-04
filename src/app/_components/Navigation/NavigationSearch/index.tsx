@@ -44,10 +44,8 @@ const NavigationSearch: FC = () => {
                                 padding: 0,
                             },
                             startAdornment: (
-                                <IconButton color="action" size="small" sx={{ marginX: 1 }}>
-                                    <SearchIcon
-                                        fontSize="small"
-                                    />
+                                <IconButton size="small" sx={{ marginX: 1 }}>
+                                    <SearchIcon fontSize="small" />
                                 </IconButton>
                             ),
                         },
