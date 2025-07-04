@@ -32,7 +32,8 @@ const StyledContainer = styled(Box)(({ theme }) => ({
     alignItems: 'center',
     padding: theme.spacing(0.5, 4),
     borderBottom: `1px solid ${alpha(theme.palette.divider, 0.12)}`,
-    backgroundColor: theme.palette.background.paper,
+    borderTopLeftRadius: theme.shape.borderRadius * 4,
+    backgroundColor: theme.palette.grey[800],
     position: 'fixed',
     zIndex: theme.zIndex.appBar,
 }));
