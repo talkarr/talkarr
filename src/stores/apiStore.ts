@@ -12,7 +12,7 @@ import type { TalkInfoResponse } from '@/app/_api/talks/info';
 import { talkInfo } from '@/app/_api/talks/info';
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
 import { searchEvents } from '@/app/_api/talks/search';
-import type { SingleTalkData } from '@/app/(globalModals)/talks/[slug]/page';
+import type { SingleTalkData } from '@/app/(authenticated)/(globalModals)/talks/[slug]/page';
 
 import type { TalkData } from '@/stores/uiStore';
 

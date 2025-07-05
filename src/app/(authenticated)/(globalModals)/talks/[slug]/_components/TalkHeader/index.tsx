@@ -2,7 +2,7 @@ import type { FC } from 'react';
 
 import moment from 'moment';
 
-import type { SingleTalkData } from '@/app/(globalModals)/talks/[slug]/page';
+import type { SingleTalkData } from '@/app/(authenticated)/(globalModals)/talks/[slug]/page';
 
 import { formatLanguageCode } from '@/utils/string';
 

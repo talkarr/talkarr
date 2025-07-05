@@ -3,7 +3,7 @@ import type { Metadata, NextPage } from 'next';
 import type { SuccessData } from '@backend/types';
 
 import { getGeneralSettings } from '@/app/_api/settings/general';
-import GeneralSettingsForm from '@/app/(globalModals)/settings/general/_components/GeneralSettingsForm';
+import GeneralSettingsForm from '@/app/(authenticated)/(globalModals)/settings/general/_components/GeneralSettingsForm';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';

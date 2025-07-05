@@ -1,8 +1,8 @@
 import type { Metadata, NextPage } from 'next';
 
 import { getConfig } from '@/app/_api/settings/mediamanagement';
-import AddFolderButton from '@/app/(globalModals)/settings/mediamanagement/_components/AddFolderButton';
-import FolderRow from '@/app/(globalModals)/settings/mediamanagement/_components/FolderRow';
+import AddFolderButton from '@/app/(authenticated)/(globalModals)/settings/mediamanagement/_components/AddFolderButton';
+import FolderRow from '@/app/(authenticated)/(globalModals)/settings/mediamanagement/_components/FolderRow';
 
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';

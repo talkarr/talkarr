@@ -6,7 +6,7 @@ import type { FC } from 'react';
 
 import { enqueueSnackbar } from 'notistack';
 
-import type { SingleTalkData } from '@/app/(globalModals)/talks/[slug]/page';
+import type { SingleTalkData } from '@/app/(authenticated)/(globalModals)/talks/[slug]/page';
 
 import { homePageLink } from '@/constants';
 import { useApiStore } from '@/providers/apiStoreProvider';

@@ -7,8 +7,8 @@ import prettyBytes from 'pretty-bytes';
 
 import { getMediaItemStatusColor, MediaItemStatus } from '@backend/talkUtils';
 
-import TalkAttribute from '@/app/(globalModals)/talks/[slug]/_components/TalkAttribute';
-import type { SingleTalkData } from '@/app/(globalModals)/talks/[slug]/page';
+import TalkAttribute from '@/app/(authenticated)/(globalModals)/talks/[slug]/_components/TalkAttribute';
+import type { SingleTalkData } from '@/app/(authenticated)/(globalModals)/talks/[slug]/page';
 
 import { formatVideoDuration } from '@/utils/string';
 

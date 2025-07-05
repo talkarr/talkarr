@@ -8,11 +8,11 @@ import React, { useMemo, useRef, useState } from 'react';
 import type { ExtractSuccessData, SuccessData } from '@backend/types';
 
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
-import type { AddTalksSearchRef } from '@/app/(globalModals)/talks/add/_components/AddTalksSearch';
-import AddTalksSearch from '@/app/(globalModals)/talks/add/_components/AddTalksSearch';
+import type { AddTalksSearchRef } from '@/app/(authenticated)/(globalModals)/talks/add/_components/AddTalksSearch';
+import AddTalksSearch from '@/app/(authenticated)/(globalModals)/talks/add/_components/AddTalksSearch';
 import SearchItem, {
     SearchItemSkeleton,
-} from '@/app/(globalModals)/talks/add/_components/SearchItem';
+} from '@/app/(authenticated)/(globalModals)/talks/add/_components/SearchItem';
 
 import useSearchExample from '@/hooks/useSearchExample';
 

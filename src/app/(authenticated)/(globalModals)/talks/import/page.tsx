@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 
-import ImportJsonField from '@/app/(globalModals)/talks/import/_components/ImportJsonField';
+import ImportJsonField from '@/app/(authenticated)/(globalModals)/talks/import/_components/ImportJsonField';
 
 import Box from '@mui/material/Box';
 

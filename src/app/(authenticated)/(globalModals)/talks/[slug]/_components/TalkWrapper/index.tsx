@@ -3,12 +3,12 @@
 import type { FC } from 'react';
 import { useEffect } from 'react';
 
-import TalkFiles from '@/app/(globalModals)/talks/[slug]/_components/TalkFiles';
-import TalkHeader from '@/app/(globalModals)/talks/[slug]/_components/TalkHeader';
+import TalkFiles from '@/app/(authenticated)/(globalModals)/talks/[slug]/_components/TalkFiles';
+import TalkHeader from '@/app/(authenticated)/(globalModals)/talks/[slug]/_components/TalkHeader';
 import TalkToolbar, {
     talkToolbarHeight,
-} from '@/app/(globalModals)/talks/[slug]/_components/TalkToolbar';
-import type { SingleTalkData } from '@/app/(globalModals)/talks/[slug]/page';
+} from '@/app/(authenticated)/(globalModals)/talks/[slug]/_components/TalkToolbar';
+import type { SingleTalkData } from '@/app/(authenticated)/(globalModals)/talks/[slug]/page';
 
 import { useApiStore } from '@/providers/apiStoreProvider';
 

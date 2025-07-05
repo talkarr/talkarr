@@ -9,7 +9,7 @@ import {
     getGeneralSettings,
     setGeneralSettings,
 } from '@/app/_api/settings/general';
-import type { GeneralSettings } from '@/app/(globalModals)/settings/general/page';
+import type { GeneralSettings } from '@/app/(authenticated)/(globalModals)/settings/general/page';
 
 import SettingsItem from '@components/SettingsItem';
 import AvatarIcon from '@mui/icons-material/AccountCircle';

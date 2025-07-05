@@ -5,7 +5,7 @@ import type { SuccessData } from '@backend/types';
 
 import { getTalk } from '@/app/_api/talks/get';
 import { talkInfo } from '@/app/_api/talks/info';
-import TalkWrapper from '@/app/(globalModals)/talks/[slug]/_components/TalkWrapper';
+import TalkWrapper from '@/app/(authenticated)/(globalModals)/talks/[slug]/_components/TalkWrapper';
 
 interface PageProps {
     params: Promise<{ [key: string]: string | string[] | undefined }>;

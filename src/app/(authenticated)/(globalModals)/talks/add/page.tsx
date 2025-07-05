@@ -2,7 +2,7 @@ import type { Metadata, NextPage } from 'next';
 
 import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { listEvents } from '@/app/_api/talks/list';
-import AddTalksPage from '@/app/(globalModals)/talks/add/_components/AddTalksPage';
+import AddTalksPage from '@/app/(authenticated)/(globalModals)/talks/add/_components/AddTalksPage';
 
 import Box from '@mui/material/Box';
 

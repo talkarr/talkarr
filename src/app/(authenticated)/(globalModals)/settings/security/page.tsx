@@ -1,7 +1,7 @@
 import type { Metadata, NextPage } from 'next';
 
 import { listUsers } from '@/app/_api/settings/security';
-import UserRow from '@/app/(globalModals)/settings/security/_components/UserRow';
+import UserRow from '@/app/(authenticated)/(globalModals)/settings/security/_components/UserRow';
 
 import MaterialTable from '@components/MaterialTable';
 import Box from '@mui/material/Box';

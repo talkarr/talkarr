@@ -41,9 +41,7 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => (
                     <CssBaseline />
                     <ApiStoreProvider>
                         <UiStoreProvider>
-                            <NotistackProvider>
-                                <Navigation>{children}</Navigation>
-                            </NotistackProvider>
+                            <NotistackProvider>{children}</NotistackProvider>
                         </UiStoreProvider>
                     </ApiStoreProvider>
                 </ThemeProvider>
