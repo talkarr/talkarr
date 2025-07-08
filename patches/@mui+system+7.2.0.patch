@@ -1,5 +1,5 @@
 diff --git a/node_modules/@mui/system/createTheme/shape.d.ts b/node_modules/@mui/system/createTheme/shape.d.ts
-index 8bb933f..82064f6 100644
+index 8bb933f..8695988 100644
 --- a/node_modules/@mui/system/createTheme/shape.d.ts
 +++ b/node_modules/@mui/system/createTheme/shape.d.ts
 @@ -1,5 +1,5 @@
@@ -10,7 +10,7 @@ index 8bb933f..82064f6 100644
  export type ShapeOptions = Partial<Shape>;
  declare const shape: Shape;
 diff --git a/node_modules/@mui/system/esm/createTheme/shape.d.ts b/node_modules/@mui/system/esm/createTheme/shape.d.ts
-index 8bb933f..82064f6 100644
+index 8bb933f..8695988 100644
 --- a/node_modules/@mui/system/esm/createTheme/shape.d.ts
 +++ b/node_modules/@mui/system/esm/createTheme/shape.d.ts
 @@ -1,5 +1,5 @@
