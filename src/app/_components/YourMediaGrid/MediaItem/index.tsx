@@ -137,7 +137,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                               getMediaItemStatusColor(theme)[
                                                   status
                                               ],
-                                          borderBottomWidth: 2,
+                                          borderBottomWidth: 4,
                                           borderBottomStyle: 'solid',
                                       }
                                     : {}),
