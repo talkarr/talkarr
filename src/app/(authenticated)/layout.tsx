@@ -8,3 +8,5 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
 );
 
 export default Layout;
+
+export const dynamic = 'force-dynamic';
