@@ -9,7 +9,6 @@ import { UiStoreProvider } from '@/providers/uiStoreProvider';
 import theme from '@/theme';
 
 import '@/app/globals.css';
-import Navigation from '@components/Navigation';
 import NotistackProvider from '@components/NotistackProvider';
 import { ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
