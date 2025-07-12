@@ -7,7 +7,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 
-export interface SettingsItemProps {
+export interface SettingsSwitchItemProps {
     primaryText: string;
     onClick: () => void;
     icon?: React.ReactNode;
@@ -15,7 +15,7 @@ export interface SettingsItemProps {
     children?: (onClick: () => void) => React.ReactNode;
 }
 
-const SettingsItem: FC<SettingsItemProps> = ({
+const SettingsSwitchItem: FC<SettingsSwitchItemProps> = ({
     primaryText,
     onClick,
     icon,
@@ -35,4 +35,4 @@ const SettingsItem: FC<SettingsItemProps> = ({
     </Paper>
 );
 
-export default SettingsItem;
+export default SettingsSwitchItem;

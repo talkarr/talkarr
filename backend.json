@@ -879,11 +879,23 @@
                                 "error": {
                                     "type": "string",
                                     "description": "Error message"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "example": "Event title"
+                                },
+                                "isRecorded": {
+                                    "type": "boolean",
+                                    "example": false,
+                                    "nullable": true,
+                                    "description": "True if the event is recorded"
                                 }
                             },
                             "required": [
                                 "slug",
-                                "error"
+                                "title",
+                                "error",
+                                "isRecorded"
                             ]
                         },
                         "description": "List of errors",
@@ -1022,10 +1034,19 @@
                         "type": "boolean",
                         "description": "Allow Libravatar for user avatars",
                         "example": false
+                    },
+                    "importIsRecordedFlagBehavior": {
+                        "type": "string",
+                        "enum": [
+                            "skipImportIfIsNotRecorded",
+                            "skipImportIfFlagNotExists",
+                            "alwaysImport"
+                        ]
                     }
                 },
                 "required": [
-                    "allowLibravatar"
+                    "allowLibravatar",
+                    "importIsRecordedFlagBehavior"
                 ]
             }
         }

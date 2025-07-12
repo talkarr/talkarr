@@ -34,7 +34,8 @@ export const settings: (SimpleNavigationItem & { description: string })[] = [
     {
         title: 'General',
         path: generalSettingsPageLink,
-        description: 'External services, and other general settings.',
+        description:
+            'Functionality control, external services, and other general settings.',
         slug: 'general',
     },
     {

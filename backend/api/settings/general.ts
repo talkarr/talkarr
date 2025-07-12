@@ -4,12 +4,9 @@ import typia from 'typia';
 import rootLog from '@backend/rootLog';
 import { getSettings, setSettings } from '@backend/settings';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import type { GeneralSettings } from '@backend/types/settings';
 
 const log = rootLog.child({ label: 'settings/general' });
-
-export interface GeneralSettings {
-    allowLibravatar: boolean; // Allow using Libravatar for user avatars
-}
 
 const check = typia.createIs<GeneralSettings>();
 

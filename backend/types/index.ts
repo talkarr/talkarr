@@ -164,7 +164,13 @@ export interface ExtendedDbEvent extends DbEventWithFolder {
 export interface EventFahrplanJsonImport {
     lectures: {
         slug: string;
+        title: string;
+        recorded?: boolean;
     }[];
 }
 
 export type TypeOrPick<T, K extends keyof T> = T | Pick<T, K>;
+
+export type Enum<E> = Record<keyof E, number | string> & {
+    [k: number]: string;
+};

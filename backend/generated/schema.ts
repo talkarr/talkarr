@@ -1433,6 +1433,13 @@ export interface components {
                 slug: string;
                 /** @description Error message */
                 error: string;
+                /** @example Event title */
+                title: string;
+                /**
+                 * @description True if the event is recorded
+                 * @example false
+                 */
+                isRecorded: boolean | null;
             }[] | null;
             /** @description List of parsed slugs */
             parsed_slugs: string[] | null;
@@ -1503,6 +1510,8 @@ export interface components {
              * @example false
              */
             allowLibravatar: boolean;
+            /** @enum {string} */
+            importIsRecordedFlagBehavior: "skipImportIfIsNotRecorded" | "skipImportIfFlagNotExists" | "alwaysImport";
         };
     };
     responses: never;

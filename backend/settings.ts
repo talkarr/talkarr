@@ -1,18 +1,12 @@
+import deepmerge from 'deepmerge';
 import typia from 'typia';
 
-import type { GeneralSettings } from '@backend/api/settings/general';
-import type { MediamanagementSettings } from '@backend/api/settings/mediamanagement';
-import type { SecuritySettings } from '@backend/api/settings/security';
 import { prisma } from '@backend/prisma';
 import rootLog from '@backend/rootLog';
+import type { Settings } from '@backend/types/settings';
+import { ImportIsRecordedFlagBehavior } from '@backend/types/settings';
 
 const log = rootLog.child({ label: 'settings' });
-
-export interface Settings {
-    general: GeneralSettings;
-    mediamanagement: MediamanagementSettings;
-    security: SecuritySettings;
-}
 
 const check = typia.createIs<Settings>();
 
@@ -23,6 +17,8 @@ export type SettingsValue<K extends SettingsKey> = Settings[K];
 export const initialSettings: Settings = {
     general: {
         allowLibravatar: false, // Make this opt-in
+        importIsRecordedFlagBehavior:
+            ImportIsRecordedFlagBehavior.skipImportIfIsNotRecorded,
     },
     mediamanagement: {},
     security: {},
@@ -94,10 +90,10 @@ const recoverSettings = async (): Promise<void> => {
         existingSettingsMap[setting.key] = JSON.parse(setting.value);
     }
 
-    const mergedSettings: Settings = {
-        ...initialSettings,
-        ...existingSettingsMap,
-    };
+    const mergedSettings: Settings = deepmerge(
+        initialSettings,
+        existingSettingsMap,
+    );
 
     if (!check(mergedSettings)) {
         log.warn('Recovered settings validation failed', { mergedSettings });

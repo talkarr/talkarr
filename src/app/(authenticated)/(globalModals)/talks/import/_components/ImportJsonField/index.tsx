@@ -8,26 +8,21 @@ import type { ExtractSuccessData } from '@backend/types';
 import { getConfig } from '@/app/_api/settings/mediamanagement';
 import type { ImportJsonResponse } from '@/app/_api/talks/import';
 import { importJson, verifyJsonImport } from '@/app/_api/talks/import';
+import ImportJsonRow from '@/app/(authenticated)/(globalModals)/talks/import/_components/ImportJsonRow';
 
 import { stripInvalidCharsForDataAttribute } from '@/utils/string';
 
 import { monoFont } from '@/theme';
 
-import ErrorIcon from '@mui/icons-material/Error';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import MovieIcon from '@mui/icons-material/Movie';
 import UploadIcon from '@mui/icons-material/Upload';
-import { alpha, styled, useTheme } from '@mui/material';
+import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
@@ -47,8 +42,6 @@ const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({
 }));
 
 const ImportJsonField: FC = () => {
-    const theme = useTheme();
-
     const [json, setJson] = useState<string>('');
 
     const debouncedJson = useDebounce(json, 500);
@@ -64,6 +57,16 @@ const ImportJsonField: FC = () => {
         [],
     );
     const [rootFolder, setRootFolder] = useState<string>('');
+
+    const resetImport = useCallback((): void => {
+        setJson('');
+        setError(null);
+        setHasCheckedJson(false);
+        setImportResult(null);
+        setProcessing(false);
+        setAvailableRootFolders([]);
+        setRootFolder('');
+    }, []);
 
     useEffect(() => {
         const func = async (): Promise<void> => {
@@ -149,212 +152,132 @@ const ImportJsonField: FC = () => {
 
     return (
         <Box>
-            <Box mb={2}>
-                <Typography variant="h2" mb={1}>
-                    Import JSON
-                </Typography>
-                <Typography>Import talks from c3 Fahrplan.</Typography>
-            </Box>
-            <Box mb={2}>
-                <StyledTextareaAutosize
-                    value={json}
-                    onChange={e => setJson(e.target.value)}
-                    minRows={10}
-                    maxRows={20}
-                    placeholder="Paste JSON here"
-                    spellCheck="false"
-                    autoCorrect="off"
-                />
-                {error !== null ? (
-                    <FormHelperText error data-testid="json-error">
-                        {error}
-                    </FormHelperText>
-                ) : null}
-            </Box>
-            <Box mb={2}>
-                <FormControl fullWidth>
-                    <InputLabel id="root-folder-label">Root folder</InputLabel>
-                    <Select
-                        variant="outlined"
-                        fullWidth
-                        value={rootFolder}
-                        onChange={e => setRootFolder(e.target.value as string)}
-                        labelId="root-folder-label"
-                        label="Root folder"
-                        data-testid="root-folder-select"
-                    >
-                        {availableRootFolders.map(folder => (
-                            <MenuItem
-                                key={folder}
-                                value={folder}
-                                data-testid={`root-folder-${stripInvalidCharsForDataAttribute(folder)}`}
-                            >
-                                {folder}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Box>
-            <Box
-                display="flex"
-                flexDirection="row"
-                justifyContent="flex-end"
-                gap={2}
-            >
-                <Button
-                    component="label"
-                    role={undefined}
-                    variant="text"
-                    tabIndex={-1}
-                    startIcon={<FileOpenIcon />}
-                    disabled={processing}
-                >
-                    Load JSON
-                    <input
-                        type="file"
-                        accept=".json"
-                        hidden
-                        onChange={loadFile}
-                    />
-                </Button>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={
-                        !json ||
-                        error !== null ||
-                        !hasCheckedJson ||
-                        !rootFolder ||
-                        availableRootFolders.length === 0
-                    }
-                    loading={processing}
-                    sx={{
-                        minWidth: 120,
-                    }}
-                    startIcon={<UploadIcon />}
-                    onClick={handleImport}
-                >
-                    Import
-                </Button>
-            </Box>
-            {importResult ? (
+            {importResult === null ? (
                 <>
-                    <Divider sx={{ marginY: 2 }} />
-                    <Box>
-                        <Typography variant="h3" mb={2}>
-                            Import Result
+                    <Box mb={2}>
+                        <Typography variant="h2" mb={1}>
+                            Import JSON
                         </Typography>
-                        <Box display="flex" flexDirection="column" gap={2}>
-                            {importResult.successful_imports.length > 0 ? (
-                                <Box
-                                    border={1}
-                                    borderRadius={4}
-                                    p={1}
-                                    borderColor={theme.palette.success.main}
-                                    bgcolor={alpha(
-                                        theme.palette.success.main,
-                                        0.2,
-                                    )}
-                                >
-                                    <Typography
-                                        variant="h5"
-                                        mb={1}
-                                        color="success"
-                                        marginX={1}
-                                    >
-                                        Successfully imported{' '}
-                                        {importResult.successful_imports.length}{' '}
-                                        talks
-                                    </Typography>
-                                    <List disablePadding sx={{ marginX: 2 }}>
-                                        {importResult.successful_imports.map(
-                                            talk => (
-                                                <ListItem
-                                                    key={`successful-import-${talk.slug}`}
-                                                    disablePadding
-                                                >
-                                                    <ListItemIcon>
-                                                        <MovieIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText>
-                                                        {talk.title}
-                                                    </ListItemText>
-                                                </ListItem>
-                                            ),
-                                        )}
-                                    </List>
-                                </Box>
-                            ) : null}
-                            <Box
-                                border={1}
-                                borderRadius={4}
-                                p={1}
-                                bgcolor={alpha(theme.palette.warning.main, 0.2)}
+                        <Typography>Import talks from c3 Fahrplan.</Typography>
+                    </Box>
+                    <Box mb={2}>
+                        <StyledTextareaAutosize
+                            value={json}
+                            onChange={e => setJson(e.target.value)}
+                            minRows={10}
+                            maxRows={20}
+                            placeholder="Paste JSON here"
+                            spellCheck="false"
+                            autoCorrect="off"
+                        />
+                        {error !== null ? (
+                            <FormHelperText error data-testid="json-error">
+                                {error}
+                            </FormHelperText>
+                        ) : null}
+                    </Box>
+                    <Box mb={2}>
+                        <FormControl fullWidth>
+                            <InputLabel id="root-folder-label">
+                                Root folder
+                            </InputLabel>
+                            <Select
+                                variant="outlined"
+                                fullWidth
+                                value={rootFolder}
+                                onChange={e =>
+                                    setRootFolder(e.target.value as string)
+                                }
+                                labelId="root-folder-label"
+                                label="Root folder"
+                                data-testid="root-folder-select"
                             >
-                                <Typography
-                                    variant="h5"
-                                    mb={1}
-                                    color="warning"
-                                    marginX={1}
-                                >
-                                    {importResult.existing_imports.length} talks
-                                    already exist
-                                </Typography>
-                                <List disablePadding sx={{ marginX: 2 }}>
-                                    {importResult.existing_imports.map(talk => (
-                                        <ListItem
-                                            key={`existing-import-${talk}`}
-                                            disablePadding
-                                        >
-                                            <ListItemIcon>
-                                                <MovieIcon color="warning" />
-                                            </ListItemIcon>
-                                            <ListItemText>{talk}</ListItemText>
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            </Box>
-                            {importResult.errors ? (
-                                <Box
-                                    border={1}
-                                    borderRadius={4}
-                                    p={1}
-                                    bgcolor={alpha(
-                                        theme.palette.error.main,
-                                        0.2,
-                                    )}
-                                >
-                                    <Typography
-                                        variant="h5"
-                                        mb={1}
-                                        color="error"
-                                        marginX={1}
+                                {availableRootFolders.map(folder => (
+                                    <MenuItem
+                                        key={folder}
+                                        value={folder}
+                                        data-testid={`root-folder-${stripInvalidCharsForDataAttribute(folder)}`}
                                     >
-                                        {importResult.errors.length} errors
-                                        occurred
-                                    </Typography>
-                                    <List disablePadding sx={{ marginX: 2 }}>
-                                        {importResult.errors.map(talk => (
-                                            <ListItem
-                                                key={`failed-import-errors-${talk.slug}`}
-                                                disablePadding
-                                            >
-                                                <ListItemIcon>
-                                                    <ErrorIcon color="error" />
-                                                </ListItemIcon>
-                                                <ListItemText
-                                                    primary={talk.slug}
-                                                    secondary={talk.error}
-                                                />
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </Box>
-                            ) : null}
-                        </Box>
+                                        {folder}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box
+                        display="flex"
+                        flexDirection="row"
+                        justifyContent="flex-end"
+                        gap={2}
+                    >
+                        <Button
+                            component="label"
+                            role={undefined}
+                            variant="text"
+                            tabIndex={-1}
+                            startIcon={<FileOpenIcon />}
+                            disabled={processing}
+                        >
+                            Load JSON
+                            <input
+                                type="file"
+                                accept=".json"
+                                hidden
+                                onChange={loadFile}
+                            />
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            disabled={
+                                !json ||
+                                error !== null ||
+                                !hasCheckedJson ||
+                                !rootFolder ||
+                                availableRootFolders.length === 0
+                            }
+                            loading={processing}
+                            sx={{
+                                minWidth: 120,
+                            }}
+                            startIcon={<UploadIcon />}
+                            onClick={handleImport}
+                        >
+                            Import
+                        </Button>
                     </Box>
                 </>
-            ) : null}
+            ) : (
+                <Box>
+                    <Box
+                        display="flex"
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+                        <Typography variant="h3">Import Result</Typography>
+                        <Button
+                            variant="text"
+                            color="error"
+                            onClick={resetImport}
+                            data-testid="reset-import"
+                        >
+                            Reset Import
+                        </Button>
+                    </Box>
+                    <List>
+                        {importResult.errors?.map(data => (
+                            <ImportJsonRow errorData={data} key={data.slug} />
+                        ))}
+                        {importResult.successful_imports?.map(data => (
+                            <ImportJsonRow successData={data} key={data.slug} />
+                        ))}
+                        {importResult.existing_imports?.map(data => (
+                            <ImportJsonRow existingData={data} key={data} />
+                        ))}
+                    </List>
+                </Box>
+            )}
         </Box>
     );
 };

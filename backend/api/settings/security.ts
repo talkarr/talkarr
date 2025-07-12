@@ -8,8 +8,6 @@ import { Permission } from '@prisma/client';
 
 const log = rootLog.child({ label: 'settings/security' });
 
-export interface SecuritySettings {}
-
 const router = express.Router();
 
 router.get(

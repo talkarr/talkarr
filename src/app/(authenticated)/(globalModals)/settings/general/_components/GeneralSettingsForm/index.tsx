@@ -5,13 +5,16 @@ import React, { useState } from 'react';
 
 import { useSnackbar } from 'notistack';
 
+import { ImportIsRecordedFlagBehavior } from '@backend/types/settings';
+
 import {
     getGeneralSettings,
     setGeneralSettings,
 } from '@/app/_api/settings/general';
 import type { GeneralSettings } from '@/app/(authenticated)/(globalModals)/settings/general/page';
 
-import SettingsItem from '@components/SettingsItem';
+import SettingsEnumItem from '@components/SettingsEnumItem';
+import SettingsSwitchItem from '@components/SettingsSwitchItem';
 import AvatarIcon from '@mui/icons-material/AccountCircle';
 import SaveIcon from '@mui/icons-material/SaveRounded';
 import Box from '@mui/material/Box';
@@ -101,13 +104,47 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
             </Box>
             <form onSubmit={handleSubmit}>
                 <Box mb={2}>
+                    <Typography variant="h6">Functionality control</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        Enable, disable or configure various features of the
+                        software.
+                    </Typography>
+                </Box>
+                <Box mb={4}>
+                    <SettingsEnumItem
+                        primaryText="Behavior of the 'is recorded' flag"
+                        secondaryText="This controls how the 'is recorded' flag is set for imported media."
+                        options={ImportIsRecordedFlagBehavior}
+                        value={settings.importIsRecordedFlagBehavior}
+                        onChange={value => {
+                            setSettings({
+                                ...settings,
+                                importIsRecordedFlagBehavior:
+                                    value as ImportIsRecordedFlagBehavior,
+                            });
+                        }}
+                    />
+                    <Box mt={1}>
+                        {/* Todo: improve when translations are happening */}
+                        <Typography variant="body2" color="textSecondary">
+                            skipImportIfIsNotRecorded: Description
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            skipImportIfFlagNotExists: Description
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            alwaysImport: Description
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box mb={2}>
                     <Typography variant="h6">External Services</Typography>
                     <Typography variant="body2" color="textSecondary">
                         Configure external services for this software.
                     </Typography>
                 </Box>
                 <Box>
-                    <SettingsItem
+                    <SettingsSwitchItem
                         icon={<AvatarIcon />}
                         primaryText="Allow Libravatar"
                         secondaryText="This will enable fetching avatars via the account email."
@@ -124,7 +161,7 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
                                 checked={settings.allowLibravatar}
                             />
                         )}
-                    </SettingsItem>
+                    </SettingsSwitchItem>
                 </Box>
             </form>
         </Container>
