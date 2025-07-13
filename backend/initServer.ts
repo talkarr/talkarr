@@ -69,4 +69,4 @@ const startInitServer = (): http.Server => {
     return loadingHttpServer;
 };
 
-export default startInitServer;
+export const initServer = startInitServer();

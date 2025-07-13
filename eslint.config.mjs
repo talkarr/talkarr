@@ -120,6 +120,7 @@ export default tseslint.config(
             "simple-import-sort/imports": ["error", {
                 groups: [
                     ["\\u0000$"],
+                    ["@backend/initServer", "^@backend/initServer$"],
                     ["^next"],
                     ["^react"],
                     ["^\\w"],

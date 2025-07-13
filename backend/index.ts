@@ -1,9 +1,6 @@
-/* eslint-disable import/first */
 import type { NextFunction, Request, Response } from 'express';
 
-import startInitServer from '@backend/initServer';
-
-const initServer = startInitServer();
+import { initServer } from '@backend/initServer';
 
 import next from 'next';
 
