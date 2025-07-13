@@ -211,8 +211,8 @@ export const setSettings = async <TSettingsKey extends SettingsKey>(
     key: TSettingsKey,
     value:
         | ((
-            current: SettingsValue<TSettingsKey>,
-        ) => SettingsValue<TSettingsKey>)
+              current: SettingsValue<TSettingsKey>,
+          ) => SettingsValue<TSettingsKey>)
         | SettingsValue<TSettingsKey>,
     save = true,
 ): Promise<void> => {

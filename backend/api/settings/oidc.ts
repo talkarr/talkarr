@@ -34,6 +34,7 @@ router.post(
                 success: false,
                 error: 'Internal Server Error',
             });
+            console.error('Error saving OIDC settings:', error);
         }
     },
 );
