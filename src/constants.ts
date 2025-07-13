@@ -25,6 +25,9 @@ export const generalSettingsPageLink = '/settings/general';
 export const mediaManagementSettingsPageLink = '/settings/mediamanagement';
 export const securitySettingsPageLink = '/settings/security';
 
+// === User ===
+export const loginPageLink = '/login';
+
 // === API ===
 export const apiBaseUrl = `http://${process.env.HOST || 'localhost'}:${process.env.PORT || 3232}`;
 

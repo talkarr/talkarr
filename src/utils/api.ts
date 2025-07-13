@@ -9,7 +9,7 @@ const tag = `API-${typeof window === 'undefined' ? 'SERVER-SIDE' : 'CLIENT-SIDE'
 const apiMiddleware: Middleware = {
     onRequest: async ({ request }) => {
         // get token from cookie "token"
-        if (process.env.CI || process.env.NODE_ENV !== 'production') {
+        if (process.env.CI) {
             console.log(
                 `[${tag}] Fetching ${request.method} ${request.url} with cookies "${request.headers.get('cookie')}"`,
             );

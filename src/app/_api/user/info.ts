@@ -3,13 +3,14 @@ import { getCookiesForApi } from '@/app/_api';
 import api from '@/utils/api';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const pListEvents = async () => {
+const pGetUserInfo = async () => {
     const cookie = await getCookiesForApi();
-    const { data, error, response } = await api.GET('/talks/list', {
+
+    const { data, error, response } = await api.GET('/user/info', {
+        cache: 'no-store',
         headers: {
             cookie,
         },
-        cache: 'no-store',
     });
 
     if (error) {
@@ -19,8 +20,8 @@ const pListEvents = async () => {
     return data;
 };
 
-export type ListEventsResponse =
-    | Awaited<ReturnType<typeof pListEvents>>
+export type GetUserInfoResponse =
+    | Awaited<ReturnType<typeof pGetUserInfo>>
     | undefined;
 
-export const listEvents: () => Promise<ListEventsResponse> = pListEvents;
+export const getUserInfo: () => Promise<GetUserInfoResponse> = pGetUserInfo;

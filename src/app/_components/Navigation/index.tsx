@@ -15,6 +15,7 @@ import LogoWithText from '@components/LogoWithText';
 import { navigationItems } from '@components/Navigation/navigation';
 import NavigationItem from '@components/Navigation/NavigationItem';
 import NavigationSearch from '@components/Navigation/NavigationSearch';
+import NavigationUser from '@components/Navigation/NavigationUser';
 import { useTheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -176,11 +177,15 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                             height: '100%',
                             backgroundColor: theme.palette.background.paper,
                         }}
+                        disableGutters
+                        sx={{
+                            paddingX: 1,
+                            gap: 1,
+                        }}
                     >
                         <Box
                             display={{ xs: 'flex', md: 'none' }}
                             alignItems="center"
-                            mr={2}
                         >
                             <IconButton
                                 color="inherit"
@@ -191,6 +196,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                             </IconButton>
                         </Box>
                         <NavigationSearch />
+                        <NavigationUser />
                     </Toolbar>
                 </AppBar>
                 <Box

@@ -1,7 +1,8 @@
-import type { Event as DbEvent, File as DbFile } from '.prisma/client';
 import type {
     Conference,
+    Event as DbEvent,
     EventInfo,
+    File as DbFile,
     Person,
     RootFolder,
     Tag,
@@ -85,13 +86,19 @@ export type ExpressGetRequest<
     RequestParams<P, M>
 >;
 
+type User = components['schemas']['User'] | null;
+
 export type ExpressRequest<
     P extends PathsWithMethod<paths, M>,
     M extends Method,
 > = M extends 'get'
-    ? ExpressGetRequest<P, M>
+    ? ExpressGetRequest<P, M> & {
+          user?: User;
+      }
     : M extends 'post'
-      ? ExpressPostRequest<P, M>
+      ? ExpressPostRequest<P, M> & {
+            user?: User;
+        }
       : never;
 
 export type RequestParams<

@@ -9,5 +9,15 @@ config({
     ],
 });
 
-export const serverPort = Number(process.env.PORT) || 3232;
-export const serverHost = process.env.HOST;
+export const serverPort = Number(process.env.TALKARR_PORT) || 3232;
+export const serverHost = process.env.TALKARR_HOST;
+export const serverSecret = process.env.TALKARR_SECRET || '';
+export const logLevel =
+    process.env.TALKARR_LOG_LEVEL?.toLowerCase() ||
+    (process.env.NODE_ENV === 'production' ? 'info' : 'debug');
+
+if (!serverSecret) {
+    throw new Error(
+        'No TALKARR_SECRET set in .env or .env.local. Please set it to a random string.',
+    );
+}

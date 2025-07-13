@@ -4,13 +4,13 @@ import { getCookiesForApi } from '@/app/_api';
 
 import api from '@/utils/api';
 
-export type AddEventBody = RequestBody<'/talks/add'>;
+export type UserLoginBody = RequestBody<'/user/login'>;
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const pAddEvent = async (body: AddEventBody) => {
+const pLoginUser = async (body: UserLoginBody) => {
     const cookie = await getCookiesForApi();
 
-    const { data, error, response } = await api.POST('/talks/add', {
+    const { data, error, response } = await api.POST('/user/login', {
         body,
         headers: {
             cookie,
@@ -24,9 +24,9 @@ const pAddEvent = async (body: AddEventBody) => {
     return data;
 };
 
-export type AddEventResponse =
-    | Awaited<ReturnType<typeof pAddEvent>>
+export type LoginUserResponse =
+    | Awaited<ReturnType<typeof pLoginUser>>
     | undefined;
 
-export const addEvent: (body: AddEventBody) => Promise<AddEventResponse> =
-    pAddEvent;
+export const loginUser: (body: UserLoginBody) => Promise<LoginUserResponse> =
+    pLoginUser;
