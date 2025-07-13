@@ -61,7 +61,7 @@ const handleImportJsonRequest = async (
 
         // do the import here
         const result = await importEventFahrplanJson({
-            slugs: data.lectures.map(lecture => lecture.slug),
+            lectures: data.lectures,
             rootFolder,
         });
 

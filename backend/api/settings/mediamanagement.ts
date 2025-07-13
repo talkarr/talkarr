@@ -19,8 +19,6 @@ import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'settings/mediamanagement' });
 
-export interface MediamanagementSettings {}
-
 const router = express.Router();
 
 export const listFoldersFromFs = async (

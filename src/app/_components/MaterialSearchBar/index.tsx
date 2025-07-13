@@ -1,3 +1,5 @@
+'use client';
+
 import type { TextFieldProps } from '@mui/material';
 
 import type { FC } from 'react';

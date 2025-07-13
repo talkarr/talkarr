@@ -1,19 +1,10 @@
-import { config } from 'dotenv';
 import fs from 'node:fs';
 import path from 'path';
 import * as winston from 'winston';
 
+import { logLevel } from '@backend/env';
+
 import 'winston-daily-rotate-file';
-
-// load .env and .env.local files. needed because this gets loaded before Next.js loads the .env files
-config({
-    path: [
-        path.resolve(process.cwd(), '.env'),
-        path.resolve(process.cwd(), '.env.local'),
-    ],
-});
-
-const logLevel = process.env.LOG_LEVEL?.toLowerCase();
 
 const hformat = winston.format.printf(
     ({ level, label, message, timestamp, ...metadata }) => {
@@ -61,8 +52,7 @@ const hformat = winston.format.printf(
 );
 
 const rootLog = winston.createLogger({
-    level:
-        logLevel || (process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
+    level: logLevel,
     format: winston.format.combine(
         winston.format.splat(),
         winston.format.timestamp(),

@@ -1,7 +1,8 @@
 FROM node:24-alpine AS base
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat ffmpeg yt-dlp
+RUN apk add --no-cache libc6-compat ffmpeg yt-dlp \
+    pkgconfig pixman build-base g++ cairo-dev pango-dev giflib-dev
 
 # Install dependencies
 FROM base AS deps
@@ -14,7 +15,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock .npmrc* ./
-RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn YOUTUBE_DL_SKIP_DOWNLOAD=true yarn --frozen-lockfile --prefer-offline
+RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn YOUTUBE_DL_SKIP_DOWNLOAD=true yarn --frozen-lockfile --prefer-offline --build-from-source
 
 # Rebuild the source code only when needed
 FROM deps AS builder

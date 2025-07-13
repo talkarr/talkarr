@@ -164,6 +164,8 @@ jobs:
           
           mkdir -p logs
           chmod 777 -R logs
+          
+          echo "TALKARR_SECRET=verysecret" > .env.local
 
       - name: Run migrations
         run: yarn prisma db push --force-reset --accept-data-loss

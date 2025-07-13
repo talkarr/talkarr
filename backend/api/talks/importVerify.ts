@@ -51,7 +51,7 @@ const handleVerifyJsonRequest = async (
 
         res.json({ success: true, data: null });
     } catch (error) {
-        log.error('Invalid JSON (Parse error):', { error });
+        log.debug('Invalid JSON (Parse error):', { error });
 
         res.status(400).json({
             success: false,

@@ -19,10 +19,6 @@
 - [Prisma](https://www.prisma.io/) - A modern database toolkit
 - [PostgreSQL](https://www.postgresql.org/) - A powerful, open source object-relational database system
 
-## Task Queue
-
-- [Bull](https://optimalbits.github.io/bull/) - A Node.js job and message queue library
-
 ## Deployment
 
 - [Docker](https://www.docker.com/) - A tool for building and running applications in containers

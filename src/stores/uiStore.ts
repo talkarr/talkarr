@@ -2,6 +2,7 @@ import type { PartialDeep } from 'type-fest';
 
 import deepmerge from 'deepmerge';
 import { createStore } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 import type { SuccessData } from '@backend/types';
 
@@ -41,12 +42,21 @@ export const defaultUiState: UiState = {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const createUiStore = (initialState?: PartialDeep<UiState>) =>
-    createStore<UiStore>(set => ({
-        ...(deepmerge(defaultUiState, initialState || {}) as UiState),
-        openAddTalkModal: talk => set({ addTalkModal: talk }),
-        closeAddTalkModal: () => set({ addTalkModal: null }),
-        openAddFolderModal: () => set({ addFolderModal: true }),
-        closeAddFolderModal: () => set({ addFolderModal: false }),
-        showConfirmationModal: config => set({ confirmationModal: config }),
-        closeConfirmationModal: () => set({ confirmationModal: null }),
-    }));
+    createStore<UiStore>()(
+        devtools(
+            set => ({
+                ...(deepmerge(defaultUiState, initialState || {}) as UiState),
+                openAddTalkModal: talk => set({ addTalkModal: talk }),
+                closeAddTalkModal: () => set({ addTalkModal: null }),
+                openAddFolderModal: () => set({ addFolderModal: true }),
+                closeAddFolderModal: () => set({ addFolderModal: false }),
+                showConfirmationModal: config =>
+                    set({ confirmationModal: config }),
+                closeConfirmationModal: () => set({ confirmationModal: null }),
+            }),
+            {
+                name: 'uiStore',
+                enabled: process.env.NODE_ENV === 'development',
+            },
+        ),
+    );

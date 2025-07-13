@@ -3,13 +3,15 @@ import { Geist, Geist_Mono } from 'next/font/google';
 
 import type { FC, PropsWithChildren } from 'react';
 
+import { getUserInfo } from '@/app/_api/user/info';
+
 import { pageName } from '@/constants';
 import { ApiStoreProvider } from '@/providers/apiStoreProvider';
 import { UiStoreProvider } from '@/providers/uiStoreProvider';
+import { UserStoreProvider } from '@/providers/userStoreProvider';
 import theme from '@/theme';
 
 import '@/app/globals.css';
-import Navigation from '@components/Navigation';
 import NotistackProvider from '@components/NotistackProvider';
 import { ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -33,23 +35,35 @@ export const metadata: Metadata = {
     description: 'Download and manage your personal collection of chaos talks.',
 };
 
-const RootLayout: FC<PropsWithChildren> = ({ children }) => (
-    <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable}`}>
-            <AppRouterCacheProvider>
-                <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <ApiStoreProvider>
-                        <UiStoreProvider>
-                            <NotistackProvider>
-                                <Navigation>{children}</Navigation>
-                            </NotistackProvider>
-                        </UiStoreProvider>
-                    </ApiStoreProvider>
-                </ThemeProvider>
-            </AppRouterCacheProvider>
-        </body>
-    </html>
-);
+const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
+    const initialUserInfo = await getUserInfo();
+
+    return (
+        <html lang="en">
+            <body className={`${geistSans.variable} ${geistMono.variable}`}>
+                <AppRouterCacheProvider>
+                    <ThemeProvider theme={theme}>
+                        <CssBaseline />
+                        <UserStoreProvider
+                            apiState={{
+                                user: initialUserInfo?.success
+                                    ? initialUserInfo.data
+                                    : null,
+                            }}
+                        >
+                            <ApiStoreProvider>
+                                <UiStoreProvider>
+                                    <NotistackProvider>
+                                        {children}
+                                    </NotistackProvider>
+                                </UiStoreProvider>
+                            </ApiStoreProvider>
+                        </UserStoreProvider>
+                    </ThemeProvider>
+                </AppRouterCacheProvider>
+            </body>
+        </html>
+    );
+};
 
 export default RootLayout;

@@ -34,6 +34,21 @@ async function main(): Promise<void> {
                 path: '/Users/ccomm/Movies/talkarr',
             },
         });
+        await prisma.user.create({
+            data: {
+                email: 'test@example.com',
+                displayName: 'Test User',
+                password:
+                    '$argon2i$v=19$m=16,t=2,p=1$Vk1wMWdqSThLVGJUMDZJTw$FiPub6+Bu8FwkA40Eu7JMQ',
+                permissions: {
+                    create: [
+                        {
+                            permission: 'Admin',
+                        },
+                    ],
+                },
+            },
+        });
     }
 }
 

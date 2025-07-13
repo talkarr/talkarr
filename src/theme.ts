@@ -73,6 +73,12 @@ const baseTheme = createTheme({
             dark: '#000000',
             contrastText: '#ffffff',
         },
+        light: {
+            main: '#f5f5f5',
+            light: '#ffffff',
+            dark: '#e0e0e0',
+            contrastText: '#000000',
+        },
         background: {
             default: pageBackgroundColor,
             paper: pagePaperColor,

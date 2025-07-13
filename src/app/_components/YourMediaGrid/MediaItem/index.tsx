@@ -109,7 +109,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
 
     return (
         <StyledContainer
-            size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+            size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
             ref={containerRef}
             data-media-item-slug={initialData.slug}
             data-testid="media-item"
@@ -137,7 +137,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                               getMediaItemStatusColor(theme)[
                                                   status
                                               ],
-                                          borderBottomWidth: 2,
+                                          borderBottomWidth: 4,
                                           borderBottomStyle: 'solid',
                                       }
                                     : {}),
