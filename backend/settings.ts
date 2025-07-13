@@ -22,6 +22,11 @@ export const initialSettings: Settings = {
     },
     mediamanagement: {},
     security: {},
+    oidc: {
+        wellKnownUrl: '',
+        clientId: '',
+        clientSecret: '',
+    },
 };
 
 export const setSettingsIfNotSet = async (): Promise<Settings> => {
@@ -63,6 +68,26 @@ export const setSettingsIfNotSet = async (): Promise<Settings> => {
                 },
             });
         }
+
+        // TODO uncomment when OIDC settings are merged
+        // const oidcSettings = await prisma.settings.findMany({
+        //     select: {
+        //         key: true,
+        //     },
+        //     where: {
+        //         key: 'oidc',
+        //     },
+        // });
+
+        // if (oidcSettings.length === 0) {
+        //     log.info('Creating initial OIDC settings');
+        //     await prisma.settings.create({
+        //         data: {
+        //             key: 'oidc',
+        //             value: JSON.stringify(initialSettings.oidc),
+        //         },
+        //     });
+        // }
     } catch (e) {
         log.error('Error setting initial settings:', { e });
 
@@ -186,8 +211,8 @@ export const setSettings = async <TSettingsKey extends SettingsKey>(
     key: TSettingsKey,
     value:
         | ((
-              current: SettingsValue<TSettingsKey>,
-          ) => SettingsValue<TSettingsKey>)
+            current: SettingsValue<TSettingsKey>,
+        ) => SettingsValue<TSettingsKey>)
         | SettingsValue<TSettingsKey>,
     save = true,
 ): Promise<void> => {

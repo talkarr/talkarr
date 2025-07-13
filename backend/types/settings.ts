@@ -16,8 +16,15 @@ export interface MediamanagementSettings {}
 /* Security settings */
 export interface SecuritySettings {}
 
+export interface OIDCSettings {
+    wellKnownUrl: string;
+    clientId: string;
+    clientSecret: string;
+}
+
 export interface Settings {
     general: GeneralSettings;
     mediamanagement: MediamanagementSettings;
     security: SecuritySettings;
+    oidc: OIDCSettings;
 }

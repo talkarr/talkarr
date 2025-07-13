@@ -150,7 +150,8 @@ model UserPermission {
 }
 
 model User {
-  id String @id @default(cuid())
+  id  String  @id @default(cuid())
+  sub String? @unique
 
   email    String @unique
   password String // argon2

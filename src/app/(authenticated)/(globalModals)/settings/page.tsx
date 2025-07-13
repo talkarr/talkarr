@@ -9,6 +9,8 @@ export const metadata: Metadata = {
     title: 'Settings',
 };
 
+const oidcSettingsPageLink = '/settings/oidc';
+
 const Page: NextPage = () => (
     <Box display="flex" flexDirection="column" data-testid="settings" gap={3}>
         {settings.map(item => {
@@ -37,6 +39,11 @@ const Page: NextPage = () => (
                 </Box>
             );
         })}
+        <Box>
+            <Link href={oidcSettingsPageLink}>
+                <Typography variant="h4">OIDC Settings</Typography>
+            </Link>
+        </Box>
     </Box>
 );
 
