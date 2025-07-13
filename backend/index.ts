@@ -1,6 +1,6 @@
-import type { NextFunction, Request, Response } from 'express';
-
 import { initServer } from '@backend/initServer';
+
+import type { NextFunction, Request, Response } from 'express';
 
 import next from 'next';
 
