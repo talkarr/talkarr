@@ -67,4 +67,6 @@ test('authenticate', async ({ page }) => {
     expect(response.ok()).toBeTruthy();
     const data = await response.json();
     expect(data.success).toBeTruthy();
+
+    console.info('User', data);
 });
