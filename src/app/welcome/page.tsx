@@ -16,6 +16,7 @@ const Page: NextPage = () => (
         width="100%"
         minWidth={350}
         padding={{ xs: 2, lg: 0 }}
+        data-testid="welcome-page"
     >
         <Typography variant="h3" textAlign="center">
             Welcome to {pageName}
@@ -31,6 +32,7 @@ const Page: NextPage = () => (
                     variant="contained"
                     color="primary"
                     endIcon="🎉"
+                    data-testid="welcome-get-started-button"
                 >
                     Get Started
                 </Button>

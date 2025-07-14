@@ -79,6 +79,7 @@ const LoginPageForm: FC = () => {
             width="100%"
             minWidth={350}
             padding={{ xs: 2, lg: 0 }}
+            data-testid="login-page-form"
         >
             <StyledForm onSubmit={handleSubmit}>
                 <TextField
@@ -91,6 +92,11 @@ const LoginPageForm: FC = () => {
                     required
                     onChange={e => setEmail(e.target.value)}
                     disabled={loading}
+                    slotProps={{
+                        htmlInput: {
+                            'data-testid': 'login-form-email',
+                        },
+                    }}
                 />
                 <TextField
                     fullWidth
@@ -121,6 +127,9 @@ const LoginPageForm: FC = () => {
                                 </InputAdornment>
                             ),
                         },
+                        htmlInput: {
+                            'data-testid': 'login-form-password',
+                        },
                     }}
                 />
                 <Button
@@ -128,6 +137,7 @@ const LoginPageForm: FC = () => {
                     variant="contained"
                     type="submit"
                     loading={loading}
+                    data-testid="login-form-submit"
                 >
                     Login
                 </Button>

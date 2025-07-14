@@ -106,6 +106,7 @@ const InitialAccountForm: FC = () => {
             width="100%"
             minWidth={350}
             padding={{ xs: 2, lg: 0 }}
+            data-testid="initial-account-form"
         >
             <StyledForm onSubmit={handleSubmit}>
                 <TextField
@@ -118,6 +119,11 @@ const InitialAccountForm: FC = () => {
                     required
                     onChange={e => setDisplayName(e.target.value)}
                     disabled={loading}
+                    slotProps={{
+                        htmlInput: {
+                            'data-testid': 'display-name-input',
+                        },
+                    }}
                 />
                 <TextField
                     fullWidth
@@ -129,6 +135,11 @@ const InitialAccountForm: FC = () => {
                     required
                     onChange={e => setEmail(e.target.value)}
                     disabled={loading}
+                    slotProps={{
+                        htmlInput: {
+                            'data-testid': 'email-input',
+                        },
+                    }}
                 />
                 <TextField
                     fullWidth
@@ -161,6 +172,12 @@ const InitialAccountForm: FC = () => {
                                 </InputAdornment>
                             ),
                         },
+                        htmlInput: {
+                            'data-testid': 'password-input',
+                        },
+                        formHelperText: {
+                            'data-testid': 'password-error-text',
+                        },
                     }}
                 />
                 <TextField
@@ -192,6 +209,9 @@ const InitialAccountForm: FC = () => {
                                 </InputAdornment>
                             ),
                         },
+                        htmlInput: {
+                            'data-testid': 'confirm-password-input',
+                        },
                     }}
                 />
                 <Button
@@ -201,6 +221,7 @@ const InitialAccountForm: FC = () => {
                     type="submit"
                     loading={loading}
                     sx={{ mt: 2 }}
+                    data-testid="create-account-button"
                 >
                     Create your account
                 </Button>

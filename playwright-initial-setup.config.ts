@@ -1,4 +1,4 @@
-import type { TestOptions } from './e2e/talks.spec';
+import type { TestOptions } from './e2e/after-setup/talks.spec';
 
 import { defineConfig, devices } from '@playwright/test';
 
@@ -16,18 +16,13 @@ import { defineConfig, devices } from '@playwright/test';
 const excludeMobile = process.env.EXCLUDE_MOBILE || process.env.FIREFOX_ONLY; // || process.env.CI;
 
 export default defineConfig<TestOptions>({
-    testDir: './e2e',
-    /* Run tests in files in parallel */
-    fullyParallel: true,
+    fullyParallel: false,
+    testDir: './e2e/initial-setup',
+    testMatch: /.*\.spec\.ts/,
     /* Fail the build on CI if you accidentally left test.only in the source code. */
     forbidOnly: !!process.env.CI,
     retries: 0,
-    workers: process.env.CI ? 1 : undefined,
-    /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-    // reporter: process.env.CI ? 'github' : 'html',
-    reporter: process.env.CI
-        ? [['github'], ['html'], ['json', { outputFile: 'results.json' }]]
-        : 'html',
+    workers: 1,
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         /* Base URL to use in actions like `await page.goto('/')`. */
@@ -40,6 +35,15 @@ export default defineConfig<TestOptions>({
         },
         video: process.env.CI ? 'off' : 'retain-on-failure',
     },
+    /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+    // reporter: process.env.CI ? 'github' : 'html',
+    reporter: process.env.CI
+        ? [
+              ['github'],
+              ['html', { outputFolder: 'initial-setup-report' }],
+              ['json', { outputFile: 'initial-setup-results.json' }],
+          ]
+        : [['html', { outputFolder: 'initial-setup-report' }]],
 
     /* Configure projects for major browsers */
     projects: [
