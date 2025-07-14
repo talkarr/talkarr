@@ -1,16 +1,17 @@
 /* eslint-disable playwright/no-wait-for-selector */
+import argon2 from 'argon2';
+
 import { prisma } from '@backend/prisma';
 
 import { pageName } from '@/constants';
 
 import { expect, test } from '@playwright/test';
-import { hashPassword } from '@backend/users';
 
 test.describe.configure({
     mode: 'serial',
 });
 
-export const testUser = {
+const testUser = {
     displayName: 'Test User',
     email: `testuser-${Date.now()}@example.com`,
     password: 'password123',
@@ -26,24 +27,7 @@ test.describe('Initial talkarr setup', () => {
         console.info('Deleted test user:', result);
     });
 
-    test.afterAll(async () => {
-        console.info('Creating test user for further tests...');
-        const passwordHash = await hashPassword(testUser.password);
-
-        const user = await prisma.user.create({
-            data: {
-                displayName: testUser.displayName,
-                email: testUser.email,
-                password: passwordHash,
-            },
-        });
-
-        console.info('Created test user:', user);
-    });
-
-    test('should have a welcome page', async ({ page, browserName }) => {
-        console.log('foo', browserName);
-
+    test('should have a welcome page', async ({ page }) => {
         await page.goto('http://localhost:3232', {
             waitUntil: 'domcontentloaded',
         });

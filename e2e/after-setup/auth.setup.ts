@@ -1,8 +1,39 @@
-import { testUser } from '../initial-setup/setup.spec';
+import argon2 from 'argon2';
+
+import { prisma } from '@backend/prisma';
 
 import { expect, test } from '@playwright/test';
 
+const testUser = {
+    displayName: 'Test User',
+    email: `testuser-${Date.now()}@example.com`,
+    password: 'password123',
+};
+
 test('authenticate', async ({ page }) => {
+    console.info('Creating test user for further tests...');
+    const passwordHash = await argon2.hash(testUser.password);
+
+    const user = await prisma.user.create({
+        data: {
+            displayName: testUser.displayName,
+            email: testUser.email,
+            password: passwordHash,
+            isActive: true,
+            permissions: {
+                create: {
+                    permission: 'Admin',
+                },
+            },
+        },
+    });
+
+    console.info('Created test user:', user);
+
+    await page.goto('http://localhost:3232/login', {
+        waitUntil: 'domcontentloaded',
+    });
+
     await page.waitForURL('http://localhost:3232/login', {
         waitUntil: 'domcontentloaded',
     });
