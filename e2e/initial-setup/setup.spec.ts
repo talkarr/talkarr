@@ -4,12 +4,13 @@ import { prisma } from '@backend/prisma';
 import { pageName } from '@/constants';
 
 import { expect, test } from '@playwright/test';
+import { hashPassword } from '@backend/users';
 
 test.describe.configure({
     mode: 'serial',
 });
 
-const user = {
+export const testUser = {
     displayName: 'Test User',
     email: `testuser-${Date.now()}@example.com`,
     password: 'password123',
@@ -23,6 +24,21 @@ test.describe('Initial talkarr setup', () => {
         const result = await prisma.user.deleteMany({});
 
         console.info('Deleted test user:', result);
+    });
+
+    test.afterAll(async () => {
+        console.info('Creating test user for further tests...');
+        const passwordHash = await hashPassword(testUser.password);
+
+        const user = await prisma.user.create({
+            data: {
+                displayName: testUser.displayName,
+                email: testUser.email,
+                password: passwordHash,
+            },
+        });
+
+        console.info('Created test user:', user);
     });
 
     test('should have a welcome page', async ({ page, browserName }) => {
@@ -85,9 +101,9 @@ test.describe('Initial talkarr setup', () => {
 
         await expect(elements.submitButton).toBeEnabled();
 
-        await elements.displayName.fill(user.displayName);
-        await elements.email.fill(user.email);
-        await elements.password.fill(user.password);
+        await elements.displayName.fill(testUser.displayName);
+        await elements.email.fill(testUser.email);
+        await elements.password.fill(testUser.password);
         await elements.passwordConfirmation.fill('foobar');
 
         await elements.submitButton.click();
@@ -97,7 +113,7 @@ test.describe('Initial talkarr setup', () => {
             'Passwords do not match',
         );
 
-        await elements.passwordConfirmation.fill(user.password);
+        await elements.passwordConfirmation.fill(testUser.password);
 
         await elements.submitButton.click();
 
@@ -120,8 +136,8 @@ test.describe('Initial talkarr setup', () => {
         await expect(loginElements.submitButton).toContainText('Login');
         await expect(loginElements.submitButton).toBeEnabled();
 
-        await loginElements.email.fill(user.email);
-        await loginElements.password.fill(user.password);
+        await loginElements.email.fill(testUser.email);
+        await loginElements.password.fill(testUser.password);
 
         await loginElements.submitButton.click();
 

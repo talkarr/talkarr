@@ -47,17 +47,23 @@ export default defineConfig<TestOptions>({
 
     /* Configure projects for major browsers */
     projects: [
+        {
+            name: 'setup',
+            testMatch: /.*\.setup\.ts/,
+        },
         ...(process.env.FIREFOX_ONLY
             ? []
             : [
                   {
                       name: 'chromium',
                       use: { ...devices['Desktop Chrome'], searchItemIndex: 0 },
+                      dependencies: ['setup'],
                   },
 
                   {
                       name: 'webkit',
                       use: { ...devices['Desktop Safari'], searchItemIndex: 2 },
+                      dependencies: ['setup'],
                   },
               ]),
 
@@ -67,6 +73,7 @@ export default defineConfig<TestOptions>({
             retries: process.env.CI ? undefined : 5,
             timeout: process.env.CI ? undefined : 30000,
             use: { ...devices['Desktop Firefox'], searchItemIndex: 1 },
+            dependencies: ['setup'],
         },
 
         /* Test against mobile viewports. */
@@ -76,6 +83,7 @@ export default defineConfig<TestOptions>({
                   {
                       name: 'Mobile Chrome',
                       use: { ...devices['Pixel 7'], searchItemIndex: 3 },
+                      dependencies: ['setup'],
                   },
                   // Mobile safari is completely broken, just forget about it
                   ...(process.env.CI
@@ -87,6 +95,7 @@ export default defineConfig<TestOptions>({
                                     ...devices['iPhone 13'],
                                     searchItemIndex: 4,
                                 },
+                                dependencies: ['setup'],
                             },
                         ]),
               ]),
