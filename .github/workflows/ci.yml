@@ -175,7 +175,7 @@ jobs:
 
       - name: Wait for the app to be ready
         run: |
-          npx wait-on -t 3m http://localhost:3232
+          npx wait-on -t 3m http://localhost:3232/api/healthz
 
       - name: Run backend tests
         run: yarn test:backend
