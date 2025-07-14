@@ -17,6 +17,14 @@ Please change the values of the environment variables to match your environment.
 > We do not support using the docker.io registry anymore.
 > In case you are using the docker.io image, please migrate to the GitHub Container Registry (ghcr.io).
 
+## Pre-requisites
+
+To generate a secure secret, you can use the following command:
+
+```bash
+openssl rand -hex 32
+```
+
 ## Deploying via Docker Compose (Recommended)
 
 For more information about Docker Compose itself, please refer to the [official documentation](https://docs.docker.com/compose/).
@@ -24,6 +32,9 @@ For more information about Docker Compose itself, please refer to the [official 
 For docker-compose, you can use this `.env` file as is and it should work:
 
 ```bash
+TALKARR_SECRET=verysecret # Change this to a more secure secret
+# TALKARR_LOG_LEVEL=info
+
 POSTGRES_USER=talkarr
 POSTGRES_PASSWORD=talkarr # Change this to a more secure password
 POSTGRES_DB=talkarr
@@ -110,6 +121,9 @@ docker compose up -d
 For normal Docker, you can use this `.env` file as is and it should work:
 
 ```bash
+TALKARR_SECRET=verysecret # Change this to a more secure secret
+# TALKARR_LOG_LEVEL=info
+
 POSTGRES_USER=talkarr
 POSTGRES_PASSWORD=talkarr # Change this to a more secure password
 POSTGRES_DB=talkarr
@@ -134,6 +148,9 @@ However, this method is not recommended as it is more difficult to manage the co
 If you already have a PostgreSQL instance running, you can just set the environment variables accordingly:
 
 ```bash
+TALKARR_SECRET=verysecret # Change this to a more secure secret
+# TALKARR_LOG_LEVEL=info
+
 POSTGRES_USER=talkarr
 POSTGRES_PASSWORD=talkarr # Change this to a more secure password
 POSTGRES_DB=talkarr
