@@ -109,6 +109,7 @@ const theme = createTheme(
                     root: {
                         borderRadius: baseTheme.shape.borderRadius * 2.5,
                         padding: baseTheme.spacing(1, 2),
+                        textTransform: 'none',
                     },
                 },
             },

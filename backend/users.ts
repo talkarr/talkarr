@@ -1,7 +1,8 @@
-import type { User as DbUser } from '@prisma/client';
+import type { Permission, User as DbUser } from '@prisma/client';
 import type express from 'express';
 import type { Algorithm } from 'jsonwebtoken';
 
+import argon2 from 'argon2';
 import gravatar from 'gravatar';
 import jwt from 'jsonwebtoken';
 import { generateIdenticonDataUrl } from 'simple-identicon';
@@ -131,6 +132,30 @@ export const getUserWithPasswordById = async (
     };
 };
 
+export const doesEmailExist = async (email: string): Promise<boolean> => {
+    const user = await prisma.user.findUnique({
+        where: { email },
+    });
+
+    return user !== null;
+};
+
+export const getUserCount = async (): Promise<number> => prisma.user.count();
+
+export const hasAdminUsers = async (): Promise<boolean> => {
+    const adminCount = await prisma.user.count({
+        where: {
+            permissions: {
+                some: {
+                    permission: 'Admin',
+                },
+            },
+        },
+    });
+
+    return adminCount > 0;
+};
+
 export const setUserCookie = (
     res: ExpressResponse<'/user/login', 'post'>,
     user: components['schemas']['User'],
@@ -207,4 +232,105 @@ export const userMiddleware = async (
     }
 
     next();
+};
+
+export const verifyPassword = async (
+    user: UserWithPassword,
+    password?: string,
+): Promise<boolean> => {
+    try {
+        return await argon2.verify(
+            user.password,
+            password ?? 'nopasswordprovided',
+        );
+    } catch (error) {
+        log.error('Password verification failed', { error });
+        return false;
+    }
+};
+
+export const hashPassword = async (password: string): Promise<string> => {
+    try {
+        return await argon2.hash(password, {
+            type: argon2.argon2id,
+            hashLength: 50,
+            memoryCost: 2 ** 16, // 64 MB
+        });
+    } catch (error) {
+        log.error('Password hashing failed', { error });
+        throw new Error('Failed to hash password');
+    }
+};
+
+// This will automatically result in an admin account
+export const createInitialUser = async ({
+    email,
+    unhashedPassword,
+    displayName,
+}: {
+    email: string;
+    unhashedPassword: string;
+    displayName: string;
+}): Promise<DbUser> => {
+    // first, verify that there are no users in the database
+    const userCount = await getUserCount();
+
+    if (userCount > 0) {
+        log.warn('Attempted to create initial user, but users already exist');
+        throw new Error('Users already exist in the database');
+    }
+
+    const passwordHash = await hashPassword(unhashedPassword);
+
+    const user = await prisma.user.create({
+        data: {
+            email,
+            password: passwordHash,
+            displayName,
+            permissions: {
+                create: {
+                    permission: 'Admin',
+                },
+            },
+        },
+    });
+
+    log.info(`Initial user created with ID: ${user.id}`);
+
+    return user;
+};
+
+export const createUser = async ({
+    email,
+    password,
+    displayName,
+    initialPermissions = [],
+}: {
+    email: string;
+    password: string;
+    displayName: string;
+    initialPermissions: Permission[];
+}): Promise<DbUser> => {
+    const passwordHash = await hashPassword(password);
+
+    const user = await prisma.user.create({
+        data: {
+            email,
+            password: passwordHash,
+            displayName,
+            ...(initialPermissions.length > 0
+                ? {
+                      permissions: {
+                          create: initialPermissions.map(permission => ({
+                              permission,
+                          })),
+                      },
+                  }
+                : {}),
+        },
+    });
+
+    log.info(`User created with ID: ${user.id}`);
+
+    return user;
 };

@@ -3,11 +3,12 @@
 import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
-import React, { useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 
 import { useSnackbar } from 'notistack';
 
-import { loginUser } from '@/app/_api/user/login';
+import { registerInitialUser } from '@/app/_api/user/register-initial';
 
 import { homePageLink } from '@/constants';
 
@@ -24,17 +25,22 @@ const StyledForm = styled('form')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(2),
+    marginTop: theme.spacing(2),
     width: '100%',
 }));
 
-const LoginPageForm: FC = () => {
+const InitialAccountForm: FC = () => {
     const router = useRouter();
     const { enqueueSnackbar } = useSnackbar();
 
     const [email, setEmail] = useState<string>('');
+    const [displayName, setDisplayName] = useState<string>('');
 
     const [password, setPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+
+    const [passwordError, setPasswordError] = useState<string | null>(null);
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -43,27 +49,48 @@ const LoginPageForm: FC = () => {
     ): Promise<void> => {
         event.preventDefault();
 
-        setLoading(true);
+        setPasswordError(null);
         setPasswordVisible(false);
 
+        if (password.length < 8) {
+            setPasswordError('Password must be at least 8 characters long');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setPasswordError('Passwords do not match');
+            return;
+        }
+
+        setLoading(true);
+
         try {
-            const result = await loginUser({ email, password });
+            const result = await registerInitialUser({
+                email,
+                displayName,
+                password,
+            });
 
             if (result?.success) {
+                enqueueSnackbar('Account created successfully!', {
+                    variant: 'success',
+                });
                 router.push(homePageLink);
             } else {
                 setLoading(false);
-                // Handle login error, e.g., show an error message
-                console.warn('Login failed:', result?.error || 'Unknown error');
+                console.warn(
+                    'Account creation failed:',
+                    result?.error || 'Unknown error',
+                );
                 enqueueSnackbar(
-                    `Login failed: ${result?.error || 'Unknown error'}`,
+                    `Account creation failed: ${result?.error || 'Unknown error'}`,
                     {
                         variant: 'error',
                     },
                 );
             }
         } catch (error) {
-            console.warn('Login error:', error);
+            console.warn('Account creation failed:', error);
             enqueueSnackbar('An unexpected error occurred. Please try again.', {
                 variant: 'error',
             });
@@ -83,8 +110,19 @@ const LoginPageForm: FC = () => {
             <StyledForm onSubmit={handleSubmit}>
                 <TextField
                     fullWidth
+                    label="Display name"
+                    placeholder="Enter your display name"
+                    type="text"
+                    autoComplete="username"
+                    value={displayName}
+                    required
+                    onChange={e => setDisplayName(e.target.value)}
+                    disabled={loading}
+                />
+                <TextField
+                    fullWidth
                     label="Email"
-                    placeholder="Email"
+                    placeholder="Enter your email"
                     type="email"
                     autoComplete="email"
                     value={email}
@@ -95,12 +133,45 @@ const LoginPageForm: FC = () => {
                 <TextField
                     fullWidth
                     label="Password"
-                    placeholder="Password"
+                    placeholder="Enter your password"
                     type={passwordVisible ? 'text' : 'password'}
-                    autoComplete="current-password"
+                    autoComplete="new-password"
                     value={password}
                     required
                     onChange={e => setPassword(e.target.value)}
+                    disabled={loading}
+                    error={!!passwordError}
+                    helperText={passwordError}
+                    slotProps={{
+                        input: {
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={() =>
+                                            setPasswordVisible(state => !state)
+                                        }
+                                        edge="end"
+                                    >
+                                        {passwordVisible ? (
+                                            <VisibilityOffIcon />
+                                        ) : (
+                                            <VisibilityIcon />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        },
+                    }}
+                />
+                <TextField
+                    fullWidth
+                    label="Confirm Password"
+                    placeholder="Repeat your password"
+                    type={passwordVisible ? 'text' : 'password'}
+                    autoComplete="off"
+                    value={confirmPassword}
+                    required
+                    onChange={e => setConfirmPassword(e.target.value)}
                     disabled={loading}
                     slotProps={{
                         input: {
@@ -126,14 +197,16 @@ const LoginPageForm: FC = () => {
                 <Button
                     fullWidth
                     variant="contained"
+                    color="primary"
                     type="submit"
                     loading={loading}
+                    sx={{ mt: 2 }}
                 >
-                    Login
+                    Create your account
                 </Button>
             </StyledForm>
         </Box>
     );
 };
 
-export default LoginPageForm;
+export default InitialAccountForm;

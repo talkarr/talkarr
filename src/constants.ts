@@ -6,6 +6,10 @@ export const pagePaperColor = '#343536';
 export const pageBorderColor = '#ffffff';
 export const pageName = 'Talkarr';
 
+// === Welcome ===
+export const welcomePageLink = '/welcome';
+export const welcomeStartPageLink = '/welcome/start';
+
 // === Paths ===
 export const homePageLink = '/';
 export const addTalksPageLink = '/talks/add';

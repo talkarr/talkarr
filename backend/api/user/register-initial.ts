@@ -1,15 +1,11 @@
 import { validate as validateEmail } from 'email-validator';
 
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
-import {
-    getUserWithPasswordByEmail,
-    setUserCookie,
-    verifyPassword,
-} from '@backend/users';
+import { createInitialUser, doesEmailExist } from '@backend/users';
 
-const handleLoginRequest = async (
-    req: ExpressRequest<'/user/login', 'post'>,
-    res: ExpressResponse<'/user/login', 'post'>,
+const handleRegisterInitialRequest = async (
+    req: ExpressRequest<'/user/register-initial', 'post'>,
+    res: ExpressResponse<'/user/register-initial', 'post'>,
 ): Promise<void> => {
     if (req.user) {
         res.status(400).json({
@@ -19,12 +15,12 @@ const handleLoginRequest = async (
         return;
     }
 
-    const { email, password } = req.body;
+    const { email, password, displayName } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password || !displayName) {
         res.status(400).json({
             success: false,
-            error: 'Email and password are required.',
+            error: 'Email, password and display name are required.',
         });
         return;
     }
@@ -37,28 +33,22 @@ const handleLoginRequest = async (
         return;
     }
 
-    const userFromDatabase = await getUserWithPasswordByEmail(email);
+    const userExists = await doesEmailExist(email);
 
-    if (!userFromDatabase) {
-        res.status(401).json({
+    if (userExists) {
+        res.status(400).json({
             success: false,
-            error: 'Invalid email or password.',
+            error: 'Email already exists.',
         });
         return;
     }
 
     try {
-        const passwordValid = await verifyPassword(userFromDatabase, password);
-
-        if (!passwordValid) {
-            res.status(401).json({
-                success: false,
-                error: 'Invalid email or password.',
-            });
-            return;
-        }
-
-        setUserCookie(res, userFromDatabase);
+        await createInitialUser({
+            email,
+            displayName,
+            unhashedPassword: password,
+        });
 
         res.status(200).json({
             success: true,
@@ -73,4 +63,4 @@ const handleLoginRequest = async (
     }
 };
 
-export default handleLoginRequest;
+export default handleRegisterInitialRequest;

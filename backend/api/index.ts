@@ -6,7 +6,9 @@ import settingsRouter from '@backend/api/settings';
 import talksRouter from '@backend/api/talks';
 import taskRouter from '@backend/api/tasks';
 import userRouter from '@backend/api/user';
+import { checkIsNewInstance } from '@backend/helper';
 import rootLog from '@backend/rootLog';
+import type { ExpressResponse } from '@backend/types';
 import { userMiddleware } from '@backend/users';
 
 const log = rootLog.child({ label: 'API' });
@@ -30,6 +32,15 @@ router.use(userMiddleware);
 
 router.get('/healthz', (_req, res) => {
     res.status(200).json({ status: 'ok' });
+});
+
+router.get('/status', async (_req, res: ExpressResponse<'/status', 'get'>) => {
+    res.status(200).json({
+        success: true,
+        data: {
+            isNewInstance: await checkIsNewInstance(),
+        },
+    });
 });
 
 router.use('/talks', talksRouter);

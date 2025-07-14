@@ -26,21 +26,21 @@ export const initialSettings: Settings = {
 
 export const setSettingsIfNotSet = async (): Promise<Settings> => {
     try {
-        const mediaManagementSettings = await prisma.settings.findMany({
+        const generalSettings = await prisma.settings.findMany({
             select: {
                 key: true,
             },
             where: {
-                key: 'mediamanagement',
+                key: 'general',
             },
         });
 
-        if (mediaManagementSettings.length === 0) {
-            log.info('Creating initial media management settings');
+        if (generalSettings.length === 0) {
+            log.info('Creating initial general settings');
             await prisma.settings.create({
                 data: {
-                    key: 'mediamanagement',
-                    value: JSON.stringify(initialSettings.mediamanagement),
+                    key: 'general',
+                    value: JSON.stringify(initialSettings.general),
                 },
             });
         }
@@ -60,6 +60,25 @@ export const setSettingsIfNotSet = async (): Promise<Settings> => {
                 data: {
                     key: 'security',
                     value: JSON.stringify(initialSettings.security),
+                },
+            });
+        }
+
+        const mediaManagementSettings = await prisma.settings.findMany({
+            select: {
+                key: true,
+            },
+            where: {
+                key: 'mediamanagement',
+            },
+        });
+
+        if (mediaManagementSettings.length === 0) {
+            log.info('Creating initial media management settings');
+            await prisma.settings.create({
+                data: {
+                    key: 'mediamanagement',
+                    value: JSON.stringify(initialSettings.mediamanagement),
                 },
             });
         }

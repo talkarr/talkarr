@@ -4,6 +4,52 @@
  */
 
 export interface paths {
+    "/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["AppInfo"];
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/talks/search": {
         parameters: {
             query?: never;
@@ -1243,6 +1289,63 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/user/register-initial": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserRegistration"];
+                };
+            };
+            responses: {
+                /** @description User registered successfully */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"];
+                    };
+                };
+                /** @description Invalid request data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1685,6 +1788,31 @@ export interface components {
             allowLibravatar: boolean;
             /** @enum {string} */
             importIsRecordedFlagBehavior: "skipImportIfIsNotRecorded" | "skipImportIfFlagNotExists" | "alwaysImport";
+        };
+        AppInfo: {
+            /**
+             * @description True if this is a new instance of the app
+             * @example true
+             */
+            isNewInstance: boolean;
+        };
+        UserRegistration: {
+            /**
+             * Format: email
+             * @description Email of user
+             * @example user@example.com
+             */
+            email: string;
+            /**
+             * @description Display name of user
+             * @example John Doe
+             */
+            displayName: string;
+            /**
+             * @description Password of user
+             * @example securepassword123
+             */
+            password: string;
         };
     };
     responses: never;

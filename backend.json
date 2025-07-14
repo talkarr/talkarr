@@ -1048,10 +1048,90 @@
                     "allowLibravatar",
                     "importIsRecordedFlagBehavior"
                 ]
+            },
+            "AppInfo": {
+                "type": "object",
+                "properties": {
+                    "isNewInstance": {
+                        "type": "boolean",
+                        "description": "True if this is a new instance of the app",
+                        "example": true
+                    }
+                },
+                "required": [
+                    "isNewInstance"
+                ]
+            },
+            "UserRegistration": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Email of user",
+                        "example": "user@example.com"
+                    },
+                    "displayName": {
+                        "type": "string",
+                        "description": "Display name of user",
+                        "example": "John Doe"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Password of user",
+                        "example": "securepassword123"
+                    }
+                },
+                "required": [
+                    "email",
+                    "displayName",
+                    "password"
+                ]
             }
         }
     },
     "paths": {
+        "/status": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/AppInfo"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/talks/search": {
             "get": {
                 "description": "Search for events",
@@ -2511,6 +2591,52 @@
                             }
                         },
                         "description": "Logout successful"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/user/register-initial": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserRegistration"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        },
+                        "description": "User registered successfully"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Invalid request data"
                     },
                     "500": {
                         "content": {
