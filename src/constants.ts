@@ -6,6 +6,10 @@ export const pagePaperColor = '#343536';
 export const pageBorderColor = '#ffffff';
 export const pageName = 'Talkarr';
 
+// === Welcome ===
+export const welcomePageLink = '/welcome';
+export const welcomeStartPageLink = '/welcome/start';
+
 // === Paths ===
 export const homePageLink = '/';
 export const addTalksPageLink = '/talks/add';
@@ -18,8 +22,15 @@ export const addTalksPageWithSearchLink = (search: string): string => {
 export const scanFilesPageLink = '/talks/scan';
 export const importTalksPageLink = '/talks/import';
 export const specificTalkPageLink = (slug: string): string => `/talks/${slug}`;
+
+// === Settings ===
 export const settingsPageLink = '/settings';
+export const generalSettingsPageLink = '/settings/general';
 export const mediaManagementSettingsPageLink = '/settings/mediamanagement';
+export const securitySettingsPageLink = '/settings/security';
+
+// === User ===
+export const loginPageLink = '/login';
 
 // === API ===
 export const apiBaseUrl = `http://${process.env.HOST || 'localhost'}:${process.env.PORT || 3232}`;

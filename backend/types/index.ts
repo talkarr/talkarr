@@ -1,7 +1,8 @@
-import type { Event as DbEvent, File as DbFile } from '.prisma/client';
 import type {
     Conference,
+    Event as DbEvent,
     EventInfo,
+    File as DbFile,
     Person,
     RootFolder,
     Tag,
@@ -61,10 +62,19 @@ export type RequestBody<
     ? paths[P][M]['requestBody']['content']['application/json']
     : never;
 
+export type ExpressRequestBody<
+    P extends PathsWithMethod<paths, M>,
+    M extends Method = 'post',
+> = paths[P][M] extends {
+    requestBody: { content: { 'application/json': object } };
+}
+    ? Partial<paths[P][M]['requestBody']['content']['application/json']>
+    : never;
+
 export type ExpressPostRequest<
     P extends PathsWithMethod<paths, M>,
     M extends Method = 'post',
-> = express.Request<core.ParamsDictionary, unknown, RequestBody<P, M>>;
+> = express.Request<core.ParamsDictionary, unknown, ExpressRequestBody<P, M>>;
 
 export type ExpressGetRequest<
     P extends PathsWithMethod<paths, M>,
@@ -76,13 +86,19 @@ export type ExpressGetRequest<
     RequestParams<P, M>
 >;
 
+type User = components['schemas']['User'] | null;
+
 export type ExpressRequest<
     P extends PathsWithMethod<paths, M>,
     M extends Method,
 > = M extends 'get'
-    ? ExpressGetRequest<P, M>
+    ? ExpressGetRequest<P, M> & {
+          user?: User;
+      }
     : M extends 'post'
-      ? ExpressPostRequest<P, M>
+      ? ExpressPostRequest<P, M> & {
+            user?: User;
+        }
       : never;
 
 export type RequestParams<
@@ -155,7 +171,13 @@ export interface ExtendedDbEvent extends DbEventWithFolder {
 export interface EventFahrplanJsonImport {
     lectures: {
         slug: string;
+        title: string;
+        recorded?: boolean;
     }[];
 }
 
 export type TypeOrPick<T, K extends keyof T> = T | Pick<T, K>;
+
+export type Enum<E> = Record<keyof E, number | string> & {
+    [k: number]: string;
+};

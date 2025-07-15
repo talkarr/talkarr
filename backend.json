@@ -879,11 +879,23 @@
                                 "error": {
                                     "type": "string",
                                     "description": "Error message"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "example": "Event title"
+                                },
+                                "isRecorded": {
+                                    "type": "boolean",
+                                    "example": false,
+                                    "nullable": true,
+                                    "description": "True if the event is recorded"
                                 }
                             },
                             "required": [
                                 "slug",
-                                "error"
+                                "title",
+                                "error",
+                                "isRecorded"
                             ]
                         },
                         "description": "List of errors",
@@ -942,10 +954,184 @@
                     "Downloading",
                     "Problem"
                 ]
+            },
+            "UserPermission": {
+                "type": "string",
+                "enum": [
+                    "None",
+                    "ViewEvents",
+                    "AddEvents",
+                    "EditDeleteEvents",
+                    "Admin"
+                ],
+                "description": "User permissions"
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "CUID of user",
+                        "example": "ckx1234567890abcdef123456"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Email of user",
+                        "example": "email@example.com"
+                    },
+                    "displayName": {
+                        "type": "string",
+                        "description": "Display name of user",
+                        "example": "John Doe"
+                    },
+                    "permissions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserPermission"
+                        },
+                        "description": "Permissions of user"
+                    },
+                    "isActive": {
+                        "type": "boolean",
+                        "description": "Is user active",
+                        "example": true
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Creation date of user",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Last update date of user",
+                        "example": "2022-01-01T00:00:00Z"
+                    },
+                    "avatarUrl": {
+                        "type": "string",
+                        "description": "Avatar URL of user. Needs to be encoded data url",
+                        "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...",
+                        "format": "data-url"
+                    }
+                },
+                "required": [
+                    "id",
+                    "email",
+                    "displayName",
+                    "permissions",
+                    "isActive",
+                    "createdAt",
+                    "updatedAt",
+                    "avatarUrl"
+                ]
+            },
+            "GeneralConfig": {
+                "type": "object",
+                "properties": {
+                    "allowLibravatar": {
+                        "type": "boolean",
+                        "description": "Allow Libravatar for user avatars",
+                        "example": false
+                    },
+                    "importIsRecordedFlagBehavior": {
+                        "type": "string",
+                        "enum": [
+                            "skipImportIfIsNotRecorded",
+                            "skipImportIfFlagNotExists",
+                            "alwaysImport"
+                        ]
+                    }
+                },
+                "required": [
+                    "allowLibravatar",
+                    "importIsRecordedFlagBehavior"
+                ]
+            },
+            "AppInfo": {
+                "type": "object",
+                "properties": {
+                    "isNewInstance": {
+                        "type": "boolean",
+                        "description": "True if this is a new instance of the app",
+                        "example": true
+                    }
+                },
+                "required": [
+                    "isNewInstance"
+                ]
+            },
+            "UserRegistration": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Email of user",
+                        "example": "user@example.com"
+                    },
+                    "displayName": {
+                        "type": "string",
+                        "description": "Display name of user",
+                        "example": "John Doe"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Password of user",
+                        "example": "securepassword123"
+                    }
+                },
+                "required": [
+                    "email",
+                    "displayName",
+                    "password"
+                ]
             }
         }
     },
     "paths": {
+        "/status": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/AppInfo"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/talks/search": {
             "get": {
                 "description": "Search for events",
@@ -2046,6 +2232,140 @@
                 }
             }
         },
+        "/settings/security/users": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "users": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/User"
+                                                            }
+                                                        },
+                                                        "available_permissions": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "users",
+                                                        "available_permissions"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/settings/general/config": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/GeneralConfig"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GeneralConfig"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/tasks/execute": {
             "post": {
                 "requestBody": {
@@ -2129,6 +2449,200 @@
                                             "$ref": "#/components/schemas/ErrorResponse"
                                         }
                                     ]
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/user/info": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/User"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "user@example.com",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password"
+                                    }
+                                },
+                                "required": [
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        },
+                        "description": "Login successful"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Invalid request data"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Invalid credentials"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/user/logout": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        },
+                        "description": "Logout successful"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/user/register-initial": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserRegistration"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        },
+                        "description": "User registered successfully"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Invalid request data"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         },

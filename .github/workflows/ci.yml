@@ -164,6 +164,8 @@ jobs:
           
           mkdir -p logs
           chmod 777 -R logs
+          
+          echo "TALKARR_SECRET=verysecret" > .env.local
 
       - name: Run migrations
         run: yarn prisma db push --force-reset --accept-data-loss
@@ -173,7 +175,7 @@ jobs:
 
       - name: Wait for the app to be ready
         run: |
-          npx wait-on -t 3m http://localhost:3232
+          npx wait-on -t 3m http://localhost:3232/api/healthz
 
       - name: Run backend tests
         run: yarn test:backend
@@ -410,14 +412,27 @@ jobs:
       - uses: daun/playwright-report-summary@v3
         continue-on-error: true
         with:
-          report-file: results.json
+          report-file: initial-setup-results.json
+          job-summary: 'true'
+
+      - uses: daun/playwright-report-summary@v3
+        continue-on-error: true
+        with:
+          report-file: after-setup-results.json
           job-summary: 'true'
 
       - uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: playwright-report
-          path: playwright-report/
+          name: initial-setup-report
+          path: initial-setup-report/
+          retention-days: 30
+
+      - uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: after-setup-report
+          path: after-setup-report/
           retention-days: 30
 
       - uses: actions/upload-artifact@v4

@@ -4,6 +4,52 @@
  */
 
 export interface paths {
+    "/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["AppInfo"];
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/talks/search": {
         parameters: {
             query?: never;
@@ -877,6 +923,133 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/settings/security/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: {
+                                users: components["schemas"]["User"][];
+                                available_permissions: string[];
+                            };
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/settings/general/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["GeneralConfig"];
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["GeneralConfig"];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/tasks/execute": {
         parameters: {
             query?: never;
@@ -918,6 +1091,236 @@ export interface paths {
                     };
                 };
                 /** @description Missing taskName or data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["User"];
+                        };
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: email
+                         * @example user@example.com
+                         */
+                        email: string;
+                        /** @example password */
+                        password: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Login successful */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"];
+                    };
+                };
+                /** @description Invalid request data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Invalid credentials */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Logout successful */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/register-initial": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserRegistration"];
+                };
+            };
+            responses: {
+                /** @description User registered successfully */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"];
+                    };
+                };
+                /** @description Invalid request data */
                 400: {
                     headers: {
                         [name: string]: unknown;
@@ -1306,6 +1709,13 @@ export interface components {
                 slug: string;
                 /** @description Error message */
                 error: string;
+                /** @example Event title */
+                title: string;
+                /**
+                 * @description True if the event is recorded
+                 * @example false
+                 */
+                isRecorded: boolean | null;
             }[] | null;
             /** @description List of parsed slugs */
             parsed_slugs: string[] | null;
@@ -1321,6 +1731,88 @@ export interface components {
             Downloading: number;
             /** @example 0 */
             Problem: number;
+        };
+        /**
+         * @description User permissions
+         * @enum {string}
+         */
+        UserPermission: "None" | "ViewEvents" | "AddEvents" | "EditDeleteEvents" | "Admin";
+        User: {
+            /**
+             * @description CUID of user
+             * @example ckx1234567890abcdef123456
+             */
+            id: string;
+            /**
+             * Format: email
+             * @description Email of user
+             * @example email@example.com
+             */
+            email: string;
+            /**
+             * @description Display name of user
+             * @example John Doe
+             */
+            displayName: string;
+            /** @description Permissions of user */
+            permissions: components["schemas"]["UserPermission"][];
+            /**
+             * @description Is user active
+             * @example true
+             */
+            isActive: boolean;
+            /**
+             * Format: date-time
+             * @description Creation date of user
+             * @example 2022-01-01T00:00:00Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description Last update date of user
+             * @example 2022-01-01T00:00:00Z
+             */
+            updatedAt: string;
+            /**
+             * Format: data-url
+             * @description Avatar URL of user. Needs to be encoded data url
+             * @example data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...
+             */
+            avatarUrl: string;
+        };
+        GeneralConfig: {
+            /**
+             * @description Allow Libravatar for user avatars
+             * @example false
+             */
+            allowLibravatar: boolean;
+            /** @enum {string} */
+            importIsRecordedFlagBehavior: "skipImportIfIsNotRecorded" | "skipImportIfFlagNotExists" | "alwaysImport";
+        };
+        AppInfo: {
+            /**
+             * @description True if this is a new instance of the app
+             * @example true
+             */
+            isNewInstance: boolean;
+        };
+        UserRegistration: {
+            /**
+             * Format: email
+             * @description Email of user
+             * @example user@example.com
+             */
+            email: string;
+            /**
+             * @description Display name of user
+             * @example John Doe
+             */
+            displayName: string;
+            /**
+             * @description Password of user
+             * @example securepassword123
+             */
+            password: string;
         };
     };
     responses: never;

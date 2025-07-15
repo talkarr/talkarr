@@ -2,10 +2,12 @@ import type SvgIcon from '@mui/material/SvgIcon';
 
 import {
     addTalksPageLink,
+    generalSettingsPageLink,
     homePageLink,
     importTalksPageLink,
     mediaManagementSettingsPageLink,
     scanFilesPageLink,
+    securitySettingsPageLink,
     settingsPageLink,
 } from '@/constants';
 
@@ -29,6 +31,19 @@ export interface NavigationItemType {
 export type SplitNavigationItems = SimpleNavigationItem[][];
 
 export const settings: (SimpleNavigationItem & { description: string })[] = [
+    {
+        title: 'General',
+        path: generalSettingsPageLink,
+        description:
+            'Functionality control, external services, and other general settings.',
+        slug: 'general',
+    },
+    {
+        title: 'Security',
+        path: securitySettingsPageLink,
+        description: 'Manage users, permissions and security settings.',
+        slug: 'security',
+    },
     {
         title: 'Media Management',
         path: mediaManagementSettingsPageLink,

@@ -103,6 +103,7 @@ const nextConfig = async (): Promise<NextConfig> => {
                 NEXT_PUBLIC_CURRENT_COMMIT_TIMESTAMP: currentCommitTimestamp,
                 YTDLP_PATH_OVERRIDE: process.env.YTDLP_PATH_OVERRIDE,
             },
+            trailingSlash: false,
             devIndicators: {
                 position: 'bottom-right',
             },

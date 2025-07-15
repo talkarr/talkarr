@@ -9,16 +9,19 @@ import type { components } from '@backend/generated/schema';
 import { getConferenceFromEvent, getTalkFromApiBySlug } from '@backend/helper';
 import { prisma } from '@backend/prisma';
 import rootLog from '@backend/rootLog';
+import { getSettings } from '@backend/settings';
 import type {
     ApiEvent,
     ConvertBigintToNumberType,
     ConvertDateToStringType,
+    EventFahrplanJsonImport,
     ExtendedDbEvent,
     ImportJsonResponse,
     NormalAndConvertedDate,
     TalkInfo,
 } from '@backend/types';
 import { AddTalkFailure, ProblemType } from '@backend/types';
+import { ImportIsRecordedFlagBehavior } from '@backend/types/settings';
 
 import { Prisma } from '@prisma/client';
 
@@ -1085,13 +1088,13 @@ export const checkEventForProblems = async ({
 };
 
 export const importEventFahrplanJson = async ({
-    slugs,
+    lectures,
     rootFolder,
 }: {
-    slugs: string[];
+    lectures: EventFahrplanJsonImport['lectures'];
     rootFolder: string;
 }): Promise<ImportJsonResponse> => {
-    if (!slugs.length) {
+    if (!lectures.length) {
         return {
             successful_imports: [],
             existing_imports: [],
@@ -1101,7 +1104,10 @@ export const importEventFahrplanJson = async ({
         };
     }
 
-    let slugsToImport = slugs.filter(Boolean);
+    const slugs = lectures.map(lecture => lecture.slug);
+    let slugsToImport = slugs.filter(
+        slug => slug && slug.length > 0,
+    ) as string[];
 
     const existingImports: ImportJsonResponse['existing_imports'] = [];
 
@@ -1124,8 +1130,54 @@ export const importEventFahrplanJson = async ({
         slug => !existingImports.includes(slug),
     );
 
+    const {
+        general: { importIsRecordedFlagBehavior },
+    } = getSettings();
+
     for await (const slug of slugsToImport) {
         log.info('Importing talk', { slug });
+        const lecture = lectures.find(l => l.slug === slug);
+
+        const wasRecorded = lecture?.recorded;
+
+        if (
+            importIsRecordedFlagBehavior !==
+            ImportIsRecordedFlagBehavior.alwaysImport
+        ) {
+            if (
+                importIsRecordedFlagBehavior ===
+                    ImportIsRecordedFlagBehavior.skipImportIfFlagNotExists &&
+                typeof wasRecorded === 'undefined'
+            ) {
+                log.warn('Talk was not recorded, skipping import', { slug });
+
+                errors.push({
+                    slug,
+                    title: lecture?.title || '',
+                    isRecorded: wasRecorded ?? null,
+                    error: 'Talk recorded flag does not exist',
+                });
+
+                continue;
+            }
+
+            if (
+                importIsRecordedFlagBehavior ===
+                    ImportIsRecordedFlagBehavior.skipImportIfIsNotRecorded &&
+                wasRecorded === false
+            ) {
+                log.warn('Talk was not recorded, skipping import', { slug });
+
+                errors.push({
+                    slug,
+                    title: lecture?.title || '',
+                    isRecorded: wasRecorded,
+                    error: 'Talk was not recorded',
+                });
+
+                continue;
+            }
+        }
 
         // implement it like importExistingFileFromFilesystem
         const apiEvent = await getTalkFromApiBySlug({ slug });
@@ -1135,6 +1187,8 @@ export const importEventFahrplanJson = async ({
 
             errors.push({
                 slug,
+                title: lecture?.title || '',
+                isRecorded: wasRecorded ?? null,
                 error: 'Talk not found',
             });
 
@@ -1151,6 +1205,8 @@ export const importEventFahrplanJson = async ({
 
             errors.push({
                 slug,
+                title: lecture?.title || '',
+                isRecorded: wasRecorded ?? null,
                 error: 'Error adding talk to database',
             });
 

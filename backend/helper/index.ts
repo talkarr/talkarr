@@ -3,6 +3,7 @@
 import { cccApiBaseUrl, conferenceCacheKey } from '@backend/constants';
 import apiFetch from '@backend/fetch';
 import type { ApiConference, ApiEvent } from '@backend/types';
+import { hasAdminUsers } from '@backend/users';
 
 export const getTalkFromApiByGuid = async ({
     guid,
@@ -90,4 +91,10 @@ export const getTalkFromApiBySlug = async ({
     }
 
     return response.json() as ApiEvent;
+};
+
+export const checkIsNewInstance = async (): Promise<boolean> => {
+    const adminUserExists = await hasAdminUsers();
+
+    return !adminUserExists;
 };

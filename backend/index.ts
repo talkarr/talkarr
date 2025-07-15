@@ -1,3 +1,5 @@
+import { initServer } from '@backend/initServer';
+
 import type { NextFunction, Request, Response } from 'express';
 
 import next from 'next';
@@ -5,7 +7,6 @@ import next from 'next';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import fs from 'node:fs';
-import pathUtils from 'path';
 import swaggerUi from 'swagger-ui-express';
 
 import '@backend/workers/addTalk';
@@ -13,6 +14,7 @@ import '@backend/workers/generateMissingNfo';
 import { startCheckForRootFolders } from '@backend/workers/checkForRootFolders';
 
 import api from '@backend/api';
+import { serverHost, serverPort } from '@backend/env';
 import { clearDownloadingFlagForAllTalks } from '@backend/events';
 import { releaseAllLocks } from '@backend/locks';
 import rootLog from '@backend/rootLog';
@@ -24,65 +26,7 @@ const log = rootLog.child({ label: 'server' });
 
 log.info('Starting server...', { dev });
 
-const loadingServer = express();
-
-loadingServer.get('/logo.png', (req, res) => {
-    res.sendFile('logo_cropped.png', {
-        root: pathUtils.join(__dirname, '..', 'assets'),
-    });
-});
-
-loadingServer.get('/favicon.ico', (req, res) => {
-    res.sendFile('favicon.ico', {
-        root: pathUtils.join(__dirname, '..', 'assets'),
-    });
-});
-
-loadingServer.get('/small_logo.png', (req, res) => {
-    res.sendFile('logo_cropped_small.png', {
-        root: pathUtils.join(__dirname, '..', 'assets'),
-    });
-});
-
-// with express 5, everything needs a name now, even wildcards.
-loadingServer.get('*_', (req, res) => {
-    if (req.path.startsWith('/api')) {
-        res.status(521).json({
-            message: 'Service not available',
-        });
-
-        return;
-    }
-
-    if (req.path.startsWith('/_next')) {
-        res.status(521).json({
-            message: 'Service not available',
-        });
-
-        return;
-    }
-
-    res.sendFile('loading.html', { root: __dirname });
-});
-
-const port = Number(process.env.PORT) || 3232;
-const host = process.env.HOST;
-
-let loadingHttpServer;
-
-if (host) {
-    log.info(`Starting startup server on http://${host}:${port}/ ...`);
-    loadingHttpServer = loadingServer.listen(port, host, () => {
-        log.info(`Startup server listening on http://${host}:${port}/`);
-    });
-} else {
-    log.info(`Starting startup server on http://localhost:${port}/ ...`);
-    loadingHttpServer = loadingServer.listen(port, () => {
-        log.info(`Startup server listening on http://localhost:${port}/`);
-    });
-}
-
-loadingHttpServer.on('listening', async () => {
+initServer.on('listening', async () => {
     const app = next({ dev, turbopack: true });
     const handle = app.getRequestHandler();
 
@@ -136,7 +80,7 @@ loadingHttpServer.on('listening', async () => {
             });
 
             // close loading server
-            loadingHttpServer.close(async err => {
+            initServer.close(async err => {
                 if (err) {
                     log.error('Error closing loading server', { err });
                     process.exit(1);
@@ -144,13 +88,17 @@ loadingHttpServer.on('listening', async () => {
 
                 log.info('Startup server closed');
 
-                if (host) {
-                    server.listen(port, host, () => {
-                        log.info(`Server ready on http://${host}:${port}/`);
+                if (serverHost) {
+                    server.listen(serverPort, serverHost, () => {
+                        log.info(
+                            `Server ready on http://${serverHost}:${serverPort}/`,
+                        );
                     });
                 } else {
-                    server.listen(port, () => {
-                        log.info(`Server ready on http://localhost:${port}/`);
+                    server.listen(serverPort, () => {
+                        log.info(
+                            `Server ready on http://localhost:${serverPort}/`,
+                        );
                     });
                 }
             });

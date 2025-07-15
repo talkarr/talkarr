@@ -28,6 +28,8 @@ const NotistackProvider: FC<PropsWithChildren> = ({ children }) => (
                 Dismiss
             </Button>
         )}
+        autoHideDuration={4500}
+        preventDuplicate
     >
         {children}
     </SnackbarProvider>

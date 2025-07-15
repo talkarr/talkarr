@@ -17,6 +17,8 @@ services:
       - ./.env:/app/.env
       - ./logs:/app/logs
       - ./e2e-test-folder:/app/e2e-test-folder
+    environment:
+      TALKARR_SECRET: verysecret
     depends_on:
       - db
 
