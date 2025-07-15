@@ -56,13 +56,21 @@ export default defineConfig<TestOptions>({
             : [
                   {
                       name: 'chromium',
-                      use: { ...devices['Desktop Chrome'], searchItemIndex: 0 },
+                      use: {
+                          ...devices['Desktop Chrome'],
+                          searchItemIndex: 0,
+                          storageState: 'e2e/.auth.json',
+                      },
                       dependencies: ['setup'],
                   },
 
                   {
                       name: 'webkit',
-                      use: { ...devices['Desktop Safari'], searchItemIndex: 2 },
+                      use: {
+                          ...devices['Desktop Safari'],
+                          searchItemIndex: 2,
+                          storageState: 'e2e/.auth.json',
+                      },
                       dependencies: ['setup'],
                   },
               ]),
@@ -72,7 +80,11 @@ export default defineConfig<TestOptions>({
             // for some reason, firefox sometimes fails on local machine
             retries: process.env.CI ? undefined : 5,
             timeout: process.env.CI ? undefined : 30000,
-            use: { ...devices['Desktop Firefox'], searchItemIndex: 1 },
+            use: {
+                ...devices['Desktop Firefox'],
+                searchItemIndex: 1,
+                storageState: 'e2e/.auth.json',
+            },
             dependencies: ['setup'],
         },
 
@@ -82,7 +94,11 @@ export default defineConfig<TestOptions>({
             : [
                   {
                       name: 'Mobile Chrome',
-                      use: { ...devices['Pixel 7'], searchItemIndex: 3 },
+                      use: {
+                          ...devices['Pixel 7'],
+                          searchItemIndex: 3,
+                          storageState: 'e2e/.auth.json',
+                      },
                       dependencies: ['setup'],
                   },
                   // Mobile safari is completely broken, just forget about it
@@ -94,6 +110,7 @@ export default defineConfig<TestOptions>({
                                 use: {
                                     ...devices['iPhone 13'],
                                     searchItemIndex: 4,
+                                    storageState: 'e2e/.auth.json',
                                 },
                                 dependencies: ['setup'],
                             },

@@ -1,6 +1,4 @@
 /* eslint-disable playwright/no-wait-for-selector */
-import argon2 from 'argon2';
-
 import { prisma } from '@backend/prisma';
 
 import { pageName } from '@/constants';

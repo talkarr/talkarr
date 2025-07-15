@@ -1,4 +1,5 @@
 import argon2 from 'argon2';
+import path from 'path';
 
 import { prisma } from '@backend/prisma';
 
@@ -9,6 +10,8 @@ const testUser = {
     email: `testuser-${Date.now()}@example.com`,
     password: 'password123',
 };
+
+const authFile = path.join(__dirname, '../.auth.json');
 
 test('authenticate', async ({ page }) => {
     console.info('Creating test user for further tests...');
@@ -69,4 +72,6 @@ test('authenticate', async ({ page }) => {
     expect(data.success).toBeTruthy();
 
     console.info('User', data);
+
+    await page.context().storageState({ path: authFile });
 });

@@ -45,6 +45,7 @@ playwright-report/
 initial-setup-report/
 after-setup-report/
 **/e2e-test-folder/
+/e2e/.auth.json
 
 **/*video-info-error*
 **/results.json
