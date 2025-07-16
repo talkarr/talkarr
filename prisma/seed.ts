@@ -2,6 +2,7 @@ import { execSync } from 'child_process';
 import waitOn from 'wait-on';
 
 import { PrismaClient } from '@prisma/client';
+import { markRootFolder } from '@backend/fs';
 
 waitOn({
     resources: ['tcp:5432'],
@@ -29,9 +30,16 @@ async function main(): Promise<void> {
 
     if (applyLaptopPreset) {
         console.log('Populating root folder');
+        const path = '/Users/ccomm/Movies/talkarr';
+
+        await markRootFolder({
+            rootFolderPath: path,
+        });
+
         await prisma.rootFolder.create({
             data: {
-                path: '/Users/ccomm/Movies/talkarr',
+                path,
+                marked: true,
             },
         });
     }
