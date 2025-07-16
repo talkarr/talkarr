@@ -1,6 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
+import { useEffect } from 'react';
 
 import type { ExtractSuccessData } from '@backend/types';
 
@@ -17,11 +18,13 @@ const AuthenticationDataUpdater: FC<AuthenticationDataUpdaterProps> = ({
 }) => {
     const setUser = useUserStore(store => store.setUser);
 
-    if (initialUserInfo) {
-        setUser(initialUserInfo);
-    } else {
-        setUser(null);
-    }
+    useEffect(() => {
+        if (initialUserInfo) {
+            setUser(initialUserInfo);
+        } else {
+            setUser(null);
+        }
+    }, [initialUserInfo, setUser]);
 
     return null;
 };
