@@ -187,12 +187,12 @@ export const validateUserCookie = async (
     try {
         const token = req.cookies[tokenCookieName];
 
-        log.info(
+        log.debug(
             `Validating user cookie: ${token ? 'present' : 'not present'}`,
         );
 
         if (!token) {
-            log.info('No user token found in cookies');
+            log.debug('No user token found in cookies');
             return null;
         }
 
@@ -202,7 +202,7 @@ export const validateUserCookie = async (
                 issuer: jwtIssuer,
             }) as { id: components['schemas']['User']['id'] };
 
-            log.info(
+            log.debug(
                 `User token decoded successfully for user ID: ${decoded.id}`,
             );
 
