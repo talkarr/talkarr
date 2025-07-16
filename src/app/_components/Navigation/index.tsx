@@ -179,7 +179,8 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                         }}
                         disableGutters
                         sx={{
-                            paddingX: 1,
+                            paddingLeft: 1,
+                            paddingRight: 2,
                             gap: 1,
                         }}
                     >
