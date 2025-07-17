@@ -1,7 +1,8 @@
 import express from 'express';
 
-import { getCachedImageFromUrl } from '@backend/imageCache';
+import { getCachedImageFromUrl, imageCacheDirectory } from '@backend/imageCache';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import pathUtils from 'path';
 
 const router = express.Router();
 
@@ -21,8 +22,6 @@ router.get(
             return;
         }
 
-        console.log(`Fetching cached image for URL: ${url} with key: ${key}`);
-
         const cachedFile = await getCachedImageFromUrl({
             url,
             cacheKey: key,
@@ -37,6 +36,17 @@ router.get(
         }
 
         const { cachePathOnFs, remainingCacheDuration } = cachedFile;
+
+        const normalizedPath = pathUtils.normalize(cachePathOnFs);
+
+        // Ensure the path is within the image cache directory
+        if (!normalizedPath.startsWith(imageCacheDirectory)) {
+            res.status(403).json({
+                success: false,
+                error: 'Invalid cache path.',
+            });
+            return;
+        }
 
         // send file from the path 'cachedFile'
         res.status(200).sendFile(

@@ -7,9 +7,13 @@ import { libravatarDomain } from '@backend/users';
 
 const log = rootLog.child({ label: 'imageCache' });
 
-const imageCacheDirectory = path.join(configDirectory, 'cache', 'images');
-const defaultCacheDuration = 1000 * 60 * 60 * 24; // 24 hours
-const validDomains = ['static.media.ccc.de', libravatarDomain] as const;
+export const imageCacheDirectory = path.join(
+    configDirectory,
+    'cache',
+    'images',
+);
+export const defaultCacheDuration = 1000 * 60 * 60 * 24; // 24 hours
+export const validDomains = ['static.media.ccc.de', libravatarDomain] as const;
 
 // returns the path to the cached image or null if not found
 export const getCachedImageFromUrl = async ({
@@ -70,7 +74,7 @@ export const getCachedImageFromUrl = async ({
             throw new Error('Cache expired');
         }
 
-        log.info(`Returning cached image for ${url}`);
+        log.debug(`Returning cached image for ${url}`);
         return {
             cachePathOnFs: cacheFilePath,
             remainingCacheDuration: cacheDuration - fileAge,
