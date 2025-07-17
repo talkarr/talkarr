@@ -15,9 +15,27 @@ export const serverSecret = process.env.TALKARR_SECRET || '';
 export const logLevel =
     process.env.TALKARR_LOG_LEVEL?.toLowerCase() ||
     (process.env.NODE_ENV === 'production' ? 'info' : 'debug');
+export const configDirectory =
+    process.env.TALKARR_CONFIG_DIRECTORY || path.join(process.cwd(), 'config');
 
 if (!serverSecret) {
     throw new Error(
         'No TALKARR_SECRET set in .env or .env.local. Please set it to a random string.',
     );
+}
+
+if (!configDirectory) {
+    throw new Error(
+        'No TALKARR_CONFIG_DIRECTORY set in .env or .env.local. Please set it to a valid directory path.',
+    );
+}
+
+if (process.env.NODE_ENV === 'development') {
+    console.dir({
+        serverPort,
+        serverHost,
+        serverSecret,
+        logLevel,
+        configDirectory,
+    });
 }

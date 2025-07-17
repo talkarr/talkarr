@@ -2,9 +2,15 @@ import fs from 'node:fs';
 import path from 'path';
 import * as winston from 'winston';
 
-import { logLevel } from '@backend/env';
+import { configDirectory, logLevel } from '@backend/env';
 
 import 'winston-daily-rotate-file';
+
+if (typeof window !== 'undefined') {
+    throw new Error(
+        'This file should not be imported in the browser. It is meant for server-side logging only.',
+    );
+}
 
 const hformat = winston.format.printf(
     ({ level, label, message, timestamp, ...metadata }) => {
@@ -77,9 +83,7 @@ const rootLog = winston.createLogger({
             symlinkName: 'talkarr.log',
         }), */
         new winston.transports.DailyRotateFile({
-            filename: process.env.CONFIG_DIRECTORY
-                ? `${process.env.CONFIG_DIRECTORY}/logs/.machinelogs-%DATE%.json`
-                : path.join(__dirname, '../logs/.machinelogs-%DATE%.json'),
+            filename: `${configDirectory}/logs/.machinelogs-%DATE%.json`,
             datePattern: 'YYYY-MM-DD',
             zippedArchive: true,
             maxSize: '20m',
@@ -98,7 +102,7 @@ const rootLog = winston.createLogger({
 });
 
 // make sure the logs directory exists and is writable
-const logDir = path.join(__dirname, '../logs');
+const logDir = path.join(configDirectory, 'logs');
 
 if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir);
