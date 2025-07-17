@@ -1087,6 +1087,27 @@
                     "displayName",
                     "password"
                 ]
+            },
+            "RootFolderFixes": {
+                "type": "object",
+                "properties": {
+                    "path": {
+                        "type": "string",
+                        "description": "Path to the root folder",
+                        "example": "/path/to/root/folder"
+                    },
+                    "fix_type": {
+                        "type": "string",
+                        "description": "Type of fix applied",
+                        "enum": [
+                            "force_mark"
+                        ]
+                    }
+                },
+                "required": [
+                    "path",
+                    "fix_type"
+                ]
             }
         }
     },
@@ -2224,6 +2245,62 @@
                                             "$ref": "#/components/schemas/ErrorResponse"
                                         }
                                     ]
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/settings/mediamanagement/root-folder-fix": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RootFolderFixes"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Invalid request data"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Root folder not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         },

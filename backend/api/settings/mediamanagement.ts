@@ -10,8 +10,10 @@ import {
     addRootFolder,
     AddRootFolderResponse,
     deleteRootFolder,
+    doesRootFolderExist,
     listRootFolders,
     setRootFolderMarked,
+    setRootFolderMarkExists,
 } from '@backend/rootFolder';
 import rootLog from '@backend/rootLog';
 import { getSettings } from '@backend/settings';
@@ -332,6 +334,136 @@ router.post(
         log.info('Folder removed:', { rootFolderPath });
 
         res.json({ success: true, data: null });
+    },
+);
+
+router.post(
+    '/root-folder-fix',
+    async (
+        req: ExpressRequest<
+            '/settings/mediamanagement/root-folder-fix',
+            'post'
+        >,
+        res: ExpressResponse<
+            '/settings/mediamanagement/root-folder-fix',
+            'post'
+        >,
+    ) => {
+        const { path, fix_type: fixType } = req.body;
+
+        if (!path || !fixType) {
+            res.status(400).json({
+                success: false,
+                error: 'Path and fix type are required',
+            });
+
+            return;
+        }
+
+        const folderExists = await doesRootFolderExist({
+            rootFolderPath: path,
+        });
+
+        if (!folderExists) {
+            res.status(404).json({
+                success: false,
+                error: 'Root folder does not exist',
+            });
+
+            return;
+        }
+
+        switch (fixType) {
+            case 'force_mark': {
+                try {
+                    const markResult = await markRootFolder({
+                        rootFolderPath: path,
+                    });
+
+                    if (!markResult) {
+                        log.error('Error forcing mark for root folder:', {
+                            path,
+                        });
+
+                        res.status(500).json({
+                            success: false,
+                            error: 'Internal Server Error',
+                        });
+
+                        return;
+                    }
+
+                    const setMarkedResult = await setRootFolderMarked({
+                        rootFolderPath: path,
+                        marked: true,
+                    });
+
+                    if (!setMarkedResult) {
+                        log.error('Error setting root folder marked:', {
+                            path,
+                        });
+
+                        res.status(500).json({
+                            success: false,
+                            error: 'Internal Server Error',
+                        });
+
+                        return;
+                    }
+
+                    const setMarkExistsResult = await setRootFolderMarkExists({
+                        rootFolderPath: path,
+                    });
+
+                    if (!setMarkExistsResult) {
+                        log.error('Error setting root folder mark exists:', {
+                            path,
+                        });
+
+                        res.status(500).json({
+                            success: false,
+                            error: 'Internal Server Error',
+                        });
+
+                        return;
+                    }
+
+                    res.json({
+                        success: true,
+                        data: null,
+                    });
+
+                    return;
+                } catch (error) {
+                    log.error('Error forcing mark for root folder:', {
+                        error,
+                        path,
+                    });
+
+                    res.status(500).json({
+                        success: false,
+                        error: 'Internal Server Error',
+                    });
+
+                    return;
+                }
+            }
+            default: {
+                log.error('Invalid fix type:', { fixType });
+
+                res.status(400).json({
+                    success: false,
+                    error: 'Invalid fix type',
+                });
+
+                return;
+            }
+        }
+
+        res.status(400).json({
+            success: false,
+            error: 'Invalid request',
+        });
     },
 );
 

@@ -3,6 +3,7 @@ import type { FC, PropsWithChildren } from 'react';
 import AddFolderModal from '@/app/_modals/AddFolderModal';
 import AddTalkModal from '@/app/_modals/AddTalkModal';
 import ConfirmationModal from '@/app/_modals/ConfirmationModal';
+import RootFolderErrorModal from '@/app/_modals/RootFolderErrorModal';
 
 const Layout: FC<PropsWithChildren> = ({ children }) => (
     <>
@@ -10,6 +11,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
         <AddTalkModal />
         <AddFolderModal />
         <ConfirmationModal />
+        <RootFolderErrorModal />
     </>
 );
 

@@ -124,3 +124,35 @@ export type RemoveFolderResponse =
 export const removeFolder: (
     query: MediaManagementRemoveFolderArgs,
 ) => Promise<RemoveFolderResponse> = pRemoveFolder;
+
+export type MediaManagementRootFolderFixArgs =
+    RequestBody<'/settings/mediamanagement/root-folder-fix'>;
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const pRootFolderFix = async (body: MediaManagementRootFolderFixArgs) => {
+    const cookie = await getCookiesForApi();
+
+    const { data, error, response } = await api.POST(
+        '/settings/mediamanagement/root-folder-fix',
+        {
+            body,
+            headers: {
+                cookie,
+            },
+        },
+    );
+
+    if (error) {
+        return { ...error, response };
+    }
+
+    return data;
+};
+
+export type RootFolderFixResponse =
+    | Awaited<ReturnType<typeof pRootFolderFix>>
+    | undefined;
+
+export const rootFolderFix: (
+    query: MediaManagementRootFolderFixArgs,
+) => Promise<RootFolderFixResponse> = pRootFolderFix;

@@ -111,6 +111,9 @@ const theme = createTheme(
                         padding: baseTheme.spacing(1, 2),
                         textTransform: 'none',
                     },
+                    contained: {
+                        boxShadow: 'none',
+                    },
                 },
             },
             MuiFilledInput: {

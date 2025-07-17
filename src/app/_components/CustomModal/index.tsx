@@ -1,9 +1,11 @@
 import type { FC, ReactElement, ReactNode } from 'react';
 import React from 'react';
 
+import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 
@@ -14,6 +16,7 @@ export interface ModalProps {
     open: boolean;
     onClose?: (reason?: ModalCloseReason) => void;
     showCloseButton?: boolean;
+    disableClose?: boolean;
     disableAutoFocus?: boolean;
     moreWidth?: boolean;
     keepMounted?: boolean;
@@ -86,11 +89,17 @@ const BaseModal: FC<ModalProps> = ({
     title,
     testID,
     divider,
+    showCloseButton,
+    disableClose,
 }) => {
     const handleClose = (
         _event: never,
         reason: 'backdropClick' | 'escapeKeyDown',
     ): void => {
+        if (disableClose) {
+            return;
+        }
+
         onClose?.(reason);
     };
 
@@ -120,6 +129,7 @@ const BaseModal: FC<ModalProps> = ({
                             flexDirection="row"
                             width="100%"
                             minHeight="fit-content"
+                            justifyContent="space-between"
                         >
                             {title ? (
                                 <Typography
@@ -130,6 +140,14 @@ const BaseModal: FC<ModalProps> = ({
                                 >
                                     {title}
                                 </Typography>
+                            ) : null}
+                            {onClose && showCloseButton ? (
+                                <IconButton
+                                    onClick={() => onClose('escapeKeyDown')}
+                                    disabled={disableClose}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
                             ) : null}
                         </Box>
                         {divider ? <Divider /> : null}

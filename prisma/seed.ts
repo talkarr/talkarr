@@ -1,5 +1,6 @@
 import { execSync } from 'child_process';
 import waitOn from 'wait-on';
+import argon2 from 'argon2';
 
 import { PrismaClient } from '@prisma/client';
 import { markRootFolder } from '@backend/fs';
@@ -40,6 +41,19 @@ async function main(): Promise<void> {
             data: {
                 path,
                 marked: true,
+            },
+        });
+
+        await prisma.user.create({
+            data: {
+                displayName: 'Test User',
+                email: 'test@example.com',
+                password: await argon2.hash('Passwort_123'),
+                permissions: {
+                    create: {
+                        permission: 'Admin',
+                    },
+                },
             },
         });
     }

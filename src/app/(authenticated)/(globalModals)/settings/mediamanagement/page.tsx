@@ -43,17 +43,17 @@ const Page: NextPage = async () => {
                 >
                     <TableHead>
                         <TableRow>
+                            <TableCell padding="checkbox" />
                             <TableCell>Folder</TableCell>
                             <TableCell>Free Space</TableCell>
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data?.folders.map(({ folder, free_space }) => (
+                        {data?.folders.map(folderData => (
                             <FolderRow
-                                folder={folder}
-                                freeSpace={free_space}
-                                key={folder}
+                                folderData={folderData}
+                                key={folderData.folder}
                             />
                         ))}
                         {data?.folders.length === 0 ? (

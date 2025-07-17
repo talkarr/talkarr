@@ -243,3 +243,26 @@ export const clearAllRootFolderHasMarks = async (): Promise<boolean> => {
         return false;
     }
 };
+
+export const doesRootFolderExist = async ({
+    rootFolderPath,
+}: {
+    rootFolderPath: string;
+}): Promise<boolean> => {
+    try {
+        const folder = await prisma.rootFolder.findUnique({
+            where: {
+                path: rootFolderPath,
+            },
+        });
+
+        return folder !== null;
+    } catch (e) {
+        log.error('Error checking if root folder exists', {
+            error: e,
+            rootFolderPath,
+        });
+
+        return false;
+    }
+};

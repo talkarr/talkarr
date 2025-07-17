@@ -923,6 +923,72 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/settings/mediamanagement/root-folder-fix": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RootFolderFixes"];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"];
+                    };
+                };
+                /** @description Invalid request data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Root folder not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/settings/security/users": {
         parameters: {
             query?: never;
@@ -1813,6 +1879,18 @@ export interface components {
              * @example securepassword123
              */
             password: string;
+        };
+        RootFolderFixes: {
+            /**
+             * @description Path to the root folder
+             * @example /path/to/root/folder
+             */
+            path: string;
+            /**
+             * @description Type of fix applied
+             * @enum {string}
+             */
+            fix_type: "force_mark";
         };
     };
     responses: never;
