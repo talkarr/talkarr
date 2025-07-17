@@ -61,7 +61,6 @@ services:
   
   app:
     image: ghcr.io/talkarr/talkarr:latest # from github
-    # image: talkarr/talkarr:latest # from docker hub
     restart: unless-stopped
     env_file:
       - .env
@@ -167,7 +166,6 @@ Then you can run the application using the following docker-compose file:
 services:
   app:
     image: ghcr.io/talkarr/talkarr:latest
-    # image: talkarr/talkarr:latest
     restart: unless-stopped
     env_file:
       - .env
