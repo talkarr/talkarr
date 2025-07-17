@@ -71,7 +71,7 @@ const checkForRootFolders: TaskFunction<CheckForRootFoldersData> = async (
             log.info('Root folder marked:', { rootFolder });
 
             await setRootFolderMarkExists({ rootFolderPath: rootFolder.path });
-            startCheckIfFilesExist({
+            await startCheckIfFilesExist({
                 rootFolder: rootFolder.path,
                 isInit: data?.isInit,
                 startScanForMissing: isLast,

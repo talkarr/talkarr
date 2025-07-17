@@ -7,6 +7,7 @@ import { devtools } from 'zustand/middleware';
 import type { SuccessData } from '@backend/types';
 
 import type { ConfirmationModalConfig } from '@/app/_modals/ConfirmationModal';
+import type { RootFolderErrorModalData } from '@/app/_modals/RootFolderErrorModal';
 
 export type TalkData = SuccessData<'/talks/search', 'get'>['events'][0];
 
@@ -14,6 +15,7 @@ export interface UiState {
     addTalkModal: TalkData | null;
     addFolderModal: boolean;
     confirmationModal: ConfirmationModalConfig | null;
+    rootFolderErrorModal: RootFolderErrorModalData | null;
 }
 
 export interface UiActions {
@@ -30,6 +32,10 @@ export interface UiActions {
         config: ConfirmationModalConfig<T>,
     ) => void;
     closeConfirmationModal: () => void;
+
+    // rootFolderErrorModal
+    openRootFolderErrorModal: (data: RootFolderErrorModalData) => void;
+    closeRootFolderErrorModal: () => void;
 }
 
 export type UiStore = UiState & UiActions;
@@ -38,6 +44,7 @@ export const defaultUiState: UiState = {
     addTalkModal: null,
     addFolderModal: false,
     confirmationModal: null,
+    rootFolderErrorModal: null,
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -53,6 +60,10 @@ export const createUiStore = (initialState?: PartialDeep<UiState>) =>
                 showConfirmationModal: config =>
                     set({ confirmationModal: config }),
                 closeConfirmationModal: () => set({ confirmationModal: null }),
+                openRootFolderErrorModal: data =>
+                    set({ rootFolderErrorModal: data }),
+                closeRootFolderErrorModal: () =>
+                    set({ rootFolderErrorModal: null }),
             }),
             {
                 name: 'uiStore',

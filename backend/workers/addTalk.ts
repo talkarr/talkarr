@@ -357,11 +357,20 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         });
 
         videoSubprocess.on('error', error => {
-            console.log(event.title, 'error:', error);
+            log.error('Error with video download subprocess:', {
+                error,
+                title: event.title,
+            });
+
+            throw error;
         });
 
         videoSubprocess.on('close', code => {
-            console.log(event.title, 'close:', code);
+            log.info('Video download finished:', {
+                title: event.title,
+                exitCode: code,
+                stderrBuffer,
+            });
             exitCode = code;
         });
 
