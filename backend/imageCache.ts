@@ -40,6 +40,9 @@ export const getCachedImageFromUrl = async ({
         return null;
     }
 
+    // make sure cache key is a valid filename and sanitize it
+    const cacheKeySanitized = cacheKey.replace(/[^a-zA-Z0-9_-]/g, '_');
+
     // check if the URL is from a valid domain
     const urlObj = new URL(url);
     if (!validDomains.includes(urlObj.hostname)) {
@@ -61,7 +64,7 @@ export const getCachedImageFromUrl = async ({
         return null;
     }
 
-    const cacheFilePath = path.join(imageCacheDirectory, cacheKey);
+    const cacheFilePath = path.join(imageCacheDirectory, cacheKeySanitized);
 
     try {
         const stats = await fs.promises.stat(cacheFilePath);
@@ -93,6 +96,16 @@ export const getCachedImageFromUrl = async ({
                     status: response.status,
                     statusText: response.statusText,
                 },
+            );
+            return null;
+        }
+
+        // make sure the response is an image
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.startsWith('image/')) {
+            log.warn(
+                `Response from ${url} is not an image, resolving to original url`,
+                { contentType },
             );
             return null;
         }
