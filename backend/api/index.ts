@@ -52,6 +52,7 @@ router.use('/tasks', taskRouter);
 router.use('/user', userRouter);
 
 router.use((_req, res) => {
+    log.warn('API endpoint not found', { url: _req.originalUrl });
     res.sendStatus(404);
 });
 

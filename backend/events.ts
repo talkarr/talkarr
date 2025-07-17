@@ -324,7 +324,10 @@ export const getTalkInfoByGuid = async ({
             return null;
         }
 
-        const folder = await getFolderPathForTalk({ event: result });
+        const folder = await getFolderPathForTalk({
+            event: result,
+            skipFilesystemAccess: true,
+        });
 
         if (!folder) {
             log.warn('Folder not found for talk', { title: result.title });

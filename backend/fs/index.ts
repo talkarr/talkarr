@@ -273,16 +273,21 @@ type GetFolderPathForTalkEvent = Pick<
 
 export const getFolderPathForTalk = async ({
     event,
+    skipFilesystemAccess,
 }: {
     event: ConvertBigintToNumberType<
         NormalAndConvertedDate<GetFolderPathForTalkEvent>
     >;
+    skipFilesystemAccess?: boolean;
 }): Promise<string | null> => {
     if (!event.rootFolderPath) {
         return null;
     }
 
-    if (!(await isFolderMarked({ rootFolderPath: event.rootFolderPath }))) {
+    if (
+        !skipFilesystemAccess &&
+        !(await isFolderMarked({ rootFolderPath: event.rootFolderPath }))
+    ) {
         log.warn(
             'Cannot get folder path for talk, root folder does not have mark',
             {
@@ -294,7 +299,9 @@ export const getFolderPathForTalk = async ({
     }
 
     try {
-        await fs_promises.access(event.rootFolderPath);
+        if (!skipFilesystemAccess) {
+            await fs_promises.access(event.rootFolderPath);
+        }
     } catch {
         return null;
     }
@@ -310,13 +317,15 @@ export const getFolderPathForTalk = async ({
         event.slug,
     );
 
-    await fs_promises.mkdir(folderPath, { recursive: true });
+    if (!skipFilesystemAccess) {
+        await fs_promises.mkdir(folderPath, { recursive: true });
 
-    try {
-        await fs_promises.access(folderPath);
-    } catch {
-        log.error(`Could not create folder ${folderPath}`);
-        return null;
+        try {
+            await fs_promises.access(folderPath);
+        } catch {
+            log.error(`Could not create folder ${folderPath}`);
+            return null;
+        }
     }
 
     return folderPath;
