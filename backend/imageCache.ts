@@ -65,6 +65,14 @@ export const getCachedImageFromUrl = async ({
     }
 
     const cacheFilePath = path.join(imageCacheDirectory, cacheKeySanitized);
+    // check that cacheFilePath starts with imageCacheDirectory
+    const normalizedCacheFilePath = path.normalize(cacheFilePath);
+    if (!normalizedCacheFilePath.startsWith(imageCacheDirectory)) {
+        log.error(
+            `Cache file path ${cacheFilePath} is not within the cache directory ${imageCacheDirectory}.`,
+        );
+        return null;
+    }
 
     try {
         const stats = await fs.promises.stat(cacheFilePath);
