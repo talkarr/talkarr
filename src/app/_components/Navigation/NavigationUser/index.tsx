@@ -9,7 +9,9 @@ import { useSnackbar } from 'notistack';
 
 import useLogout from '@/hooks/useLogout';
 
-import { loginPageLink } from '@/constants';
+import { generateCacheUrl } from '@/utils/cache';
+
+import { loginPageLink, userAvatarCacheKey } from '@/constants';
 import { useUserStore } from '@/providers/userStoreProvider';
 
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -62,7 +64,14 @@ const NavigationUser: FC = () => {
                 }}
             >
                 <Avatar
-                    src={user?.avatarUrl}
+                    src={
+                        user
+                            ? generateCacheUrl({
+                                  url: user.avatarUrl,
+                                  cacheKey: userAvatarCacheKey(user),
+                              })
+                            : undefined
+                    }
                     alt={user?.displayName || user?.email}
                 />
             </ButtonBase>
@@ -100,7 +109,14 @@ const NavigationUser: FC = () => {
                     paddingTop={3}
                 >
                     <Avatar
-                        src={user?.avatarUrl}
+                        src={
+                            user
+                                ? generateCacheUrl({
+                                      url: user.avatarUrl,
+                                      cacheKey: userAvatarCacheKey(user),
+                                  })
+                                : undefined
+                        }
                         alt={user?.displayName || user?.email}
                     />
                     <Box display="flex" flexDirection="column">

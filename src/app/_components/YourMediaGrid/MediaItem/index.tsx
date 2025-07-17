@@ -12,6 +12,8 @@ import type { SuccessData } from '@backend/types';
 
 import useOnScreen from '@/hooks/useOnScreen';
 
+import { generateCacheUrl } from '@/utils/cache';
+
 import { longDateFormat, specificTalkPageLink } from '@/constants';
 import { useApiStore } from '@/providers/apiStoreProvider';
 
@@ -169,7 +171,10 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                     }}
                                 >
                                     <Image
-                                        src={initialData.poster_url}
+                                        src={generateCacheUrl({
+                                            url: initialData.poster_url,
+                                            cacheKey: `poster-${initialData.guid}`,
+                                        })}
                                         fill
                                         style={{
                                             objectFit: 'cover',

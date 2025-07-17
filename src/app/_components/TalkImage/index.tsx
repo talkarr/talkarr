@@ -12,6 +12,8 @@ import {
     searchItemMinHeight,
 } from '@/app/(authenticated)/(globalModals)/talks/add/_components/SearchItem';
 
+import { generateCacheUrl } from '@/utils/cache';
+
 import type { TalkData } from '@/stores/uiStore';
 
 import ImageFallback from '@components/ImageFallback';
@@ -75,7 +77,10 @@ const TalkImage: FC<TalkImageProps> = ({
                     ) : null}
                     <Image
                         loading="lazy"
-                        src={data.poster_url}
+                        src={generateCacheUrl({
+                            url: data.poster_url,
+                            cacheKey: `poster-${data.guid}`,
+                        })}
                         alt={data.title}
                         title={data.title}
                         sizes="300px"

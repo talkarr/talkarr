@@ -1,4 +1,6 @@
 // === Colors ===
+import type { ApiUser } from '@/stores/userStore';
+
 export const pagePrimaryColor = '#9b69ff';
 export const pageSecondaryColor = '#5710e6';
 export const pageBackgroundColor = '#181a1b';
@@ -52,3 +54,7 @@ export const longDateTimeFormat = 'DD.MM.yyyy HH:mm';
 export const longDateFormat = 'DD.MM.yyyy';
 
 export const yearOnlyFormat = 'yyyy';
+
+// === Cache keys ===
+export const userAvatarCacheKey = (user: ApiUser): string =>
+    `user-avatar-${user.id}`;
