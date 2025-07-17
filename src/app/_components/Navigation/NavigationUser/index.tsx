@@ -11,7 +11,8 @@ import useLogout from '@/hooks/useLogout';
 
 import { generateCacheUrl } from '@/utils/cache';
 
-import { loginPageLink, userAvatarCacheKey } from '@/constants';
+import { userAvatarCacheKey } from '@/cacheKeys';
+import { loginPageLink } from '@/constants';
 import { useUserStore } from '@/providers/userStoreProvider';
 
 import LogoutIcon from '@mui/icons-material/Logout';
