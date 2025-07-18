@@ -10,12 +10,15 @@ import { usePathname } from 'next/navigation';
 import type { FC, PropsWithChildren } from 'react';
 import { Fragment, useEffect, useState } from 'react';
 
+import { useUiStore } from '@/providers/uiStoreProvider';
+
 import AnimatedArrowIcon from '@components/AnimatedArrowIcon';
 import LogoWithText from '@components/LogoWithText';
 import { navigationItems } from '@components/Navigation/navigation';
 import NavigationItem from '@components/Navigation/NavigationItem';
 import NavigationSearch from '@components/Navigation/NavigationSearch';
 import NavigationUser from '@components/Navigation/NavigationUser';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { useTheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -36,6 +39,10 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
     const pathname = usePathname();
 
     const [open, setOpen] = useState<boolean>(false);
+
+    const openInformationModal = useUiStore(
+        store => store.openInformationModal,
+    );
 
     useEffect(() => {
         // close the mobile drawer when the route changes
@@ -197,7 +204,17 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                             </IconButton>
                         </Box>
                         <NavigationSearch />
-                        <NavigationUser />
+                        <Box
+                            display="flex"
+                            flexDirection="row"
+                            alignItems="center"
+                            gap={2}
+                        >
+                            <IconButton onClick={() => openInformationModal()}>
+                                <HelpOutlineIcon />
+                            </IconButton>
+                            <NavigationUser />
+                        </Box>
                     </Toolbar>
                 </AppBar>
                 <Box
