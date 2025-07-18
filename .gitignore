@@ -46,8 +46,7 @@ initial-setup-report/
 after-setup-report/
 **/e2e-test-folder/
 /e2e/.auth.json
-
+/config/
 **/*video-info-error*
 **/results.json
-
 .env.local

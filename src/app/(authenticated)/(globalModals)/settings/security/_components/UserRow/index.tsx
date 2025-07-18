@@ -2,6 +2,10 @@ import type { FC } from 'react';
 
 import type { components } from '@backend/generated/schema';
 
+import { generateCacheUrl } from '@/utils/cache';
+
+import { userAvatarCacheKey } from '@/cacheKeys';
+
 import CustomAvatar from '@components/CustomAvatar';
 import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
@@ -20,7 +24,10 @@ const UserRow: FC<UserRowProps> = ({ user }) => (
             <Box display="flex" flexDirection="row" alignItems="center">
                 <CustomAvatar
                     alt={user.displayName || user.email}
-                    src={user.avatarUrl}
+                    src={generateCacheUrl({
+                        url: user.avatarUrl,
+                        cacheKey: userAvatarCacheKey(user),
+                    })}
                     sx={{ width: 40, height: 40, marginRight: 2 }}
                 />
                 <Box>

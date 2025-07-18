@@ -6,6 +6,7 @@ import tseslint from "typescript-eslint";
 import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import prettier from "eslint-plugin-prettier";
+// import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 
 import _import from "eslint-plugin-import";
 import muiPathImports from "eslint-plugin-mui-path-imports";
@@ -33,6 +34,7 @@ export default tseslint.config(
             ...playwright.configs['flat/recommended'].rules,
         }
     },
+    // eslintPluginUnicorn.configs.recommended,
     {
         ignores: [
             "**/node_modules/",
@@ -218,6 +220,15 @@ export default tseslint.config(
                 logical: "ignore",
                 prop: "ignore",
             }],
+
+            /*"unicorn/filename-case": ["error", {
+                cases: {
+                    camelCase: true,
+                    pascalCase: true,
+                    kebabCase: true,
+                    snakeCase: true,
+                },
+            }],*/
         },
     },
     {

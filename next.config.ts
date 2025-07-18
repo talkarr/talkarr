@@ -122,20 +122,9 @@ const nextConfig = async (): Promise<NextConfig> => {
                 return [
                     {
                         source: '/api/:path*',
-                        destination: `${apiBaseUrl}/:path*`,
+                        destination: `${apiBaseUrl}/api/:path*`,
                     },
                 ];
-            },
-            images: {
-                remotePatterns: [
-                    {
-                        protocol: 'https',
-                        hostname: 'static.media.ccc.de',
-                        port: '',
-                        search: '',
-                    },
-                ],
-                minimumCacheTTL: 24 * 60 * 60, // 24 hours
             },
             /*
             // for some reason, this does not work :(

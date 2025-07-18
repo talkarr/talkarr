@@ -9,6 +9,9 @@ import { useSnackbar } from 'notistack';
 
 import useLogout from '@/hooks/useLogout';
 
+import { generateCacheUrl } from '@/utils/cache';
+
+import { userAvatarCacheKey } from '@/cacheKeys';
 import { loginPageLink } from '@/constants';
 import { useUserStore } from '@/providers/userStoreProvider';
 
@@ -62,7 +65,14 @@ const NavigationUser: FC = () => {
                 }}
             >
                 <Avatar
-                    src={user?.avatarUrl}
+                    src={
+                        user
+                            ? generateCacheUrl({
+                                  url: user.avatarUrl,
+                                  cacheKey: userAvatarCacheKey(user),
+                              })
+                            : undefined
+                    }
                     alt={user?.displayName || user?.email}
                 />
             </ButtonBase>
@@ -100,7 +110,14 @@ const NavigationUser: FC = () => {
                     paddingTop={3}
                 >
                     <Avatar
-                        src={user?.avatarUrl}
+                        src={
+                            user
+                                ? generateCacheUrl({
+                                      url: user.avatarUrl,
+                                      cacheKey: userAvatarCacheKey(user),
+                                  })
+                                : undefined
+                        }
                         alt={user?.displayName || user?.email}
                     />
                     <Box display="flex" flexDirection="column">

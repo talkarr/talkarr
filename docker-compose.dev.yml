@@ -15,7 +15,7 @@ services:
     network_mode: host
     volumes:
       - ./.env:/app/.env
-      - ./logs:/app/logs
+      - ./config:/app/config
       - ./e2e-test-folder:/app/e2e-test-folder
     environment:
       TALKARR_SECRET: verysecret

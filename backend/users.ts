@@ -26,7 +26,8 @@ export interface UserWithPassword extends SchemaUser {
     password: string;
 }
 
-const libravatarBaseUrl = 'https://seccdn.libravatar.org/';
+export const libravatarBaseUrl = 'https://seccdn.libravatar.org/';
+export const libravatarDomain = new URL(libravatarBaseUrl).hostname;
 
 export const generateAvatarUrl = async (user: DbUser): Promise<string> => {
     const { allowLibravatar } = getSettings().general;

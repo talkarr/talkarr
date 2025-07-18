@@ -68,7 +68,7 @@ services:
       - "3232:3232"
     volumes:
       - /path/to/your/media:/media # in theory, you can mount it wherever you like
-      - ./logs:/app/logs # Store the logs in "./logs" directory
+      - ./config:/app/config # Store the config in "./config" directory
     depends_on:
       - db
 ```
@@ -173,7 +173,7 @@ services:
       - "3232:3232"
     volumes:
       - /path/to/your/media:/media # in theory, you can mount it wherever you like
-      - ./logs:/app/logs # Store the logs in "./logs" directory
+      - ./config:/app/config # Store the config in "./config" directory
 ```
 
 Or you can run the application using the following command:

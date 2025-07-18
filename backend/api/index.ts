@@ -2,6 +2,7 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import expressWinston from 'express-winston';
 
+import cacheRouter from '@backend/api/cache';
 import settingsRouter from '@backend/api/settings';
 import talksRouter from '@backend/api/talks';
 import taskRouter from '@backend/api/tasks';
@@ -51,7 +52,10 @@ router.use('/tasks', taskRouter);
 
 router.use('/user', userRouter);
 
+router.use('/cache', cacheRouter);
+
 router.use((_req, res) => {
+    log.warn('API endpoint not found', { url: _req.originalUrl });
     res.sendStatus(404);
 });
 
