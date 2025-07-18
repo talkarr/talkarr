@@ -63,15 +63,22 @@ const InformationModal: FC = () => {
             }
             // Extract the repo path from pathname
             // pathname: /user/repo(.git)
-            const pathMatch = urlObj.pathname.match(/^\/([^/]+)\/([^/.]+)(?:\.git)?$/);
+            const pathMatch = urlObj.pathname.match(
+                /^\/([^/]+)\/([^/.]+)(?:\.git)?$/,
+            );
             if (!pathMatch) return 'unknown repo';
             return `${pathMatch[1]}/${pathMatch[2]}`;
-        } catch (e) {
+        } catch {
             // Not a valid URL, could be an SSH URL
             // SSH format: git@github.com:user/repo.git
             const sshRegex = /^git@github\.com:(.+?)(?:\.git)?$/;
             const match = repoUrl.match(sshRegex);
-            if
+            if (match) {
+                return match[1];
+            }
+            return 'unknown repo';
+        }
+    }, []);
 
     const repoHref = `https://github.com/${repoName}`;
 
