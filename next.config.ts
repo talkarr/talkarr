@@ -126,6 +126,17 @@ const nextConfig = async (): Promise<NextConfig> => {
                     },
                 ];
             },
+            images: {
+                remotePatterns: [
+                    {
+                        protocol: 'https',
+                        hostname: 'static.media.ccc.de',
+                        port: '',
+                        search: '',
+                    },
+                ],
+                minimumCacheTTL: 24 * 60 * 60, // 24 hours
+            },
             /*
             // for some reason, this does not work :(
             async headers() {

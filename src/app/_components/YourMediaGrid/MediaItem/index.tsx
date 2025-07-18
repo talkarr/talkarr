@@ -77,10 +77,10 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
               ? 1000
               : 5000;
 
-        const interval = isVisible ? setInterval(func, intervalMs) : null;
+        let interval = null;
 
         if (isVisible) {
-            func();
+            interval = setInterval(func, intervalMs);
         }
 
         return () => {
