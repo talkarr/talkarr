@@ -51,25 +51,27 @@ const InformationModal: FC = () => {
     const repoName = useMemo(() => {
         const repoUrl = process.env.NEXT_PUBLIC_REMOTE_URL; // might be https or ssh. directly extracted from git
 
-        if (!repoUrl?.includes('github.com')) {
+        if (!repoUrl) {
             return 'unknown repo';
         }
 
-        const regex = /github\.com[:/](.+?)(?:\.git)?$/;
-        const match = repoUrl.match(regex);
-
-        if (!match || match.length < 2) {
-            return 'unknown repo';
-        }
-
-        const repoPath = match[1];
-        const parts = repoPath.split('/');
-        if (parts.length < 2) {
-            return 'unknown repo';
-        }
-
-        return `${parts[0]}/${parts[1]}`;
-    }, []);
+        // Handle HTTPS/HTTP URLs
+        try {
+            const urlObj = new URL(repoUrl);
+            if (urlObj.hostname !== 'github.com') {
+                return 'unknown repo';
+            }
+            // Extract the repo path from pathname
+            // pathname: /user/repo(.git)
+            const pathMatch = urlObj.pathname.match(/^\/([^/]+)\/([^/.]+)(?:\.git)?$/);
+            if (!pathMatch) return 'unknown repo';
+            return `${pathMatch[1]}/${pathMatch[2]}`;
+        } catch (e) {
+            // Not a valid URL, could be an SSH URL
+            // SSH format: git@github.com:user/repo.git
+            const sshRegex = /^git@github\.com:(.+?)(?:\.git)?$/;
+            const match = repoUrl.match(sshRegex);
+            if
 
     const repoHref = `https://github.com/${repoName}`;
 
