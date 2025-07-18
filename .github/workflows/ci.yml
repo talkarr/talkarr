@@ -162,8 +162,8 @@ jobs:
           # wait for the database to be ready
           npx wait-on -t 3m tcp:5432
           
-          mkdir -p logs
-          chmod 777 -R logs
+          mkdir -p config
+          chmod 777 -R config
           
           echo "TALKARR_SECRET=verysecret" > .env.local
 
@@ -385,13 +385,13 @@ jobs:
               exit 1
           fi
           
-          mkdir -p logs
-          chmod 777 -R logs
+          mkdir -p config
+          chmod 777 -R config
           
           mkdir -p e2e/e2e-test-folder
           chmod 777 -R e2e/e2e-test-folder
           
-          docker run -d --rm -v ./.env:/app/.env -v ./logs:/app/logs -v ./e2e/e2e-test-folder:/app/e2e/e2e-test-folder --network host ${{ env.container_ref }}
+          docker run -d --rm -v ./.env:/app/.env -v ./config:/app/config -v ./e2e/e2e-test-folder:/app/e2e/e2e-test-folder --network host ${{ env.container_ref }}
           
           echo "Waiting for the app to be ready"
           
@@ -449,13 +449,13 @@ jobs:
       - name: Dump container logs
         continue-on-error: true
         run: |
-          docker logs $(docker ps -q --filter ancestor=${{ env.container_ref }}) > logs/container.log
+          docker logs $(docker ps -q --filter ancestor=${{ env.container_ref }}) > config/logs/container.log
 
       - name: Upload logs folder
         uses: actions/upload-artifact@v4
         with:
           name: logs
-          path: logs/
+          path: config/logs/
           retention-days: 30
 
       - name: Fail if exit code is not 0

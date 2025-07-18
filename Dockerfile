@@ -62,8 +62,8 @@ RUN adduser --system --uid 1001 nextjs
 
 # create logs folder for the app
 # and make sure the user has the right permissions
-RUN mkdir -p /app/logs && \
-    chown -R nextjs:nodejs /app/logs
+RUN mkdir -p /app/config && \
+    chown -R nextjs:nodejs /app/config
 
 # https://github.com/vercel/next.js/discussions/36935#discussioncomment-2757861
 RUN mkdir -p /app/.next/cache/images && \
