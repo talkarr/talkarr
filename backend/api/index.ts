@@ -3,6 +3,7 @@ import express from 'express';
 import expressWinston from 'express-winston';
 
 import cacheRouter from '@backend/api/cache';
+import informationHandler from '@backend/api/information';
 import settingsRouter from '@backend/api/settings';
 import talksRouter from '@backend/api/talks';
 import taskRouter from '@backend/api/tasks';
@@ -43,6 +44,8 @@ router.get('/status', async (_req, res: ExpressResponse<'/status', 'get'>) => {
         },
     });
 });
+
+router.get('/information', informationHandler);
 
 router.use('/talks', talksRouter);
 

@@ -5,12 +5,12 @@ import Image from 'next/image';
 import type { CSSProperties, FC } from 'react';
 import { useEffect, useState } from 'react';
 
-import type { SingleTalkData } from '@/app/(authenticated)/(globalModals)/talks/[slug]/page';
+import type { SingleTalkData } from '@/app/(authenticated)/talks/[slug]/page';
 // eslint-disable-next-line import/no-cycle
 import {
     searchItemMaxImageWidth,
     searchItemMinHeight,
-} from '@/app/(authenticated)/(globalModals)/talks/add/_components/SearchItem';
+} from '@/app/(authenticated)/talks/add/_components/SearchItem';
 
 import { generateCacheUrl } from '@/utils/cache';
 

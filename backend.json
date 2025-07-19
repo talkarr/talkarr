@@ -1049,7 +1049,7 @@
                     "importIsRecordedFlagBehavior"
                 ]
             },
-            "AppInfo": {
+            "AppStatus": {
                 "type": "object",
                 "properties": {
                     "isNewInstance": {
@@ -1060,6 +1060,19 @@
                 },
                 "required": [
                     "isNewInstance"
+                ]
+            },
+            "AppInformation": {
+                "type": "object",
+                "properties": {
+                    "ytdlpVersion": {
+                        "type": "string",
+                        "description": "Version of yt-dlp used",
+                        "example": "2023.10.01"
+                    }
+                },
+                "required": [
+                    "ytdlpVersion"
                 ]
             },
             "UserRegistration": {
@@ -1127,7 +1140,48 @@
                                             "type": "object",
                                             "properties": {
                                                 "data": {
-                                                    "$ref": "#/components/schemas/AppInfo"
+                                                    "$ref": "#/components/schemas/AppStatus"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/information": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/AppInformation"
                                                 }
                                             },
                                             "required": [

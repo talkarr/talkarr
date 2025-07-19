@@ -262,6 +262,8 @@ jobs:
             OVERRIDE_CURRENT_BRANCH=${{ env.CURRENT_BRANCH }}
             OVERRIDE_CURRENT_VERSION=${{ env.CURRENT_VERSION }}
             OVERRIDE_CURRENT_TAG=${{ env.CURRENT_TAG }}
+            OVERRIDE_REMOTE_URL=${{ github.repositoryUrl }}
+            GITHUB_ACTIONS_RUN_ID=${{ github.run_id }}
 
       - name: Output sha of the container
         id: ref

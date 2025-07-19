@@ -16,6 +16,7 @@ export interface UiState {
     addFolderModal: boolean;
     confirmationModal: ConfirmationModalConfig | null;
     rootFolderErrorModal: RootFolderErrorModalData | null;
+    informationModal: boolean;
 }
 
 export interface UiActions {
@@ -36,6 +37,10 @@ export interface UiActions {
     // rootFolderErrorModal
     openRootFolderErrorModal: (data: RootFolderErrorModalData) => void;
     closeRootFolderErrorModal: () => void;
+
+    // informationModal
+    openInformationModal: () => void;
+    closeInformationModal: () => void;
 }
 
 export type UiStore = UiState & UiActions;
@@ -45,6 +50,7 @@ export const defaultUiState: UiState = {
     addFolderModal: false,
     confirmationModal: null,
     rootFolderErrorModal: null,
+    informationModal: false,
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -64,6 +70,8 @@ export const createUiStore = (initialState?: PartialDeep<UiState>) =>
                     set({ rootFolderErrorModal: data }),
                 closeRootFolderErrorModal: () =>
                     set({ rootFolderErrorModal: null }),
+                openInformationModal: () => set({ informationModal: true }),
+                closeInformationModal: () => set({ informationModal: false }),
             }),
             {
                 name: 'uiStore',

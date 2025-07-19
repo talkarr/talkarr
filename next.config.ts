@@ -31,6 +31,7 @@ export const unpluginTypiaOptions: Options = {
 
 const nextConfig = async (): Promise<NextConfig> => {
     const isInsideDocker = process.env.IS_INSIDE_DOCKER === 'true';
+    const githubActionsRunId = process.env.GITHUB_ACTIONS_RUN_ID;
     let currentCommit: string | undefined = process.env.OVERRIDE_CURRENT_COMMIT;
     let currentCommitTimestamp: string | undefined =
         process.env.OVERRIDE_CURRENT_COMMIT_TS;
@@ -38,6 +39,7 @@ const nextConfig = async (): Promise<NextConfig> => {
     let currentTag: string | undefined = process.env.OVERRIDE_CURRENT_TAG;
     let currentVersion: string | undefined =
         process.env.OVERRIDE_CURRENT_VERSION;
+    let remoteUrl: string | undefined = process.env.OVERRIDE_REMOTE_URL;
 
     if (!isInsideDocker) {
         console.log('Running outside of Docker, fetching git info...');
@@ -69,6 +71,15 @@ const nextConfig = async (): Promise<NextConfig> => {
                 await git.raw(['describe', '--tags', '--always'])
             ).trim();
         }
+
+        if (!remoteUrl) {
+            const configuredRemoteUrl = (
+                await git.getConfig('remote.origin.url')
+            ).value;
+            if (configuredRemoteUrl) {
+                remoteUrl = configuredRemoteUrl;
+            }
+        }
     }
 
     console.dir({
@@ -78,6 +89,8 @@ const nextConfig = async (): Promise<NextConfig> => {
         currentVersion,
         isInsideDocker,
         currentCommitTimestamp,
+        remoteUrl,
+        githubActionsRunId,
         YTDLP_PATH_OVERRIDE:
             process.env.YTDLP_PATH_OVERRIDE ?? '<hardcoded_not_set>',
     });
@@ -101,6 +114,9 @@ const nextConfig = async (): Promise<NextConfig> => {
                 NEXT_PUBLIC_CURRENT_VERSION: currentVersion,
                 NEXT_PUBLIC_IS_INSIDE_DOCKER: isInsideDocker ? 'true' : 'false',
                 NEXT_PUBLIC_CURRENT_COMMIT_TIMESTAMP: currentCommitTimestamp,
+                NEXT_PUBLIC_REMOTE_URL: remoteUrl,
+                NEXT_PUBLIC_NODEJS_VERSION: process.version,
+                NEXT_PUBLIC_GITHUB_ACTIONS_RUN_ID: githubActionsRunId,
                 YTDLP_PATH_OVERRIDE: process.env.YTDLP_PATH_OVERRIDE,
             },
             trailingSlash: false,
