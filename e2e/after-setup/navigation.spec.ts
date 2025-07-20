@@ -5,12 +5,6 @@ import { expect, test } from '@playwright/test';
 test.setTimeout(60_000);
 
 test('should be able to navigate to the home page', async ({ page }) => {
-    const logs: { msg: string; type: string }[] = [];
-
-    page.on('console', msg => {
-        logs.push({ msg: msg.text(), type: msg.type() });
-    });
-
     await page.goto('http://localhost:3232', {
         waitUntil: 'domcontentloaded',
     });
@@ -25,24 +19,6 @@ test('should be able to navigate to the home page', async ({ page }) => {
     await expect(page.title()).resolves.toBe('Talkarr');
 
     await expect(page.title()).resolves.not.toContain('404');
-
-    // check console logs for any errors
-    const errors = logs.filter(log => log.type === 'error');
-
-    // check if hydration errors are present
-    const hydrationErrors = errors.filter(
-        log =>
-            log.msg.toLowerCase().includes('hydration failed') ||
-            log.msg.toLowerCase().includes('minified react error #418'),
-    );
-
-    // eslint-disable-next-line playwright/no-conditional-in-test
-    if (hydrationErrors.length > 0) {
-        console.error('Hydration errors found:', hydrationErrors);
-    }
-
-    expect(hydrationErrors).toHaveLength(0);
-    expect(hydrationErrors).toEqual([]);
 });
 
 test('should be able to navigate to each page', async ({ page }) => {

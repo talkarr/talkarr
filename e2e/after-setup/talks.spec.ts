@@ -230,6 +230,13 @@ test('should be able to search for a string', async ({
     browserName,
     isMobile,
 }, testInfo) => {
+    const logs: { msg: string; type: string }[] = [];
+
+    page.on('console', msg => {
+        console.info('\n\nConsole log:', msg.text(), '\n\n');
+        logs.push({ msg: msg.text(), type: msg.type() });
+    });
+
     expect(searchItemIndex).toBeGreaterThan(-1);
 
     console.log('searchItemIndex', searchItemIndex);
@@ -542,6 +549,24 @@ test('should be able to search for a string', async ({
 
     // url should be talks
     await page.waitForURL('http://localhost:3232/');
+
+    // check console logs for any errors
+    const errors = logs.filter(log => log.type === 'error');
+
+    // check if hydration errors are present
+    const hydrationErrors = errors.filter(
+        log =>
+            log.msg.toLowerCase().includes('hydration failed') ||
+            log.msg.toLowerCase().includes('minified react error #418'),
+    );
+
+    // eslint-disable-next-line playwright/no-conditional-in-test
+    if (hydrationErrors.length > 0) {
+        console.error('Hydration errors found:', hydrationErrors);
+    }
+
+    expect(hydrationErrors).toHaveLength(0);
+    expect(hydrationErrors).toEqual([]);
 });
 
 test('should be able to remove the root folder', async ({ page }, testInfo) => {
