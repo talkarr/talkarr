@@ -235,6 +235,22 @@ export const userMiddleware = async (
     next();
 };
 
+export const requireUser = async (
+    req: express.Request,
+    res: express.Response,
+): Promise<boolean> => {
+    if (!(req as any).user) {
+        log.warn('User is not authenticated');
+        res.status(401).json({
+            success: false,
+            error: 'User is not authenticated',
+        });
+        return false;
+    }
+
+    return true;
+};
+
 export const verifyPassword = async (
     user: UserWithPassword,
     password?: string,

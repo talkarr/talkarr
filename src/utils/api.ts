@@ -4,6 +4,8 @@ import createClient from 'openapi-fetch';
 
 import type { paths } from '@backend/generated/schema';
 
+import { getCookiesForApi } from '@/app/_api';
+
 const tag = `API-${typeof window === 'undefined' ? 'SERVER-SIDE' : 'CLIENT-SIDE'}`;
 
 const apiMiddleware: Middleware = {
@@ -16,6 +18,14 @@ const apiMiddleware: Middleware = {
         }
         // @ts-expect-error: requestTime is not part of the Node.js Request type
         request.requestTime = Date.now();
+
+        const hasCookie = request.headers.has('cookie');
+        if (!hasCookie && typeof window === 'undefined') {
+            const cookies = await getCookiesForApi();
+            if (cookies) {
+                request.headers.set('cookie', cookies);
+            }
+        }
     },
     onResponse: async ({ request, response }) => {
         // @ts-expect-error: requestTime is not part of the Node.js Request type

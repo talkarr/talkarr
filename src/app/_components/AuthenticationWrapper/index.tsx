@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import type { FC } from 'react';
 import React from 'react';
 
-import { getAppStatus } from '@/app/_api';
+import { getAppStatus } from '@/app/_api/information';
 import { getUserInfo } from '@/app/_api/user/info';
 
 import { welcomePageLink } from '@/constants';

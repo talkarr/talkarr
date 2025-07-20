@@ -1,20 +1,13 @@
 import type { RequestBody } from '@backend/types';
 
-import { getCookiesForApi } from '@/app/_api';
-
 import api from '@/utils/api';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pGetGeneralSettings = async () => {
-    const cookie = await getCookiesForApi();
-
     const { data, error, response } = await api.GET(
         '/settings/general/config',
         {
             cache: 'no-store',
-            headers: {
-                cookie,
-            },
         },
     );
 
@@ -36,14 +29,10 @@ export type SetGeneralSettingsParams = RequestBody<'/settings/general/config'>;
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pSetGeneralSettings = async (body: SetGeneralSettingsParams) => {
-    const cookie = await getCookiesForApi();
     const { data, error, response } = await api.POST(
         '/settings/general/config',
         {
             body,
-            headers: {
-                cookie,
-            },
         },
     );
 
