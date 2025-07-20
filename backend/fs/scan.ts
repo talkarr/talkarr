@@ -59,9 +59,22 @@ export const scanForExistingFiles = async ({
         const conferenceAcronym = folder.name;
         let conferenceIsValid = true;
 
-        const conference = await getConferenceFromAcronym({
-            acronym: conferenceAcronym,
-        });
+        let conference;
+
+        try {
+            conference = await getConferenceFromAcronym({
+                acronym: conferenceAcronym,
+            });
+        } catch (error) {
+            log.error(
+                `Error fetching conference ${conferenceAcronym}, skipping...`,
+                {
+                    error,
+                },
+            );
+            // there was a problem during the fetch which is not a 404 for example, so we skip it.
+            continue;
+        }
 
         if (!conference) {
             log.warn(`Folder ${conferenceAcronym} is not a valid conference`);
@@ -116,7 +129,16 @@ export const scanForExistingFiles = async ({
                 continue;
             }
 
-            const event = await getTalkFromApiBySlug({ slug: eventSlug });
+            let event;
+
+            try {
+                event = await getTalkFromApiBySlug({ slug: eventSlug });
+            } catch (error) {
+                log.error(`Error fetching event ${eventSlug}, skipping...`, {
+                    error,
+                });
+                continue;
+            }
 
             if (!event) {
                 log.warn(`Event ${eventSlug} does not exist`);

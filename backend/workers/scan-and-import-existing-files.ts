@@ -28,7 +28,9 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
             jobId: job.id,
         });
 
-        return done(); // do not throw error
+        // do not throw error
+        done();
+        return;
     }
 
     const rootFolders = await listRootFolders();
@@ -86,7 +88,9 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
         }
     }
 
-    return done();
+    console.log('scanAndImportExistingFiles done\n\n\n\n');
+
+    done();
 };
 
 queue.addWorker(taskName, {

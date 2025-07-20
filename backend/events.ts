@@ -1185,17 +1185,29 @@ export const importEventFahrplanJson = async ({
             }
         }
 
-        // implement it like importExistingFileFromFilesystem
-        const apiEvent = await getTalkFromApiBySlug({ slug });
+        let apiEvent;
 
-        if (!apiEvent) {
-            log.error('Talk not found', { slug });
+        try {
+            // implement it like importExistingFileFromFilesystem
+            apiEvent = await getTalkFromApiBySlug({ slug });
 
-            errors.push({
+            if (!apiEvent) {
+                log.error('Talk not found', { slug });
+
+                errors.push({
+                    slug,
+                    title: lecture?.title || '',
+                    isRecorded: wasRecorded ?? null,
+                    error: 'Talk not found',
+                });
+
+                continue;
+            }
+        } catch (error) {
+            log.error('Error fetching talk from API', {
+                error,
                 slug,
-                title: lecture?.title || '',
-                isRecorded: wasRecorded ?? null,
-                error: 'Talk not found',
+                title: lecture?.title || '<no title found>',
             });
 
             continue;

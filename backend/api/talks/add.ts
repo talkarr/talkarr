@@ -36,14 +36,30 @@ const handleAddEventRequest = async (
         return;
     }
 
-    const event = await getTalkFromApiByGuid({ guid });
+    let event;
 
-    if (!event) {
-        log.error('Talk not found.');
+    try {
+        event = await getTalkFromApiByGuid({ guid });
 
-        res.status(404).json({
+        if (!event) {
+            log.error('Talk not found.');
+
+            res.status(404).json({
+                success: false,
+                error: 'Talk not found.',
+            });
+
+            return;
+        }
+    } catch (error) {
+        log.error('Error fetching talk from API:', {
+            error,
+            guid,
+        });
+
+        res.status(500).json({
             success: false,
-            error: 'Talk not found.',
+            error: 'Error fetching talk from API.',
         });
 
         return;

@@ -53,12 +53,28 @@ const handleGetEventRequest = async (
         return;
     }
 
-    const talkData = await getTalkFromApiByGuid({
-        guid: event.guid,
-        cache: {
-            cacheKey: `talks/get/${event.guid}`,
-        },
-    });
+    let talkData;
+
+    try {
+        talkData = await getTalkFromApiByGuid({
+            guid: event.guid,
+            cache: {
+                cacheKey: `talks/get/${event.guid}`,
+            },
+        });
+    } catch (error) {
+        log.error('Error fetching talk from API:', {
+            error,
+            guid: event.guid,
+        });
+
+        res.status(500).json({
+            success: false,
+            error: 'Error fetching talk from API.',
+        });
+
+        return;
+    }
 
     const talkInfo = await getTalkInfoByGuid({ guid: event.guid });
 
