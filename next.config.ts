@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-await-expression-member */
 // noinspection ES6PreferShortImport
 
 import type { Options } from '@ryoppippi/unplugin-typia';
@@ -9,6 +10,7 @@ import { apiBaseUrl } from './src/constants';
 import unTypiaNext from '@ryoppippi/unplugin-typia/next';
 
 if (process.argv.includes('build')) {
+    // eslint-disable-next-line unicorn/no-lonely-if
     if (process.env.NODE_ENV !== 'production') {
         throw new Error(
             'You must build in production mode. Set NODE_ENV=production.',

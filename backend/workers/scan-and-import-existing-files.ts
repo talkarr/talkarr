@@ -88,8 +88,6 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
         }
     }
 
-    console.log('scanAndImportExistingFiles done\n\n\n\n');
-
     done();
 };
 

@@ -12,7 +12,7 @@ export const acquireLock = async (data: Locks): Promise<void> => {
         await prisma.locks.create({
             data,
         });
-        log.info('Lock acquired', { lock: data.name });
+        log.debug('Lock acquired', { lock: data.name });
     } catch (error) {
         if (
             error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -30,9 +30,16 @@ export const acquireLockAndReturn = async (data: Locks): Promise<boolean> => {
         await prisma.locks.create({
             data,
         });
-        log.info('Lock acquired', { lock: data.name });
+        log.debug('Lock acquired', { lock: data.name });
         return true;
-    } catch {
+    } catch (error) {
+        if (
+            error instanceof Prisma.PrismaClientKnownRequestError &&
+            error.code === 'P2002'
+        ) {
+            log.debug('Lock already acquired', { lock: data.name });
+            return false;
+        }
         return false;
     }
 };
@@ -47,7 +54,7 @@ export const releaseLock = async (
                 name: data.name,
             },
         });
-        log.info('Lock released', { lock: data.name });
+        log.debug('Lock released', { lock: data.name });
     } catch (error) {
         if (
             error instanceof Prisma.PrismaClientKnownRequestError &&

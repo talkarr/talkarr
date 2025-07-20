@@ -34,6 +34,7 @@ export default defineConfig<TestOptions>({
             mode: 'only-on-failure',
         },
         video: process.env.CI ? 'off' : 'retain-on-failure',
+        timezoneId: 'Europe/Vienna',
     },
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     // reporter: process.env.CI ? 'github' : 'html',
