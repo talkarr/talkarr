@@ -5,7 +5,7 @@ import { getFolderPathForTalk } from '@backend/fs';
 import { handleEventNfoGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type {
     ConvertBigintToNumberType,
     ExtendedDbEvent,

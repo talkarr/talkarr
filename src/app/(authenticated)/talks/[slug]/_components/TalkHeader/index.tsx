@@ -84,7 +84,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => (
                             />
                         </Box>
                     ) : null}
-                    {data.db.persons.length ? (
+                    {data.db.persons.length > 0 ? (
                         <Box>
                             <SmallText mb={bottomPadding}>Speaker</SmallText>
                             <Box
@@ -104,7 +104,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => (
                             </Box>
                         </Box>
                     ) : null}
-                    {data.db.tags.length ? (
+                    {data.db.tags.length > 0 ? (
                         <Box>
                             <SmallText mb={bottomPadding}>Tags</SmallText>
                             <Box

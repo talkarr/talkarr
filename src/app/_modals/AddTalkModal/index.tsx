@@ -17,7 +17,7 @@ import {
 } from '@/utils/string';
 
 import { yearOnlyFormat } from '@/constants';
-import { useUiStore } from '@/providers/uiStoreProvider';
+import { useUiStore } from '@/providers/ui-store-provider';
 
 import BaseModal from '@components/CustomModal';
 import TalkImage from '@components/TalkImage';

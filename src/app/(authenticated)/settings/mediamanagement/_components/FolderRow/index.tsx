@@ -12,7 +12,7 @@ import type { SuccessData } from '@backend/types';
 
 import { removeFolder } from '@/app/_api/settings/mediamanagement';
 
-import { useUiStore } from '@/providers/uiStoreProvider';
+import { useUiStore } from '@/providers/ui-store-provider';
 
 import FancyIconButton from '@components/FancyIconButton';
 import DeleteIcon from '@mui/icons-material/Delete';

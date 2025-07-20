@@ -7,7 +7,7 @@ import { enqueueSnackbar } from 'notistack';
 
 import { addFolder, listFiles } from '@/app/_api/settings/mediamanagement';
 
-import { useUiStore } from '@/providers/uiStoreProvider';
+import { useUiStore } from '@/providers/ui-store-provider';
 
 import BaseModal from '@components/CustomModal';
 import AddIcon from '@mui/icons-material/Add';
@@ -73,8 +73,8 @@ const AddFolderModal: FC = () => {
             } else {
                 setError('Error fetching folders');
             }
-        } catch (e) {
-            console.error('Error fetching folders', e);
+        } catch (error_) {
+            console.error('Error fetching folders', error_);
             setError('Error fetching folders');
         }
     };
@@ -100,8 +100,8 @@ const AddFolderModal: FC = () => {
             } else {
                 setError('Error adding folder');
             }
-        } catch (e) {
-            console.error('Error adding folder', e);
+        } catch (error_) {
+            console.error('Error adding folder', error_);
             setError('Error adding folder');
         }
 
@@ -116,7 +116,7 @@ const AddFolderModal: FC = () => {
 
     useEffect(() => {
         // if opened and no folders, fetch root folders
-        if (!folders.length) {
+        if (folders.length === 0) {
             handleFetchFolders(folderName);
         }
     }, [folderName, folders.length]);
@@ -187,9 +187,10 @@ const AddFolderModal: FC = () => {
             </Box>
             <Box mb={2}>
                 <StyledList disablePadding ref={listRef}>
-                    {folders.length ? (
+                    {folders.length > 0 ? (
                         <ListItem disablePadding>
                             <ListItemButton
+                                // previous folder
                                 onClick={() => removeFolderSegment()}
                                 disabled={addFolderLoading}
                             >

@@ -1,7 +1,7 @@
 import express from 'express';
 import typia from 'typia';
 
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import { getSettings, setSettings } from '@backend/settings';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import type { GeneralSettings } from '@backend/types/settings';
@@ -46,8 +46,8 @@ router.post(
 
         try {
             await setSettings('general', settings);
-        } catch (e) {
-            log.error('Error saving general settings', { e });
+        } catch (error) {
+            log.error('Error saving general settings', { e: error });
             res.status(500).json({
                 success: false,
                 error: 'Error saving general settings',

@@ -98,6 +98,7 @@ const ImportJsonField: FC = () => {
                 setJson(content);
             }
         };
+        // eslint-disable-next-line unicorn/prefer-blob-reading-methods
         reader.readAsText(file);
     };
 
@@ -109,7 +110,7 @@ const ImportJsonField: FC = () => {
 
             if (!result) {
                 setError('An error occurred while verifying the JSON');
-            } else if (!result.success) {
+            } else if (result.success === false) {
                 setError(result.error);
             } else {
                 setError(null);
@@ -170,11 +171,11 @@ const ImportJsonField: FC = () => {
                             spellCheck="false"
                             autoCorrect="off"
                         />
-                        {error !== null ? (
+                        {error === null ? null : (
                             <FormHelperText error data-testid="json-error">
                                 {error}
                             </FormHelperText>
-                        ) : null}
+                        )}
                     </Box>
                     <Box mb={2}>
                         <FormControl fullWidth>

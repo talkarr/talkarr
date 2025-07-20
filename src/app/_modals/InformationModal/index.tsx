@@ -11,7 +11,7 @@ import { getInformation } from '@/app/_api/information';
 import InfoBox from '@/app/_modals/InformationModal/_components/InfoBox';
 
 import { pageName } from '@/constants';
-import { useUiStore } from '@/providers/uiStoreProvider';
+import { useUiStore } from '@/providers/ui-store-provider';
 
 import BaseModal from '@components/CustomModal';
 import Grid from '@mui/material/Grid';
@@ -99,7 +99,7 @@ const InformationModal: FC = () => {
         const runId = process.env.NEXT_PUBLIC_GITHUB_ACTIONS_RUN_ID;
 
         if (!runId) {
-            return undefined;
+            return null;
         }
 
         return `${repoHref}/actions/runs/${runId}`;
@@ -133,7 +133,7 @@ const InformationModal: FC = () => {
                             process.env.NEXT_PUBLIC_GITHUB_ACTIONS_RUN_ID ||
                             'Not built with GitHub Actions'
                         }
-                        href={githubActionsRunIdHref}
+                        href={githubActionsRunIdHref || undefined}
                     />
                     <InfoBox
                         primaryText="Node.js version"

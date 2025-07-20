@@ -10,7 +10,7 @@ import TalkToolbar, {
 } from '@/app/(authenticated)/talks/[slug]/_components/TalkToolbar';
 import type { SingleTalkData } from '@/app/(authenticated)/talks/[slug]/page';
 
-import { useApiStore } from '@/providers/apiStoreProvider';
+import { useApiStore } from '@/providers/api-store-provider';
 
 import Box from '@mui/material/Box';
 

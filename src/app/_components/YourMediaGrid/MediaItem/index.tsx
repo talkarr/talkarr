@@ -7,15 +7,15 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import moment from 'moment';
 
-import { getMediaItemStatusColor } from '@backend/talkUtils';
+import { getMediaItemStatusColor } from '@backend/talk-utils';
 import type { SuccessData } from '@backend/types';
 
-import useOnScreen from '@/hooks/useOnScreen';
+import useOnScreen from '@/hooks/use-on-screen';
 
 import { generateCacheUrl } from '@/utils/cache';
 
 import { longDateFormat, specificTalkPageLink } from '@/constants';
-import { useApiStore } from '@/providers/apiStoreProvider';
+import { useApiStore } from '@/providers/api-store-provider';
 
 import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
 import InvisibleLink from '@components/InvisibleLink';
@@ -72,7 +72,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
         };
 
         const intervalMs = initialData.has_problems?.length
-            ? 20000
+            ? 20_000
             : talkInfo?.is_downloading
               ? 1000
               : 5000;
@@ -133,16 +133,16 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                         <Box
                             height="100%"
                             sx={{
-                                ...(status !== null
-                                    ? {
+                                ...(status === null
+                                    ? {}
+                                    : {
                                           borderBottomColor:
                                               getMediaItemStatusColor(theme)[
                                                   status
                                               ],
                                           borderBottomWidth: 4,
                                           borderBottomStyle: 'solid',
-                                      }
-                                    : {}),
+                                      }),
                             }}
                         >
                             <CardMedia>

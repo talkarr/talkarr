@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process';
 
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'informationHandler' });

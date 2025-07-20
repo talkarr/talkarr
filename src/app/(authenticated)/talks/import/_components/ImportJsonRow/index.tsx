@@ -68,10 +68,10 @@ const ImportJsonRow: FC<ImportJsonRowProps> = ({
                 ) : existingData ? (
                     <FolderCopyRoundedIcon color="warning" />
                 ) : errorData ? (
-                    errorData.isRecorded !== false ? (
-                        <ErrorIcon color="error" />
-                    ) : (
+                    errorData.isRecorded === false ? (
                         <VideocamOffRoundedIcon color="error" />
+                    ) : (
+                        <ErrorIcon color="error" />
                     )
                 ) : (
                     <QuestionMarkRoundedIcon color="disabled" />

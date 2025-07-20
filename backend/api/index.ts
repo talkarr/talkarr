@@ -9,7 +9,7 @@ import talksRouter from '@backend/api/talks';
 import taskRouter from '@backend/api/tasks';
 import userRouter from '@backend/api/user';
 import { checkIsNewInstance } from '@backend/helper';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type { ExpressResponse } from '@backend/types';
 import { userMiddleware } from '@backend/users';
 

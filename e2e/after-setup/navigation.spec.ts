@@ -2,7 +2,7 @@
 import { navigationItems } from '@components/Navigation/navigation';
 import { expect, test } from '@playwright/test';
 
-test.setTimeout(60000);
+test.setTimeout(60_000);
 
 test('should be able to navigate to the home page', async ({ page }) => {
     await page.goto('http://localhost:3232', {
@@ -22,6 +22,7 @@ test('should be able to navigate to the home page', async ({ page }) => {
 });
 
 test('should be able to navigate to each page', async ({ page }) => {
+    // eslint-disable-next-line unicorn/no-array-reduce
     const pages = navigationItems.reduce<string[]>((acc, item) => {
         if (item.visible === false) {
             return acc;

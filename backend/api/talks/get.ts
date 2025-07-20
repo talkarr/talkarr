@@ -5,8 +5,8 @@ import {
     getTalkInfoByGuid,
 } from '@backend/events';
 import { getTalkFromApiByGuid } from '@backend/helper';
-import rootLog from '@backend/rootLog';
-import { generateMediaItemStatus } from '@backend/talkUtils';
+import rootLog from '@backend/root-log';
+import { generateMediaItemStatus } from '@backend/talk-utils';
 import type {
     ConvertDateToStringType,
     ExpressRequest,
@@ -83,7 +83,9 @@ const handleGetEventRequest = async (
                 rootFolderPath: event.root_folder.path,
                 downloadError: talkInfo.download_error,
             })
-        )?.map(problem => problemMap[problem] ?? problem) || null;
+        )
+            // eslint-disable-next-line unicorn/no-await-expression-member
+            ?.map(problem => problemMap[problem] ?? problem) || null;
 
     res.json({
         success: true,

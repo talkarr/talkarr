@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import path from 'path';
+import path from 'node:path';
 import * as winston from 'winston';
 
 import { configDirectory, logLevel } from '@backend/env';
@@ -7,7 +7,7 @@ import { configDirectory, logLevel } from '@backend/env';
 import 'winston-daily-rotate-file';
 
 if (typeof window !== 'undefined') {
-    throw new Error(
+    throw new TypeError(
         'This file should not be imported in the browser. It is meant for server-side logging only.',
     );
 }

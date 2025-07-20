@@ -7,13 +7,13 @@ import React, { useState } from 'react';
 
 import { useSnackbar } from 'notistack';
 
-import useLogout from '@/hooks/useLogout';
+import useLogout from '@/hooks/use-logout';
 
 import { generateCacheUrl } from '@/utils/cache';
 
-import { userAvatarCacheKey } from '@/cacheKeys';
+import { userAvatarCacheKey } from '@/cache-keys';
 import { loginPageLink } from '@/constants';
-import { useUserStore } from '@/providers/userStoreProvider';
+import { useUserStore } from '@/providers/user-store-provider';
 
 import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';

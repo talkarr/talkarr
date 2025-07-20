@@ -9,8 +9,8 @@ import { enqueueSnackbar } from 'notistack';
 import type { SingleTalkData } from '@/app/(authenticated)/talks/[slug]/page';
 
 import { homePageLink } from '@/constants';
-import { useApiStore } from '@/providers/apiStoreProvider';
-import { useUiStore } from '@/providers/uiStoreProvider';
+import { useApiStore } from '@/providers/api-store-provider';
+import { useUiStore } from '@/providers/ui-store-provider';
 
 import VerticalIconButton from '@components/VerticalIconButton';
 import DeleteIcon from '@mui/icons-material/Delete';

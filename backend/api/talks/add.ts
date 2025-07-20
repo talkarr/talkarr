@@ -1,8 +1,8 @@
-import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
+import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
 
 import { addTalk, fixBigintInExtendedDbEvent } from '@backend/events';
 import { getTalkFromApiByGuid } from '@backend/helper';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import { AddTalkFailure } from '@backend/types';
 

@@ -1,4 +1,4 @@
-import { initServer } from '@backend/initServer';
+import { initServer } from '@backend/init-server';
 
 import type { NextFunction, Request, Response } from 'express';
 
@@ -9,15 +9,15 @@ import express from 'express';
 import fs from 'node:fs';
 import swaggerUi from 'swagger-ui-express';
 
-import '@backend/workers/addTalk';
-import '@backend/workers/generateMissingNfo';
-import { startCheckForRootFolders } from '@backend/workers/checkForRootFolders';
+import '@backend/workers/add-talk';
+import '@backend/workers/generate-missing-nfo';
+import { startCheckForRootFolders } from '@backend/workers/check-for-root-folders';
 
 import api from '@backend/api';
 import { serverHost, serverPort } from '@backend/env';
 import { clearDownloadingFlagForAllTalks } from '@backend/events';
 import { releaseAllLocks } from '@backend/locks';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import { loadSettings } from '@backend/settings';
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -49,7 +49,7 @@ initServer.on('listening', async () => {
 
             server.use('/api', api);
 
-            const apiDocs = fs.readFileSync('./backend.json', 'utf-8');
+            const apiDocs = fs.readFileSync('./backend.json', 'utf8');
             server.use(
                 '/api-docs',
                 swaggerUi.serve,
@@ -103,8 +103,8 @@ initServer.on('listening', async () => {
                 }
             });
         })
-        .catch(err => {
-            log.error('Catched Error', { stack: err.stack });
+        .catch(error => {
+            log.error('Catched Error', { stack: error.stack });
             process.exit(1);
         });
 

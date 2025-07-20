@@ -4,8 +4,11 @@ import {
     mapResultFiles,
 } from '@backend/events';
 import { isFolderMarked } from '@backend/fs';
-import rootLog from '@backend/rootLog';
-import { generateMediaItemStatus, generateStatusMap } from '@backend/talkUtils';
+import rootLog from '@backend/root-log';
+import {
+    generateMediaItemStatus,
+    generateStatusMap,
+} from '@backend/talk-utils';
 import type {
     ConvertDateToStringType,
     ExpressRequest,
@@ -30,7 +33,9 @@ const handleListEventsRequest = async (
                         rootFolderPath: event.root_folder.path,
                         eventInfoGuid: event.eventInfo?.guid,
                     })
-                )?.map(problem => problemMap[problem] ?? problem) || null;
+                )
+                    // eslint-disable-next-line unicorn/no-await-expression-member
+                    ?.map(problem => problemMap[problem] ?? problem) || null;
 
             const file = event.file?.map(f =>
                 mapResultFiles({

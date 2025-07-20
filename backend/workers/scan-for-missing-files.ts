@@ -1,11 +1,11 @@
 import type { Locks } from '@prisma/client';
 
-import pathUtils from 'path';
+import pathUtils from 'node:path';
 import typia from 'typia';
 
 // eslint-disable-next-line import/no-cycle
-import { startAddTalk } from '@backend/workers/addTalk';
-import { startGenerateMissingNfo } from '@backend/workers/generateMissingNfo';
+import { startAddTalk } from '@backend/workers/add-talk';
+import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 
 import {
     addDownloadedFile,
@@ -24,7 +24,7 @@ import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
 import { acquireLockAndReturn, releaseLock } from '@backend/locks';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type {
     ConvertBigintToNumberType,
     ExtendedDbEvent,
@@ -75,7 +75,8 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
 
     const events = job.data.event
         ? [job.data.event]
-        : (await listEvents()).map(e => fixBigintInExtendedDbEvent(e));
+        : // eslint-disable-next-line unicorn/no-await-expression-member
+          (await listEvents()).map(e => fixBigintInExtendedDbEvent(e));
 
     let hasErrored = false;
 
@@ -100,28 +101,16 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
 
             const result = await createNewTalkInfo({ talk: event });
 
-            if (!result) {
+            if (result) {
+                log.info('Created new talk info:', { title: event.title });
+            } else {
                 log.error('Error creating new talk info:', {
                     title: event.title,
                 });
                 continue;
-            } else {
-                log.info('Created new talk info:', { title: event.title });
             }
 
-            if (!hasFiles?.find(f => f.isVideo)) {
-                // check if the event is downloading already
-                const isDownloading = await isEventDownloading({
-                    eventGuid: event.guid,
-                });
-                if (!isDownloading) {
-                    await startAddTalk({ event });
-                } else {
-                    log.info('Event is already downloading', {
-                        title: event.title,
-                    });
-                }
-            } else {
+            if (hasFiles?.find(f => f.isVideo)) {
                 await setIsDownloading({
                     eventGuid: event.guid,
                     isDownloading: false,
@@ -162,6 +151,18 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                             throw new Error('Error adding file to db');
                         }
                     }
+                }
+            } else {
+                // check if the event is downloading already
+                const isDownloading = await isEventDownloading({
+                    eventGuid: event.guid,
+                });
+                if (isDownloading) {
+                    log.info('Event is already downloading', {
+                        title: event.title,
+                    });
+                } else {
+                    await startAddTalk({ event });
                 }
             }
 

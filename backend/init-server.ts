@@ -1,27 +1,27 @@
-import type http from 'http';
+import type http from 'node:http';
 
 import express from 'express';
-import pathUtils from 'path';
+import pathUtils from 'node:path';
 
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 
 const log = rootLog.child({ label: 'loadingServer' });
 
 const loadingServer = express();
 
-loadingServer.get('/logo.png', (req, res) => {
+loadingServer.get('/logo.png', (_req, res) => {
     res.sendFile('logo_cropped.png', {
         root: pathUtils.join(__dirname, '..', 'assets'),
     });
 });
 
-loadingServer.get('/favicon.ico', (req, res) => {
+loadingServer.get('/favicon.ico', (_req, res) => {
     res.sendFile('favicon.ico', {
         root: pathUtils.join(__dirname, '..', 'assets'),
     });
 });
 
-loadingServer.get('/small_logo.png', (req, res) => {
+loadingServer.get('/small_logo.png', (_req, res) => {
     res.sendFile('logo_cropped_small.png', {
         root: pathUtils.join(__dirname, '..', 'assets'),
     });

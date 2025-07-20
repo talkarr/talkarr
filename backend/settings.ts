@@ -2,7 +2,7 @@ import deepmerge from 'deepmerge';
 import typia from 'typia';
 
 import { prisma } from '@backend/prisma';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type { Settings } from '@backend/types/settings';
 import { ImportIsRecordedFlagBehavior } from '@backend/types/settings';
 
@@ -82,10 +82,10 @@ export const setSettingsIfNotSet = async (): Promise<Settings> => {
                 },
             });
         }
-    } catch (e) {
-        log.error('Error setting initial settings:', { e });
+    } catch (error) {
+        log.error('Error setting initial settings:', { error });
 
-        throw e;
+        throw error;
     }
 
     return initialSettings;
@@ -165,10 +165,10 @@ export const loadSettings = async (recursive?: boolean): Promise<void> => {
         log.info('Settings loaded:', { settings });
 
         settingsLoaded = true;
-    } catch (e) {
-        log.error('Error loading settings:', { e });
+    } catch (error) {
+        log.error('Error loading settings:', { error });
 
-        throw e;
+        throw error;
     }
 };
 
@@ -186,10 +186,10 @@ export const saveSettings = async (): Promise<void> => {
         }
 
         log.info('Settings saved:', { settings });
-    } catch (e) {
-        log.error('Error saving settings:', { e });
+    } catch (error) {
+        log.error('Error saving settings:', { error });
 
-        throw e;
+        throw error;
     }
 };
 

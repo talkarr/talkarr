@@ -1,5 +1,5 @@
 import cache from '@backend/cache';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 
 const log = rootLog.child({ label: 'fetch' });
 
@@ -32,7 +32,7 @@ const apiFetch = async (
         if (cachedResponse) {
             log.debug(`Returning cached response for ${url}`);
 
-            return Promise.resolve(cachedResponse as FetchResponse);
+            return cachedResponse as FetchResponse;
         }
     }
 

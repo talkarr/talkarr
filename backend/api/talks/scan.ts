@@ -1,6 +1,6 @@
 import { scanForExistingFiles } from '@backend/fs/scan';
 import type { components } from '@backend/generated/schema';
-import { listRootFolders } from '@backend/rootFolder';
+import { listRootFolders } from '@backend/root-folder';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const handleScanEventsRequest = async (
@@ -9,9 +9,10 @@ const handleScanEventsRequest = async (
 ): Promise<void> => {
     const { root_folder: rootFolder } = req.body;
 
+    // eslint-disable-next-line unicorn/no-await-expression-member
     const rootFolders = (await listRootFolders()).map(folder => folder.path);
 
-    if (!rootFolders || !rootFolders.length) {
+    if (!rootFolders || rootFolders.length === 0) {
         res.status(500).json({
             success: false,
             error: 'Internal Server Error',
@@ -31,13 +32,13 @@ const handleScanEventsRequest = async (
     }
 
     const foldersToScan =
-        typeof rootFolder !== 'string'
-            ? rootFolders
-            : rootFolders.includes(rootFolder)
-              ? [rootFolder]
-              : [];
+        typeof rootFolder === 'string'
+            ? rootFolders.includes(rootFolder)
+                ? [rootFolder]
+                : []
+            : rootFolders;
 
-    if (!foldersToScan.length) {
+    if (foldersToScan.length === 0) {
         res.status(400).json({
             success: false,
             error: 'Invalid root_folder',
@@ -51,7 +52,7 @@ const handleScanEventsRequest = async (
     for await (const rootFolderPath of foldersToScan) {
         const files = (await scanForExistingFiles({ rootFolderPath })) ?? [];
 
-        if (!files.length) {
+        if (files.length === 0) {
             continue;
         }
 

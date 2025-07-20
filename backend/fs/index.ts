@@ -1,8 +1,8 @@
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
-import pathUtils from 'path';
+import pathUtils from 'node:path';
 
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type {
     ConvertBigintToNumberType,
     ExtendedDbEvent,
@@ -127,7 +127,7 @@ export const doesTalkHaveExistingFilesOnDisk = async ({
         existingFiles,
     });
 
-    return existingFiles.length ? existingFiles : null;
+    return existingFiles.length > 0 ? existingFiles : null;
 };
 
 export const getEventFilename = ({
@@ -146,8 +146,8 @@ export const getEventFilename = ({
     );
 
     const slug = slugWithoutConference
-        .replace(/ /g, '-')
-        .replace(/[^a-zA-Z-_]/g, '')
+        .replaceAll(' ', '-')
+        .replaceAll(/[^a-zA-Z-_]/g, '')
         .toLowerCase()
         .trim()
         .replace(/^-+/, '')

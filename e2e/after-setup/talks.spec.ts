@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention,playwright/no-wait-for-selector,playwright/no-wait-for-timeout */
 import fs from 'node:fs';
-import pathUtils from 'path';
+import pathUtils from 'node:path';
 
 import { stripInvalidCharsForDataAttribute } from '@/utils/string';
 
@@ -26,7 +26,7 @@ const e2eTestFolderName = (name: string | unknown): string => {
     }
 
     // make name all lower case and replace invalid chars with _
-    const formatted = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    const formatted = name.toLowerCase().replaceAll(/[^a-z0-9]/g, '_');
 
     const path = pathUtils.join(BASE_DIR, 'e2e-test-folder', formatted);
 
@@ -51,21 +51,21 @@ const e2eTestFolderName = (name: string | unknown): string => {
         // try to write a file
         fs.writeFileSync(pathUtils.join(path, 'test-file.txt'), 'test');
 
-        if (!fs.existsSync(pathUtils.join(path, 'test-file.txt'))) {
-            throw new Error('Failed to write file');
-        } else {
+        if (fs.existsSync(pathUtils.join(path, 'test-file.txt'))) {
             console.log(
                 `File ${pathUtils.join(path, 'test-file.txt')} written`,
             );
+        } else {
+            throw new Error('Failed to write file');
         }
 
         // read the file
         const data = fs.readFileSync(pathUtils.join(path, 'test-file.txt'));
 
-        if (data.toString() !== 'test') {
-            throw new Error('Failed to read file');
-        } else {
+        if (data.toString() === 'test') {
             console.log(`File ${pathUtils.join(path, 'test-file.txt')} read`);
+        } else {
+            throw new Error('Failed to read file');
         }
 
         console.log('Folder created successfully', formatted);
@@ -150,7 +150,7 @@ test('should be able to add a root folder', async ({
     // eslint-disable-next-line playwright/no-conditional-in-test
     if (await areRootFoldersConfigured.count()) {
         for await (const folder of await areRootFoldersConfigured.all()) {
-            const folderName = await folder.innerText();
+            const folderName = await folder.textContent();
 
             // eslint-disable-next-line playwright/no-conditional-in-test
             if (folderName === rootFolder) {
@@ -459,9 +459,9 @@ test('should be able to search for a string', async ({
     // expect snackbar to have a message
     const snackbarMessage = await page
         .locator('[data-testid=snackbar]')
-        .innerText();
+        .textContent();
 
-    expect(snackbarMessage.toLowerCase()).toContain('successfully');
+    expect(snackbarMessage?.toLowerCase()).toContain('successfully');
 
     // eslint-disable-next-line playwright/no-conditional-in-test
     if (isMobile) {
@@ -545,7 +545,7 @@ test('should be able to search for a string', async ({
 });
 
 test('should be able to remove the root folder', async ({ page }, testInfo) => {
-    test.setTimeout(60000);
+    test.setTimeout(60_000);
 
     // directly go to the media management settings page
     await page.goto(`http://localhost:3232${mediaManagementSettingsPageLink}`, {

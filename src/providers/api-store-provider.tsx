@@ -7,8 +7,8 @@ import React, { createContext, useContext, useRef } from 'react';
 
 import { useStore } from 'zustand';
 
-import type { ApiState, ApiStore } from '@/stores/apiStore';
-import { createApiStore } from '@/stores/apiStore';
+import type { ApiState, ApiStore } from '@/stores/api-store';
+import { createApiStore } from '@/stores/api-store';
 
 export type ApiStoreApi = ReturnType<typeof createApiStore>;
 

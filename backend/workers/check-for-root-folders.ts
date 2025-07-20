@@ -1,6 +1,6 @@
 import typia from 'typia';
 
-import { startCheckIfFilesExist } from '@backend/workers/checkIfFilesExist';
+import { startCheckIfFilesExist } from '@backend/workers/check-if-files-exist';
 
 import { isFolderMarked } from '@backend/fs';
 import type { TaskFunction } from '@backend/queue';
@@ -9,8 +9,8 @@ import {
     clearAllRootFolderHasMarks,
     listRootFolders,
     setRootFolderMarkExists,
-} from '@backend/rootFolder';
-import rootLog from '@backend/rootLog';
+} from '@backend/root-folder';
+import rootLog from '@backend/root-log';
 
 export const taskName = 'checkForRootFolders';
 
@@ -42,7 +42,7 @@ const checkForRootFolders: TaskFunction<CheckForRootFoldersData> = async (
 
     const databaseRootFolders = await listRootFolders();
 
-    if (!databaseRootFolders.length) {
+    if (databaseRootFolders.length === 0) {
         log.info('No root folders found');
 
         return done();
@@ -63,11 +63,7 @@ const checkForRootFolders: TaskFunction<CheckForRootFoldersData> = async (
             rootFolderPath: rootFolder.path,
         });
 
-        if (!hasMark) {
-            log.error('Root folder not marked:', { rootFolder });
-
-            throw new Error('Root folder not marked');
-        } else {
+        if (hasMark) {
             log.info('Root folder marked:', { rootFolder });
 
             await setRootFolderMarkExists({ rootFolderPath: rootFolder.path });
@@ -76,6 +72,10 @@ const checkForRootFolders: TaskFunction<CheckForRootFoldersData> = async (
                 isInit: data?.isInit,
                 startScanForMissing: isLast,
             });
+        } else {
+            log.error('Root folder not marked:', { rootFolder });
+
+            throw new Error('Root folder not marked');
         }
     }
 

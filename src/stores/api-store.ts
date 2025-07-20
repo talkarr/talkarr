@@ -14,7 +14,7 @@ import type { SearchEventsResponse } from '@/app/_api/talks/search';
 import { searchEvents } from '@/app/_api/talks/search';
 import type { SingleTalkData } from '@/app/(authenticated)/talks/[slug]/page';
 
-import type { TalkData } from '@/stores/uiStore';
+import type { TalkData } from '@/stores/ui-store';
 
 export interface ApiState {
     searchResults: SearchEventsResponse | undefined;

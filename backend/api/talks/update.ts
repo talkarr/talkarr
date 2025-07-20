@@ -1,6 +1,6 @@
 import { updateTalk } from '@backend/events';
 import { getTalkFromApiByGuid } from '@backend/helper';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/update' });

@@ -2,7 +2,7 @@ import type { Locks } from '@prisma/client';
 
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
-import pathUtils from 'path';
+import pathUtils from 'node:path';
 import typia from 'typia';
 import {
     create as createYoutubeDl,
@@ -10,7 +10,7 @@ import {
 } from 'youtube-dl-exec';
 
 // eslint-disable-next-line import/no-cycle
-import { startGenerateMissingNfo } from '@backend/workers/generateMissingNfo';
+import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 
 import {
     addDownloadedFile,
@@ -33,7 +33,7 @@ import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
 import { acquireLockAndReturn, releaseLock } from '@backend/locks';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type {
     ConvertBigintToNumberType,
     ExtendedDbEvent,
@@ -212,7 +212,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             log.error('Error with ytdl:', { error });
         });
 
-        exitCode = (await ytdlInstance).exitCode;
+        const awaitedProcess = await ytdlInstance;
+        exitCode = awaitedProcess.exitCode;
 
         if (exitCode !== 0) {
             log.error('Error fetching video info (exitCode != 0)', {
@@ -336,7 +337,9 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
                 ? stdout.match(/(\d+\.?\d*)%/)
                 : null;
 
-            const rounded = progress ? Math.round(parseFloat(progress[0])) : 0;
+            const rounded = progress
+                ? Math.round(Number.parseFloat(progress[0]))
+                : 0;
 
             if (rounded !== lastProgress) {
                 lastProgress = rounded;
@@ -374,7 +377,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
             exitCode = code;
         });
 
-        exitCode = (await videoSubprocess).exitCode;
+        const awaitedVideoSubprocess = await videoSubprocess;
+        exitCode = awaitedVideoSubprocess.exitCode;
 
         if (!path) {
             await setIsDownloading({

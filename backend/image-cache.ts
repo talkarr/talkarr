@@ -1,8 +1,8 @@
 import fs from 'node:fs';
-import path from 'path';
+import path from 'node:path';
 
 import { configDirectory } from '@backend/env';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import { libravatarDomain } from '@backend/users';
 
 const log = rootLog.child({ label: 'imageCache' });
@@ -41,7 +41,7 @@ export const getCachedImageFromUrl = async ({
     }
 
     // make sure cache key is a valid filename and sanitize it
-    const cacheKeySanitized = cacheKey.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const cacheKeySanitized = cacheKey.replaceAll(/[^a-zA-Z0-9_-]/g, '_');
 
     // check if the URL is from a valid domain
     const urlObj = new URL(url);
@@ -90,8 +90,8 @@ export const getCachedImageFromUrl = async ({
             cachePathOnFs: cacheFilePath,
             remainingCacheDuration: cacheDuration - fileAge,
         };
-    } catch (err) {
-        log.debug(`Cached image not found for ${url}, fetching...`, { err });
+    } catch (error) {
+        log.debug(`Cached image not found for ${url}, fetching...`, { error });
     }
 
     try {
@@ -127,10 +127,10 @@ export const getCachedImageFromUrl = async ({
             cachePathOnFs: cacheFilePath,
             remainingCacheDuration: cacheDuration,
         };
-    } catch (err) {
+    } catch (error) {
         log.error(
             `Error fetching or caching image from ${url}, resolving to original url`,
-            { err },
+            { error },
         );
         return null;
     }

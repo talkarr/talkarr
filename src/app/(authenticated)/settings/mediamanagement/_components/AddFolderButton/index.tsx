@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import type { FC } from 'react';
 import { useEffect } from 'react';
 
-import { useUiStore } from '@/providers/uiStoreProvider';
+import { useUiStore } from '@/providers/ui-store-provider';
 
 import AddFolderIcon from '@mui/icons-material/Folder';
 import Button from '@mui/material/Button';

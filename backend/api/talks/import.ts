@@ -1,7 +1,7 @@
 import typia from 'typia';
 
 import { importEventFahrplanJson } from '@backend/events';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type {
     EventFahrplanJsonImport,
     ExpressRequest,
