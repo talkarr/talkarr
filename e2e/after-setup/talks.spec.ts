@@ -389,6 +389,8 @@ test('should be able to search for a string', async ({
     // click the cancel button
     await cancelButton.click();
 
+    await page.getByTestId('add-talk-loading').waitFor({ state: 'hidden' });
+
     // expect add-talk-modal to be hidden
     await expect(page.getByTestId('add-talk-modal')).toBeHidden();
 
@@ -456,6 +458,8 @@ test('should be able to search for a string', async ({
 
     // click the add talk button
     await addTalkButton_2.click();
+
+    await page.getByTestId('add-talk-loading').waitFor({ state: 'hidden' });
 
     // expect add-talk-modal to be hidden
     await expect(page.getByTestId('add-talk-modal')).toBeHidden();
