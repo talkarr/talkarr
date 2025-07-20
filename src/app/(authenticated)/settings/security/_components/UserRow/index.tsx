@@ -4,7 +4,7 @@ import type { components } from '@backend/generated/schema';
 
 import { generateCacheUrl } from '@/utils/cache';
 
-import { userAvatarCacheKey } from '@/cacheKeys';
+import { userAvatarCacheKey } from '@/cache-keys';
 
 import CustomAvatar from '@components/CustomAvatar';
 import EditIcon from '@mui/icons-material/Edit';

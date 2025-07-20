@@ -1,14 +1,14 @@
 import typia from 'typia';
 
-import { startScanAndImportExistingFiles } from '@backend/workers/scanAndImportExistingFiles';
-import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
+import { startScanAndImportExistingFiles } from '@backend/workers/scan-and-import-existing-files';
+import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
 
 import { removeFileFromDatabase } from '@backend/events';
 import { doesFileExist } from '@backend/fs';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
-import { listFilesForRootFolder } from '@backend/rootFolder';
-import rootLog from '@backend/rootLog';
+import { listFilesForRootFolder } from '@backend/root-folder';
+import rootLog from '@backend/root-log';
 
 export const taskName = 'checkIfFilesExist';
 
@@ -46,7 +46,7 @@ const checkIfFilesExist: TaskFunction<CheckIfFilesExistData> = async (
         throw new Error('Error listing files for root folder');
     }
 
-    if (!files.length) {
+    if (files.length === 0) {
         log.info('No files found for root folder, skipping check:', {
             rootFolder: data.rootFolder,
         });
@@ -63,7 +63,9 @@ const checkIfFilesExist: TaskFunction<CheckIfFilesExistData> = async (
             // check if file exists
             const exists = await doesFileExist({ filePath: file.path });
 
-            if (!exists) {
+            if (exists) {
+                log.debug('File exists:', { filePath: file.path });
+            } else {
                 log.warn(
                     'File does not exist anymore, deleting from database:',
                     {
@@ -81,8 +83,6 @@ const checkIfFilesExist: TaskFunction<CheckIfFilesExistData> = async (
                         filePath: file.path,
                     });
                 }
-            } else {
-                log.debug('File exists:', { filePath: file.path });
             }
         }
     }

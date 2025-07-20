@@ -1,18 +1,18 @@
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 
-import { taskName as addTalk } from './addTalk';
+import { taskName as addTalk } from './add-talk';
 import {
     check as validateCheckForRootFolders,
     taskName as checkForRootFolders,
-} from './checkForRootFolders';
+} from './check-for-root-folders';
 import {
     check as validateGenerateMissingNfo,
     taskName as generateMissingNfo,
-} from './generateMissingNfo';
+} from './generate-missing-nfo';
 import {
     check as validateScanForMissingFiles,
     taskName as scanForMissingFiles,
-} from './scanForMissingFiles';
+} from './scan-for-missing-files';
 
 const log = rootLog.child({ label: 'workers/index' });
 

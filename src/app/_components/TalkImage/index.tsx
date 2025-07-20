@@ -14,7 +14,7 @@ import {
 
 import { generateCacheUrl } from '@/utils/cache';
 
-import type { TalkData } from '@/stores/uiStore';
+import type { TalkData } from '@/stores/ui-store';
 
 import ImageFallback from '@components/ImageFallback';
 import { useTheme } from '@mui/material';

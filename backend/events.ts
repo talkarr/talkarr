@@ -1,14 +1,14 @@
 import type { Event as DbEvent, EventInfo, File } from '@prisma/client';
 
 // eslint-disable-next-line import/no-cycle
-import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
+import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
 
 import { getFolderPathForTalk, isFolderMarked, isVideoFile } from '@backend/fs';
 import type { ExistingFileWithGuessedInformation } from '@backend/fs/scan';
 import type { components } from '@backend/generated/schema';
 import { getConferenceFromEvent, getTalkFromApiBySlug } from '@backend/helper';
 import { prisma } from '@backend/prisma';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import { getSettings } from '@backend/settings';
 import type {
     ApiEvent,
@@ -530,6 +530,7 @@ export const isEventDownloading = async ({
         });
 
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            // eslint-disable-next-line unicorn/no-lonely-if
             if (error.code === 'P2021' && throwIfNotFound) {
                 throw new Error('Event info not found');
             }
@@ -576,6 +577,7 @@ export const setDownloadError = async ({
         });
 
         if (db_error instanceof Prisma.PrismaClientKnownRequestError) {
+            // eslint-disable-next-line unicorn/no-lonely-if
             if (db_error.code === 'P2021') {
                 log.error('Event info not found', { eventInfoGuid });
             }
@@ -650,6 +652,7 @@ export const clearDownloadError = async ({
         log.error('Error clearing download error', { db_error, eventGuid });
 
         if (db_error instanceof Prisma.PrismaClientKnownRequestError) {
+            // eslint-disable-next-line unicorn/no-lonely-if
             if (db_error.code === 'P2021') {
                 log.error('Event info not found', { eventGuid });
             }
@@ -1083,7 +1086,7 @@ export const checkEventForProblems = async ({
 
     // ==== End of problem checks ====
 
-    if (!problems.length) {
+    if (problems.length === 0) {
         return null;
     }
 
@@ -1097,7 +1100,7 @@ export const importEventFahrplanJson = async ({
     lectures: EventFahrplanJsonImport['lectures'];
     rootFolder: string;
 }): Promise<ImportJsonResponse> => {
-    if (!lectures.length) {
+    if (lectures.length === 0) {
         return {
             successful_imports: [],
             existing_imports: [],
@@ -1118,7 +1121,7 @@ export const importEventFahrplanJson = async ({
 
     const errors: ImportJsonResponse['errors'] = [];
 
-    slugsToImport = Array.from(new Set(slugsToImport));
+    slugsToImport = [...new Set(slugsToImport)];
 
     // check with getSpecificTalkBySlug if the talk already exists
     for await (const slug of slugsToImport) {
@@ -1182,17 +1185,29 @@ export const importEventFahrplanJson = async ({
             }
         }
 
-        // implement it like importExistingFileFromFilesystem
-        const apiEvent = await getTalkFromApiBySlug({ slug });
+        let apiEvent;
 
-        if (!apiEvent) {
-            log.error('Talk not found', { slug });
+        try {
+            // implement it like importExistingFileFromFilesystem
+            apiEvent = await getTalkFromApiBySlug({ slug });
 
-            errors.push({
+            if (!apiEvent) {
+                log.error('Talk not found', { slug });
+
+                errors.push({
+                    slug,
+                    title: lecture?.title || '',
+                    isRecorded: wasRecorded ?? null,
+                    error: 'Talk not found',
+                });
+
+                continue;
+            }
+        } catch (error) {
+            log.error('Error fetching talk from API', {
+                error,
                 slug,
-                title: lecture?.title || '',
-                isRecorded: wasRecorded ?? null,
-                error: 'Talk not found',
+                title: lecture?.title || '<no title found>',
             });
 
             continue;

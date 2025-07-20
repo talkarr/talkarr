@@ -6,9 +6,9 @@ import type { FC, PropsWithChildren } from 'react';
 import { getUserInfo } from '@/app/_api/user/info';
 
 import { pageName } from '@/constants';
-import { ApiStoreProvider } from '@/providers/apiStoreProvider';
-import { UiStoreProvider } from '@/providers/uiStoreProvider';
-import { UserStoreProvider } from '@/providers/userStoreProvider';
+import { ApiStoreProvider } from '@/providers/api-store-provider';
+import { UiStoreProvider } from '@/providers/ui-store-provider';
+import { UserStoreProvider } from '@/providers/user-store-provider';
 import theme from '@/theme';
 
 import '@/app/globals.css';

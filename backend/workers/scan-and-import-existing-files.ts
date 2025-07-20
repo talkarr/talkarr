@@ -6,8 +6,8 @@ import { scanForExistingFiles } from '@backend/fs/scan';
 import { acquireLockAndReturn } from '@backend/locks';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
-import { listRootFolders } from '@backend/rootFolder';
-import rootLog from '@backend/rootLog';
+import { listRootFolders } from '@backend/root-folder';
+import rootLog from '@backend/root-log';
 
 export const taskName = 'scanAndImportExistingFiles';
 
@@ -28,7 +28,9 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
             jobId: job.id,
         });
 
-        return done(); // do not throw error
+        // do not throw error
+        done();
+        return;
     }
 
     const rootFolders = await listRootFolders();
@@ -50,7 +52,7 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
             rootFolderPath: rootFolder.path,
         });
 
-        if (!scanResult || !scanResult.length) {
+        if (!scanResult || scanResult.length === 0) {
             log.info('No new files found in root folder:', { rootFolder });
 
             continue;
@@ -75,18 +77,20 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
                 file,
             });
 
-            if (!result) {
+            if (result) {
+                log.info('File imported:', { file: file.filename });
+            } else {
                 log.error(
                     'Error importing file (importExistingFileFromFilesystem):',
                     { file: file.filename },
                 );
-            } else {
-                log.info('File imported:', { file: file.filename });
             }
         }
     }
 
-    return done();
+    console.log('scanAndImportExistingFiles done\n\n\n\n');
+
+    done();
 };
 
 queue.addWorker(taskName, {

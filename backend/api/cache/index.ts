@@ -1,10 +1,10 @@
 import express from 'express';
-import pathUtils from 'path';
+import pathUtils from 'node:path';
 
 import {
     getCachedImageFromUrl,
     imageCacheDirectory,
-} from '@backend/imageCache';
+} from '@backend/image-cache';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const router = express.Router();

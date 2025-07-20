@@ -2,7 +2,7 @@ import type { File } from '@prisma/client';
 
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
-import pathUtils from 'path';
+import pathUtils from 'node:path';
 
 import { getEventByFilePath } from '@backend/events';
 import {
@@ -16,7 +16,7 @@ import {
     getConferenceFromAcronym,
     getTalkFromApiBySlug,
 } from '@backend/helper';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type {
     ApiConference,
     ApiEvent,
@@ -51,15 +51,30 @@ export const scanForExistingFiles = async ({
 
     const folders = (
         await fs_promises.readdir(rootFolderPath, { withFileTypes: true })
-    ).filter(dirent => dirent.isDirectory());
+    )
+        // eslint-disable-next-line unicorn/no-await-expression-member
+        .filter(dirent => dirent.isDirectory());
 
     for await (const folder of folders) {
         const conferenceAcronym = folder.name;
         let conferenceIsValid = true;
 
-        const conference = await getConferenceFromAcronym({
-            acronym: conferenceAcronym,
-        });
+        let conference;
+
+        try {
+            conference = await getConferenceFromAcronym({
+                acronym: conferenceAcronym,
+            });
+        } catch (error) {
+            log.error(
+                `Error fetching conference ${conferenceAcronym}, skipping...`,
+                {
+                    error,
+                },
+            );
+            // there was a problem during the fetch which is not a 404 for example, so we skip it.
+            continue;
+        }
 
         if (!conference) {
             log.warn(`Folder ${conferenceAcronym} is not a valid conference`);
@@ -87,7 +102,9 @@ export const scanForExistingFiles = async ({
 
         const events = (
             await fs_promises.readdir(scanPath, { withFileTypes: true })
-        ).filter(dirent => dirent.isDirectory());
+        )
+            // eslint-disable-next-line unicorn/no-await-expression-member
+            .filter(dirent => dirent.isDirectory());
 
         for await (const eventDir of events) {
             const eventSlug = eventDir.name;
@@ -112,7 +129,16 @@ export const scanForExistingFiles = async ({
                 continue;
             }
 
-            const event = await getTalkFromApiBySlug({ slug: eventSlug });
+            let event;
+
+            try {
+                event = await getTalkFromApiBySlug({ slug: eventSlug });
+            } catch (error) {
+                log.error(`Error fetching event ${eventSlug}, skipping...`, {
+                    error,
+                });
+                continue;
+            }
 
             if (!event) {
                 log.warn(`Event ${eventSlug} does not exist`);
@@ -122,13 +148,15 @@ export const scanForExistingFiles = async ({
 
             const files = (
                 await fs_promises.readdir(eventPath, { withFileTypes: true })
-            ).filter(
-                dirent =>
-                    dirent.isFile() &&
-                    validFileExtensions.includes(
-                        pathUtils.extname(dirent.name),
-                    ),
-            );
+            )
+                // eslint-disable-next-line unicorn/no-await-expression-member
+                .filter(
+                    dirent =>
+                        dirent.isFile() &&
+                        validFileExtensions.includes(
+                            pathUtils.extname(dirent.name),
+                        ),
+                );
 
             if (files.length === 0) {
                 log.warn(`No files found for event ${eventSlug}`);

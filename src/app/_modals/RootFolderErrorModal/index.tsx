@@ -11,7 +11,7 @@ import type { SuccessData } from '@backend/types';
 
 import { rootFolderFix } from '@/app/_api/settings/mediamanagement';
 
-import { useUiStore } from '@/providers/uiStoreProvider';
+import { useUiStore } from '@/providers/ui-store-provider';
 
 import BaseModal from '@components/CustomModal';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -97,12 +97,7 @@ const RootFolderErrorModal: FC = () => {
     };
 
     useEffect(() => {
-        if (loading) {
-            // make browser ask for confirmation before closing the modal
-            window.onbeforeunload = () => true;
-        } else {
-            window.onbeforeunload = null;
-        }
+        window.onbeforeunload = loading ? () => true : null;
     }, [loading]);
 
     return (

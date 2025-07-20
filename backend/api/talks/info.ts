@@ -3,8 +3,8 @@ import {
     getTalkInfoByGuid,
     getTalkInfoBySlug,
 } from '@backend/events';
-import rootLog from '@backend/rootLog';
-import { generateMediaItemStatus } from '@backend/talkUtils';
+import rootLog from '@backend/root-log';
+import { generateMediaItemStatus } from '@backend/talk-utils';
 import type { ExpressRequest, ExpressResponse, TalkInfo } from '@backend/types';
 import { problemMap } from '@backend/types';
 import { requireUser } from '@backend/users';
@@ -57,7 +57,9 @@ const handleEventInfoRequest = async (
                 rootFolderPath: talk.root_folder,
                 downloadError: talk.download_error,
             })
-        )?.map(problem => problemMap[problem] ?? problem) || null;
+        )
+            // eslint-disable-next-line unicorn/no-await-expression-member
+            ?.map(problem => problemMap[problem] ?? problem) || null;
 
     res.json({
         success: true,

@@ -4,7 +4,7 @@ import handleAddEventRequest from '@backend/api/talks/add';
 import handleDeleteEventRequest from '@backend/api/talks/delete';
 import handleGetEventRequest from '@backend/api/talks/get';
 import handleImportJsonRequest from '@backend/api/talks/import';
-import handleVerifyJsonRequest from '@backend/api/talks/importVerify';
+import handleVerifyJsonRequest from '@backend/api/talks/import-verify';
 import handleEventInfoRequest from '@backend/api/talks/info';
 import handleListEventsRequest from '@backend/api/talks/list';
 import handleScanEventsRequest from '@backend/api/talks/scan';

@@ -2,7 +2,7 @@ import type { Conference as DbConference } from '@prisma/client';
 
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
-import pathUtils from 'path';
+import pathUtils from 'node:path';
 import sharp from 'sharp';
 
 // eslint-disable-next-line import/no-cycle
@@ -14,7 +14,7 @@ import {
     getEventFilename,
     isVideoFile,
 } from '@backend/fs';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type {
     ApiConference,
     ApiEvent,

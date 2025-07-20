@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import path from 'path';
+import path from 'node:path';
 
 // load .env and .env.local files. needed because this gets loaded before Next.js loads the .env files
 config({

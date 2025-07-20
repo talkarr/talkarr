@@ -6,7 +6,7 @@ import type { TypographyProps } from '@mui/material/Typography';
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 
-import { useUiStore } from '@/providers/uiStoreProvider';
+import { useUiStore } from '@/providers/ui-store-provider';
 
 import BaseModal from '@components/CustomModal';
 import Box from '@mui/material/Box';

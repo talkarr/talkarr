@@ -3,15 +3,15 @@
 import type { FC } from 'react';
 import { useMemo } from 'react';
 
-import type { MediaItemStatus } from '@backend/talkUtils';
+import type { MediaItemStatus } from '@backend/talk-utils';
 import {
     generateStatusMap,
     getMediaItemStatusColor,
     mediaItemStatusTextMap,
-} from '@backend/talkUtils';
+} from '@backend/talk-utils';
 import type { SuccessData, SuccessResponse } from '@backend/types';
 
-import { useApiStore } from '@/providers/apiStoreProvider';
+import { useApiStore } from '@/providers/api-store-provider';
 
 import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -48,19 +48,19 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
             key,
         }));
 
-        if (!updated.length) {
+        if (updated.length === 0) {
             return generateStatusMap(initial);
         }
 
         const merged: Record<string, MediaItemStatus | null> = {};
 
-        initial.forEach(({ status, key }) => {
+        for (const { status, key } of initial) {
             merged[key] = status;
-        });
+        }
 
-        updated.forEach(({ status, key }) => {
+        for (const { status, key } of updated) {
             merged[key] = status as MediaItemStatus | null;
-        });
+        }
 
         return generateStatusMap(
             Object.entries(merged).map(([key, status]) => ({

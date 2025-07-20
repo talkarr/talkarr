@@ -28,7 +28,7 @@ export const limitChars = (
 
 // allow alphanumeric characters and punctuation
 export const stripInvalidChars = (str: string): string =>
-    str.replace(/[^a-zA-Z0-9.,!? ]/g, '');
+    str.replaceAll(/[^a-zA-Z0-9.,!? ]/g, '');
 
 export const formatVideoDuration = (seconds: number): string => {
     // format as "42 minutes 42 seconds" or "42 seconds" or "1 hour 42 minutes 42 seconds"
@@ -55,6 +55,14 @@ export const formatVideoDuration = (seconds: number): string => {
     return parts.join(' ');
 };
 
+const getLanguageCode = (codeToCheck: string): string | null => {
+    if (!ISO6391.validate(codeToCheck)) {
+        return null;
+    }
+
+    return ISO6391.getName(codeToCheck);
+};
+
 export const formatLanguageCode = (code: string): string => {
     const codesToCheck = [code];
 
@@ -63,16 +71,8 @@ export const formatLanguageCode = (code: string): string => {
         codesToCheck.push(code.slice(0, 2));
     }
 
-    const getCode = (codeToCheck: string): string | null => {
-        if (!ISO6391.validate(codeToCheck)) {
-            return null;
-        }
-
-        return ISO6391.getName(codeToCheck);
-    };
-
     for (const codeToCheck of codesToCheck) {
-        const name = getCode(codeToCheck);
+        const name = getLanguageCode(codeToCheck);
         if (name) {
             if (codeToCheck !== code) {
                 return `${name} (${code})`;
@@ -85,4 +85,4 @@ export const formatLanguageCode = (code: string): string => {
 };
 
 export const stripInvalidCharsForDataAttribute = (str: string): string =>
-    str.replace(/[^a-zA-Z0-9]/g, '');
+    str.replaceAll(/[^a-zA-Z0-9]/g, '');

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-array-reduce */
 // https://github.com/vercel/next.js/discussions/56973#discussioncomment-10246582
 import type { Params } from 'next/dist/server/request/params';
 

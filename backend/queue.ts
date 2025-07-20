@@ -1,7 +1,7 @@
 import type { Job as DatabaseJob } from '@prisma/client';
 
 import { prisma } from '@backend/prisma';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 
 import { JobStatus, Prisma } from '@prisma/client';
 
@@ -194,10 +194,7 @@ export class Queue {
             // Check for concurrency limit
             const handler = this.jobHandlers[job.name];
 
-            if (!handler) {
-                log.error(`No handler found for job ${job.name}`);
-                continue;
-            } else {
+            if (handler) {
                 const concurrency = handler.concurrency || 1;
                 const activeJobs = this.jobQueue.filter(
                     j => j.name === job.name && j.status === JobStatus.Active,
@@ -209,6 +206,9 @@ export class Queue {
                     );
                     continue;
                 }
+            } else {
+                log.error(`No handler found for job ${job.name}`);
+                continue;
             }
 
             try {
@@ -335,22 +335,22 @@ export class Queue {
                                     );
                                 }
                             }
-                        } catch (err) {
+                        } catch (error_) {
                             if (
-                                err instanceof
+                                error_ instanceof
                                 Prisma.PrismaClientKnownRequestError
                             ) {
                                 log.error(
                                     `Database error while updating job ${job.id} status:`,
                                     {
-                                        error: err.message,
+                                        error: error_.message,
                                     },
                                 );
                             } else {
                                 log.error(
                                     `Error while updating job ${job.id} status:`,
                                     {
-                                        error: (err as Error).message,
+                                        error: (error_ as Error).message,
                                     },
                                 );
                             }
@@ -538,9 +538,9 @@ export class Queue {
                     }
                 }, 500);
             })
-            .catch(err => {
+            .catch(error => {
                 log.error('Error loading jobs from database:', {
-                    error: (err as Error).message,
+                    error: (error as Error).message,
                 });
             });
     }

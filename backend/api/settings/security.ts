@@ -1,6 +1,6 @@
 import express from 'express';
 
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import { getUsers } from '@backend/users';
 

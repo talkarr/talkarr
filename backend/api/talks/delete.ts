@@ -1,5 +1,5 @@
 import { deleteTalk } from '@backend/events';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/delete' });

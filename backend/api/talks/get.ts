@@ -5,8 +5,8 @@ import {
     getTalkInfoByGuid,
 } from '@backend/events';
 import { getTalkFromApiByGuid } from '@backend/helper';
-import rootLog from '@backend/rootLog';
-import { generateMediaItemStatus } from '@backend/talkUtils';
+import rootLog from '@backend/root-log';
+import { generateMediaItemStatus } from '@backend/talk-utils';
 import type {
     ConvertDateToStringType,
     ExpressRequest,
@@ -53,12 +53,28 @@ const handleGetEventRequest = async (
         return;
     }
 
-    const talkData = await getTalkFromApiByGuid({
-        guid: event.guid,
-        cache: {
-            cacheKey: `talks/get/${event.guid}`,
-        },
-    });
+    let talkData;
+
+    try {
+        talkData = await getTalkFromApiByGuid({
+            guid: event.guid,
+            cache: {
+                cacheKey: `talks/get/${event.guid}`,
+            },
+        });
+    } catch (error) {
+        log.error('Error fetching talk from API:', {
+            error,
+            guid: event.guid,
+        });
+
+        res.status(500).json({
+            success: false,
+            error: 'Error fetching talk from API.',
+        });
+
+        return;
+    }
 
     const talkInfo = await getTalkInfoByGuid({ guid: event.guid });
 
@@ -83,7 +99,9 @@ const handleGetEventRequest = async (
                 rootFolderPath: event.root_folder.path,
                 downloadError: talkInfo.download_error,
             })
-        )?.map(problem => problemMap[problem] ?? problem) || null;
+        )
+            // eslint-disable-next-line unicorn/no-await-expression-member
+            ?.map(problem => problemMap[problem] ?? problem) || null;
 
     res.json({
         success: true,

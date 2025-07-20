@@ -14,7 +14,7 @@ import SearchItem, {
     SearchItemSkeleton,
 } from '@/app/(authenticated)/talks/add/_components/SearchItem';
 
-import useSearchExample from '@/hooks/useSearchExample';
+import useSearchExample from '@/hooks/use-search-example';
 
 import { mediaManagementSettingsPageLink } from '@/constants';
 

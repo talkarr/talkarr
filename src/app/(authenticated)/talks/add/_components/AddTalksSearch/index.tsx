@@ -14,9 +14,9 @@ import type { ExtractSuccessData } from '@backend/types';
 
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
 
-import useSearchExample from '@/hooks/useSearchExample';
+import useSearchExample from '@/hooks/use-search-example';
 
-import { useApiStore } from '@/providers/apiStoreProvider';
+import { useApiStore } from '@/providers/api-store-provider';
 
 import SearchTextField from '@components/SearchTextField';
 import Box from '@mui/material/Box';

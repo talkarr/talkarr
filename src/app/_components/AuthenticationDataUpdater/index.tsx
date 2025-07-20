@@ -7,7 +7,7 @@ import type { ExtractSuccessData } from '@backend/types';
 
 import type { GetUserInfoResponse } from '@/app/_api/user/info';
 
-import { useUserStore } from '@/providers/userStoreProvider';
+import { useUserStore } from '@/providers/user-store-provider';
 
 export interface AuthenticationDataUpdaterProps {
     initialUserInfo: ExtractSuccessData<GetUserInfoResponse> | null;

@@ -78,12 +78,8 @@ export const generateStatusMap = (
         >
     >[],
 ): Record<MediaItemStatus, number> => {
-    const statusMap = mediaItemStatusValues.reduce(
-        (acc, status) => ({
-            ...acc,
-            [status]: 0,
-        }),
-        {},
+    const statusMap = Object.fromEntries(
+        mediaItemStatusValues.map(status => [status, 0]),
     ) as Record<MediaItemStatus, number>;
 
     for (const event of events) {

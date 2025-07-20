@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation';
 import type { FC, PropsWithChildren } from 'react';
 import { Fragment, useEffect, useState } from 'react';
 
-import { useUiStore } from '@/providers/uiStoreProvider';
+import { useUiStore } from '@/providers/ui-store-provider';
 
 import AnimatedArrowIcon from '@components/AnimatedArrowIcon';
 import LogoWithText from '@components/LogoWithText';
@@ -49,11 +49,13 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
         setOpen(false);
     }, [pathname]);
 
+    // eslint-disable-next-line unicorn/no-array-reduce
     const splitItemsByDivider: SplitNavigationItems = navigationItems.reduce(
         (acc, item) => {
             if ('divider' in item && item.divider) {
                 acc.push([]);
             } else {
+                // eslint-disable-next-line unicorn/prefer-at
                 acc[acc.length - 1].push(item as NavigationItemType);
             }
 

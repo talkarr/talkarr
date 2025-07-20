@@ -1,8 +1,8 @@
-import { startScanForMissingFiles } from '@backend/workers/scanForMissingFiles';
+import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
 
 import { addTalk, fixBigintInExtendedDbEvent } from '@backend/events';
 import { getTalkFromApiByGuid } from '@backend/helper';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import { AddTalkFailure } from '@backend/types';
 
@@ -36,14 +36,30 @@ const handleAddEventRequest = async (
         return;
     }
 
-    const event = await getTalkFromApiByGuid({ guid });
+    let event;
 
-    if (!event) {
-        log.error('Talk not found.');
+    try {
+        event = await getTalkFromApiByGuid({ guid });
 
-        res.status(404).json({
+        if (!event) {
+            log.error('Talk not found.');
+
+            res.status(404).json({
+                success: false,
+                error: 'Talk not found.',
+            });
+
+            return;
+        }
+    } catch (error) {
+        log.error('Error fetching talk from API:', {
+            error,
+            guid,
+        });
+
+        res.status(500).json({
             success: false,
-            error: 'Talk not found.',
+            error: 'Error fetching talk from API.',
         });
 
         return;

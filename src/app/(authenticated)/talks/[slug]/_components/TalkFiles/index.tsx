@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 
 import prettyBytes from 'pretty-bytes';
 
-import { getMediaItemStatusColor, MediaItemStatus } from '@backend/talkUtils';
+import { getMediaItemStatusColor, MediaItemStatus } from '@backend/talk-utils';
 
 import TalkAttribute from '@/app/(authenticated)/talks/[slug]/_components/TalkAttribute';
 import type { SingleTalkData } from '@/app/(authenticated)/talks/[slug]/page';
@@ -53,7 +53,7 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
     const { status } = data.info;
 
     const statusColor =
-        status !== null ? getMediaItemStatusColor(theme)[status] : null;
+        status === null ? null : getMediaItemStatusColor(theme)[status];
 
     return (
         <Box paddingX={2}>

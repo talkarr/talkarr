@@ -1,8 +1,8 @@
 import express from 'express';
 import fs from 'node:fs';
-import pathUtils from 'path';
+import pathUtils from 'node:path';
 
-import { startScanAndImportExistingFiles } from '@backend/workers/scanAndImportExistingFiles';
+import { startScanAndImportExistingFiles } from '@backend/workers/scan-and-import-existing-files';
 
 import { markRootFolder } from '@backend/fs';
 import type { components } from '@backend/generated/schema';
@@ -14,8 +14,8 @@ import {
     listRootFolders,
     setRootFolderMarked,
     setRootFolderMarkExists,
-} from '@backend/rootFolder';
-import rootLog from '@backend/rootLog';
+} from '@backend/root-folder';
+import rootLog from '@backend/root-log';
 import { getSettings } from '@backend/settings';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 

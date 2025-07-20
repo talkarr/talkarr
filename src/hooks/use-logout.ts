@@ -1,6 +1,6 @@
 import { logoutUser } from '@/app/_api/user/logout';
 
-import { useUserStore } from '@/providers/userStoreProvider';
+import { useUserStore } from '@/providers/user-store-provider';
 
 const useLogout = (): (() => Promise<void>) => {
     const clearUser = useUserStore(store => store.clearUser);

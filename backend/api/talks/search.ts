@@ -1,7 +1,7 @@
 import { cccApiBaseUrl, conferenceCacheKey } from '@backend/constants';
 import apiFetch from '@backend/fetch';
 import type { components } from '@backend/generated/schema';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import type {
     ExpressRequest,
     ExpressResponse,
@@ -56,11 +56,11 @@ const handleSearchEventsRequest = async (
 
     const conferences = new Map<string, components['schemas']['Conference']>();
 
-    json.events.forEach((event: components['schemas']['Event']) => {
+    for (const event of json.events) {
         if (event.conference_url) {
             uniqueConferenceUrls.add(event.conference_url);
         }
-    });
+    }
 
     const fetchPromises = [];
 

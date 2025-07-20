@@ -2,7 +2,7 @@ import type { File, RootFolder } from '@prisma/client';
 
 import { deleteTalk } from '@backend/events';
 import { prisma } from '@backend/prisma';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 
 import { Prisma } from '@prisma/client';
 
@@ -31,6 +31,7 @@ export const addRootFolder = async ({
             rootFolderPath,
         });
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            // eslint-disable-next-line unicorn/no-lonely-if
             if (error.code === 'P2002') {
                 return AddRootFolderResponse.Duplicate;
             }
@@ -45,8 +46,8 @@ export const addRootFolder = async ({
 export const listRootFolders = async (): Promise<RootFolder[]> => {
     try {
         return await prisma.rootFolder.findMany();
-    } catch (e) {
-        log.error('Error listing root folders', { error: e });
+    } catch (error) {
+        log.error('Error listing root folders', { error });
         return [];
     }
 };
@@ -66,9 +67,9 @@ export const listFilesForRootFolder = async ({
                 },
             },
         });
-    } catch (e) {
+    } catch (error) {
         log.error('Error listing files for root folder', {
-            error: e,
+            error,
             rootFolderPath,
         });
 
@@ -110,9 +111,9 @@ export const deleteRootFolder = async ({
                 events: true,
             },
         });
-    } catch (e) {
+    } catch (error) {
         log.error('Error deleting root folder', {
-            error: e,
+            error,
             rootFolderPath,
         });
         return false;
@@ -139,9 +140,9 @@ export const setRootFolderMarked = async ({
         });
 
         return true;
-    } catch (e) {
+    } catch (error) {
         log.error('Error setting root folder marked', {
-            error: e,
+            error,
             rootFolderPath,
         });
 
@@ -165,9 +166,9 @@ export const setRootFolderMarkExists = async ({
         });
 
         return true;
-    } catch (e) {
+    } catch (error) {
         log.error('Error setting root folder mark exists', {
-            error: e,
+            error,
             rootFolderPath,
         });
 
@@ -191,9 +192,9 @@ export const clearRootFolderMark = async ({
         });
 
         return true;
-    } catch (e) {
+    } catch (error) {
         log.error('Error clearing root folder mark', {
-            error: e,
+            error,
             rootFolderPath,
         });
 
@@ -218,9 +219,9 @@ export const wasMarkFoundForRootFolder = async ({
         }
 
         return !folder.did_not_find_mark;
-    } catch (e) {
+    } catch (error) {
         log.error('Error checking if root folder has mark', {
-            error: e,
+            error,
             rootFolderPath,
         });
 
@@ -237,8 +238,8 @@ export const clearAllRootFolderHasMarks = async (): Promise<boolean> => {
         });
 
         return true;
-    } catch (e) {
-        log.error('Error clearing all root folder has marks', { error: e });
+    } catch (error) {
+        log.error('Error clearing all root folder has marks', { error });
 
         return false;
     }
@@ -257,9 +258,9 @@ export const doesRootFolderExist = async ({
         });
 
         return folder !== null;
-    } catch (e) {
+    } catch (error) {
         log.error('Error checking if root folder exists', {
-            error: e,
+            error,
             rootFolderPath,
         });
 

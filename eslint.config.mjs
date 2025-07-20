@@ -6,7 +6,7 @@ import tseslint from "typescript-eslint";
 import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import prettier from "eslint-plugin-prettier";
-// import eslintPluginUnicorn from 'eslint-plugin-unicorn';
+import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 
 import _import from "eslint-plugin-import";
 import muiPathImports from "eslint-plugin-mui-path-imports";
@@ -34,7 +34,7 @@ export default tseslint.config(
             ...playwright.configs['flat/recommended'].rules,
         }
     },
-    // eslintPluginUnicorn.configs.recommended,
+    eslintPluginUnicorn.configs.recommended,
     {
         ignores: [
             "**/node_modules/",
@@ -121,7 +121,7 @@ export default tseslint.config(
 
             "simple-import-sort/imports": ["error", {
                 groups: [
-                    ["@backend/initServer", "^@backend/initServer$"],
+                    ["@backend/init-server", "^@backend/init-server$"],
                     ["\\u0000$"],
                     ["^next"],
                     ["^react"],
@@ -229,6 +229,13 @@ export default tseslint.config(
                     snakeCase: true,
                 },
             }],*/
+            "unicorn/no-null": "off",
+            "unicorn/prevent-abbreviations": "off",
+            "unicorn/prefer-global-this": "off",
+            "unicorn/no-typeof-undefined": "off",
+            "unicorn/prefer-add-event-listener": "off",
+            "unicorn/no-process-exit": "off",
+            "unicorn/prefer-module": "off",
         },
     },
     {

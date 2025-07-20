@@ -11,8 +11,8 @@ import moment from 'moment';
 import { formatLanguageCode } from '@/utils/string';
 
 import { longDateFormat, yearOnlyFormat } from '@/constants';
-import { useUiStore } from '@/providers/uiStoreProvider';
-import type { TalkData } from '@/stores/uiStore';
+import { useUiStore } from '@/providers/ui-store-provider';
+import type { TalkData } from '@/stores/ui-store';
 
 import searchItemCss from './searchitem.module.css';
 
@@ -196,7 +196,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                                         </Box>
                                     ) : null}
                                 </Box>
-                                {badges.length ? (
+                                {badges.length > 0 ? (
                                     <Grid
                                         container
                                         spacing={1}
@@ -226,11 +226,11 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                             </Box>
                         }
                         subheader={
-                            !item.subtitle
-                                ? undefined
-                                : item.description?.startsWith(item.subtitle)
-                                  ? undefined
-                                  : item.subtitle
+                            item.subtitle
+                                ? item.description?.startsWith(item.subtitle)
+                                    ? undefined
+                                    : item.subtitle
+                                : undefined
                         }
                     />
                     {item.description ? (

@@ -10,7 +10,7 @@ import { generateIdenticonDataUrl } from 'simple-identicon';
 import { serverSecret } from '@backend/env';
 import type { components } from '@backend/generated/schema';
 import { prisma } from '@backend/prisma';
-import rootLog from '@backend/rootLog';
+import rootLog from '@backend/root-log';
 import { getSettings } from '@backend/settings';
 import type { ExpressResponse } from '@backend/types';
 
