@@ -7,6 +7,7 @@ import rootLog from '@backend/rootLog';
 import { generateMediaItemStatus } from '@backend/talkUtils';
 import type { ExpressRequest, ExpressResponse, TalkInfo } from '@backend/types';
 import { problemMap } from '@backend/types';
+import { requireUser } from '@backend/users';
 
 const log = rootLog.child({ label: 'talks/info' });
 
@@ -14,6 +15,10 @@ const handleEventInfoRequest = async (
     req: ExpressRequest<'/talks/info', 'get'>,
     res: ExpressResponse<'/talks/info', 'get'>,
 ): Promise<void> => {
+    if (!(await requireUser(req, res))) {
+        return;
+    }
+
     const { guid, slug } = req.query;
 
     if (!guid && !slug) {

@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 
 import type { FC, PropsWithChildren } from 'react';
 
-import { getAppStatus } from '@/app/_api';
+import { getAppStatus } from '@/app/_api/information';
 
 import { homePageLink, pageName } from '@/constants';
 

@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack';
 
 import type { SuccessData } from '@backend/types';
 
-import { getInformation } from '@/app/_api';
+import { getInformation } from '@/app/_api/information';
 import InfoBox from '@/app/_modals/InformationModal/_components/InfoBox';
 
 import { pageName } from '@/constants';

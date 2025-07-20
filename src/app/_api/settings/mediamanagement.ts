@@ -1,7 +1,5 @@
 import type { RequestBody, RequestParams } from '@backend/types';
 
-import { getCookiesForApi } from '@/app/_api';
-
 import api from '@/utils/api';
 
 export type MediaManagementFilesArgs =
@@ -9,17 +7,12 @@ export type MediaManagementFilesArgs =
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pListFiles = async (query: MediaManagementFilesArgs) => {
-    const cookie = await getCookiesForApi();
-
     const { data, error, response } = await api.GET(
         '/settings/mediamanagement/files',
         {
             cache: 'no-store',
             params: {
                 query,
-            },
-            headers: {
-                cookie,
             },
         },
     );
@@ -41,11 +34,9 @@ export const listFiles: (
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pGetConfig = async () => {
-    const cookie = await getCookiesForApi();
-
     const { data, error, response } = await api.GET(
         '/settings/mediamanagement/info',
-        { cache: 'no-store', headers: { cookie } },
+        { cache: 'no-store' },
     );
 
     if (error) {
@@ -66,15 +57,10 @@ export type MediaManagementAddFolderArgs =
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pAddFolder = async (body: MediaManagementAddFolderArgs) => {
-    const cookie = await getCookiesForApi();
-
     const { data, error, response } = await api.POST(
         '/settings/mediamanagement/add',
         {
             body,
-            headers: {
-                cookie,
-            },
         },
     );
 
@@ -98,15 +84,10 @@ export type MediaManagementRemoveFolderArgs =
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pRemoveFolder = async (body: MediaManagementRemoveFolderArgs) => {
-    const cookie = await getCookiesForApi();
-
     const { data, error, response } = await api.POST(
         '/settings/mediamanagement/remove',
         {
             body,
-            headers: {
-                cookie,
-            },
         },
     );
 
@@ -130,15 +111,10 @@ export type MediaManagementRootFolderFixArgs =
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pRootFolderFix = async (body: MediaManagementRootFolderFixArgs) => {
-    const cookie = await getCookiesForApi();
-
     const { data, error, response } = await api.POST(
         '/settings/mediamanagement/root-folder-fix',
         {
             body,
-            headers: {
-                cookie,
-            },
         },
     );
 
