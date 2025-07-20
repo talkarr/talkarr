@@ -52,6 +52,12 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
 
     const isVisible = useOnScreen(containerRef);
 
+    const [dateDisplayed, setDateDisplayed] = useState<string>('Loading...');
+
+    useEffect(() => {
+        setDateDisplayed(moment(initialData.date).format(longDateFormat));
+    }, [initialData.date]);
+
     const talkInfo = useApiStore(state => {
         if (initialData.guid in state.talkInfo) {
             const res = state.talkInfo[initialData.guid];
@@ -186,7 +192,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                             </CardMedia>
                             <CardHeader
                                 title={initialData.title}
-                                subheader={`${moment(initialData.date).format(longDateFormat)} - ${initialData.conference.title}`}
+                                subheader={`${dateDisplayed} - ${initialData.conference.title}`}
                             />
                         </Box>
                     </CardActionArea>

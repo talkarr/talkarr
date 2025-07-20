@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 
 import moment from 'moment';
 
@@ -20,114 +21,126 @@ export interface TalkHeaderProps {
 
 const bottomPadding = 1;
 
-const TalkHeader: FC<TalkHeaderProps> = ({ data }) => (
-    <Box paddingX={2} paddingTop={1}>
-        <Box
-            display="flex"
-            flexDirection="row"
-            justifyContent="center"
-            gap={2}
-            flexWrap="wrap"
-        >
-            <Box flex={1}>
-                <TalkImage data={data.db} maxWidth="100%" height="auto" />
-            </Box>
-            <Box flex={2} display="flex" flexDirection="column" gap={2}>
-                <Typography variant="h2">
-                    {data.db.title} (
-                    {moment(data.db.date).format(yearOnlyFormat)})
-                </Typography>
-                <Box>
-                    <Typography variant="body1">
-                        {data.db.description}
-                    </Typography>
+const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
+    const [dateDisplayed, setDateDisplayed] = useState<string>();
+
+    useEffect(() => {
+        setDateDisplayed(moment(data.db.date).format(longDateFormat));
+    }, [data.db.date]);
+
+    return (
+        <Box paddingX={2} paddingTop={1}>
+            <Box
+                display="flex"
+                flexDirection="row"
+                justifyContent="center"
+                gap={2}
+                flexWrap="wrap"
+            >
+                <Box flex={1}>
+                    <TalkImage data={data.db} maxWidth="100%" height="auto" />
                 </Box>
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    gap={1.5}
-                    flexWrap="wrap"
-                >
-                    {data.db.conference.title ? (
-                        <Box>
-                            <SmallText mb={bottomPadding}>Conference</SmallText>
-                            <VideoMetaBadge
-                                badgeType="conference"
-                                badgeContent={data.db.conference.title}
-                                size="small"
-                            />
-                        </Box>
-                    ) : null}
-                    {data.db.date ? (
-                        <Box>
-                            <SmallText mb={bottomPadding}>Date</SmallText>
-                            <VideoMetaBadge
-                                badgeType="date"
-                                badgeContent={moment(data.db.date).format(
-                                    longDateFormat,
-                                )}
-                                size="small"
-                                disableOnClick
-                            />
-                        </Box>
-                    ) : null}
-                    {data.db.original_language ? (
-                        <Box>
-                            <SmallText mb={bottomPadding}>Language</SmallText>
-                            <VideoMetaBadge
-                                badgeType="language"
-                                badgeContent={formatLanguageCode(
-                                    data.db.original_language,
-                                )}
-                                size="small"
-                                disableOnClick
-                            />
-                        </Box>
-                    ) : null}
-                    {data.db.persons.length > 0 ? (
-                        <Box>
-                            <SmallText mb={bottomPadding}>Speaker</SmallText>
-                            <Box
-                                display="flex"
-                                flexDirection="row"
-                                gap={1}
-                                flexWrap="wrap"
-                            >
-                                {data.db.persons.map((text, index) => (
-                                    <VideoMetaBadge
-                                        key={`speaker-badge-${index}`}
-                                        badgeType="speaker"
-                                        badgeContent={text}
-                                        size="small"
-                                    />
-                                ))}
+                <Box flex={2} display="flex" flexDirection="column" gap={2}>
+                    <Typography variant="h2">
+                        {data.db.title} (
+                        {moment(data.db.date).format(yearOnlyFormat)})
+                    </Typography>
+                    <Box>
+                        <Typography variant="body1">
+                            {data.db.description}
+                        </Typography>
+                    </Box>
+                    <Box
+                        display="flex"
+                        flexDirection="row"
+                        gap={1.5}
+                        flexWrap="wrap"
+                    >
+                        {data.db.conference.title ? (
+                            <Box>
+                                <SmallText mb={bottomPadding}>
+                                    Conference
+                                </SmallText>
+                                <VideoMetaBadge
+                                    badgeType="conference"
+                                    badgeContent={data.db.conference.title}
+                                    size="small"
+                                />
                             </Box>
-                        </Box>
-                    ) : null}
-                    {data.db.tags.length > 0 ? (
-                        <Box>
-                            <SmallText mb={bottomPadding}>Tags</SmallText>
-                            <Box
-                                display="flex"
-                                flexDirection="row"
-                                gap={1}
-                                flexWrap="wrap"
-                            >
-                                {data.db.tags.map((text, index) => (
-                                    <VideoMetaBadge
-                                        key={`tag-badge-${index}`}
-                                        badgeType="tag"
-                                        badgeContent={text}
-                                        size="small"
-                                    />
-                                ))}
+                        ) : null}
+                        {dateDisplayed ? (
+                            <Box>
+                                <SmallText mb={bottomPadding}>Date</SmallText>
+                                <VideoMetaBadge
+                                    badgeType="date"
+                                    badgeContent={dateDisplayed}
+                                    size="small"
+                                    disableOnClick
+                                />
                             </Box>
-                        </Box>
-                    ) : null}
+                        ) : null}
+                        {data.db.original_language ? (
+                            <Box>
+                                <SmallText mb={bottomPadding}>
+                                    Language
+                                </SmallText>
+                                <VideoMetaBadge
+                                    badgeType="language"
+                                    badgeContent={formatLanguageCode(
+                                        data.db.original_language,
+                                    )}
+                                    size="small"
+                                    disableOnClick
+                                />
+                            </Box>
+                        ) : null}
+                        {data.db.persons.length > 0 ? (
+                            <Box>
+                                <SmallText mb={bottomPadding}>
+                                    Speaker
+                                </SmallText>
+                                <Box
+                                    display="flex"
+                                    flexDirection="row"
+                                    gap={1}
+                                    flexWrap="wrap"
+                                >
+                                    {data.db.persons.map((text, index) => (
+                                        <VideoMetaBadge
+                                            key={`speaker-badge-${index}`}
+                                            badgeType="speaker"
+                                            badgeContent={text}
+                                            size="small"
+                                        />
+                                    ))}
+                                </Box>
+                            </Box>
+                        ) : null}
+                        {data.db.tags.length > 0 ? (
+                            <Box>
+                                <SmallText mb={bottomPadding}>Tags</SmallText>
+                                <Box
+                                    display="flex"
+                                    flexDirection="row"
+                                    gap={1}
+                                    flexWrap="wrap"
+                                >
+                                    {data.db.tags.map((text, index) => (
+                                        <VideoMetaBadge
+                                            key={`tag-badge-${index}`}
+                                            badgeType="tag"
+                                            badgeContent={text}
+                                            size="small"
+                                        />
+                                    ))}
+                                </Box>
+                            </Box>
+                        ) : null}
+                    </Box>
                 </Box>
             </Box>
         </Box>
-    </Box>
-);
+    );
+};
 
 export default TalkHeader;
