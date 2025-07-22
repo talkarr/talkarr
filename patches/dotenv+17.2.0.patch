@@ -1,0 +1,33 @@
+diff --git a/node_modules/dotenv/lib/main.js b/node_modules/dotenv/lib/main.js
+index 2ac4c9c..6535f22 100644
+--- a/node_modules/dotenv/lib/main.js
++++ b/node_modules/dotenv/lib/main.js
+@@ -7,18 +7,7 @@ const packageJson = require('../package.json')
+ const version = packageJson.version
+ 
+ // Array of tips to display randomly
+-const TIPS = [
+-  '🔐 encrypt with dotenvx: https://dotenvx.com',
+-  '🔐 prevent committing .env to code: https://dotenvx.com/precommit',
+-  '🔐 prevent building .env in docker: https://dotenvx.com/prebuild',
+-  '🛠️  run anywhere with `dotenvx run -- yourcommand`',
+-  '⚙️  specify custom .env file path with { path: \'/custom/path/.env\' }',
+-  '⚙️  enable debug logging with { debug: true }',
+-  '⚙️  override existing env vars with { override: true }',
+-  '⚙️  suppress all logs with { quiet: true }',
+-  '⚙️  write to custom object with { processEnv: myObject }',
+-  '⚙️  load multiple .env files with { path: [\'.env.local\', \'.env\'] }'
+-]
++const TIPS = []
+ 
+ // Get a random tip from the tips array
+ function _getRandomTip () {
+@@ -311,7 +300,7 @@ function configDotenv (options) {
+       }
+     }
+ 
+-    _log(`injecting env (${keysCount}) from ${shortPaths.join(',')} ${dim(`(tip: ${_getRandomTip()})`)}`)
++    _log(`injecting env (${keysCount}) from ${shortPaths.join(',')}`)
+   }
+ 
+   if (lastError) {
