@@ -5,6 +5,7 @@ import {
     generalSettingsPageLink,
     homePageLink,
     importTalksPageLink,
+    licensesSettingsPageLink,
     mediaManagementSettingsPageLink,
     scanFilesPageLink,
     securitySettingsPageLink,
@@ -49,6 +50,12 @@ export const settings: (SimpleNavigationItem & { description: string })[] = [
         path: mediaManagementSettingsPageLink,
         description: 'Naming and management of media files.',
         slug: 'media-management',
+    },
+    {
+        title: 'Licenses',
+        path: licensesSettingsPageLink,
+        description: 'View licenses of used packages.',
+        slug: 'licenses',
     },
 ];
 

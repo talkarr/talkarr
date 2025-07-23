@@ -1,3 +1,4 @@
+import type { License } from '@components/LicenseViewer';
 import type { PartialDeep } from 'type-fest';
 
 import deepmerge from 'deepmerge';
@@ -9,6 +10,8 @@ import type { SuccessData } from '@backend/types';
 import type { ConfirmationModalConfig } from '@/app/_modals/ConfirmationModal';
 import type { RootFolderErrorModalData } from '@/app/_modals/RootFolderErrorModal';
 
+import { licenseList } from '@components/LicenseViewer';
+
 export type TalkData = SuccessData<'/talks/search', 'get'>['events'][0];
 
 export interface UiState {
@@ -17,6 +20,7 @@ export interface UiState {
     confirmationModal: ConfirmationModalConfig | null;
     rootFolderErrorModal: RootFolderErrorModalData | null;
     informationModal: boolean;
+    licenseSelected: License;
 }
 
 export interface UiActions {
@@ -41,6 +45,9 @@ export interface UiActions {
     // informationModal
     openInformationModal: () => void;
     closeInformationModal: () => void;
+
+    // licenseSelected
+    setLicenseSelected: (license: License) => void;
 }
 
 export type UiStore = UiState & UiActions;
@@ -51,6 +58,7 @@ export const defaultUiState: UiState = {
     confirmationModal: null,
     rootFolderErrorModal: null,
     informationModal: false,
+    licenseSelected: licenseList[0],
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -72,6 +80,9 @@ export const createUiStore = (initialState?: PartialDeep<UiState>) =>
                     set({ rootFolderErrorModal: null }),
                 openInformationModal: () => set({ informationModal: true }),
                 closeInformationModal: () => set({ informationModal: false }),
+                setLicenseSelected: license =>
+                    set({ licenseSelected: license }),
+                clearLicenseSelected: () => set({ licenseSelected: null }),
             }),
             {
                 name: 'uiStore',

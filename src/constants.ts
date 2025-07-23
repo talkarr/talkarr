@@ -6,6 +6,11 @@ export const pagePaperColor = '#343536';
 export const pageBorderColor = '#ffffff';
 export const pageName = 'Talkarr';
 
+// navbar
+export const drawerWidth = 240;
+
+export const appbarHeight = 64;
+
 // === Welcome ===
 export const welcomePageLink = '/welcome';
 export const welcomeStartPageLink = '/welcome/start';
@@ -28,6 +33,7 @@ export const settingsPageLink = '/settings';
 export const generalSettingsPageLink = '/settings/general';
 export const mediaManagementSettingsPageLink = '/settings/mediamanagement';
 export const securitySettingsPageLink = '/settings/security';
+export const licensesSettingsPageLink = '/settings/licenses';
 
 // === User ===
 export const loginPageLink = '/login';
