@@ -70,7 +70,7 @@ jobs:
         continue-on-error: true
         id: eslint-backend
         run: |
-          yarn lint:backend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results-backend.sarif
+          SARIF_ESLINT_IGNORE_SUPPRESSED=true yarn lint:backend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results-backend.sarif
           
           # if success, create an empty file
           if [ $? -eq 0 ]; then
