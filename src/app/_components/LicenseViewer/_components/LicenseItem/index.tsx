@@ -2,7 +2,7 @@
 
 import type { License } from '@components/LicenseViewer';
 
-import { FC, useMemo } from 'react';
+import type { FC } from 'react';
 
 import { useUiStore } from '@/providers/ui-store-provider';
 

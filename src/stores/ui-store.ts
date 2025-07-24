@@ -10,7 +10,7 @@ import type { SuccessData } from '@backend/types';
 import type { ConfirmationModalConfig } from '@/app/_modals/ConfirmationModal';
 import type { RootFolderErrorModalData } from '@/app/_modals/RootFolderErrorModal';
 
-import { licenseList } from '@components/LicenseViewer';
+import { licenseList } from '@/utils/licenes';
 
 export type TalkData = SuccessData<'/talks/search', 'get'>['events'][0];
 
@@ -82,7 +82,6 @@ export const createUiStore = (initialState?: PartialDeep<UiState>) =>
                 closeInformationModal: () => set({ informationModal: false }),
                 setLicenseSelected: license =>
                     set({ licenseSelected: license }),
-                clearLicenseSelected: () => set({ licenseSelected: null }),
             }),
             {
                 name: 'uiStore',

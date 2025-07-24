@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-import licenses from '@backend/licenses.json';
+import { licenseList } from '@/utils/licenes';
 
 import LicenseInfo from '@components/LicenseViewer/_components/LicenseInfo';
 import LicenseItem from '@components/LicenseViewer/_components/LicenseItem';
@@ -15,24 +15,6 @@ export interface License {
 }
 
 export type LicenseList = License[];
-
-const formatName = (name: string): string => {
-    const formattedName = name.startsWith('@') ? name.slice(1) : name;
-    return formattedName.toLowerCase();
-};
-
-export const licenseList: LicenseList = licenses.toSorted((a, b) => {
-    const nameA = formatName(a.name);
-    const nameB = formatName(b.name);
-    if (nameA < nameB) return -1;
-    if (nameA > nameB) return 1;
-
-    if (a.version && b.version) {
-        return a.version.localeCompare(b.version);
-    }
-
-    return 0;
-});
 
 export interface LicenseViewerProps {
     scrollBoxHeight?: string;
