@@ -57,5 +57,8 @@ test('should be able to navigate to each page', async ({ page }) => {
         await expect(page.title()).resolves.toContain('Talkarr');
 
         await expect(page.title()).resolves.not.toContain('404');
+
+        // eslint-disable-next-line playwright/no-networkidle
+        await page.waitForLoadState('networkidle');
     }
 });

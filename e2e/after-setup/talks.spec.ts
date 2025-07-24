@@ -233,7 +233,7 @@ test('should be able to search for a string', async ({
     const logs: { msg: string; type: string }[] = [];
 
     page.on('console', msg => {
-        console.info('\n\nConsole log:', msg.text(), '\n\n');
+        console.info('Console log:', msg.text());
         logs.push({ msg: msg.text(), type: msg.type() });
     });
 
