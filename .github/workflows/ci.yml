@@ -44,11 +44,15 @@ jobs:
       - name: Install dependencies
         run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
 
+      - name: Make sure that backend/licenses.json did not change
+        run: |    
+          git diff --exit-code backend/licenses.json
+
       - name: Run ESLint for frontend
         continue-on-error: true
         id: eslint-frontend
         run: |
-          yarn lint:frontend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+          SARIF_ESLINT_IGNORE_SUPPRESSED=true yarn lint:frontend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
           
           # if success, create an empty file
           if [ $? -eq 0 ]; then
@@ -66,7 +70,7 @@ jobs:
         continue-on-error: true
         id: eslint-backend
         run: |
-          yarn lint:backend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results-backend.sarif
+          SARIF_ESLINT_IGNORE_SUPPRESSED=true yarn lint:backend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results-backend.sarif
           
           # if success, create an empty file
           if [ $? -eq 0 ]; then

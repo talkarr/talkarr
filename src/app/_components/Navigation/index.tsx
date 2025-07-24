@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation';
 import type { FC, PropsWithChildren } from 'react';
 import { Fragment, useEffect, useState } from 'react';
 
+import { appbarHeight, drawerWidth } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import AnimatedArrowIcon from '@components/AnimatedArrowIcon';
@@ -28,10 +29,6 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-
-export const drawerWidth = 240;
-
-export const appbarHeight = 64;
 
 const Navigation: FC<PropsWithChildren> = ({ children }) => {
     const theme = useTheme();
