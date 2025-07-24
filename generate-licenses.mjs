@@ -2,6 +2,13 @@ import licenseChecker from 'license-checker';
 import fs from 'fs';
 import packageJson from './package.json' with { type: 'json' };
 
+const isCi = process.env.CI === 'true' || process.env.CI === '1' || process.env.CI === 'yes';
+
+if (isCi) {
+    console.info('Running in CI mode, skipping license generation.');
+    process.exit(0);
+}
+
 licenseChecker.init({
     start: './',
     excludePrivatePackages: true,
