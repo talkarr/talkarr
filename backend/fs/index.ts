@@ -2,6 +2,7 @@ import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'node:path';
 
+import { prisma } from '@backend/prisma';
 import rootLog from '@backend/root-log';
 import type {
     ConvertBigintToNumberType,
@@ -329,4 +330,94 @@ export const getFolderPathForTalk = async ({
     }
 
     return folderPath;
+};
+
+export const deleteFilesForEvent = async ({
+    event,
+}: {
+    event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
+}): Promise<boolean> => {
+    if (!event.rootFolderPath) {
+        log.warn('Event does not have a root folder path', { event });
+        return false;
+    }
+
+    const folderPath = await getFolderPathForTalk({
+        event,
+        skipFilesystemAccess: true,
+    });
+
+    if (!folderPath) {
+        log.warn('Could not get folder path for talk', { event });
+        return false;
+    }
+
+    /* for await (const extension of validFileExtensions) {
+        const file = pathUtils.join(folderPath, `${event.slug}${extension}`);
+
+        try {
+            await fs_promises.unlink(file);
+            log.info(`Deleted file ${file}`);
+        } catch (error) {
+            log.error(`Could not delete file ${file}`, { error });
+        }
+    } */
+
+    if (event.file && event.file.length > 0) {
+        for await (const file of event.file) {
+            // check if the file exists
+            if (!file.path) {
+                log.warn('File does not have a path', { file, event });
+                continue;
+            }
+
+            const exists = await doesFileExist({ filePath: file.path });
+
+            if (!exists) {
+                log.warn(`File does not exist, cannot delete it`, {
+                    filePath: file.path,
+                    event,
+                });
+                continue;
+            }
+
+            try {
+                await fs_promises.unlink(file.path);
+                log.info(`Deleted file ${file.path}`, { event });
+                await prisma.file.delete({
+                    where: {
+                        path: file.path,
+                    },
+                });
+            } catch (error) {
+                log.error(`Could not delete file ${file.path}`, {
+                    error,
+                    event,
+                });
+
+                return false;
+            }
+        }
+    } else {
+        log.warn('Event does not have any files to delete', { event });
+    }
+
+    // delete the folder if it is empty
+    try {
+        const files = await fs_promises.readdir(folderPath);
+
+        if (files.length === 0) {
+            await fs_promises.rmdir(folderPath);
+            log.info(`Deleted empty folder ${folderPath}`);
+            return true;
+        }
+
+        log.info(`Folder ${folderPath} is not empty, not deleting it`, {
+            files,
+        });
+    } catch (error) {
+        log.error(`Could not read or delete folder ${folderPath}`, { error });
+    }
+
+    return false;
 };
