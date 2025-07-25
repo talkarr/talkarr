@@ -57,6 +57,8 @@ export const initEnv = async (): Promise<void> => {
             '--always',
         ]);
         privateGitDescribeResult = privateGitDescribeResult.trim();
+
+        process.env.CURRENT_APP_VERSION = privateGitDescribeResult;
     } catch (error) {
         console.error('Failed to get git commit hash:', error);
         privateGitDescribeResult = undefined;

@@ -5,7 +5,6 @@ import type { Options } from '@ryoppippi/unplugin-typia';
 
 import type { NextConfig } from 'next';
 
-import { getAppVersion } from './backend/env';
 import { apiBaseUrl } from './src/constants';
 
 import unTypiaNext from '@ryoppippi/unplugin-typia/next';
@@ -17,6 +16,12 @@ if (process.argv.includes('build')) {
             'You must build in production mode. Set NODE_ENV=production.',
         );
     }
+}
+
+if (!process.env.CURRENT_APP_VERSION) {
+    throw new Error(
+        'No CURRENT_APP_VERSION set by backend. Please open up a bug report.',
+    );
 }
 
 if (!['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
@@ -35,6 +40,7 @@ export const unpluginTypiaOptions: Options = {
 const nextConfig = async (): Promise<NextConfig> => {
     const isInsideDocker = process.env.IS_INSIDE_DOCKER === 'true';
     const githubActionsRunId = process.env.GITHUB_ACTIONS_RUN_ID;
+    const appVersion = process.env.CURRENT_APP_VERSION;
     let currentCommit: string | undefined = process.env.OVERRIDE_CURRENT_COMMIT;
     let currentCommitTimestamp: string | undefined =
         process.env.OVERRIDE_CURRENT_COMMIT_TS;
@@ -76,8 +82,6 @@ const nextConfig = async (): Promise<NextConfig> => {
             }
         }
     }
-
-    const appVersion = getAppVersion();
 
     console.dir({
         currentCommit,
