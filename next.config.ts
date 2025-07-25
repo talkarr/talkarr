@@ -18,10 +18,13 @@ if (process.argv.includes('build')) {
     }
 }
 
-if (!process.env.CURRENT_APP_VERSION) {
-    throw new Error(
-        'No CURRENT_APP_VERSION set by backend. Please open up a bug report.',
-    );
+if (!process.argv.includes('lint')) {
+    // eslint-disable-next-line unicorn/no-lonely-if
+    if (!process.env.CURRENT_APP_VERSION) {
+        throw new Error(
+            'No CURRENT_APP_VERSION set by backend. Please open up a bug report.',
+        );
+    }
 }
 
 if (!['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
