@@ -5,6 +5,7 @@ import type { Options } from '@ryoppippi/unplugin-typia';
 
 import type { NextConfig } from 'next';
 
+import { getAppVersion } from './backend/env';
 import { apiBaseUrl } from './src/constants';
 
 import unTypiaNext from '@ryoppippi/unplugin-typia/next';
@@ -39,8 +40,6 @@ const nextConfig = async (): Promise<NextConfig> => {
         process.env.OVERRIDE_CURRENT_COMMIT_TS;
     let currentBranch: string | undefined = process.env.OVERRIDE_CURRENT_BRANCH;
     let currentTag: string | undefined = process.env.OVERRIDE_CURRENT_TAG;
-    let currentVersion: string | undefined =
-        process.env.OVERRIDE_CURRENT_VERSION;
     let remoteUrl: string | undefined = process.env.OVERRIDE_REMOTE_URL;
 
     if (!isInsideDocker) {
@@ -68,12 +67,6 @@ const nextConfig = async (): Promise<NextConfig> => {
             currentTag = (await git.tags()).latest;
         }
 
-        if (!currentVersion) {
-            currentVersion = (
-                await git.raw(['describe', '--tags', '--always'])
-            ).trim();
-        }
-
         if (!remoteUrl) {
             const configuredRemoteUrl = (
                 await git.getConfig('remote.origin.url')
@@ -84,11 +77,13 @@ const nextConfig = async (): Promise<NextConfig> => {
         }
     }
 
+    const appVersion = getAppVersion();
+
     console.dir({
         currentCommit,
         currentBranch,
         currentTag,
-        currentVersion,
+        appVersion,
         isInsideDocker,
         currentCommitTimestamp,
         remoteUrl,
@@ -113,7 +108,7 @@ const nextConfig = async (): Promise<NextConfig> => {
                 NEXT_PUBLIC_CURRENT_BRANCH: currentBranch,
                 NEXT_PUBLIC_CURRENT_TAG:
                     currentTag === 'false' ? undefined : currentTag,
-                NEXT_PUBLIC_CURRENT_VERSION: currentVersion,
+                NEXT_PUBLIC_CURRENT_VERSION: appVersion,
                 NEXT_PUBLIC_IS_INSIDE_DOCKER: isInsideDocker ? 'true' : 'false',
                 NEXT_PUBLIC_CURRENT_COMMIT_TIMESTAMP: currentCommitTimestamp,
                 NEXT_PUBLIC_REMOTE_URL: remoteUrl,

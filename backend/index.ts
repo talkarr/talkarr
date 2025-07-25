@@ -14,7 +14,7 @@ import '@backend/workers/generate-missing-nfo';
 import { startCheckForRootFolders } from '@backend/workers/check-for-root-folders';
 
 import api from '@backend/api';
-import { serverHost, serverPort } from '@backend/env';
+import { initEnv, serverHost, serverPort } from '@backend/env';
 import { clearDownloadingFlagForAllTalks } from '@backend/events';
 import { releaseAllLocks } from '@backend/locks';
 import rootLog from '@backend/root-log';
@@ -27,6 +27,7 @@ const log = rootLog.child({ label: 'server' });
 log.info('Starting server...', { dev });
 
 initServer.on('listening', async () => {
+    await initEnv();
     const app = next({ dev, turbopack: true });
     const handle = app.getRequestHandler();
 

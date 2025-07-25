@@ -21,6 +21,7 @@ export interface UiState {
     rootFolderErrorModal: RootFolderErrorModalData | null;
     informationModal: boolean;
     licenseSelected: License;
+    versionChangedModal: boolean;
 }
 
 export interface UiActions {
@@ -48,6 +49,9 @@ export interface UiActions {
 
     // licenseSelected
     setLicenseSelected: (license: License) => void;
+
+    // versionChangedModal
+    showVersionChangedModal: () => void;
 }
 
 export type UiStore = UiState & UiActions;
@@ -59,6 +63,7 @@ export const defaultUiState: UiState = {
     rootFolderErrorModal: null,
     informationModal: false,
     licenseSelected: licenseList[0],
+    versionChangedModal: false,
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -82,6 +87,8 @@ export const createUiStore = (initialState?: PartialDeep<UiState>) =>
                 closeInformationModal: () => set({ informationModal: false }),
                 setLicenseSelected: license =>
                     set({ licenseSelected: license }),
+                showVersionChangedModal: () =>
+                    set({ versionChangedModal: true }),
             }),
             {
                 name: 'uiStore',

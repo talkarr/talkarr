@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
 import path from 'node:path';
+import { simpleGit } from 'simple-git';
 
 // load .env and .env.local files. needed because this gets loaded before Next.js loads the .env files
 config({
@@ -8,6 +9,12 @@ config({
         path.resolve(process.cwd(), '.env.local'),
     ],
 });
+
+let privateGitDescribeResult: string | undefined;
+
+const overrideCurrentVersion = process.env.OVERRIDE_CURRENT_VERSION;
+export const getAppVersion = (): string =>
+    overrideCurrentVersion || privateGitDescribeResult || 'unknown';
 
 export const serverPort = Number(process.env.TALKARR_PORT) || 3232;
 export const serverHost = process.env.TALKARR_HOST;
@@ -39,3 +46,19 @@ if (process.env.NODE_ENV === 'development') {
         configDirectory,
     });
 }
+
+export const initEnv = async (): Promise<void> => {
+    const git = simpleGit();
+
+    try {
+        privateGitDescribeResult = await git.raw([
+            'describe',
+            '--tags',
+            '--always',
+        ]);
+        privateGitDescribeResult = privateGitDescribeResult.trim();
+    } catch (error) {
+        console.error('Failed to get git commit hash:', error);
+        privateGitDescribeResult = undefined;
+    }
+};

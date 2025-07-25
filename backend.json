@@ -1069,10 +1069,16 @@
                         "type": "string",
                         "description": "Version of yt-dlp used",
                         "example": "2023.10.01"
+                    },
+                    "appVersion": {
+                        "type": "string",
+                        "description": "Version of the app",
+                        "example": "1.0.0"
                     }
                 },
                 "required": [
-                    "ytdlpVersion"
+                    "ytdlpVersion",
+                    "appVersion"
                 ]
             },
             "UserRegistration": {
