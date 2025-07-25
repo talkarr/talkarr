@@ -19,7 +19,9 @@ export const getAppStatus: () => Promise<GetAppStatusResponse> = pGetAppStatus;
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pGetAppInformation = async () => {
-    const { data, error, response } = await api.GET('/information');
+    const { data, error, response } = await api.GET('/information', {
+        cache: 'no-cache',
+    });
 
     if (error) {
         return { ...error, response };
