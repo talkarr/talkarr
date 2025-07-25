@@ -1968,6 +1968,11 @@ export interface components {
              * @example 2023.10.01
              */
             ytdlpVersion: string;
+            /**
+             * @description Version of the app
+             * @example 1.0.0
+             */
+            appVersion: string;
         };
         UserRegistration: {
             /**

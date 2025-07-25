@@ -5,6 +5,7 @@ import AddTalkModal from '@/app/_modals/AddTalkModal';
 import ConfirmationModal from '@/app/_modals/ConfirmationModal';
 import InformationModal from '@/app/_modals/InformationModal';
 import RootFolderErrorModal from '@/app/_modals/RootFolderErrorModal';
+import VersionChangedModal from '@/app/_modals/VersionChangedModal';
 
 import { loginPageLink } from '@/constants';
 
@@ -25,6 +26,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
         <ConfirmationModal />
         <RootFolderErrorModal />
         <InformationModal />
+        <VersionChangedModal />
     </>
 );
 

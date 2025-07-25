@@ -18,8 +18,10 @@ export type GetAppStatusResponse =
 export const getAppStatus: () => Promise<GetAppStatusResponse> = pGetAppStatus;
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const pGetInformation = async () => {
-    const { data, error, response } = await api.GET('/information');
+const pGetAppInformation = async () => {
+    const { data, error, response } = await api.GET('/information', {
+        cache: 'no-cache',
+    });
 
     if (error) {
         return { ...error, response };
@@ -28,9 +30,9 @@ const pGetInformation = async () => {
     return data;
 };
 
-export type GetInformationResponse =
-    | Awaited<ReturnType<typeof pGetInformation>>
+export type GetAppInformationResponse =
+    | Awaited<ReturnType<typeof pGetAppInformation>>
     | undefined;
 
-export const getInformation: () => Promise<GetInformationResponse> =
-    pGetInformation;
+export const getAppInformation: () => Promise<GetAppInformationResponse> =
+    pGetAppInformation;

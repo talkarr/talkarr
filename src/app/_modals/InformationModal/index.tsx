@@ -1,36 +1,46 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
+
 import type { FC } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { useSnackbar } from 'notistack';
 
-import type { SuccessData } from '@backend/types';
-
-import { getInformation } from '@/app/_api/information';
 import InfoBox from '@/app/_modals/InformationModal/_components/InfoBox';
 
 import { pageName } from '@/constants';
+import { useApiStore } from '@/providers/api-store-provider';
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import BaseModal from '@components/CustomModal';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-type AppInformation = SuccessData<'/information', 'get'>;
-
 const InformationModal: FC = () => {
+    const pathname = usePathname();
     const { enqueueSnackbar } = useSnackbar();
     const informationModalOpen = useUiStore(store => store.informationModal);
     const closeInformationModal = useUiStore(
         store => store.closeInformationModal,
     );
-    const [appInformation, setAppInformation] = useState<AppInformation | null>(
-        null,
+
+    const showVersionChangedModal = useUiStore(
+        store => store.showVersionChangedModal,
+    );
+
+    const appInformation = useApiStore(store => store.appInformation);
+    const getAppInformationData = useApiStore(
+        store => store.getAppInformationData,
     );
 
     const updateInformation = useCallback(async (): Promise<void> => {
-        const result = await getInformation();
+        const result = await getAppInformationData({
+            onVersionChange: () => {
+                closeInformationModal();
+                showVersionChangedModal();
+            },
+        });
 
         if (!result?.success) {
             enqueueSnackbar('Failed to load application information', {
@@ -38,9 +48,28 @@ const InformationModal: FC = () => {
             });
             return;
         }
+    }, [
+        closeInformationModal,
+        enqueueSnackbar,
+        getAppInformationData,
+        showVersionChangedModal,
+    ]);
 
-        setAppInformation(result.data);
-    }, [enqueueSnackbar]);
+    useEffect(() => {
+        if (pathname) {
+            getAppInformationData({
+                onVersionChange: () => {
+                    closeInformationModal();
+                    showVersionChangedModal();
+                },
+            });
+        }
+    }, [
+        getAppInformationData,
+        showVersionChangedModal,
+        closeInformationModal,
+        pathname,
+    ]);
 
     useEffect(() => {
         if (informationModalOpen) {
