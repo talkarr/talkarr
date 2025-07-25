@@ -3,7 +3,12 @@ import type { Event as DbEvent, EventInfo, File } from '@prisma/client';
 // eslint-disable-next-line import/no-cycle
 import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
 
-import { getFolderPathForTalk, isFolderMarked, isVideoFile } from '@backend/fs';
+import {
+    deleteFilesForEvent,
+    getFolderPathForTalk,
+    isFolderMarked,
+    isVideoFile,
+} from '@backend/fs';
 import type { ExistingFileWithGuessedInformation } from '@backend/fs/scan';
 import type { components } from '@backend/generated/schema';
 import { getConferenceFromEvent, getTalkFromApiBySlug } from '@backend/helper';
@@ -265,37 +270,6 @@ export const updateTalk = async ({
     }
 };
 
-export const deleteTalk = async ({
-    guid,
-    deleteFiles = false,
-}: {
-    guid: string;
-    deleteFiles: boolean;
-}): Promise<boolean> => {
-    if (deleteFiles) {
-        // TODO: Implement file deletion
-        log.warn('Deleting files is not implemented yet');
-    }
-
-    try {
-        await prisma.event.delete({
-            where: {
-                guid,
-            },
-            include: {
-                eventInfo: true,
-                file: true,
-            },
-        });
-
-        return true;
-    } catch (error) {
-        log.error('Error deleting talk', { error, guid });
-
-        return false;
-    }
-};
-
 export const getTalkInfoByGuid = async ({
     guid,
 }: {
@@ -382,6 +356,59 @@ export const getTalkInfoBySlug = async ({
         log.error('Error getting talk info by slug', { error, slug });
 
         throw error;
+    }
+};
+
+export const deleteTalk = async ({
+    guid,
+    deleteFiles = false,
+}: {
+    guid: string;
+    deleteFiles: boolean;
+}): Promise<boolean> => {
+    if (deleteFiles) {
+        const event = (await prisma.event.findUnique({
+            where: {
+                guid,
+            },
+            include: {
+                persons: true,
+                tags: true,
+                file: true,
+                root_folder: true,
+                conference: true,
+            },
+        })) as ConvertBigintToNumberType<
+            NormalAndConvertedDate<ExtendedDbEvent>
+        > | null;
+
+        if (!event) {
+            log.error('Event not found for deletion', { guid });
+            return false;
+        }
+
+        const deleteSuccess = await deleteFilesForEvent({
+            event,
+        });
+
+        if (!deleteSuccess) {
+            log.error('Error deleting files for talk', { guid });
+            return false;
+        }
+    }
+
+    try {
+        await prisma.event.delete({
+            where: {
+                guid,
+            },
+        });
+
+        return true;
+    } catch (error) {
+        log.error('Error deleting talk', { error, guid });
+
+        return false;
     }
 };
 
