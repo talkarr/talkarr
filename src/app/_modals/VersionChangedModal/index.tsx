@@ -11,12 +11,17 @@ import Typography from '@mui/material/Typography';
 
 const VersionChangedModal: FC = () => {
     const versionChangedModal = useUiStore(store => store.versionChangedModal);
+    const closeVersionChangedModal = useUiStore(
+        store => store.closeVersionChangedModal,
+    );
 
     return (
         <BaseModal
             open={versionChangedModal}
             testID="version-changed-modal"
             title="Version Changed"
+            onClose={closeVersionChangedModal}
+            showCloseButton={process.env.NODE_ENV !== 'production'}
         >
             <Typography mb={2}>
                 The application version has changed. Please refresh the page to

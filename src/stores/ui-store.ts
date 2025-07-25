@@ -52,6 +52,7 @@ export interface UiActions {
 
     // versionChangedModal
     showVersionChangedModal: () => void;
+    closeVersionChangedModal: () => void;
 }
 
 export type UiStore = UiState & UiActions;
@@ -89,6 +90,8 @@ export const createUiStore = (initialState?: PartialDeep<UiState>) =>
                     set({ licenseSelected: license }),
                 showVersionChangedModal: () =>
                     set({ versionChangedModal: true }),
+                closeVersionChangedModal: () =>
+                    set({ versionChangedModal: false }),
             }),
             {
                 name: 'uiStore',

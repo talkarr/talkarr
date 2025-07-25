@@ -140,11 +140,16 @@ export const createApiStore = (initialState?: PartialDeep<ApiState>) =>
                         typeof oldVersion === 'string' &&
                         typeof newVersion === 'string' &&
                         oldVersion !== newVersion &&
-                        !doNotReload &&
-                        typeof window !== 'undefined' &&
-                        process.env.NODE_ENV === 'production'
+                        !doNotReload
                     ) {
+                        console.warn(
+                            `App version changed from ${oldVersion} to ${newVersion}. Reloading...`,
+                        );
                         onVersionChange?.();
+                    } else {
+                        console.log(
+                            `App version is still the same: ${oldVersion}==${newVersion}`,
+                        );
                     }
 
                     set({ appInformation: data });

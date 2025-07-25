@@ -35,7 +35,12 @@ const InformationModal: FC = () => {
     );
 
     const updateInformation = useCallback(async (): Promise<void> => {
-        const result = await getAppInformationData();
+        const result = await getAppInformationData({
+            onVersionChange: () => {
+                closeInformationModal();
+                showVersionChangedModal();
+            },
+        });
 
         if (!result?.success) {
             enqueueSnackbar('Failed to load application information', {
@@ -43,7 +48,12 @@ const InformationModal: FC = () => {
             });
             return;
         }
-    }, [enqueueSnackbar, getAppInformationData]);
+    }, [
+        closeInformationModal,
+        enqueueSnackbar,
+        getAppInformationData,
+        showVersionChangedModal,
+    ]);
 
     useEffect(() => {
         if (pathname) {
