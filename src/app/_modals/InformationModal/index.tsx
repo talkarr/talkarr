@@ -48,7 +48,6 @@ const InformationModal: FC = () => {
     useEffect(() => {
         if (pathname) {
             getAppInformationData({
-                skipIfExists: true,
                 onVersionChange: () => {
                     closeInformationModal();
                     showVersionChangedModal();
