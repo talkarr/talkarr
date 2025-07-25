@@ -1,5 +1,7 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
+
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo } from 'react';
 
@@ -16,6 +18,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 const InformationModal: FC = () => {
+    const pathname = usePathname();
     const { enqueueSnackbar } = useSnackbar();
     const informationModalOpen = useUiStore(store => store.informationModal);
     const closeInformationModal = useUiStore(
@@ -43,14 +46,21 @@ const InformationModal: FC = () => {
     }, [enqueueSnackbar, getAppInformationData]);
 
     useEffect(() => {
-        getAppInformationData({
-            skipIfExists: true,
-            onVersionChange: () => {
-                closeInformationModal();
-                showVersionChangedModal();
-            },
-        });
-    }, [getAppInformationData, showVersionChangedModal, closeInformationModal]);
+        if (pathname) {
+            getAppInformationData({
+                skipIfExists: true,
+                onVersionChange: () => {
+                    closeInformationModal();
+                    showVersionChangedModal();
+                },
+            });
+        }
+    }, [
+        getAppInformationData,
+        showVersionChangedModal,
+        closeInformationModal,
+        pathname,
+    ]);
 
     useEffect(() => {
         if (informationModalOpen) {
