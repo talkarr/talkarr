@@ -58,7 +58,7 @@ const Page: NextPage = async () => {
                         ))}
                         {data?.folders.length === 0 ? (
                             <TableRow data-testid="no-root-folder">
-                                <TableCell colSpan={3}>
+                                <TableCell colSpan={4}>
                                     No root folders have been configured.
                                 </TableCell>
                             </TableRow>
