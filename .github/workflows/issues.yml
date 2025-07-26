@@ -21,10 +21,10 @@ jobs:
           contains(github.event.issue.labels.*.name, 'bug') ||
           contains(github.event.issue.type.name, 'Bug') ||
           contains(github.event.pull_request.labels.*.name, 'bug')
-        uses: srggrs/assign-one-project-github-action@1.3.1
+        uses: actions/add-to-project@v1.0.2
         with:
-          project: 'https://github.com/orgs/talkarr/projects/1'
-          column_name: 'To triage'
+          project-url: 'https://github.com/orgs/talkarr/projects/1'
+          github-token: ${{ secrets.MY_GITHUB_TOKEN }}
 
       - name: Assign features to the Features project
         if: |
@@ -32,6 +32,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'enhancement') ||
             contains(github.event.issue.type.name, 'Feature') ||
             contains(github.event.pull_request.labels.*.name, 'feature')
-        uses: srggrs/assign-one-project-github-action@1.3.1
+        uses: actions/add-to-project@v1.0.2
         with:
-          project: 'https://github.com/orgs/talkarr/projects/2'
+          project-url: 'https://github.com/orgs/talkarr/projects/2'
+          github-token: ${{ secrets.MY_GITHUB_TOKEN }}
