@@ -54,7 +54,7 @@ export const listFoldersFromFs = async (
                     fs.constants.R_OK | fs.constants.W_OK,
                 );
             } catch (error) {
-                log.warn('Error accessing folder (READ_WRITE_CHECK):', {
+                log.debug('Error accessing folder (READ_WRITE_CHECK):', {
                     error,
                     folder: pathUtils.join(startFolderPath, file.name),
                     startFolderPath,
@@ -275,6 +275,21 @@ router.post(
             }
 
             log.info('Folder marked:', { rootFolderPath });
+
+            if (
+                !(await setRootFolderMarkExists({
+                    rootFolderPath,
+                }))
+            ) {
+                log.error('Error setting root folder mark exists:', {
+                    rootFolderPath,
+                });
+
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error',
+                });
+            }
         } else {
             log.error('Error marking root folder:', { rootFolderPath });
 
