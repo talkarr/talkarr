@@ -19,6 +19,8 @@ export interface ModalProps {
     disableClose?: boolean;
     disableAutoFocus?: boolean;
     moreWidth?: boolean;
+    moreMobileWidth?: boolean;
+    moreDesktopWidth?: boolean;
     keepMounted?: boolean;
     title?: string;
     testID: string;
@@ -38,8 +40,15 @@ const StyledModal = styled(Modal)(({ theme, open }) => ({
 }));
 
 const OuterWrapper = styled(Box, {
-    shouldForwardProp: propName => propName !== 'moreWidth',
-})<{ moreWidth?: boolean }>(({ theme, moreWidth }) => ({
+    shouldForwardProp: propName =>
+        propName !== 'moreWidth' &&
+        propName !== 'moreMobileWidth' &&
+        propName !== 'moreDesktopWidth',
+})<{
+    moreWidth?: boolean;
+    moreMobileWidth?: boolean;
+    moreDesktopWidth?: boolean;
+}>(({ theme, moreWidth, moreMobileWidth, moreDesktopWidth }) => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     position: 'absolute',
@@ -54,14 +63,17 @@ const OuterWrapper = styled(Box, {
     pointerEvents: 'none',
 
     [theme.breakpoints.down('md')]: {
-        maxWidth: moreWidth ? 'calc(100vw - 40px)' : 'calc(100vw - 80px)',
+        maxWidth:
+            moreWidth || moreMobileWidth
+                ? 'calc(100vw - 20px)'
+                : 'calc(100vw - 60px)',
         maxHeight: 'calc(100vh - 80px)',
         top: '40px',
         left: 0,
         right: 0,
     },
     [theme.breakpoints.up('md')]: {
-        maxWidth: `min(${moreWidth ? 1200 : 696}px, calc(100vw - 40px))`,
+        maxWidth: `min(${moreWidth || moreDesktopWidth ? 1200 : 696}px, calc(100vw - 40px))`,
         maxHeight: 'calc(100vh - 120px)',
         top: '60px',
         left: 0,
@@ -74,8 +86,14 @@ const InnerWrapper = styled(Box)(({ theme }) => ({
     maxHeight: 'inherit',
     maxWidth: 'inherit',
     backgroundColor: theme.palette.background.paper,
-    padding: theme.shape.borderRadius * 3,
-    borderRadius: theme.shape.borderRadius * 4,
+    [theme.breakpoints.down('md')]: {
+        padding: theme.spacing(2),
+        borderRadius: theme.shape.borderRadius * 3,
+    },
+    [theme.breakpoints.up('md')]: {
+        padding: theme.spacing(3),
+        borderRadius: theme.shape.borderRadius * 4,
+    },
     pointerEvents: 'auto',
 }));
 
@@ -85,6 +103,8 @@ const BaseModal: FC<ModalProps> = ({
     children,
     disableAutoFocus,
     moreWidth,
+    moreMobileWidth,
+    moreDesktopWidth,
     keepMounted,
     title,
     testID,
@@ -115,7 +135,11 @@ const BaseModal: FC<ModalProps> = ({
                 },
             }}
         >
-            <OuterWrapper moreWidth={moreWidth}>
+            <OuterWrapper
+                moreWidth={moreWidth}
+                moreMobileWidth={moreMobileWidth}
+                moreDesktopWidth={moreDesktopWidth}
+            >
                 <InnerWrapper>
                     <Box
                         height="100%"
