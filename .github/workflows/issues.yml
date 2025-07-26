@@ -1,13 +1,15 @@
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened, labeled, typed]
   pull_request:
-    types: [opened, labeled]
+    types: [opened, labeled, typed]
   issue_comment:
     types: [created]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+name: Assign Issues to Projects
 
 jobs:
   assign-project:
