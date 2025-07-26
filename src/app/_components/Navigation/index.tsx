@@ -143,7 +143,10 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                     anchor="left"
                     data-testid="mobile-navigation-drawer"
                 >
-                    <LogoWithText redirectToHome />
+                    <LogoWithText
+                        redirectToHome
+                        onClick={() => setOpen(false)}
+                    />
                     {splitItemsByDivider.map((items, index, { length }) => (
                         <Fragment key={`mobile-navigation-item-list-${index}`}>
                             <List

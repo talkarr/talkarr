@@ -11,11 +11,12 @@ import Typography from '@mui/material/Typography';
 
 export interface LogoWithTextProps {
     redirectToHome?: boolean;
+    onClick?: () => void;
 }
 
-const LogoWithText: FC<LogoWithTextProps> = ({ redirectToHome }) =>
+const LogoWithText: FC<LogoWithTextProps> = ({ redirectToHome, onClick }) =>
     redirectToHome ? (
-        <Link href={homePageLink}>
+        <Link href={homePageLink} onClick={onClick}>
             <Button fullWidth sx={{ borderRadius: 0, p: 0 }}>
                 <Box
                     sx={{
