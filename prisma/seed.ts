@@ -1,19 +1,20 @@
-import { execSync } from 'child_process';
-import waitOn from 'wait-on';
 import argon2 from 'argon2';
+import { execSync } from 'node:child_process';
+import waitOn from 'wait-on';
+
+import { markRootFolder } from '@backend/fs';
 
 import { PrismaClient } from '@prisma/client';
-import { markRootFolder } from '@backend/fs';
 
 waitOn({
     resources: ['tcp:5432'],
-    timeout: 60000,
+    timeout: 60_000,
 })
     .then(async () => {
         console.log('Postgres is up');
     })
-    .catch(async e => {
-        console.error(e);
+    .catch(async error => {
+        console.error(error);
         process.exit(1);
     });
 
@@ -63,8 +64,8 @@ main()
     .then(async () => {
         console.log('Successfully seeded database');
     })
-    .catch(async e => {
-        console.error(e);
+    .catch(async error => {
+        console.error(error);
         process.exit(1);
     })
     .finally(async () => {

@@ -236,6 +236,7 @@ export default tseslint.config(
             "unicorn/prefer-add-event-listener": "off",
             "unicorn/no-process-exit": "off",
             "unicorn/prefer-module": "off",
+            "unicorn/prefer-top-level-await": "off",
         },
     },
     {
