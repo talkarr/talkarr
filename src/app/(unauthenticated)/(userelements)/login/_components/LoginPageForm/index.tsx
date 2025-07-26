@@ -77,7 +77,7 @@ const LoginPageForm: FC = () => {
             flexDirection="column"
             gap={2}
             width="100%"
-            minWidth={350}
+            minWidth={{ lg: 350 }}
             padding={{ xs: 2, lg: 0 }}
             data-testid="login-page-form"
         >

@@ -141,6 +141,7 @@ const InformationModal: FC = () => {
             testID="information-modal"
             title="Informations about the application"
             showCloseButton
+            moreMobileWidth
         >
             {appInformation ? (
                 <Grid container spacing={2}>

@@ -78,7 +78,7 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
                 display="flex"
                 flexDirection="row"
                 flexWrap="wrap"
-                gap={2}
+                gap={{ xs: 0.5, lg: 2 }}
                 mt={2}
             >
                 {Object.entries(colors).map(([statusElement, color]) => (

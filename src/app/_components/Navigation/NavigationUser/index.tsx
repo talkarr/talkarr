@@ -88,7 +88,7 @@ const NavigationUser: FC = () => {
                     paper: {
                         sx: {
                             minWidth: 300,
-                            pb: 3,
+                            pb: { xs: 2, lg: 3 },
                             borderRadius: 4,
                         },
                         elevation: 3,
@@ -107,7 +107,7 @@ const NavigationUser: FC = () => {
                     alignItems="center"
                     gap={2}
                     paddingX={3}
-                    paddingTop={3}
+                    paddingTop={{ xs: 2, lg: 3 }}
                 >
                     <Avatar
                         src={

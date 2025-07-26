@@ -53,7 +53,7 @@ const UserRow: FC<UserRowProps> = ({ user }) => (
             {new Date(user.updatedAt).toLocaleString()}
         </TableCell>
         <TableCell align="right">
-            <IconButton color="primary">
+            <IconButton color="primary" disabled>
                 <EditIcon />
             </IconButton>
         </TableCell>
