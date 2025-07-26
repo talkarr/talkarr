@@ -26,8 +26,8 @@ const SetupScreenWrapper: FC<PropsWithChildren> = ({ children }) => (
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                minWidth: '400px',
-                minHeight: '300px',
+                minWidth: { lg: '400px' },
+                minHeight: { lg: '300px' },
                 maxWidth: { xs: '100vw', lg: '80vw' },
                 maxHeight: { xs: '100vh', lg: '80vh' },
                 height: '100%',
@@ -38,10 +38,11 @@ const SetupScreenWrapper: FC<PropsWithChildren> = ({ children }) => (
         >
             <Box
                 display="flex"
-                flexDirection="row"
+                flexDirection={{ xs: 'column', lg: 'row' }}
                 gap={{ lg: 4 }}
                 alignItems="center"
                 flexWrap="wrap"
+                width={{ xs: '100%', lg: 'auto' }}
             >
                 <Box
                     flex={1}
@@ -82,7 +83,8 @@ const SetupScreenWrapper: FC<PropsWithChildren> = ({ children }) => (
                     flexDirection="column"
                     alignItems="center"
                     justifyContent="center"
-                    gap={{ xs: 0, lg: 2 }}
+                    gap={{ lg: 2 }}
+                    width={{ xs: '100%', lg: 'auto' }}
                 >
                     {children}
                 </Box>
