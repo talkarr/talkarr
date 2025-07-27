@@ -1282,6 +1282,55 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/tasks/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: {
+                                tasks: components["schemas"]["TaskInfo"][];
+                                valid_tasks: string[];
+                            };
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/user/info": {
         parameters: {
             query?: never;
@@ -2003,6 +2052,35 @@ export interface components {
              * @enum {string}
              */
             fix_type: "force_mark";
+        };
+        /**
+         * @description Status of the task
+         * @enum {string}
+         */
+        TaskStatus: "Active" | "Waiting" | "Completed" | "Failed";
+        TaskInfo: {
+            /**
+             * @description Unique identifier for the task
+             * @example task_1234567890
+             */
+            id: string;
+            /**
+             * @description Name of the task
+             * @example Example Task
+             */
+            name: string;
+            status: components["schemas"]["TaskStatus"];
+            /**
+             * @description Progress of the task in percentage
+             * @example 50
+             */
+            progress: number;
+            /**
+             * Format: date-time
+             * @description Start time of the task
+             * @example 2022-01-01T00:00:00Z
+             */
+            started_at: string | null;
         };
     };
     responses: never;

@@ -31,7 +31,8 @@ loadingServer.get('/small_logo.png', (_req, res) => {
 loadingServer.get('*_', (req, res) => {
     if (req.path.startsWith('/api')) {
         res.status(521).json({
-            message: 'Service not available',
+            success: false,
+            error: 'Service not available',
         });
 
         return;
@@ -39,7 +40,8 @@ loadingServer.get('*_', (req, res) => {
 
     if (req.path.startsWith('/_next')) {
         res.status(521).json({
-            message: 'Service not available',
+            success: false,
+            error: 'Service not available',
         });
 
         return;

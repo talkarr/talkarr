@@ -1127,6 +1127,53 @@
                     "path",
                     "fix_type"
                 ]
+            },
+            "TaskStatus": {
+                "type": "string",
+                "enum": [
+                    "Active",
+                    "Waiting",
+                    "Completed",
+                    "Failed"
+                ],
+                "description": "Status of the task"
+            },
+            "TaskInfo": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "Unique identifier for the task",
+                        "example": "task_1234567890"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the task",
+                        "example": "Example Task"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/TaskStatus"
+                    },
+                    "progress": {
+                        "type": "integer",
+                        "description": "Progress of the task in percentage",
+                        "example": 50
+                    },
+                    "started_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Start time of the task",
+                        "example": "2022-01-01T00:00:00Z",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "status",
+                    "progress",
+                    "started_at"
+                ]
             }
         }
     },
@@ -2634,6 +2681,65 @@
                                             "$ref": "#/components/schemas/ErrorResponse"
                                         }
                                     ]
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/tasks/status": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "tasks": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/TaskInfo"
+                                                            }
+                                                        },
+                                                        "valid_tasks": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "tasks",
+                                                        "valid_tasks"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         },
