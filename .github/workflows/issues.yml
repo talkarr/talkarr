@@ -6,9 +6,6 @@ on:
   issue_comment:
     types: [created]
 
-env:
-  MY_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 name: Assign Issues to Projects
 
 jobs:
@@ -24,7 +21,7 @@ jobs:
         uses: actions/add-to-project@v1.0.2
         with:
           project-url: 'https://github.com/orgs/talkarr/projects/1'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROJECT_PAT }}
 
       - name: Assign features to the Features project
         if: |
@@ -35,4 +32,4 @@ jobs:
         uses: actions/add-to-project@v1.0.2
         with:
           project-url: 'https://github.com/orgs/talkarr/projects/2'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROJECT_PAT }}
