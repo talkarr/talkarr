@@ -54,6 +54,6 @@ export const getFileRoutePath = (pathname: string, params: Params): string => {
         }, '')
         .slice(0, -1)
         .split('/')
-        .reverse()
+        .toReversed()
         .join('/');
 };
