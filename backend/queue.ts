@@ -1,5 +1,6 @@
 import type { Job as DatabaseJob } from '@prisma/client';
 
+import type { components } from '@backend/generated/schema';
 import { prisma } from '@backend/prisma';
 import rootLog from '@backend/root-log';
 
@@ -543,6 +544,19 @@ export class Queue {
                     error: (error as Error).message,
                 });
             });
+    }
+
+    public getJobs(): components['schemas']['TaskInfo'][] {
+        return this.jobQueue.map(
+            job =>
+                ({
+                    id: job.id,
+                    name: job.name,
+                    progress: job.progress,
+                    status: job.status,
+                    started_at: job.startedAt,
+                }) as components['schemas']['TaskInfo'],
+        );
     }
 }
 

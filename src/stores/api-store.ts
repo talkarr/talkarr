@@ -16,6 +16,8 @@ import type { TalkInfoResponse } from '@/app/_api/talks/info';
 import { talkInfo } from '@/app/_api/talks/info';
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
 import { searchEvents } from '@/app/_api/talks/search';
+import { getTaskStatus } from '@/app/_api/tasks/status';
+import type { TasksData } from '@/app/(authenticated)/settings/tasks/page';
 import type { SingleTalkData } from '@/app/(authenticated)/talks/[slug]/page';
 
 import type { TalkData } from '@/stores/ui-store';
@@ -27,6 +29,7 @@ export interface ApiState {
     talkInfo: Record<TalkData['guid'], TalkInfoResponse>;
     singleTalkData: SingleTalkData | null;
     appInformation: AppInformation | null;
+    taskStatus: TasksData | null;
 }
 
 export interface ApiActions {
@@ -45,6 +48,7 @@ export interface ApiActions {
         doNotReload?: boolean;
         onVersionChange?: () => void;
     }) => Promise<GetAppInformationResponse>;
+    getTaskStatusData: () => Promise<TasksData | null>;
 }
 
 export type ApiStore = ApiState & ApiActions;
@@ -54,6 +58,7 @@ export const defaultApiState: ApiState = {
     talkInfo: {},
     singleTalkData: null,
     appInformation: null,
+    taskStatus: null,
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -155,6 +160,17 @@ export const createApiStore = (initialState?: PartialDeep<ApiState>) =>
                     set({ appInformation: data });
 
                     return response;
+                },
+                getTaskStatusData: async () => {
+                    const response = await getTaskStatus();
+
+                    if (!response?.success) {
+                        return null;
+                    }
+
+                    set({ taskStatus: response.data });
+
+                    return response.data;
                 },
             }),
             {

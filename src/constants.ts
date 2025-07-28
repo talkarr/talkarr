@@ -33,6 +33,7 @@ export const settingsPageLink = '/settings';
 export const generalSettingsPageLink = '/settings/general';
 export const mediaManagementSettingsPageLink = '/settings/mediamanagement';
 export const securitySettingsPageLink = '/settings/security';
+export const tasksSettingsPageLink = '/settings/tasks';
 export const licensesSettingsPageLink = '/settings/licenses';
 
 // === User ===

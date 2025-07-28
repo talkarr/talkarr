@@ -10,6 +10,7 @@ import {
     scanFilesPageLink,
     securitySettingsPageLink,
     settingsPageLink,
+    tasksSettingsPageLink,
 } from '@/constants';
 
 import TalksIcon from '@mui/icons-material/RecordVoiceOverRounded';
@@ -50,6 +51,12 @@ export const settings: (SimpleNavigationItem & { description: string })[] = [
         path: mediaManagementSettingsPageLink,
         description: 'Naming and management of media files.',
         slug: 'media-management',
+    },
+    {
+        title: 'Tasks',
+        path: tasksSettingsPageLink,
+        description: 'Manage scheduled tasks.',
+        slug: 'tasks',
     },
     {
         title: 'Licenses',
