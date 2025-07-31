@@ -1,0 +1,3 @@
+[submodule "src/locales"]
+	path = src/locales
+	url = git@github.com:talkarr/talkarr-translations.git
