@@ -54,7 +54,7 @@ const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
                             <ApiStoreProvider>
                                 <UiStoreProvider>
                                     <NotistackProvider>
-                                        {children}
+                                            {children}
                                     </NotistackProvider>
                                 </UiStoreProvider>
                             </ApiStoreProvider>
