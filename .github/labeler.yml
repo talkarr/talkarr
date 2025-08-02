@@ -35,3 +35,7 @@ Unit-Tests:
 API:
   - changed-files:
       - any-glob-to-any-file: ['backend/api/**', 'backend.json']
+
+Translations:
+  - changed-files:
+      - any-glob-to-any-file: ['src/i18n/**', 'src/translations', 'src/translations/**']
