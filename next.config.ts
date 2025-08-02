@@ -5,8 +5,6 @@ import type { Options } from '@ryoppippi/unplugin-typia';
 
 import type { NextConfig } from 'next';
 
-import fs from 'node:fs';
-
 import { apiBaseUrl } from './src/constants';
 
 import unTypiaNext from '@ryoppippi/unplugin-typia/next';
@@ -24,25 +22,6 @@ if (!['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
     throw new Error('Invalid NODE_ENV');
 }
 
-// ensure the translation folder exists
-const translationsDir = './src/translations';
-if (!fs.existsSync(translationsDir)) {
-    throw new Error(
-        `Translations directory "${translationsDir}" does not exist. Please check your project setup.`,
-    );
-}
-
-// make sure there are json files in the translations directory
-const translationFiles = fs
-    .readdirSync(translationsDir)
-    .filter(file => file.endsWith('.json'));
-
-if (translationFiles.length === 0) {
-    throw new Error(
-        `No translation files found in "${translationsDir}". Please check your project setup.`,
-    );
-}
-
 console.log(`====================
 NODE_ENV: ${process.env.NODE_ENV}
 ====================`);
@@ -53,6 +32,13 @@ export const unpluginTypiaOptions: Options = {
 };
 
 const nextConfig = async (): Promise<NextConfig> => {
+    try {
+        await import('./src/translations/en.json');
+    } catch (error) {
+        console.error('Failed to load translation files:', error);
+        throw new Error('Missing translation files, please check your setup.');
+    }
+
     const isInsideDocker = process.env.IS_INSIDE_DOCKER === 'true';
     const githubActionsRunId = process.env.GITHUB_ACTIONS_RUN_ID;
     let currentCommit: string | undefined = process.env.OVERRIDE_CURRENT_COMMIT;
