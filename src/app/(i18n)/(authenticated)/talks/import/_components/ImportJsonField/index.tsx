@@ -2,6 +2,7 @@
 
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { ExtractSuccessData } from '@backend/types';
 
@@ -42,6 +43,8 @@ const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({
 }));
 
 const ImportJsonField: FC = () => {
+    const { t } = useTranslation();
+
     const [json, setJson] = useState<string>('');
 
     const debouncedJson = useDebounce(json, 500);
@@ -85,7 +88,7 @@ const ImportJsonField: FC = () => {
         func();
     }, []);
 
-    const loadFile = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const loadJsonFile = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const file = event.target.files?.[0];
         if (!file) {
             return;
@@ -109,7 +112,7 @@ const ImportJsonField: FC = () => {
             });
 
             if (!result) {
-                setError('An error occurred while verifying the JSON');
+                setError(t('pages.importJsonPage.checkJsonError'));
             } else if (result.success === false) {
                 setError(result.error);
             } else {
@@ -121,7 +124,7 @@ const ImportJsonField: FC = () => {
         if (debouncedJson) {
             checkJson();
         }
-    }, [debouncedJson]);
+    }, [t, debouncedJson]);
 
     useEffect(() => {
         if (json) {
@@ -157,9 +160,11 @@ const ImportJsonField: FC = () => {
                 <>
                     <Box mb={2}>
                         <Typography variant="h2" mb={1}>
-                            Import JSON
+                            {t('pages.importJsonPage.title')}
                         </Typography>
-                        <Typography>Import talks from c3 Fahrplan.</Typography>
+                        <Typography>
+                            {t('pages.importJsonPage.description')}
+                        </Typography>
                     </Box>
                     <Box mb={2}>
                         <StyledTextareaAutosize
@@ -167,7 +172,9 @@ const ImportJsonField: FC = () => {
                             onChange={e => setJson(e.target.value)}
                             minRows={10}
                             maxRows={20}
-                            placeholder="Paste JSON here"
+                            placeholder={t(
+                                'pages.importJsonPage.pasteJsonHere',
+                            )}
                             spellCheck="false"
                             autoCorrect="off"
                         />
@@ -180,7 +187,7 @@ const ImportJsonField: FC = () => {
                     <Box mb={2}>
                         <FormControl fullWidth>
                             <InputLabel id="root-folder-label">
-                                Root folder
+                                {t('pages.importJsonPage.selectRootFolder')}
                             </InputLabel>
                             <Select
                                 variant="outlined"
@@ -190,7 +197,9 @@ const ImportJsonField: FC = () => {
                                     setRootFolder(e.target.value as string)
                                 }
                                 labelId="root-folder-label"
-                                label="Root folder"
+                                label={t(
+                                    'pages.importJsonPage.selectRootFolder',
+                                )}
                                 data-testid="root-folder-select"
                             >
                                 {availableRootFolders.map(folder => (
@@ -219,12 +228,12 @@ const ImportJsonField: FC = () => {
                             startIcon={<FileOpenIcon />}
                             disabled={processing}
                         >
-                            Load JSON
+                            {t('pages.importJsonPage.loadJsonFromFile')}
                             <input
                                 type="file"
                                 accept=".json"
                                 hidden
-                                onChange={loadFile}
+                                onChange={loadJsonFile}
                             />
                         </Button>
                         <Button
@@ -244,7 +253,7 @@ const ImportJsonField: FC = () => {
                             startIcon={<UploadIcon />}
                             onClick={handleImport}
                         >
-                            Import
+                            {t('pages.importJsonPage.importButton')}
                         </Button>
                     </Box>
                 </>
@@ -256,14 +265,16 @@ const ImportJsonField: FC = () => {
                         justifyContent="space-between"
                         alignItems="center"
                     >
-                        <Typography variant="h3">Import Result</Typography>
+                        <Typography variant="h3">
+                            {t('pages.importJsonPage.importResult')}
+                        </Typography>
                         <Button
                             variant="text"
                             color="error"
                             onClick={resetImport}
                             data-testid="reset-import"
                         >
-                            Reset Import
+                            {t('pages.importJsonPage.resetImport')}
                         </Button>
                     </Box>
                     <List>

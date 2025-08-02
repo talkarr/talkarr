@@ -1,5 +1,8 @@
+'use client';
+
 import type { FC } from 'react';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { Enum } from '@backend/types';
 
@@ -17,6 +20,8 @@ export interface SettingsEnumItemProps {
     onChange: (value: string) => void;
     icon?: React.ReactNode;
     secondaryText?: string;
+    // typically the translatePrefix is set to the name of the enum
+    translatePrefix?: string;
 }
 
 const SettingsEnumItem: FC<SettingsEnumItemProps> = ({
@@ -26,7 +31,10 @@ const SettingsEnumItem: FC<SettingsEnumItemProps> = ({
     value,
     options,
     onChange,
+    translatePrefix,
 }) => {
+    const { t } = useTranslation();
+
     const [open, setOpen] = useState<boolean>(false);
 
     return (
@@ -60,8 +68,9 @@ const SettingsEnumItem: FC<SettingsEnumItemProps> = ({
                 >
                     {Object.entries(options).map(([key, label]) => (
                         <MenuItem key={key} value={key}>
-                            {/* TODO: once translations are happening, automatically translate these values */}
-                            {label}
+                            {translatePrefix
+                                ? t(`enums.${translatePrefix}.${label}.label`)
+                                : label}
                         </MenuItem>
                     ))}
                 </Select>

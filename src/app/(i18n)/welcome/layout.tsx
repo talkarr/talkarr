@@ -5,13 +5,18 @@ import type { FC, PropsWithChildren } from 'react';
 
 import { getAppStatus } from '@/app/_api/information';
 
-import { homePageLink, pageName } from '@/constants';
+import { homePageLink } from '@/constants';
+import { getServerSideTranslation } from '@/i18n/server-side';
 
 import AppNotAvailable from '@components/AppNotAvailable';
 import SetupScreenWrapper from '@components/SetupScreenWrapper';
 
-export const metadata: Metadata = {
-    title: `Welcome to ${pageName}`,
+export const generateMetadata = async (): Promise<Metadata> => {
+    const { t } = await getServerSideTranslation();
+
+    return {
+        title: t('pages.welcomePage.title'),
+    };
 };
 
 const Layout: FC<PropsWithChildren> = async ({ children }) => {

@@ -2,6 +2,7 @@
 
 import type { FC } from 'react';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import moment from 'moment';
 
@@ -19,6 +20,8 @@ export interface TaskListProps {
 }
 
 const TaskList: FC<TaskListProps> = ({ initialData }) => {
+    const { t } = useTranslation();
+
     const taskStatus = useApiStore(store => store.taskStatus);
     const getTaskStatusData = useApiStore(store => store.getTaskStatusData);
 
@@ -35,7 +38,7 @@ const TaskList: FC<TaskListProps> = ({ initialData }) => {
     }, [getTaskStatusData, tasksData]);
 
     if (!tasksData) {
-        return <Typography>Loading...</Typography>;
+        return <Typography>{t('common.loading')}</Typography>;
     }
 
     return (
@@ -49,23 +52,42 @@ const TaskList: FC<TaskListProps> = ({ initialData }) => {
                     <Box mt={1}>
                         <Typography variant="body1">
                             Status: {task.status}
+                            {t(
+                                'pages.taskSettingsPage.components.taskList.status',
+                                {
+                                    status: task.status,
+                                },
+                            )}
                         </Typography>
                         <Typography variant="body2">
-                            Started at:{' '}
-                            {task.started_at
-                                ? moment(task.started_at).format(
-                                      longDateTimeFormat,
-                                  )
-                                : 'N/A'}
+                            {t(
+                                'pages.taskSettingsPage.components.taskList.startedAt',
+                                {
+                                    startedAt: task.started_at
+                                        ? moment(task.started_at).format(
+                                              longDateTimeFormat,
+                                          )
+                                        : 'N/A',
+                                },
+                            )}
                         </Typography>
                         <Typography variant="body2">
-                            Progress: {task.progress || 'N/A'}%
+                            {t(
+                                'pages.taskSettingsPage.components.taskList.progress',
+                                {
+                                    progress: task.progress || 'N/A',
+                                },
+                            )}
                         </Typography>
                     </Box>
                 </Paper>
             ))}
             {tasksData.tasks.length === 0 ? (
-                <Typography>No tasks currently running.</Typography>
+                <Typography>
+                    {t(
+                        'pages.taskSettingsPage.components.taskList.noTasksRunning',
+                    )}
+                </Typography>
             ) : null}
         </Box>
     );

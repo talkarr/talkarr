@@ -1,8 +1,11 @@
+'use client';
+
 import Link from 'next/link';
 
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { homePageLink, pageName } from '@/constants';
+import { homePageLink } from '@/constants';
 
 import Logo from '@components/Logo';
 import Box from '@mui/material/Box';
@@ -14,8 +17,10 @@ export interface LogoWithTextProps {
     onClick?: () => void;
 }
 
-const LogoWithText: FC<LogoWithTextProps> = ({ redirectToHome, onClick }) =>
-    redirectToHome ? (
+const LogoWithText: FC<LogoWithTextProps> = ({ redirectToHome, onClick }) => {
+    const { t } = useTranslation();
+
+    return redirectToHome ? (
         <Link href={homePageLink} onClick={onClick}>
             <Button fullWidth sx={{ borderRadius: 0, p: 0 }}>
                 <Box
@@ -33,7 +38,7 @@ const LogoWithText: FC<LogoWithTextProps> = ({ redirectToHome, onClick }) =>
                         fontWeight="bold"
                         style={{ textTransform: 'none' }}
                     >
-                        {pageName}
+                        {t('application.name')}
                     </Typography>
                 </Box>
             </Button>
@@ -49,9 +54,10 @@ const LogoWithText: FC<LogoWithTextProps> = ({ redirectToHome, onClick }) =>
         >
             <Logo />
             <Typography variant="h3" component="h1" fontWeight="bold">
-                {pageName}
+                {t('application.name')}
             </Typography>
         </Box>
     );
+};
 
 export default LogoWithText;

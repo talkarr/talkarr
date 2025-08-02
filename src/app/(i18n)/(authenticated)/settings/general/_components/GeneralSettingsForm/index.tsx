@@ -2,6 +2,7 @@
 
 import type { FC } from 'react';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useSnackbar } from 'notistack';
 
@@ -13,6 +14,7 @@ import {
 } from '@/app/_api/settings/general';
 import type { GeneralSettings } from '@/app/(i18n)/(authenticated)/settings/general/page';
 
+import SettingsEnumDescriptions from '@components/SettingsEnumDescriptions';
 import SettingsEnumItem from '@components/SettingsEnumItem';
 import SettingsSwitchItem from '@components/SettingsSwitchItem';
 import AvatarIcon from '@mui/icons-material/AccountCircle';
@@ -20,6 +22,7 @@ import SaveIcon from '@mui/icons-material/SaveRounded';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
@@ -28,6 +31,8 @@ export interface GeneralSettingsFormProps {
 }
 
 const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
+    const { t } = useTranslation();
+
     const [settings, internalSetSettings] =
         useState<GeneralSettings>(initialData);
     const [wasChanged, setWasChanged] = useState<boolean>(false);
@@ -46,20 +51,18 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
             return;
         }
 
-        console.log('Submitting settings:', settings);
-
         try {
             const response = await setGeneralSettings(settings);
 
             if (!response?.success) {
                 console.error('Failed to set settings:', response);
-                enqueueSnackbar('Failed to save settings', {
+                enqueueSnackbar(t('messages.settingsSaveFailed'), {
                     variant: 'error',
                 });
                 return;
             }
 
-            enqueueSnackbar('Settings saved successfully', {
+            enqueueSnackbar(t('messages.settingsSaveSuccess'), {
                 variant: 'success',
                 preventDuplicate: true,
             });
@@ -70,15 +73,18 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
                 internalSetSettings(updatedSettings.data);
                 setWasChanged(false);
             } else {
-                console.error('Failed to update settings');
-                enqueueSnackbar('Failed to update settings', {
+                console.error(
+                    'Failed to update settings',
+                    updatedSettings?.error,
+                );
+                enqueueSnackbar(t('messages.settingsSaveFailed'), {
                     variant: 'error',
                 });
             }
         } catch (error) {
             console.error('Error updating settings:', error);
 
-            enqueueSnackbar('Error updating settings', {
+            enqueueSnackbar(t('messages.settingsSaveFailed'), {
                 variant: 'error',
             });
         }
@@ -93,7 +99,9 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
                 justifyContent="space-between"
                 alignItems="flex-start"
             >
-                <Typography variant="h4">General</Typography>
+                <Typography variant="h4">
+                    {t('pages.generalSettingsPage.title')}
+                </Typography>
                 <IconButton
                     onClick={handleSubmit}
                     disabled={!wasChanged}
@@ -104,16 +112,25 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
             </Box>
             <form onSubmit={handleSubmit}>
                 <Box mb={2}>
-                    <Typography variant="h6">Functionality control</Typography>
+                    <Typography variant="h6">
+                        {t(
+                            'pages.generalSettingsPage.components.generalSettingsForm.functionalityControl.title',
+                        )}
+                    </Typography>
                     <Typography variant="body2" color="textSecondary">
-                        Enable, disable or configure various features of the
-                        software.
+                        {t(
+                            'pages.generalSettingsPage.components.generalSettingsForm.functionalityControl.description',
+                        )}
                     </Typography>
                 </Box>
                 <Box mb={4}>
                     <SettingsEnumItem
-                        primaryText="Behavior of the 'is recorded' flag"
-                        secondaryText="This controls how the 'is recorded' flag is set for imported media."
+                        primaryText={t(
+                            'pages.generalSettingsPage.components.generalSettingsForm.functionalityControl.isRecordedFlagBehavior.primaryText',
+                        )}
+                        secondaryText={t(
+                            'pages.generalSettingsPage.components.generalSettingsForm.functionalityControl.isRecordedFlagBehavior.secondaryText',
+                        )}
                         options={ImportIsRecordedFlagBehavior}
                         value={settings.importIsRecordedFlagBehavior}
                         onChange={value => {
@@ -123,31 +140,36 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
                                     value as ImportIsRecordedFlagBehavior,
                             });
                         }}
+                        translatePrefix="importIsRecordedFlagBehavior"
                     />
                     <Box mt={1}>
-                        {/* Todo: improve when translations are happening */}
-                        <Typography variant="body2" color="textSecondary">
-                            skipImportIfIsNotRecorded: Description
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            skipImportIfFlagNotExists: Description
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            alwaysImport: Description
-                        </Typography>
+                        <SettingsEnumDescriptions
+                            options={ImportIsRecordedFlagBehavior}
+                            translatePrefix="importIsRecordedFlagBehavior"
+                        />
                     </Box>
                 </Box>
                 <Box mb={2}>
-                    <Typography variant="h6">External Services</Typography>
+                    <Typography variant="h6">
+                        {t(
+                            'pages.generalSettingsPage.components.generalSettingsForm.externalServices.title',
+                        )}
+                    </Typography>
                     <Typography variant="body2" color="textSecondary">
-                        Configure external services for this software.
+                        {t(
+                            'pages.generalSettingsPage.components.generalSettingsForm.externalServices.description',
+                        )}
                     </Typography>
                 </Box>
                 <Box>
                     <SettingsSwitchItem
                         icon={<AvatarIcon />}
-                        primaryText="Allow Libravatar"
-                        secondaryText="This will enable fetching avatars via the account email."
+                        primaryText={t(
+                            'pages.generalSettingsPage.components.generalSettingsForm.externalServices.allowLibravatar.primaryText',
+                        )}
+                        secondaryText={t(
+                            'pages.generalSettingsPage.components.generalSettingsForm.externalServices.allowLibravatar.secondaryText',
+                        )}
                         onClick={() => {
                             setSettings({
                                 ...settings,

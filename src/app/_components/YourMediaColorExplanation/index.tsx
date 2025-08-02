@@ -2,12 +2,12 @@
 
 import type { FC } from 'react';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { MediaItemStatus } from '@backend/talk-utils';
 import {
     generateStatusMap,
     getMediaItemStatusColor,
-    mediaItemStatusTextMap,
 } from '@backend/talk-utils';
 import type { SuccessData, SuccessResponse } from '@backend/types';
 
@@ -26,6 +26,7 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
     initialStatusCount,
     initialData,
 }) => {
+    const { t } = useTranslation();
     const theme = useTheme();
 
     const colors = getMediaItemStatusColor(theme);
@@ -41,7 +42,7 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
         const updated = (
             Object.entries(talkInfoMap).filter(
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                ([_, t]) => t?.success,
+                ([_, talk]) => talk?.success,
             ) as [string, SuccessResponse<'/talks/info', 'get'>][]
         ).map(([key, { data }]) => ({
             status: data.status,
@@ -97,12 +98,7 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
                             }}
                         />
                         <Typography sx={{ color }}>
-                            {
-                                mediaItemStatusTextMap[
-                                    statusElement as unknown as MediaItemStatus
-                                ]
-                            }
-                            :{' '}
+                            {t(`enums.mediaItemStatus.${statusElement}`)}:{' '}
                             {
                                 statusCount[
                                     statusElement as keyof typeof statusCount
@@ -127,7 +123,10 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
                         backgroundColor: theme.palette.text.secondary,
                     }}
                 />
-                <Typography>Total events: {initialData.length}</Typography>
+                <Typography>
+                    {t('components.yourMediaColorExplanation.totalEvents')}:{' '}
+                    {initialData.length}
+                </Typography>
             </Box>
         </>
     );

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useSnackbar } from 'notistack';
 
@@ -28,6 +29,8 @@ const StyledForm = styled('form')(({ theme }) => ({
 }));
 
 const LoginPageForm: FC = () => {
+    const { t } = useTranslation();
+
     const router = useRouter();
     const { enqueueSnackbar } = useSnackbar();
 
@@ -54,9 +57,14 @@ const LoginPageForm: FC = () => {
             } else {
                 setLoading(false);
                 // Handle login error, e.g., show an error message
-                console.warn('Login failed:', result?.error || 'Unknown error');
+                console.warn(
+                    'Login failed:',
+                    result?.error || t('errors.unknownError'),
+                );
                 enqueueSnackbar(
-                    `Login failed: ${result?.error || 'Unknown error'}`,
+                    t('pages.loginPage.components.loginPageForm.loginFailed', {
+                        error: result?.error || t('errors.unknownError'),
+                    }),
                     {
                         variant: 'error',
                     },
@@ -64,7 +72,7 @@ const LoginPageForm: FC = () => {
             }
         } catch (error) {
             console.warn('Login error:', error);
-            enqueueSnackbar('An unexpected error occurred. Please try again.', {
+            enqueueSnackbar(t('errors.unexpectedError'), {
                 variant: 'error',
             });
             setLoading(false);
@@ -84,8 +92,8 @@ const LoginPageForm: FC = () => {
             <StyledForm onSubmit={handleSubmit}>
                 <TextField
                     fullWidth
-                    label="Email"
-                    placeholder="Email"
+                    label={t('common.email')}
+                    placeholder={t('common.emailPlaceholder')}
                     type="email"
                     autoComplete="email"
                     value={email}
@@ -100,8 +108,8 @@ const LoginPageForm: FC = () => {
                 />
                 <TextField
                     fullWidth
-                    label="Password"
-                    placeholder="Password"
+                    label={t('common.password')}
+                    placeholder={t('common.passwordPlaceholder')}
                     type={passwordVisible ? 'text' : 'password'}
                     autoComplete="current-password"
                     value={password}
@@ -139,7 +147,7 @@ const LoginPageForm: FC = () => {
                     loading={loading}
                     data-testid="login-form-submit"
                 >
-                    Login
+                    {t('common.login')}
                 </Button>
             </StyledForm>
         </Box>

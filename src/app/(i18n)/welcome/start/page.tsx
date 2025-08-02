@@ -1,20 +1,33 @@
-import type { NextPage } from 'next';
+import type { Metadata, NextPage } from 'next';
 
 import InitialAccountForm from '@/app/(i18n)/welcome/start/_components/InitialAccountForm';
 
+import { getServerSideTranslation } from '@/i18n/server-side';
+
 import Typography from '@mui/material/Typography';
 
-const Page: NextPage = () => (
-    <>
-        <Typography variant="h4" textAlign="center">
-            Setup your initial account
-        </Typography>
-        <Typography variant="body2" textAlign="center">
-            This account will have admin privileges. Note, that you must have at
-            least one admin account registered.
-        </Typography>
-        <InitialAccountForm />
-    </>
-);
+export const generateMetadata = async (): Promise<Metadata> => {
+    const { t } = await getServerSideTranslation();
+
+    return {
+        title: t('pages.welcomeStart.title'),
+    };
+};
+
+const Page: NextPage = async () => {
+    const { t } = await getServerSideTranslation();
+
+    return (
+        <>
+            <Typography variant="h4" textAlign="center">
+                {t('pages.welcomeStart.title')}
+            </Typography>
+            <Typography variant="body2" textAlign="center">
+                {t('pages.welcomeStart.description')}
+            </Typography>
+            <InitialAccountForm />
+        </>
+    );
+};
 
 export default Page;

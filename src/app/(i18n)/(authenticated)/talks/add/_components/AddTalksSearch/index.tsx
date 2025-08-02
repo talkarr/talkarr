@@ -1,4 +1,4 @@
-import type { Sort } from '@components/SearchTextField';
+import type { SearchTextFieldSortMethod } from '@components/SearchTextField';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -9,6 +9,7 @@ import React, {
     useImperativeHandle,
     useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { ExtractSuccessData } from '@backend/types';
 
@@ -34,8 +35,8 @@ export interface AddTalksSearchProps {
     ) => void;
     setSearchEmpty: (empty: boolean) => void;
     ref: React.Ref<AddTalksSearchRef>;
-    sort: Sort;
-    setSort: (sort: Sort) => void;
+    sortMethod: SearchTextFieldSortMethod;
+    setSortMethod: (sort: SearchTextFieldSortMethod) => void;
 }
 
 const AddTalksSearch: FC<AddTalksSearchProps> = ({
@@ -44,12 +45,13 @@ const AddTalksSearch: FC<AddTalksSearchProps> = ({
     setResults,
     setSearchEmpty,
     ref,
-    sort,
-    setSort,
+    sortMethod,
+    setSortMethod,
 }) => {
     const params = useSearchParams();
     const [search, setSearch] = useState<string>(params.get('search') || '');
     const randomExample = useSearchExample();
+    const { t } = useTranslation();
 
     useEffect(() => {
         setSearchEmpty(search.trim() === '');
@@ -80,7 +82,11 @@ const AddTalksSearch: FC<AddTalksSearchProps> = ({
 
             if (result !== false) {
                 if (!result) {
-                    setError('An error occurred while searching for talks.');
+                    setError(
+                        t(
+                            'pages.addTalksPage.components.addTalksSearch.searchError',
+                        ),
+                    );
                 } else if (result.success) {
                     setResults(result.data);
                 } else {
@@ -91,7 +97,7 @@ const AddTalksSearch: FC<AddTalksSearchProps> = ({
 
             setLoading(false);
         },
-        [doSearch, setError, setLoading, setResults],
+        [t, doSearch, setError, setLoading, setResults],
     );
 
     useEffect(() => {
@@ -127,8 +133,8 @@ const AddTalksSearch: FC<AddTalksSearchProps> = ({
                 }}
             >
                 <SearchTextField
-                    sort={sort}
-                    setSort={setSort}
+                    sortMethod={sortMethod}
+                    setSortMethod={setSortMethod}
                     placeholder={randomExample ? `e.g. '${randomExample}'` : ''}
                     value={search}
                     onChange={e => {

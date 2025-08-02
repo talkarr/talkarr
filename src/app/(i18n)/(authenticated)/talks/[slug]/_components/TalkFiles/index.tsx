@@ -2,6 +2,7 @@
 
 import type { FC } from 'react';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import prettyBytes from 'pretty-bytes';
 
@@ -29,6 +30,7 @@ export interface TalkFilesProps {
 
 const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
     const theme = useTheme();
+    const { t } = useTranslation();
 
     const videoFiles = useMemo(
         () => data.info.files.filter(file => file.is_video),
@@ -59,7 +61,7 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
         <Box paddingX={2}>
             <Box mb={3}>
                 <Typography variant="h5" borderBottom={1} mb={1}>
-                    Information
+                    {t('pages.singleTalkPage.information')}
                 </Typography>
                 <Box
                     display="flex"
@@ -68,31 +70,39 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                     rowGap={1}
                     flexWrap="wrap"
                 >
-                    <TalkAttribute name="Path" value={data.info.folder} />
                     <TalkAttribute
-                        name="Size"
+                        name={t('talks.path')}
+                        value={data.info.folder}
+                    />
+                    <TalkAttribute
+                        name={t('talks.size')}
                         value={prettyBytes(videoSize)}
                         title={`${videoSize} bytes`}
                     />
-                    <TalkAttribute name="Duration" value={videoDuration} />
                     <TalkAttribute
-                        name="Status"
+                        name={t('talks.duration')}
+                        value={videoDuration}
+                    />
+                    <TalkAttribute
+                        name={t('talks.status')}
                         value={
                             status === MediaItemStatus.Downloading
-                                ? `Downloading (${data.info.download_progress}%)`
+                                ? t('talks.statusValues.downloading', {
+                                      progress: data.info.download_progress,
+                                  })
                                 : status === MediaItemStatus.Downloaded
-                                  ? 'Downloaded'
+                                  ? t('talks.statusValues.downloaded')
                                   : status === MediaItemStatus.Missing
-                                    ? 'Missing'
+                                    ? t('talks.statusValues.missing')
                                     : status === MediaItemStatus.Problem
-                                      ? 'Problem'
-                                      : 'Unknown'
+                                      ? t('talks.statusValues.problem')
+                                      : t('talks.statusValues.unknown')
                         }
                         color={statusColor}
                     />
                     {data.info.download_error ? (
                         <TalkAttribute
-                            name="Download Error"
+                            name={t('talks.downloadError')}
                             value={data.info.download_error}
                             color={theme.palette.error.main}
                         />
@@ -101,7 +111,7 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
             </Box>
             <Box mb={3}>
                 <Typography variant="h5" borderBottom={1}>
-                    Videos
+                    {t('pages.singleTalkPage.videos')}
                 </Typography>
                 <List disablePadding>
                     {videoFiles.map(file => (
@@ -119,14 +129,14 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                     ))}
                     {videoFiles.length === 0 ? (
                         <ListItem>
-                            <ListItemText primary="No video files" />
+                            <ListItemText primary={t('talks.noVideoFiles')} />
                         </ListItem>
                     ) : null}
                 </List>
             </Box>
             <Box mb={3}>
                 <Typography variant="h5" borderBottom={1}>
-                    Other Files
+                    {t('pages.singleTalkPage.otherFiles')}
                 </Typography>
                 <List disablePadding>
                     {otherFiles.map(file => (
@@ -144,7 +154,7 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                     ))}
                     {otherFiles.length === 0 ? (
                         <ListItem>
-                            <ListItemText primary="No other files" />
+                            <ListItemText primary={t('talks.noOtherFiles')} />
                         </ListItem>
                     ) : null}
                 </List>

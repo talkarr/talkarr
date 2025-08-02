@@ -10,7 +10,11 @@ export const cookieName = 'i18nextLng';
 const runsOnServer = typeof window === 'undefined';
 
 i18n.use(LanguageDetector)
-    .use(backend((language: string) => import(`../locales/${language}.json`)))
+    .use(
+        backend(
+            (language: string) => import(`@/translations/${language}.json`),
+        ),
+    )
     .init({
         supportedLngs: languages,
         lng: undefined,

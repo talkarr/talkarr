@@ -22,7 +22,7 @@ export type SimpleNavigationItem = Pick<
 >;
 
 export interface NavigationItemType {
-    title: string;
+    title: `navigation.${string}` | '__unset__';
     Icon: typeof SvgIcon;
     subitems?: SimpleNavigationItem[];
     path: string | { href: string; as: string };
@@ -32,64 +32,66 @@ export interface NavigationItemType {
 
 export type SplitNavigationItems = SimpleNavigationItem[][];
 
-export const settings: (SimpleNavigationItem & { description: string })[] = [
+export const settings: (SimpleNavigationItem & {
+    title: `navigation.settings.${string}.title`;
+    description: `navigation.settings.${string}.description`;
+})[] = [
     {
-        title: 'General',
+        title: 'navigation.settings.general.title',
         path: generalSettingsPageLink,
-        description:
-            'Functionality control, external services, and other general settings.',
+        description: 'navigation.settings.general.description',
         slug: 'general',
     },
     {
-        title: 'Security',
+        title: 'navigation.settings.security.title',
         path: securitySettingsPageLink,
-        description: 'Manage users, permissions and security settings.',
+        description: 'navigation.settings.security.description',
         slug: 'security',
     },
     {
-        title: 'Media Management',
+        title: 'navigation.settings.mediaManagement.title',
         path: mediaManagementSettingsPageLink,
-        description: 'Naming and management of media files.',
+        description: 'navigation.settings.mediaManagement.description',
         slug: 'media-management',
     },
     {
-        title: 'Tasks',
+        title: 'navigation.settings.tasks.title',
         path: tasksSettingsPageLink,
-        description: 'Manage scheduled tasks.',
+        description: 'navigation.settings.tasks.description',
         slug: 'tasks',
     },
     {
-        title: 'Licenses',
+        title: 'navigation.settings.licenses.title',
         path: licensesSettingsPageLink,
-        description: 'View licenses of used packages.',
+        description: 'navigation.settings.licenses.description',
         slug: 'licenses',
     },
 ];
 
 export const navigationItems: NavigationItemType[] = [
     {
-        title: 'Talks',
+        title: 'navigation.talks',
         Icon: TalksIcon,
         path: homePageLink,
         slug: 'talks',
         subitems: [
             {
-                title: 'Add Talk',
+                title: 'navigation.addTalk',
                 path: addTalksPageLink,
                 slug: 'add-talk',
             },
             {
-                title: 'Scan files',
+                title: 'navigation.scanFiles',
                 path: scanFilesPageLink,
                 slug: 'scan-files',
             },
             {
-                title: 'Import Fahrplan',
+                title: 'navigation.importTalks',
                 path: importTalksPageLink,
                 slug: 'import-fahrplan',
             },
             {
-                title: 'Specific Talk',
+                title: '__unset__',
                 path: '/talks/[slug]',
                 visible: false,
                 slug: 'specific-talk',
@@ -97,7 +99,7 @@ export const navigationItems: NavigationItemType[] = [
         ],
     },
     {
-        title: 'Settings',
+        title: 'navigation.settings.title',
         Icon: SettingsIcon,
         path: settingsPageLink,
         subitems: settings,

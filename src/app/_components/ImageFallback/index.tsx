@@ -1,6 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -12,6 +13,7 @@ export interface ImageFallbackProps {
 }
 
 const ImageFallback: FC<ImageFallbackProps> = ({ width, height }) => {
+    const { t } = useTranslation();
     const theme = useTheme();
 
     return (
@@ -30,10 +32,10 @@ const ImageFallback: FC<ImageFallbackProps> = ({ width, height }) => {
             }}
         >
             <Typography variant="h4" fontWeight="normal">
-                No Image available
+                {t('components.imageFallback.noImageAvailable')}
             </Typography>
             <Typography variant="body1" fontWeight="normal">
-                Please try again later
+                {t('components.imageFallback.noImageAvailableDescription')}
             </Typography>
         </Box>
     );

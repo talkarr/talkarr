@@ -19,6 +19,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { useTranslation } from 'react-i18next';
 
 const StyledListItem = styled(ListItem, {
     shouldForwardProp: prop => prop !== 'highlighted',
@@ -44,6 +45,8 @@ const NavigationItem: FC<NavigationItemProps> = ({
     const pathname = usePathname();
     const params = useParams();
     const theme = useTheme();
+
+    const { t } = useTranslation();
 
     if (item.visible === false) {
         return null;
@@ -108,7 +111,7 @@ const NavigationItem: FC<NavigationItemProps> = ({
                     </ListItemIcon>
                 ) : null}
                 <ListItemText
-                    primary={item.title}
+                    primary={t(item.title)}
                     slotProps={{
                         primary: {
                             sx: {

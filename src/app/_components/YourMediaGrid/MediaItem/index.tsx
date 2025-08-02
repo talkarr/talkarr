@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import type { FC } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import moment from 'moment';
 
@@ -42,6 +43,7 @@ const StyledContainer = styled(Grid)(({ theme }) => ({
 }));
 
 const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
+    const { t } = useTranslation();
     const theme = useTheme();
 
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
@@ -221,7 +223,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                 p={0.5}
                             >
                                 <Typography variant="caption" color="error">
-                                    Problem
+                                    {t('components.mediaItem.problem')}
                                 </Typography>
                                 <ProblemIcon color="error" fontSize="small" />
                             </Box>

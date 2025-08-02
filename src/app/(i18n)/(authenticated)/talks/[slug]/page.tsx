@@ -7,6 +7,8 @@ import { getTalk } from '@/app/_api/talks/get';
 import { talkInfo } from '@/app/_api/talks/info';
 import TalkWrapper from '@/app/(i18n)/(authenticated)/talks/[slug]/_components/TalkWrapper';
 
+import { getServerSideTranslation } from '@/i18n/server-side';
+
 interface PageProps {
     params: Promise<{ [key: string]: string | string[] | undefined }>;
 }
@@ -14,6 +16,7 @@ interface PageProps {
 export const generateMetadata = async ({
     params,
 }: PageProps): Promise<Metadata> => {
+    const { t } = await getServerSideTranslation();
     const { slug } = await params;
 
     if (typeof slug === 'string') {
@@ -31,7 +34,7 @@ export const generateMetadata = async ({
     }
 
     return {
-        title: 'Talks',
+        title: t('pages.singleTalkPage.title'),
     };
 };
 

@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import type { FC } from 'react';
 import React, { useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { ExtractSuccessData, SuccessData } from '@backend/types';
 
@@ -18,7 +19,7 @@ import useSearchExample from '@/hooks/use-search-example';
 
 import { mediaManagementSettingsPageLink } from '@/constants';
 
-import { Sort } from '@components/SearchTextField';
+import { SearchTextFieldSortMethod } from '@components/SearchTextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -30,8 +31,11 @@ export interface AddTalksPageProps {
 
 const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
     const randomExample = useSearchExample();
+    const { t } = useTranslation();
 
-    const [sort, setSort] = useState<Sort>(Sort.Relevance);
+    const [sortMethod, setSortMethod] = useState<SearchTextFieldSortMethod>(
+        SearchTextFieldSortMethod.Relevance,
+    );
 
     const searchRef = useRef<AddTalksSearchRef>(null);
 
@@ -49,7 +53,7 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
             return null;
         }
 
-        if (sort === Sort.Relevance) {
+        if (sortMethod === SearchTextFieldSortMethod.Relevance) {
             return results.events;
         }
 
@@ -57,13 +61,13 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
             const aDate = new Date(a.date);
             const bDate = new Date(b.date);
 
-            if (sort === Sort.DateAsc) {
+            if (sortMethod === SearchTextFieldSortMethod.DateAsc) {
                 return aDate.getTime() - bDate.getTime();
             }
 
             return bDate.getTime() - aDate.getTime();
         });
-    }, [results, sort]);
+    }, [results, sortMethod]);
 
     if (!hasRootFolder) {
         return (
@@ -75,11 +79,11 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                 gap={2}
             >
                 <Typography variant="h3" fontWeight="normal" textAlign="center">
-                    You do not have a root folder set up yet!
+                    {t('pages.addTalksPage.rootFolderNotFound')}
                 </Typography>
                 <Link href={mediaManagementSettingsPageLink}>
                     <Button variant="contained" color="primary">
-                        Take me to the settings page
+                        {t('pages.addTalksPage.rootFolderNotFoundButtonText')}
                     </Button>
                 </Link>
             </Box>
@@ -95,8 +99,8 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                 setError={setError}
                 setResults={setResults}
                 setSearchEmpty={setSearchEmpty}
-                sort={sort}
-                setSort={setSort}
+                sortMethod={sortMethod}
+                setSortMethod={setSortMethod}
                 ref={searchRef}
             />
             {searchActuallyEmpty && !error && !loading ? (
@@ -106,8 +110,7 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                         fontWeight="normal"
                         textAlign="center"
                     >
-                        To add a talk, just enter something about it in the
-                        search box! 🎉
+                        {t('pages.addTalksPage.addTalkDescription')}
                     </Typography>
                     <Typography
                         variant="subtitle1"
@@ -171,7 +174,7 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                         fontWeight="normal"
                         textAlign="center"
                     >
-                        No results found!
+                        {t('pages.addTalksPage.noSearchResults')}
                     </Typography>
                 </Box>
             ) : null}

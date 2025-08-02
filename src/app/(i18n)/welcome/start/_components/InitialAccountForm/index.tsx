@@ -5,8 +5,11 @@ import { useRouter } from 'next/navigation';
 import type { FC } from 'react';
 import type React from 'react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useSnackbar } from 'notistack';
+
+import { validatePassword } from '@backend/passwords';
 
 import { registerInitialUser } from '@/app/_api/user/register-initial';
 
@@ -30,6 +33,7 @@ const StyledForm = styled('form')(({ theme }) => ({
 }));
 
 const InitialAccountForm: FC = () => {
+    const { t } = useTranslation();
     const router = useRouter();
     const { enqueueSnackbar } = useSnackbar();
 
@@ -52,13 +56,21 @@ const InitialAccountForm: FC = () => {
         setPasswordError(null);
         setPasswordVisible(false);
 
-        if (password.length < 8) {
-            setPasswordError('Password must be at least 8 characters long');
+        if (!validatePassword(password)) {
+            setPasswordError(
+                t(
+                    'pages.welcomeStart.components.initialAccountForm.passwordRequirements',
+                ),
+            );
             return;
         }
 
         if (password !== confirmPassword) {
-            setPasswordError('Passwords do not match');
+            setPasswordError(
+                t(
+                    'pages.welcomeStart.components.initialAccountForm.passwordMismatch',
+                ),
+            );
             return;
         }
 
@@ -72,9 +84,14 @@ const InitialAccountForm: FC = () => {
             });
 
             if (result?.success) {
-                enqueueSnackbar('Account created successfully!', {
-                    variant: 'success',
-                });
+                enqueueSnackbar(
+                    t(
+                        'pages.welcomeStart.components.initialAccountForm.accountCreated',
+                    ),
+                    {
+                        variant: 'success',
+                    },
+                );
                 router.push(homePageLink);
             } else {
                 setLoading(false);
@@ -83,7 +100,12 @@ const InitialAccountForm: FC = () => {
                     result?.error || 'Unknown error',
                 );
                 enqueueSnackbar(
-                    `Account creation failed: ${result?.error || 'Unknown error'}`,
+                    t(
+                        'pages.welcomeStart.components.initialAccountForm.accountCreationFailed',
+                        {
+                            error: result?.error || t('errors.unknownError'),
+                        },
+                    ),
                     {
                         variant: 'error',
                     },
@@ -91,7 +113,7 @@ const InitialAccountForm: FC = () => {
             }
         } catch (error) {
             console.warn('Account creation failed:', error);
-            enqueueSnackbar('An unexpected error occurred. Please try again.', {
+            enqueueSnackbar(t('errors.unexpectedError'), {
                 variant: 'error',
             });
             setLoading(false);
@@ -111,8 +133,12 @@ const InitialAccountForm: FC = () => {
             <StyledForm onSubmit={handleSubmit}>
                 <TextField
                     fullWidth
-                    label="Display name"
-                    placeholder="Enter your display name"
+                    label={t(
+                        'pages.welcomeStart.components.initialAccountForm.displayName',
+                    )}
+                    placeholder={t(
+                        'pages.welcomeStart.components.initialAccountForm.displayNamePlaceholder',
+                    )}
                     type="text"
                     autoComplete="username"
                     value={displayName}
@@ -127,8 +153,12 @@ const InitialAccountForm: FC = () => {
                 />
                 <TextField
                     fullWidth
-                    label="Email"
-                    placeholder="Enter your email"
+                    label={t(
+                        'pages.welcomeStart.components.initialAccountForm.email',
+                    )}
+                    placeholder={t(
+                        'pages.welcomeStart.components.initialAccountForm.emailPlaceholder',
+                    )}
                     type="email"
                     autoComplete="email"
                     value={email}
@@ -143,8 +173,12 @@ const InitialAccountForm: FC = () => {
                 />
                 <TextField
                     fullWidth
-                    label="Password"
-                    placeholder="Enter your password"
+                    label={t(
+                        'pages.welcomeStart.components.initialAccountForm.password',
+                    )}
+                    placeholder={t(
+                        'pages.welcomeStart.components.initialAccountForm.passwordPlaceholder',
+                    )}
                     type={passwordVisible ? 'text' : 'password'}
                     autoComplete="new-password"
                     value={password}
@@ -182,8 +216,12 @@ const InitialAccountForm: FC = () => {
                 />
                 <TextField
                     fullWidth
-                    label="Confirm Password"
-                    placeholder="Repeat your password"
+                    label={t(
+                        'pages.welcomeStart.components.initialAccountForm.confirmPassword',
+                    )}
+                    placeholder={t(
+                        'pages.welcomeStart.components.initialAccountForm.confirmPasswordPlaceholder',
+                    )}
                     type={passwordVisible ? 'text' : 'password'}
                     autoComplete="off"
                     value={confirmPassword}
@@ -223,7 +261,9 @@ const InitialAccountForm: FC = () => {
                     sx={{ mt: 2 }}
                     data-testid="create-account-button"
                 >
-                    Create your account
+                    {t(
+                        'pages.welcomeStart.components.initialAccountForm.createAccountButton',
+                    )}
                 </Button>
             </StyledForm>
         </Box>

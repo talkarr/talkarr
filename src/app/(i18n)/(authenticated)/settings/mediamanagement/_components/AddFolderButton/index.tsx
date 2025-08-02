@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useUiStore } from '@/providers/ui-store-provider';
 
@@ -11,6 +12,7 @@ import AddFolderIcon from '@mui/icons-material/Folder';
 import Button from '@mui/material/Button';
 
 const AddFolderButton: FC = () => {
+    const { t } = useTranslation();
     const router = useRouter();
 
     const showModal = useUiStore(state => state.openAddFolderModal);
@@ -33,7 +35,9 @@ const AddFolderButton: FC = () => {
                 minWidth: '170px',
             }}
         >
-            Add Folder
+            {t(
+                'pages.mediaManagementSettingsPage.components.addFolderButton.addFolder',
+            )}
         </Button>
     );
 };

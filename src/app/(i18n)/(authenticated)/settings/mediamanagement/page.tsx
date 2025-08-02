@@ -4,6 +4,8 @@ import { getConfig } from '@/app/_api/settings/mediamanagement';
 import AddFolderButton from '@/app/(i18n)/(authenticated)/settings/mediamanagement/_components/AddFolderButton';
 import FolderRow from '@/app/(i18n)/(authenticated)/settings/mediamanagement/_components/FolderRow';
 
+import { getServerSideTranslation } from '@/i18n/server-side';
+
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,22 +14,31 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
-export const metadata: Metadata = {
-    title: 'Mediamanagement Settings',
+export const generateMetadata = async (): Promise<Metadata> => {
+    const { t } = await getServerSideTranslation();
+
+    return {
+        title: t('pages.mediaManagementSettingsPage.title'),
+    };
 };
 
 const Page: NextPage = async () => {
     const config = await getConfig();
+
+    const { t } = await getServerSideTranslation();
 
     const data = config?.success ? config.data : null;
 
     return (
         <Box data-testid="media-management-settings">
             <Box>
-                <Typography variant="h4">Root Folders</Typography>
+                <Typography variant="h4">
+                    {t('pages.mediaManagementSettingsPage.rootFolders.title')}
+                </Typography>
                 <Typography variant="body1">
-                    Root folders are the base directories where media files are
-                    stored.
+                    {t(
+                        'pages.mediaManagementSettingsPage.rootFolders.description',
+                    )}
                 </Typography>
                 <Table
                     sx={{
@@ -44,9 +55,21 @@ const Page: NextPage = async () => {
                     <TableHead>
                         <TableRow>
                             <TableCell padding="checkbox" />
-                            <TableCell>Folder</TableCell>
-                            <TableCell>Free Space</TableCell>
-                            <TableCell align="right">Actions</TableCell>
+                            <TableCell>
+                                {t(
+                                    'pages.mediaManagementSettingsPage.rootFolders.columns.folderName',
+                                )}
+                            </TableCell>
+                            <TableCell>
+                                {t(
+                                    'pages.mediaManagementSettingsPage.rootFolders.columns.freeSpace',
+                                )}
+                            </TableCell>
+                            <TableCell align="right">
+                                {t(
+                                    'pages.mediaManagementSettingsPage.rootFolders.columns.actions',
+                                )}
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -59,7 +82,9 @@ const Page: NextPage = async () => {
                         {data?.folders.length === 0 ? (
                             <TableRow data-testid="no-root-folder">
                                 <TableCell colSpan={4}>
-                                    No root folders have been configured.
+                                    {t(
+                                        'pages.mediaManagementSettingsPage.rootFolders.noRootFoldersConfigured',
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ) : null}

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { enqueueSnackbar } from 'notistack';
 import prettyBytes from 'pretty-bytes';
@@ -34,6 +35,9 @@ const FolderRow: FC<FolderRowProps> = ({ folderData }) => {
         did_not_find_mark: didNotFindMark,
         free_space: freeSpace,
     } = folderData;
+
+    const { t } = useTranslation();
+
     const showConfirmDelete = useUiStore(state => state.showConfirmationModal);
     const openRootFolderErrorModal = useUiStore(
         state => state.openRootFolderErrorModal,
@@ -42,8 +46,15 @@ const FolderRow: FC<FolderRowProps> = ({ folderData }) => {
 
     const handleDelete = (): void => {
         showConfirmDelete({
-            title: 'Delete Folder',
-            message: `Are you sure you want to delete the folder "${folder}"?`,
+            title: t(
+                'settings.mediaManagementSettingsPage.components.folderRow.deleteModal.title',
+            ),
+            message: t(
+                'settings.mediaManagementSettingsPage.components.folderRow.deleteModal.message',
+                {
+                    folderName: folder,
+                },
+            ),
             confirmColor: 'error',
             onConfirm: async () => {
                 const response = await removeFolder({ folder });
@@ -51,19 +62,36 @@ const FolderRow: FC<FolderRowProps> = ({ folderData }) => {
                 if (response) {
                     if (response.success) {
                         router.refresh();
-                        enqueueSnackbar('Folder deleted', {
-                            variant: 'success',
-                        });
+                        enqueueSnackbar(
+                            t(
+                                'settings.mediaManagementSettingsPage.components.folderRow.deleteModal.onSuccess',
+                            ),
+                            {
+                                variant: 'success',
+                            },
+                        );
                     } else {
                         enqueueSnackbar(
-                            `Failed to delete folder: ${response.error}`,
+                            t(
+                                'settings.mediaManagementSettingsPage.components.folderRow.deleteModal.onErrorMessage',
+                                {
+                                    error:
+                                        response.error ||
+                                        t('errors.unknownError'),
+                                },
+                            ),
                             { variant: 'error' },
                         );
                     }
                 } else {
-                    enqueueSnackbar('Failed to delete folder', {
-                        variant: 'error',
-                    });
+                    enqueueSnackbar(
+                        t(
+                            'settings.mediaManagementSettingsPage.components.folderRow.deleteModal.onError',
+                        ),
+                        {
+                            variant: 'error',
+                        },
+                    );
                 }
             },
         });

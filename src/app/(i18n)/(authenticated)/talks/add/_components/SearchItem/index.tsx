@@ -1,33 +1,28 @@
 'use client';
 
-import type { VideoBadgeType } from '@components/VideoMetaBadge';
-
 import type { FC } from 'react';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Markdown from 'react-markdown';
 
 import moment from 'moment';
 
-import { formatLanguageCode } from '@/utils/string';
-
-import { longDateFormat, yearOnlyFormat } from '@/constants';
+import { yearOnlyFormat } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
 import type { TalkData } from '@/stores/ui-store';
 
 import searchItemCss from './searchitem.module.css';
 
+import SearchItemBadges from '@components/SearchItemBadges';
 // eslint-disable-next-line import/no-cycle
 import TalkImage from '@components/TalkImage';
-import VideoMetaBadge from '@components/VideoMetaBadge';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { capitalize, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
-import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 
@@ -97,62 +92,6 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
         return `${item.title} (${year})`;
     }, [item]);
 
-    const badges = useMemo(() => {
-        const badgesArray: {
-            text: string;
-            type: VideoBadgeType;
-            imageUrl?: string;
-        }[] = [];
-
-        if (item.conference_title) {
-            const logoUrl = item.conference_data?.logo_url;
-
-            badgesArray.push({
-                text: item.conference_title,
-                type: 'conference',
-                imageUrl: logoUrl,
-            });
-        }
-
-        if (item.persons.length > 0) {
-            for (const person of item.persons) {
-                if (person) {
-                    badgesArray.push({
-                        text: person,
-                        type: 'speaker',
-                    });
-                }
-            }
-        }
-
-        if (item.original_language) {
-            badgesArray.push({
-                text: formatLanguageCode(item.original_language),
-                type: 'language',
-            });
-        }
-
-        if (item.tags.length > 0) {
-            for (const tag of item.tags) {
-                if (tag) {
-                    badgesArray.push({
-                        text: tag,
-                        type: 'tag',
-                    });
-                }
-            }
-        }
-
-        if (item.date) {
-            badgesArray.push({
-                text: moment(item.date).format(longDateFormat),
-                type: 'date',
-            });
-        }
-
-        return badgesArray;
-    }, [item]);
-
     return (
         <StyledCard
             sx={{
@@ -196,33 +135,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                                         </Box>
                                     ) : null}
                                 </Box>
-                                {badges.length > 0 ? (
-                                    <Grid
-                                        container
-                                        spacing={1}
-                                        mb={item.subtitle ? 1 : undefined}
-                                        alignItems="center"
-                                        gridAutoRows="1fr"
-                                    >
-                                        {badges.map((badge, index) => (
-                                            <Grid
-                                                key={`badge-${index}-${badge.type}`}
-                                            >
-                                                <VideoMetaBadge
-                                                    badgeContent={badge.text}
-                                                    imageUrl={badge.imageUrl}
-                                                    title={capitalize(
-                                                        badge.type,
-                                                    )}
-                                                    badgeType={badge.type}
-                                                    style={{
-                                                        height: 32,
-                                                    }}
-                                                />
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                ) : null}
+                                <SearchItemBadges item={item} />
                             </Box>
                         }
                         subheader={

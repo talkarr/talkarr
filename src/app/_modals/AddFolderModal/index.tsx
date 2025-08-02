@@ -2,6 +2,7 @@
 
 import type { FC } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { enqueueSnackbar } from 'notistack';
 
@@ -37,6 +38,8 @@ const StyledList = styled(List)(({ theme }) => ({
 }));
 
 const AddFolderModal: FC = () => {
+    const { t } = useTranslation();
+
     const addFolderModal = useUiStore(state => state.addFolderModal);
     const close = useUiStore(state => state.closeAddFolderModal);
 
@@ -52,32 +55,37 @@ const AddFolderModal: FC = () => {
 
     const [addFolderLoading, setAddFolderLoading] = useState<boolean>(false);
 
-    const handleFetchFolders = async (folder: string): Promise<void> => {
-        // Fetch folders from the server
-        setError(null);
+    const handleFetchFolders = useCallback(
+        async (folder: string): Promise<void> => {
+            // Fetch folders from the server
+            setError(null);
 
-        try {
-            const response = await listFiles({ folder });
+            try {
+                const response = await listFiles({ folder });
 
-            if (response) {
-                if (response.success) {
-                    setFolders(response.data.files);
-                    setSeparator(response.data.separator);
+                if (response) {
+                    if (response.success) {
+                        setFolders(response.data.files);
+                        setSeparator(response.data.separator);
 
-                    if (listRef.current) {
-                        listRef.current.scrollTop = 0;
+                        if (listRef.current) {
+                            listRef.current.scrollTop = 0;
+                        }
+                    } else {
+                        setError(response.error);
                     }
                 } else {
-                    setError(response.error);
+                    setError(
+                        t('modals.addFolderModal.errorFetchingRootFolders'),
+                    );
                 }
-            } else {
-                setError('Error fetching folders');
+            } catch (error_) {
+                console.error('Error fetching folders', error_);
+                setError(t('modals.addFolderModal.errorFetchingRootFolders'));
             }
-        } catch (error_) {
-            console.error('Error fetching folders', error_);
-            setError('Error fetching folders');
-        }
-    };
+        },
+        [t],
+    );
 
     const handleAddFolder = async (): Promise<void> => {
         setError(null);
@@ -90,19 +98,22 @@ const AddFolderModal: FC = () => {
 
             if (response) {
                 if (response.success) {
-                    enqueueSnackbar('Folder added successfully.', {
-                        variant: 'success',
-                    });
+                    enqueueSnackbar(
+                        t('modals.addFolderModal.folderAddedSuccessfully'),
+                        {
+                            variant: 'success',
+                        },
+                    );
                     close();
                 } else {
                     setError(response.error);
                 }
             } else {
-                setError('Error adding folder');
+                setError(t('modals.addFolderModal.folderAddFailed'));
             }
         } catch (error_) {
             console.error('Error adding folder', error_);
-            setError('Error adding folder');
+            setError(t('modals.addFolderModal.folderAddFailed'));
         }
 
         setAddFolderLoading(false);
@@ -119,7 +130,7 @@ const AddFolderModal: FC = () => {
         if (folders.length === 0) {
             handleFetchFolders(folderName);
         }
-    }, [folderName, folders.length]);
+    }, [folderName, folders.length, handleFetchFolders]);
 
     const handleAppendFolderPath = useCallback(
         (folder: string): void => {
@@ -135,7 +146,7 @@ const AddFolderModal: FC = () => {
             setFolderName(newFolderName);
             handleFetchFolders(newFolderName);
         },
-        [separator, folderName],
+        [separator, folderName, handleFetchFolders],
     );
 
     const removeFolderSegment = useCallback((): void => {
@@ -148,13 +159,13 @@ const AddFolderModal: FC = () => {
         const newFolderName = folderSegments.join(separator) || '/';
         setFolderName(newFolderName);
         handleFetchFolders(newFolderName);
-    }, [separator, folderName]);
+    }, [separator, folderName, handleFetchFolders]);
 
     return (
         <BaseModal
             open={addFolderModal}
             onClose={close}
-            title="Add a root folder"
+            title={t('modals.addFolderModal.title')}
             moreWidth
             testID="add-folder-modal"
         >
@@ -166,7 +177,7 @@ const AddFolderModal: FC = () => {
                     }}
                 >
                     <TextField
-                        label="Folder name"
+                        label={t('modals.addFolderModal.rootFolderName')}
                         variant="standard"
                         value={folderName}
                         onChange={e => setFolderName(e.target.value)}
@@ -199,7 +210,9 @@ const AddFolderModal: FC = () => {
                         </ListItem>
                     ) : (
                         <ListItem>
-                            <ListItemText>No folders found</ListItemText>
+                            <ListItemText>
+                                {t('modals.addFolderModal.noRootFoldersFound')}
+                            </ListItemText>
                         </ListItem>
                     )}
                     {folders.map(folder => (
@@ -220,7 +233,7 @@ const AddFolderModal: FC = () => {
                     variant="text"
                     disabled={addFolderLoading}
                 >
-                    Cancel
+                    {t('modals.addFolderModal.cancel')}
                 </Button>
                 <Button
                     onClick={handleAddFolder}
@@ -238,7 +251,7 @@ const AddFolderModal: FC = () => {
                     }
                     startIcon={<AddIcon />}
                 >
-                    Add
+                    {t('modals.addFolderModal.addFolder')}
                 </Button>
             </Box>
         </BaseModal>

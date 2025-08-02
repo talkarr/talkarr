@@ -1,5 +1,8 @@
+'use client';
+
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import moment from 'moment';
 
@@ -22,6 +25,7 @@ export interface TalkHeaderProps {
 const bottomPadding = 1;
 
 const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
+    const { t } = useTranslation();
     const [dateDisplayed, setDateDisplayed] = useState<string>();
 
     useEffect(() => {
@@ -59,7 +63,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                         {data.db.conference.title ? (
                             <Box>
                                 <SmallText mb={bottomPadding}>
-                                    Conference
+                                    {t('talks.conference')}
                                 </SmallText>
                                 <VideoMetaBadge
                                     badgeType="conference"
@@ -70,7 +74,9 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                         ) : null}
                         {dateDisplayed ? (
                             <Box>
-                                <SmallText mb={bottomPadding}>Date</SmallText>
+                                <SmallText mb={bottomPadding}>
+                                    {t('talks.date')}
+                                </SmallText>
                                 <VideoMetaBadge
                                     badgeType="date"
                                     badgeContent={dateDisplayed}
@@ -82,7 +88,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                         {data.db.original_language ? (
                             <Box>
                                 <SmallText mb={bottomPadding}>
-                                    Language
+                                    {t('talks.language')}
                                 </SmallText>
                                 <VideoMetaBadge
                                     badgeType="language"
@@ -97,7 +103,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                         {data.db.persons.length > 0 ? (
                             <Box>
                                 <SmallText mb={bottomPadding}>
-                                    Speaker
+                                    {t('talks.speakers')}
                                 </SmallText>
                                 <Box
                                     display="flex"
@@ -118,7 +124,9 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                         ) : null}
                         {data.db.tags.length > 0 ? (
                             <Box>
-                                <SmallText mb={bottomPadding}>Tags</SmallText>
+                                <SmallText mb={bottomPadding}>
+                                    {t('talks.tags')}
+                                </SmallText>
                                 <Box
                                     display="flex"
                                     flexDirection="row"

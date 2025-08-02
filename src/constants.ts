@@ -4,7 +4,6 @@ export const pageSecondaryColor = '#5710e6';
 export const pageBackgroundColor = '#181a1b';
 export const pagePaperColor = '#343536';
 export const pageBorderColor = '#ffffff';
-export const pageName = 'Talkarr';
 
 // navbar
 export const drawerWidth = 240;

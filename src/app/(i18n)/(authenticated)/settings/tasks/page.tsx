@@ -5,16 +5,24 @@ import type { SuccessData } from '@backend/types';
 import { getTaskStatus } from '@/app/_api/tasks/status';
 import TaskList from '@/app/(i18n)/(authenticated)/settings/tasks/_components/TaskList';
 
+import { getServerSideTranslation } from '@/i18n/server-side';
+
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-export const metadata: Metadata = {
-    title: 'Tasks',
+export const generateMetadata = async (): Promise<Metadata> => {
+    const { t } = await getServerSideTranslation();
+
+    return {
+        title: t('pages.taskSettingsPage.title'),
+    };
 };
 
 export type TasksData = SuccessData<'/tasks/status', 'get'>;
 
 const Page: NextPage = async () => {
+    const { t } = await getServerSideTranslation();
+
     const tasks = await getTaskStatus();
 
     const tasksData = tasks?.success ? tasks.data : null;
@@ -23,19 +31,21 @@ const Page: NextPage = async () => {
         <Box data-testid="task-settings">
             <Box>
                 <Box mb={2}>
-                    <Typography variant="h4">Tasks</Typography>
+                    <Typography variant="h4">
+                        {t('pages.taskSettingsPage.title')}
+                    </Typography>
                 </Box>
                 {tasksData ? (
                     <TaskList initialData={tasksData} />
                 ) : (
                     <Box>
                         <Typography variant="body1">
-                            No tasks currently running or an error occurred.
+                            {t('pages.taskSettingsPage.noTasksRunning')}
                         </Typography>
                         <Typography variant="body2">
                             {!tasks?.success && tasks?.error
                                 ? `Error: ${tasks.error}`
-                                : 'Please try again later.'}
+                                : t('pages.taskSettingsPage.pleaseTryAgain')}
                         </Typography>
                     </Box>
                 )}

@@ -1,6 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { ExtractSuccessData } from '@backend/types';
 
@@ -47,7 +48,9 @@ const ImportJsonRow: FC<ImportJsonRowProps> = ({
     existingData,
     errorData,
 }) => {
+    const { t } = useTranslation();
     const theme = useTheme();
+
     return (
         <ListItem
             sx={{
@@ -82,16 +85,34 @@ const ImportJsonRow: FC<ImportJsonRowProps> = ({
                     successData
                         ? successData.title
                         : existingData ||
-                          (errorData ? errorData.title : 'Unknown')
+                          (errorData ? errorData.title : t('common.unknown'))
                 }
                 secondary={
                     successData
-                        ? `Successfully imported ${successData.slug}`
+                        ? t(
+                              'pages.importJsonPage.components.importJsonRow.successfullyImported',
+                              {
+                                  slug: successData.slug,
+                              },
+                          )
                         : existingData
-                          ? `Already exists, skipping import for ${existingData}`
+                          ? t(
+                                'pages.importJsonPage.components.importJsonRow.alreadyExists',
+                                {
+                                    slug: existingData,
+                                },
+                            )
                           : errorData
-                            ? `Error importing ${errorData.slug}: ${errorData.error}`
-                            : 'Unknown import status'
+                            ? t(
+                                  'pages.importJsonPage.components.importJsonRow.failedToImport',
+                                  {
+                                      slug: errorData.slug,
+                                      error: errorData.error,
+                                  },
+                              )
+                            : t(
+                                  'pages.importJsonPage.components.importJsonRow.unknownImportStatus',
+                              )
                 }
             />
         </ListItem>

@@ -6,14 +6,16 @@ import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { listEvents } from '@/app/_api/talks/list';
 
 import { addTalksPageLink, mediaManagementSettingsPageLink } from '@/constants';
+import { getServerSideTranslation } from '@/i18n/server-side';
 
-import YourMediaColorExplanation from '@components/YourMediaColorExplaination';
+import YourMediaColorExplanation from '@components/YourMediaColorExplanation';
 import YourMediaGrid from '@components/YourMediaGrid';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const Home: FC = async () => {
+    const { t } = await getServerSideTranslation();
     const eventsResponse = await listEvents();
     const configResponse = await getConfig();
 
@@ -42,17 +44,17 @@ const Home: FC = async () => {
                         fontWeight="normal"
                         textAlign="center"
                     >
-                        You do not have any media yet!
+                        {t('pages.homePage.noMediaFound.title')}
                     </Typography>
                     <Link href={addTalksPageLink}>
                         <Button variant="contained" color="primary">
-                            Go add some media!
+                            {t('pages.homePage.noMediaFound.buttonText')}
                         </Button>
                     </Link>
                     {hasRootFolders ? null : (
                         <Link href={mediaManagementSettingsPageLink}>
                             <Button variant="contained" color="secondary">
-                                Go to media management settings
+                                {t('pages.homePage.noRootFolders.buttonText')}
                             </Button>
                         </Link>
                     )}

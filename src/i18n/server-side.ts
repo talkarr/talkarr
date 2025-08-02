@@ -4,7 +4,7 @@ import i18next, { cookieName } from '@/i18n';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function getServerSideTranslation(
-    ns: string | readonly string[],
+    ns?: string | readonly string[],
     options: { keyPrefix?: string } = {},
 ) {
     const cookieStore = await cookies();

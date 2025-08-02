@@ -1,8 +1,6 @@
 /* eslint-disable playwright/no-wait-for-selector */
 import { prisma } from '@backend/prisma';
 
-import { pageName } from '@/constants';
-
 import { expect, test } from '@playwright/test';
 
 test.describe.configure({
@@ -39,7 +37,7 @@ test.describe('Initial talkarr setup', () => {
         expect(page.url()).toBe('http://localhost:3232/welcome');
 
         await expect(page.title()).resolves.toBe(
-            `Welcome to ${pageName} | ${pageName}`,
+            `Welcome to Talkarr | Talkarr`,
         );
         await expect(page.title()).resolves.not.toContain('404');
 
