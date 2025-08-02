@@ -32,13 +32,6 @@ export const unpluginTypiaOptions: Options = {
 };
 
 const nextConfig = async (): Promise<NextConfig> => {
-    try {
-        await import('./src/translations/en.json');
-    } catch (error) {
-        console.error('Failed to load translation files:', error);
-        throw new Error('Missing translation files, please check your setup.');
-    }
-
     const isInsideDocker = process.env.IS_INSIDE_DOCKER === 'true';
     const githubActionsRunId = process.env.GITHUB_ACTIONS_RUN_ID;
     let currentCommit: string | undefined = process.env.OVERRIDE_CURRENT_COMMIT;
