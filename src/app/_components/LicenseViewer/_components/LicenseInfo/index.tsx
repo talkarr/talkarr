@@ -2,6 +2,7 @@
 
 import type { FC } from 'react';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useUiStore } from '@/providers/ui-store-provider';
 
@@ -17,6 +18,7 @@ export interface LicenseInfoProps {
 }
 
 const LicenseInfo: FC<LicenseInfoProps> = ({ maxHeight }) => {
+    const { t } = useTranslation();
     const license = useUiStore(store => store.licenseSelected);
 
     const isValidUrl = useMemo(() => {
@@ -71,7 +73,9 @@ const LicenseInfo: FC<LicenseInfoProps> = ({ maxHeight }) => {
                         color="primary"
                         disabled={!isValidUrl}
                     >
-                        More information
+                        {t(
+                            'pages.licenseSettingsPage.components.licenseInfo.moreInformation',
+                        )}
                     </Button>
                 </a>
             </Box>

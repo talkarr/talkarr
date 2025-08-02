@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { addTalksPageWithSearchLink } from '@/constants';
 
@@ -14,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 
 const NavigationSearch: FC = () => {
     const router = useRouter();
+    const { t } = useTranslation();
 
     const [search, setSearch] = useState<string>('');
 
@@ -35,7 +37,9 @@ const NavigationSearch: FC = () => {
                 <MaterialSearchBar
                     size="small"
                     fullWidth
-                    placeholder="Search"
+                    placeholder={t(
+                        'components.navigation.navigationSearch.searchPlaceholder',
+                    )}
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                     slotProps={{

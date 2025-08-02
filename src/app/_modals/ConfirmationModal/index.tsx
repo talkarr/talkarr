@@ -5,6 +5,7 @@ import type { TypographyProps } from '@mui/material/Typography';
 
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useUiStore } from '@/providers/ui-store-provider';
 
@@ -35,6 +36,8 @@ export interface ConfirmationModalConfig<OptionKeys extends string = string> {
 }
 
 const ConfirmationModal: FC = () => {
+    const { t } = useTranslation();
+
     const confirmationModal = useUiStore(state => state.confirmationModal);
     const closeConfirmationModal = useUiStore(
         state => state.closeConfirmationModal,
@@ -112,7 +115,7 @@ const ConfirmationModal: FC = () => {
                             minWidth: '120px',
                         }}
                     >
-                        Cancel
+                        {t('modals.confirmationModal.cancel')}
                     </Button>
                     <Button
                         onClick={handleConfirm}
@@ -124,7 +127,7 @@ const ConfirmationModal: FC = () => {
                             minWidth: '120px',
                         }}
                     >
-                        Confirm
+                        {t('modals.confirmationModal.confirm')}
                     </Button>
                 </Box>
             </Box>

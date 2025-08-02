@@ -5,6 +5,8 @@ import type { Options } from '@ryoppippi/unplugin-typia';
 
 import type { NextConfig } from 'next';
 
+import fs from 'node:fs';
+
 import { apiBaseUrl } from './src/constants';
 
 import unTypiaNext from '@ryoppippi/unplugin-typia/next';
@@ -20,6 +22,25 @@ if (process.argv.includes('build')) {
 
 if (!['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
     throw new Error('Invalid NODE_ENV');
+}
+
+// ensure the translation folder exists
+const translationsDir = './src/translations';
+if (!fs.existsSync(translationsDir)) {
+    throw new Error(
+        `Translations directory "${translationsDir}" does not exist. Please check your project setup.`,
+    );
+}
+
+// make sure there are json files in the translations directory
+const translationFiles = fs
+    .readdirSync(translationsDir)
+    .filter(file => file.endsWith('.json'));
+
+if (translationFiles.length === 0) {
+    throw new Error(
+        `No translation files found in "${translationsDir}". Please check your project setup.`,
+    );
 }
 
 console.log(`====================

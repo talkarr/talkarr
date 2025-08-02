@@ -28,13 +28,6 @@ export const getMediaItemStatusColor = (
     [MediaItemStatus.Problem]: theme.palette.error.main,
 });
 
-export const mediaItemStatusTextMap: Record<MediaItemStatus, string> = {
-    [MediaItemStatus.Downloaded]: 'Downloaded videos',
-    [MediaItemStatus.Missing]: 'Missing videos',
-    [MediaItemStatus.Downloading]: 'Downloading files',
-    [MediaItemStatus.Problem]: 'Problem with event',
-};
-
 export const generateMediaItemStatus = ({
     talkInfo,
     talk,

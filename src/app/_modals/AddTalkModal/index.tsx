@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
@@ -11,15 +12,13 @@ import { enqueueSnackbar } from 'notistack';
 import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { addEvent } from '@/app/_api/talks/add';
 
-import {
-    formatVideoDuration,
-    stripInvalidCharsForDataAttribute,
-} from '@/utils/string';
+import { stripInvalidCharsForDataAttribute } from '@/utils/string';
 
 import { yearOnlyFormat } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import BaseModal from '@components/CustomModal';
+import SearchItemBadges from '@components/SearchItemBadges';
 import TalkImage from '@components/TalkImage';
 import AddIcon from '@mui/icons-material/Add';
 import { alpha, useTheme } from '@mui/material';
@@ -32,6 +31,8 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 
 const AddTalkModal: FC = () => {
+    const { t } = useTranslation();
+
     const addTalkModal = useUiStore(state => state.addTalkModal);
     const close = useUiStore(state => state.closeAddTalkModal);
     const router = useRouter();
@@ -101,14 +102,6 @@ const AddTalkModal: FC = () => {
         }
     }, [open]);
 
-    const formattedLength = useMemo(() => {
-        if (!addTalkModal?.duration) {
-            return '';
-        }
-
-        return formatVideoDuration(addTalkModal.duration);
-    }, [addTalkModal?.duration]);
-
     return (
         <BaseModal
             open={open}
@@ -158,7 +151,7 @@ const AddTalkModal: FC = () => {
                     {addTalkModal?.description || addTalkModal?.subtitle ? (
                         <Typography
                             variant="body2"
-                            mb={1}
+                            mb={2}
                             height="100%"
                             p={1.2}
                             border={1}
@@ -178,69 +171,13 @@ const AddTalkModal: FC = () => {
                                 addTalkModal?.subtitle}
                         </Typography>
                     ) : null}
-                    <Box mb={2}>
-                        <Typography variant="body1" fontWeight="bold">
-                            Date:
-                        </Typography>
-                        <Typography variant="body1">
-                            {moment(addTalkModal?.date).format('MMMM D, YYYY')}
-                        </Typography>
-                        <Typography variant="body1" fontWeight="bold">
-                            Duration:
-                        </Typography>
-                        <Typography variant="body1">
-                            {formattedLength}
-                        </Typography>
-                        <Typography variant="body1" fontWeight="bold">
-                            Conference:
-                        </Typography>
-                        <Typography variant="body1">
-                            {addTalkModal?.conference_title}{' '}
-                            {addTalkModal?.conference_data?.link ? (
-                                <>
-                                    (
-                                    <a
-                                        href={
-                                            addTalkModal?.conference_data?.link
-                                        }
-                                        target="_blank"
-                                    >
-                                        {addTalkModal?.conference_data?.link}
-                                    </a>
-                                    )
-                                </>
-                            ) : null}
-                        </Typography>
-                        <Typography variant="body1" fontWeight="bold">
-                            {addTalkModal?.persons?.length === 1
-                                ? 'Speaker'
-                                : 'Speakers'}
-                            :
-                        </Typography>
-                        <Typography variant="body1">
-                            {addTalkModal?.persons.join(', ')}
-                        </Typography>
-                        <Typography variant="body1" fontWeight="bold">
-                            Original language:
-                        </Typography>
-                        <Typography variant="body1">
-                            {addTalkModal?.original_language}
-                        </Typography>
-                        {addTalkModal?.tags.length ? (
-                            <>
-                                <Typography variant="body1" fontWeight="bold">
-                                    Tags:
-                                </Typography>
-                                <Typography variant="body1">
-                                    {addTalkModal?.tags.join(', ')}
-                                </Typography>
-                            </>
-                        ) : null}
+                    <Box mb={4}>
+                        <SearchItemBadges item={addTalkModal} disableOnClick />
                     </Box>
                     <Box mb={2}>
                         <FormControl fullWidth>
                             <InputLabel id="root-folder-label">
-                                Root folder
+                                {t('modals.addTalkModal.selectRootFolder')}
                             </InputLabel>
                             <Select
                                 variant="outlined"
@@ -250,7 +187,9 @@ const AddTalkModal: FC = () => {
                                     setRootFolder(e.target.value as string)
                                 }
                                 labelId="root-folder-label"
-                                label="Root folder"
+                                label={t(
+                                    'modals.addTalkModal.selectRootFolder',
+                                )}
                                 data-testid="root-folder-select"
                             >
                                 {availableFolders.map(folder => (
@@ -271,7 +210,7 @@ const AddTalkModal: FC = () => {
                             variant="text"
                             data-testid="cancel-button"
                         >
-                            Cancel
+                            {t('common.cancel')}
                         </Button>
                         <Button
                             variant="text"
@@ -283,7 +222,7 @@ const AddTalkModal: FC = () => {
                                 rootFolder,
                             )}
                         >
-                            Add talk
+                            {t('modals.addTalkModal.addTalkButtonText')}
                         </Button>
                     </Box>
                 </Box>

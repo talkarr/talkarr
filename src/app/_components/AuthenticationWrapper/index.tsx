@@ -8,6 +8,7 @@ import { getAppStatus } from '@/app/_api/information';
 import { getUserInfo } from '@/app/_api/user/info';
 
 import { welcomePageLink } from '@/constants';
+import { getServerSideTranslation } from '@/i18n/server-side';
 
 import AppNotAvailable from '@components/AppNotAvailable';
 import AuthenticationDataUpdater from '@components/AuthenticationDataUpdater';
@@ -27,6 +28,8 @@ const AuthenticationWrapper: FC<AuthenticationWrapperProps> = async ({
 }) => {
     const initialUserInfo = await getUserInfo();
     const appStatusResponse = await getAppStatus();
+
+    const { t } = await getServerSideTranslation();
 
     const hasUserInfo = initialUserInfo && initialUserInfo.success !== false;
     const appStatus = appStatusResponse?.success
@@ -58,7 +61,9 @@ const AuthenticationWrapper: FC<AuthenticationWrapperProps> = async ({
                         }
                     />
                     <Typography>
-                        You are not allowed to access this page.
+                        {t(
+                            'components.authenticationWrapper.youAreNotAllowedToAccessThisPage',
+                        )}
                     </Typography>
                 </Box>
             );

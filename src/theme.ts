@@ -61,6 +61,18 @@ const baseTheme = createTheme({
         secondary: {
             main: pageSecondaryColor,
         },
+        warning: {
+            main: '#ff9800',
+        },
+        error: {
+            main: '#f44336',
+        },
+        info: {
+            main: '#2196f3',
+        },
+        success: {
+            main: '#4caf50',
+        },
         white: {
             main: '#ffffff',
             light: '#f5f5f5',

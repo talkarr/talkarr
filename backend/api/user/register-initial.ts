@@ -1,5 +1,6 @@
 import { validate as validateEmail } from 'email-validator';
 
+import { validatePassword } from '@backend/passwords';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import { createInitialUser, doesEmailExist } from '@backend/users';
 
@@ -29,6 +30,14 @@ const handleRegisterInitialRequest = async (
         res.status(400).json({
             success: false,
             error: 'Invalid email format.',
+        });
+        return;
+    }
+
+    if (!validatePassword(password)) {
+        res.status(400).json({
+            success: false,
+            error: 'Password does not meet the required criteria.',
         });
         return;
     }
