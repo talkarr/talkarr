@@ -16,6 +16,8 @@ if ! git rev-parse --verify main >/dev/null 2>&1; then
   exit 1
 fi
 
+current_hash=$(git rev-parse HEAD)
+
 # check if we are on the main branch, if not, switch to it
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 if [[ "$current_branch" != "main" ]]; then
@@ -32,9 +34,12 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-# check if there were any changes
-if [[ -z $(git status --porcelain) ]]; then
-  echo "No changes to update."
+new_hash=$(git rev-parse HEAD)
+
+# Check if the current commit hash is the same as before
+if [[ "$current_hash" == "$new_hash" ]]; then
+  echo "No new changes to pull."
+  popd || exit 1
   exit 0
 fi
 
