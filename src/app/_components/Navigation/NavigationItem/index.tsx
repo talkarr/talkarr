@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { getFileRoutePath } from '@/utils/route';
 
@@ -19,7 +20,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { useTranslation } from 'react-i18next';
 
 const StyledListItem = styled(ListItem, {
     shouldForwardProp: prop => prop !== 'highlighted',

@@ -22,7 +22,6 @@ import SaveIcon from '@mui/icons-material/SaveRounded';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
