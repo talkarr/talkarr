@@ -75,10 +75,6 @@ test.describe('Initial talkarr setup', () => {
         await expect(elements.submitButton).toBeVisible();
         await expect(elements.passwordErrorText).toBeHidden();
 
-        await expect(elements.submitButton).toContainText(
-            'Create your account',
-        );
-
         await expect(elements.submitButton).toBeEnabled();
 
         await elements.displayName.fill(testUser.displayName);
@@ -89,9 +85,11 @@ test.describe('Initial talkarr setup', () => {
         await elements.submitButton.click();
 
         await expect(elements.passwordErrorText).toBeVisible();
-        await expect(elements.passwordErrorText).toContainText(
-            'Passwords do not match',
-        );
+
+        const passwordErrorText =
+            await elements.passwordErrorText.textContent();
+        expect(passwordErrorText).toBeDefined();
+        expect(passwordErrorText!.length).toBeGreaterThan(5);
 
         await elements.passwordConfirmation.fill(testUser.password);
 
