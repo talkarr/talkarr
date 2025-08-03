@@ -47,7 +47,9 @@ async function main(): Promise<void> {
             },
         });
 
-        if (!skipUserCreation) {
+        if (skipUserCreation) {
+            console.log('Skipping user creation as SKIP_USER_CREATION is set');
+        } else {
             console.log('Creating test user');
             await prisma.user.create({
                 data: {
@@ -61,8 +63,6 @@ async function main(): Promise<void> {
                     },
                 },
             });
-        } else {
-            console.log('Skipping user creation as SKIP_USER_CREATION is set');
         }
     }
 }
