@@ -10,7 +10,7 @@ test.describe.configure({
 const testUser = {
     displayName: 'Test User',
     email: `testuser-${Date.now()}@example.com`,
-    password: 'password123',
+    password: 'Password_123!',
 };
 
 test.describe('Initial talkarr setup', () => {
