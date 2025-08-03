@@ -93,7 +93,11 @@ test.describe('Initial talkarr setup', () => {
 
         await elements.passwordConfirmation.fill(testUser.password);
 
+        await expect(elements.submitButton).toBeEnabled();
         await elements.submitButton.click();
+
+        await expect(elements.passwordErrorText).toBeHidden();
+        await expect(page.getByTestId('initial-account-form')).toBeHidden();
 
         await page.waitForURL('http://localhost:3232/login', {
             waitUntil: 'domcontentloaded',
