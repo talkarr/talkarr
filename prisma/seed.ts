@@ -30,6 +30,8 @@ async function main(): Promise<void> {
         process.env.NODE_ENV !== 'test' &&
         process.env.APPLY_PRESET === '1';
 
+    const skipUserCreation = process.env.SKIP_USER_CREATION === '1';
+
     if (applyLaptopPreset) {
         console.log('Populating root folder');
         const path = '/Users/ccomm/Movies/talkarr';
@@ -45,18 +47,23 @@ async function main(): Promise<void> {
             },
         });
 
-        await prisma.user.create({
-            data: {
-                displayName: 'Test User',
-                email: 'test@example.com',
-                password: await argon2.hash('Passwort_123'),
-                permissions: {
-                    create: {
-                        permission: 'Admin',
+        if (!skipUserCreation) {
+            console.log('Creating test user');
+            await prisma.user.create({
+                data: {
+                    displayName: 'Test User',
+                    email: 'test@example.com',
+                    password: await argon2.hash('Passwort_123'),
+                    permissions: {
+                        create: {
+                            permission: 'Admin',
+                        },
                     },
                 },
-            },
-        });
+            });
+        } else {
+            console.log('Skipping user creation as SKIP_USER_CREATION is set');
+        }
     }
 }
 

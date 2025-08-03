@@ -7,6 +7,7 @@
         "build": "yarn run build:next",
         "build:next": "next build",
         "db:reset": "docker compose -f docker-compose.dev.yml down -v && docker compose -f docker-compose.dev.yml up -d db && NODE_ENV=development APPLY_PRESET=1 ts-node --project backend/tsconfig.json -r tsconfig-paths/register prisma/seed.ts",
+        "db:reset:no-user": "SKIP_USER_CREATION=1 yarn run db:reset",
         "dev": "cross-env NODE_OPTIONS='--disable-warning=DEP0174' NODE_ENV=development yarn run dev:nodemon",
         "dev:db": "docker compose -f docker-compose.dev.yml up -d db",
         "dev:nodemon": "nodemon --exec ts-node --project backend/tsconfig.json -r tsconfig-paths/register backend/index.ts",
