@@ -16,6 +16,9 @@ WORKDIR /app
 # Copy the generate-licenses script
 COPY generate-licenses.mjs ./
 
+# Copy the patches folder
+COPY patches ./patches
+
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock .npmrc* ./
 RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn YOUTUBE_DL_SKIP_DOWNLOAD=true CI=1 yarn --frozen-lockfile --prefer-offline --build-from-source
