@@ -8,10 +8,6 @@ on:
     paths:
       - .github/workflows/translations.yml
 
-permissions:
-  contents: write  # Allows the action to push changes to the repository
-  pull-requests: write  # Allows the action to create pull requests
-
 env:
   TRANSLATION_PATH: src/translations
 
@@ -46,3 +42,4 @@ jobs:
           commit-message: '[automated] Update translations from submodule'
           branch: 'automated/update-translations'
           body: 'This pull request updates the translations from the submodule. You can find the changes in the [translation repo](https://github.com/talkarr/talkarr-translations)'
+          token: '${{ secrets.PULLREQUEST_PAT }}'
