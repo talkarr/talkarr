@@ -15,7 +15,8 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#181a1b",
+  "background_color": "rgba(0, 0, 0, 0)",
+  "description": "A *arr style program for downloading talks from media.ccc.de",
   "display": "standalone"
 }
