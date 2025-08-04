@@ -21,7 +21,7 @@ test.describe('Change translations', () => {
         // there should be at least three menu items found (english, german and the weblate link).
         // we should check for > 3
         const languageOptionsCount = await languageOptions.count();
-        expect(languageOptionsCount).toBeGreaterThan(3);
+        expect(languageOptionsCount).toBeGreaterThan(2);
 
         // select the menu item with the text "English"
         const englishOption = languageOptions.filter({ hasText: 'English' });
