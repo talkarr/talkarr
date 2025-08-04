@@ -17,7 +17,7 @@ jobs:
     name: Check and Update Translations
     runs-on: ubuntu-latest
     # check that the event is not from a branch to automated/update-translations
-    if: github.ref != 'refs/heads/${{ env.TRANSLATION_BRANCH }}'
+    if: ${{ ! endsWith(github.ref, env.TRANSLATION_BRANCH) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
