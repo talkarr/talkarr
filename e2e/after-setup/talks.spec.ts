@@ -355,12 +355,12 @@ test('should be able to search for a string', async ({
 
     await expect(selectedItemAction).toBeVisible();
 
-    await selectedItemAction.click({
+    // get image inside selectedItemAction
+    const image = selectedItemAction.locator('img');
+    await expect(image).toBeVisible();
+
+    await image.click({
         delay: 80,
-        position: {
-            x: 10,
-            y: 10,
-        },
     });
 
     // expect add-talk-modal to be visible
