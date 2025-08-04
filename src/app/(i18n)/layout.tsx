@@ -4,13 +4,18 @@ import type { FC, PropsWithChildren } from 'react';
 
 import { cookieName } from '@/i18n';
 
+import NotistackProvider from '@components/NotistackProvider';
 import UseClientI18n from '@components/UseClientI18n';
 
 const Layout: FC<PropsWithChildren> = async ({ children }) => {
     const cookieStore = await cookies();
     const locale = cookieStore.get(cookieName)?.value;
 
-    return <UseClientI18n cookieLocale={locale}>{children}</UseClientI18n>;
+    return (
+        <UseClientI18n cookieLocale={locale}>
+            <NotistackProvider>{children}</NotistackProvider>
+        </UseClientI18n>
+    );
 };
 
 export default Layout;

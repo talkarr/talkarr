@@ -12,7 +12,6 @@ import { UserStoreProvider } from '@/providers/user-store-provider';
 import theme from '@/theme';
 
 import '@/app/globals.css';
-import NotistackProvider from '@components/NotistackProvider';
 import { ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
@@ -57,11 +56,7 @@ const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
                             }}
                         >
                             <ApiStoreProvider>
-                                <UiStoreProvider>
-                                    <NotistackProvider>
-                                        {children}
-                                    </NotistackProvider>
-                                </UiStoreProvider>
+                                <UiStoreProvider>{children}</UiStoreProvider>
                             </ApiStoreProvider>
                         </UserStoreProvider>
                     </ThemeProvider>
