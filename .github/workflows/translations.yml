@@ -25,12 +25,14 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: Fetch complete history for the translation submodule
+        run: |
+          cd ${TRANSLATION_PATH}
+          git fetch --unshallow || true  # Ensure we have the full history
+
       - name: Check for translation updates
         run: |
-          pushd ${{ env.TRANSLATION_PATH }}
-          git log
-          popd
-          git submodule update --remote --merge ${TRANSLATION_PATH}
+          git submodule update --remote --rebase ${TRANSLATION_PATH}
           git diff --exit-code || echo "Translations have been updated."
 
       - name: Create Pull Request if translations updated
