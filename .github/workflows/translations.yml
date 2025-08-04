@@ -5,6 +5,10 @@ on:
     - cron: '0 0 * * *'  # Runs daily at midnight
   workflow_dispatch:  # Allows manual triggering
 
+permissions:
+  contents: write  # Allows the action to push changes to the repository
+  pull-requests: write  # Allows the action to create pull requests
+
 env:
   TRANSLATION_PATH: src/translations
 
@@ -12,9 +16,6 @@ jobs:
   check-and-update-translations:
     name: Check and Update Translations
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,7 +24,7 @@ jobs:
 
       - name: Check for translation updates
         run: |
-          git submodule update --remote --rebase ${TRANSLATION_PATH}
+          git submodule update --remote --merge ${TRANSLATION_PATH}
           git diff --exit-code || echo "Translations have been updated."
 
       - name: Create Pull Request if translations updated
