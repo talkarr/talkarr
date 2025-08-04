@@ -10,14 +10,13 @@ on:
 
 env:
   TRANSLATION_PATH: src/translations
-  TRANSLATION_BRANCH: automated/update-translations
 
 jobs:
   check-and-update-translations:
     name: Check and Update Translations
     runs-on: ubuntu-latest
     # check that the event is not from a branch to automated/update-translations
-    if: ${{ ! endsWith(github.ref, env.TRANSLATION_BRANCH) }}
+    if: ${{ ! endsWith(github.ref, vars.TRANSLATION_BRANCH) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -43,6 +42,6 @@ jobs:
           reviewers: 'CommanderRedYT'
           sign-commits: 'true'
           commit-message: '[automated] Update translations from submodule'
-          branch: '${{ env.TRANSLATION_BRANCH }}'
+          branch: '${{ vars.TRANSLATION_BRANCH }}'
           body: 'This pull request updates the translations from the submodule. You can find the changes in the [translation repo](https://github.com/talkarr/talkarr-translations)'
           token: '${{ secrets.PULLREQUEST_PAT }}'
