@@ -170,10 +170,10 @@ const nextConfig = async (): Promise<NextConfig> => {
             },
             */
             eslint: {
-                ignoreDuringBuilds: true,
+                ignoreDuringBuilds: false,
             },
             typescript: {
-                ignoreBuildErrors: true,
+                ignoreBuildErrors: false,
             },
         } as NextConfig,
         unpluginTypiaOptions,

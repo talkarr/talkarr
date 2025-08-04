@@ -197,8 +197,6 @@ jobs:
       contents: read
       attestations: write
       id-token: write
-    needs:
-     - lint
     steps:
       - name: Install numfmt if not installed
         run: |
@@ -326,8 +324,6 @@ jobs:
       container_ref: ${{ needs.build-linux-container.outputs.ref }}
     needs:
       - build-linux-container
-      - test
-      - lint
     steps:
       - uses: actions/checkout@v4
 
@@ -491,7 +487,6 @@ jobs:
       id-token: write
     needs:
       - build-linux-container
-      # Only release when all tests succeed
       - run-e2e-tests
       - test
       - lint
