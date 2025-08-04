@@ -66,6 +66,8 @@ const LanguageChanger: FC<LanguageChangerProps> = ({ anchorEl, onClose }) => {
                         borderRadius: 2,
                     },
                     elevation: 3,
+                    // @ts-expect-error: Paper does not have data-testid, and because it is slotProps, it does not allow for extra props
+                    'data-testid': 'language-changer-popover',
                 },
             }}
             sx={{
@@ -79,6 +81,7 @@ const LanguageChanger: FC<LanguageChangerProps> = ({ anchorEl, onClose }) => {
                 <MenuItem
                     key={`language-${language}`}
                     onClick={() => setLanguage(language)}
+                    data-testid={`language-${language}`}
                 >
                     <ListItemText primary={languageName} />
                 </MenuItem>
