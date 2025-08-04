@@ -323,6 +323,8 @@ jobs:
     env:
       container_ref: ${{ needs.build-linux-container.outputs.ref }}
     needs:
+      - lint
+      - test
       - build-linux-container
     steps:
       - uses: actions/checkout@v4
