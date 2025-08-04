@@ -5,7 +5,7 @@ import type { FC, PropsWithChildren } from 'react';
 
 import { getUserInfo } from '@/app/_api/user/info';
 
-import { pageName } from '@/constants';
+import { getServerSideTranslation } from '@/i18n/server-side';
 import { ApiStoreProvider } from '@/providers/api-store-provider';
 import { UiStoreProvider } from '@/providers/ui-store-provider';
 import { UserStoreProvider } from '@/providers/user-store-provider';
@@ -27,20 +27,25 @@ const geistMono = Geist_Mono({
     subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-    title: {
-        absolute: pageName,
-        template: `%s | ${pageName}`,
-    },
-    description: 'Download and manage your personal collection of chaos talks.',
+export const generateMetadata = async (): Promise<Metadata> => {
+    const { t } = await getServerSideTranslation();
+    return {
+        title: {
+            absolute: t('application.name'),
+            template: `%s | ${t('application.name')}`,
+        },
+        description: t('application.description'),
+    };
 };
 
 const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
     const initialUserInfo = await getUserInfo();
+    const { t, i18n } = await getServerSideTranslation();
 
     return (
-        <html lang="en">
+        <html lang={i18n.language}>
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
+                <div id="translations-working">{t('application.name')}</div>
                 <AppRouterCacheProvider>
                     <ThemeProvider theme={theme}>
                         <CssBaseline />

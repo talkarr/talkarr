@@ -1,8 +1,6 @@
 /* eslint-disable playwright/no-wait-for-selector */
 import { prisma } from '@backend/prisma';
 
-import { pageName } from '@/constants';
-
 import { expect, test } from '@playwright/test';
 
 test.describe.configure({
@@ -12,7 +10,7 @@ test.describe.configure({
 const testUser = {
     displayName: 'Test User',
     email: `testuser-${Date.now()}@example.com`,
-    password: 'password123',
+    password: 'Password_123!',
 };
 
 test.describe('Initial talkarr setup', () => {
@@ -39,7 +37,7 @@ test.describe('Initial talkarr setup', () => {
         expect(page.url()).toBe('http://localhost:3232/welcome');
 
         await expect(page.title()).resolves.toBe(
-            `Welcome to ${pageName} | ${pageName}`,
+            `Welcome to Talkarr | Talkarr`,
         );
         await expect(page.title()).resolves.not.toContain('404');
 
@@ -77,10 +75,6 @@ test.describe('Initial talkarr setup', () => {
         await expect(elements.submitButton).toBeVisible();
         await expect(elements.passwordErrorText).toBeHidden();
 
-        await expect(elements.submitButton).toContainText(
-            'Create your account',
-        );
-
         await expect(elements.submitButton).toBeEnabled();
 
         await elements.displayName.fill(testUser.displayName);
@@ -91,13 +85,19 @@ test.describe('Initial talkarr setup', () => {
         await elements.submitButton.click();
 
         await expect(elements.passwordErrorText).toBeVisible();
-        await expect(elements.passwordErrorText).toContainText(
-            'Passwords do not match',
-        );
+
+        const passwordErrorText =
+            await elements.passwordErrorText.textContent();
+        expect(passwordErrorText).toBeDefined();
+        expect(passwordErrorText!.length).toBeGreaterThan(5);
 
         await elements.passwordConfirmation.fill(testUser.password);
 
+        await expect(elements.submitButton).toBeEnabled();
         await elements.submitButton.click();
+
+        await expect(elements.passwordErrorText).toBeHidden();
+        await expect(page.getByTestId('initial-account-form')).toBeHidden();
 
         await page.waitForURL('http://localhost:3232/login', {
             waitUntil: 'domcontentloaded',

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useSnackbar } from 'notistack';
 
@@ -30,13 +31,14 @@ export interface RootFolderErrorModalData {
 
 const RootFolderErrorModal: FC = () => {
     const router = useRouter();
+    const { t } = useTranslation();
 
     const rootFolderErrorModal = useUiStore(
         state => state.rootFolderErrorModal,
     );
     const closeModal = useUiStore(state => state.closeRootFolderErrorModal);
 
-    const close = async (): Promise<void> => {
+    const handleCloseModal = async (): Promise<void> => {
         router.refresh();
         closeModal();
     };
@@ -72,7 +74,8 @@ const RootFolderErrorModal: FC = () => {
             if (!response?.success) {
                 enqueueSnackbar({
                     message:
-                        response?.error || 'Failed to force root folder mark',
+                        response?.error ||
+                        t('modals.rootFolderErrorModal.failedToForceMark'),
                     variant: 'error',
                 });
                 setLoading(false);
@@ -80,15 +83,15 @@ const RootFolderErrorModal: FC = () => {
             }
 
             enqueueSnackbar({
-                message: 'Root folder mark forced successfully',
+                message: t('modals.rootFolderErrorModal.rootFolderMarkSuccess'),
                 variant: 'success',
             });
 
-            close();
+            handleCloseModal();
         } catch (error) {
             console.error('Error forcing root folder mark:', error);
             enqueueSnackbar({
-                message: 'Failed to force root folder mark',
+                message: t('modals.rootFolderErrorModal.failedToForceMark'),
                 variant: 'error',
             });
         }
@@ -103,8 +106,8 @@ const RootFolderErrorModal: FC = () => {
     return (
         <BaseModal
             open={open}
-            onClose={close}
-            title="Root folder errors"
+            onClose={handleCloseModal}
+            title={t('modals.rootFolderErrorModal.title')}
             testID="root-folder-error-modal"
             showCloseButton
             disableClose={loading}
@@ -129,18 +132,16 @@ const RootFolderErrorModal: FC = () => {
                         >
                             <ErrorIcon color="error" />
                             <Typography variant="h6">
-                                Root folder mark not found
+                                {t(
+                                    'modals.rootFolderErrorModal.rootFolderMarkNotFound',
+                                )}
                             </Typography>
                         </Box>
                         <Box>
                             <Typography variant="body1">
-                                The folder is marked as a root folder, but the
-                                mark was not found. Check if the folder is
-                                correctly mounted and accessible. If everything
-                                seems correct, you can force the mark by
-                                clicking the button below. This should only be
-                                done if you are sure that the folder is
-                                correctly set up.
+                                {t(
+                                    'modals.rootFolderErrorModal.rootFolderMarkNotFoundDescription',
+                                )}
                             </Typography>
                         </Box>
                         <Box
@@ -157,7 +158,9 @@ const RootFolderErrorModal: FC = () => {
                                 loading={loading}
                                 startIcon={<WarningIcon />}
                             >
-                                Force mark root folder
+                                {t(
+                                    'modals.rootFolderErrorModal.forceMarkButton',
+                                )}
                             </Button>
                         </Box>
                     </Paper>

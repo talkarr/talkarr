@@ -1,6 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useUiStore } from '@/providers/ui-store-provider';
 
@@ -10,6 +11,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const VersionChangedModal: FC = () => {
+    const { t } = useTranslation();
     const versionChangedModal = useUiStore(store => store.versionChangedModal);
     const closeVersionChangedModal = useUiStore(
         store => store.closeVersionChangedModal,
@@ -19,13 +21,12 @@ const VersionChangedModal: FC = () => {
         <BaseModal
             open={versionChangedModal}
             testID="version-changed-modal"
-            title="Version Changed"
+            title={t('modals.versionChangedModal.title')}
             onClose={closeVersionChangedModal}
             showCloseButton={process.env.NODE_ENV !== 'production'}
         >
             <Typography mb={2}>
-                The application version has changed. Please refresh the page to
-                ensure you have the latest features and fixes.
+                {t('modals.versionChangedModal.message')}
             </Typography>
             <Button
                 fullWidth
@@ -33,7 +34,7 @@ const VersionChangedModal: FC = () => {
                 onClick={() => window.location.reload()}
                 startIcon={<RefreshIcon />}
             >
-                Refresh Page
+                {t('modals.versionChangedModal.refreshButton')}
             </Button>
         </BaseModal>
     );

@@ -8,7 +8,7 @@ import { expect, test } from '@playwright/test';
 const testUser = {
     displayName: 'Test User',
     email: `testuser-${Date.now()}@example.com`,
-    password: 'password123',
+    password: 'Password_123!',
 };
 
 const authFile = path.join(__dirname, '../.auth.json');

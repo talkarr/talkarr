@@ -1,0 +1,37 @@
+# check if the translation submodule has new commits, and if so, create a pull request to update the translations
+name: Update Translations
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight
+  workflow_dispatch:  # Allows manual triggering
+
+env:
+  TRANSLATION_PATH: src/translations
+
+jobs:
+  check-and-update-translations:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Check for translation updates
+        run: |
+          git submodule update --remote --rebase ${TRANSLATION_PATH}
+          git diff --exit-code || echo "Translations have been updated."
+
+      - name: Create Pull Request if translations updated
+        if: failure()  # Only run if there are changes
+        uses: peter-evans/create-pull-request@v7
+        with:
+          title: 'Update translations'
+          reviewers: 'CommanderRedYT'
+          sign-commits: 'true'
+          commit-message: '[automated] Update translations from submodule'
+          branch: 'automated/update-translations'
+          body: 'This pull request updates the translations from the submodule. You can find the changes in the [translation repo](https://github.com/talkarr/talkarr-translations)'

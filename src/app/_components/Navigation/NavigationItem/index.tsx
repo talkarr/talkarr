@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { getFileRoutePath } from '@/utils/route';
 
@@ -44,6 +45,8 @@ const NavigationItem: FC<NavigationItemProps> = ({
     const pathname = usePathname();
     const params = useParams();
     const theme = useTheme();
+
+    const { t } = useTranslation();
 
     if (item.visible === false) {
         return null;
@@ -108,7 +111,7 @@ const NavigationItem: FC<NavigationItemProps> = ({
                     </ListItemIcon>
                 ) : null}
                 <ListItemText
-                    primary={item.title}
+                    primary={t(item.title)}
                     slotProps={{
                         primary: {
                             sx: {

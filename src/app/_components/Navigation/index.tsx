@@ -9,11 +9,13 @@ import { usePathname } from 'next/navigation';
 
 import type { FC, PropsWithChildren } from 'react';
 import { Fragment, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { appbarHeight, drawerWidth } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import AnimatedArrowIcon from '@components/AnimatedArrowIcon';
+import ChangeLanguageButton from '@components/ChangeLanguageButton';
 import LogoWithText from '@components/LogoWithText';
 import { navigationItems } from '@components/Navigation/navigation';
 import NavigationItem from '@components/Navigation/NavigationItem';
@@ -28,10 +30,12 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 const Navigation: FC<PropsWithChildren> = ({ children }) => {
     const theme = useTheme();
+    const { t } = useTranslation();
 
     const pathname = usePathname();
 
@@ -210,11 +214,19 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                             display="flex"
                             flexDirection="row"
                             alignItems="center"
-                            gap={2}
+                            gap={1}
                         >
-                            <IconButton onClick={() => openInformationModal()}>
-                                <HelpOutlineIcon />
-                            </IconButton>
+                            <Tooltip
+                                title={t('components.navigation.information')}
+                                arrow
+                            >
+                                <IconButton
+                                    onClick={() => openInformationModal()}
+                                >
+                                    <HelpOutlineIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <ChangeLanguageButton />
                             <NavigationUser />
                         </Box>
                     </Toolbar>

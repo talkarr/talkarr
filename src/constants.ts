@@ -4,7 +4,6 @@ export const pageSecondaryColor = '#5710e6';
 export const pageBackgroundColor = '#181a1b';
 export const pagePaperColor = '#343536';
 export const pageBorderColor = '#ffffff';
-export const pageName = 'Talkarr';
 
 // navbar
 export const drawerWidth = 240;
@@ -59,3 +58,6 @@ export const longDateTimeFormat = 'DD.MM.yyyy HH:mm';
 export const longDateFormat = 'DD.MM.yyyy';
 
 export const yearOnlyFormat = 'yyyy';
+
+// external links
+export const weblateUrl = 'https://weblate.commanderred.xyz/engage/talkarr/';

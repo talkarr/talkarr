@@ -17,8 +17,8 @@ import { talkInfo } from '@/app/_api/talks/info';
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
 import { searchEvents } from '@/app/_api/talks/search';
 import { getTaskStatus } from '@/app/_api/tasks/status';
-import type { TasksData } from '@/app/(authenticated)/settings/tasks/page';
-import type { SingleTalkData } from '@/app/(authenticated)/talks/[slug]/page';
+import type { TasksData } from '@/app/(i18n)/(authenticated)/settings/tasks/page';
+import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
 
 import type { TalkData } from '@/stores/ui-store';
 

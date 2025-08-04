@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useSnackbar } from 'notistack';
 
@@ -27,6 +28,7 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 
 const NavigationUser: FC = () => {
+    const { t } = useTranslation();
     const router = useRouter();
 
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -50,9 +52,17 @@ const NavigationUser: FC = () => {
                 router.push(loginPageLink);
             })
             .catch(error => {
-                enqueueSnackbar(`Logout failed: ${error.message}`, {
-                    variant: 'error',
-                });
+                enqueueSnackbar(
+                    t(
+                        'components.navigation.navigationUser.logoutFailedError',
+                        {
+                            error: error.message || t('common.unknown'),
+                        },
+                    ),
+                    {
+                        variant: 'error',
+                    },
+                );
             });
     };
 
@@ -62,6 +72,7 @@ const NavigationUser: FC = () => {
                 onClick={handleClick}
                 sx={{
                     borderRadius: '50%',
+                    marginLeft: 1,
                 }}
             >
                 <Avatar
@@ -134,7 +145,12 @@ const NavigationUser: FC = () => {
                     <ListItemIcon>
                         <LogoutIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Logout" onClick={performLogout} />
+                    <ListItemText
+                        primary={t(
+                            'components.navigation.navigationUser.logout',
+                        )}
+                        onClick={performLogout}
+                    />
                 </MenuItem>
             </Popover>
         </>
