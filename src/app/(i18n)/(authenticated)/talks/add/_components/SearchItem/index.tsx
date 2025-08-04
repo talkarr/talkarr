@@ -148,7 +148,10 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                     />
                     {item.description ? (
                         <CardContent style={{ marginBottom: 4 }}>
-                            <div className={searchItemCss.markdown}>
+                            <div
+                                className={searchItemCss.markdown}
+                                data-testid="search-item-description"
+                            >
                                 <Markdown skipHtml>{item.description}</Markdown>
                             </div>
                         </CardContent>

@@ -4,7 +4,7 @@ import pathUtils from 'node:path';
 
 import { stripInvalidCharsForDataAttribute } from '@/utils/string';
 
-import { mediaManagementSettingsPageLink } from '@/constants';
+import { appbarHeight, mediaManagementSettingsPageLink } from '@/constants';
 
 import { expect, test as base } from '@playwright/test';
 
@@ -357,9 +357,11 @@ test('should be able to search for a string', async ({
 
     await selectedItemAction.click({
         delay: 80,
+        // eslint-disable-next-line playwright/no-force-option
+        force: true, // force click to avoid any issues with visibility
         position: {
             x: 10,
-            y: 10,
+            y: 10 + appbarHeight,
         },
     });
 
@@ -422,9 +424,11 @@ test('should be able to search for a string', async ({
     // open the first search item again
     await selectedItemAction_1.click({
         delay: 80,
+        // eslint-disable-next-line playwright/no-force-option
+        force: true, // force click to avoid any issues with visibility
         position: {
             x: 10,
-            y: 10,
+            y: 10 + appbarHeight,
         },
     });
 

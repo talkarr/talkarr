@@ -80,7 +80,7 @@ export default defineConfig<TestOptions>({
             name: 'firefox',
             // for some reason, firefox sometimes fails on local machine
             retries: process.env.CI ? undefined : 5,
-            timeout: process.env.CI ? undefined : 30000,
+            timeout: process.env.CI ? undefined : 30_000,
             use: {
                 ...devices['Desktop Firefox'],
                 searchItemIndex: 1,
