@@ -20,6 +20,7 @@ const ChangeLanguageButton: FC<BoxProps> = props => {
                     aria-label="change language"
                     onClick={event => setAnchorEl(event.currentTarget)}
                     color="inherit"
+                    data-testid="change-language-button"
                 >
                     <TranslateIcon />
                 </IconButton>
