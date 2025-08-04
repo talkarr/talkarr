@@ -349,14 +349,20 @@ test('should be able to search for a string', async ({
     expect(languageBadge).toBeGreaterThan(0);
     expect(dateBadge).toBeGreaterThan(0);
 
-    const selectedItemDescription = selectedSearchItem.locator(
-        '[data-testid=search-item-description]',
+    const selectedItemAction = selectedSearchItem.locator(
+        '[data-testid=search-item-action]',
     );
 
-    await expect(selectedItemDescription).toBeVisible();
+    await expect(selectedItemAction).toBeVisible();
 
-    await selectedItemDescription.click({
+    await selectedItemAction.click({
         delay: 80,
+        // eslint-disable-next-line playwright/no-force-option
+        force: true, // force click to avoid any issues with visibility
+        position: {
+            x: 10,
+            y: 10,
+        },
     });
 
     // expect add-talk-modal to be visible
@@ -418,6 +424,8 @@ test('should be able to search for a string', async ({
     // open the first search item again
     await selectedItemAction_1.click({
         delay: 80,
+        // eslint-disable-next-line playwright/no-force-option
+        force: true, // force click to avoid any issues with visibility
         position: {
             x: 10,
             y: 10,
