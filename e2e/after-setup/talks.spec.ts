@@ -349,17 +349,13 @@ test('should be able to search for a string', async ({
     expect(languageBadge).toBeGreaterThan(0);
     expect(dateBadge).toBeGreaterThan(0);
 
-    const selectedItemAction = selectedSearchItem.locator(
-        '[data-testid=search-item-action]',
+    const selectedItemDescription = selectedSearchItem.locator(
+        '[data-testid=search-item-description]',
     );
 
-    await expect(selectedItemAction).toBeVisible();
+    await expect(selectedItemDescription).toBeVisible();
 
-    // get image inside selectedItemAction
-    const image = selectedItemAction.locator('img');
-    await expect(image).toBeVisible();
-
-    await image.click({
+    await selectedItemDescription.click({
         delay: 80,
     });
 
