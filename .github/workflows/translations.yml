@@ -4,9 +4,6 @@ on:
   schedule:
     - cron: '0 0 * * *'  # Runs daily at midnight
   workflow_dispatch:  # Allows manual triggering
-  push:
-    paths:
-      - .github/workflows/translations.yml
 
 env:
   TRANSLATION_PATH: src/translations
@@ -16,7 +13,7 @@ jobs:
     name: Check and Update Translations
     runs-on: ubuntu-latest
     # check that the event is not from a branch to automated/update-translations
-    if: ${{ ! endsWith(github.ref, vars.TRANSLATION_BRANCH) }}
+    if: ${{ ! endsWith(github.ref, vars.TRANSLATION_BRANCH) && ! startsWith(github.ref, 'refs/tags/') }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

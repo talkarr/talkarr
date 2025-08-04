@@ -498,7 +498,7 @@ jobs:
     env:
       container_ref: ${{ needs.build-linux-container.outputs.ref }}
     # only for main branch or tags
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v4
 
@@ -514,27 +514,6 @@ jobs:
         with:
           platforms: ${{ env.PLATFORMS }}
 
-      # - name: Tag latest container
-      #   run: |
-      #     # get the sha of the container
-      #     tags="${{ steps.meta.outputs.tags }}"
-      #     first_tag=$(echo $tags | cut -d ' ' -f 1)
-      #
-      #     # tag the container as latest
-      #     docker tag ${{ env.container_ref }} ghcr.io/${{ github.repository }}:latest
-      #
-      #     # push the container
-      #     docker push ghcr.io/${{ github.repository }}:latest
-      #
-      #     echo "Tagged latest container with the tag: latest"
-      #
-      #     # if this is a tag push, tag another container with the tag
-      #     if [ -n "${{ github.ref }}" ]; then
-      #         docker tag ${{ env.container_ref }} ghcr.io/${{ github.repository }}:${{ github.ref }}
-      #         docker push ghcr.io/${{ github.repository }}:${{ github.ref }}
-      #         echo "Tagged latest container with the tag: ${{ github.ref }}"
-      #     fi
-
       - name: Tag ghcr container with latest using buildx
         run: |  
           # tag the container as latest
@@ -543,9 +522,30 @@ jobs:
           echo "Successfully tagged the ghcr container with the tag: latest"
 
       - name: Tag ghcr container with git tag using buildx
-        if: startsWith(github.ref, 'refs/tags/v')
         run: |
           # tag the container with the git tag
-          docker buildx imagetools create "${{ env.container_ref }}" --tag "ghcr.io/${{ github.repository }}:${{ github.ref }}"
+          docker buildx imagetools create "${{ env.container_ref }}" --tag "ghcr.io/${{ github.repository }}:${{ github.ref_name }}"
           
-          echo "Successfully tagged the ghcr container with the tag: ${{ github.ref }}"
+          echo "Successfully tagged the ghcr container with the tag: ${{ github.ref_name }}"
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs:
+      - build-linux-container
+      - run-e2e-tests
+      - test
+      - lint
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          prerelease: false
+          draft: true
+          files: |
+            docker-compose.yml
+            .env

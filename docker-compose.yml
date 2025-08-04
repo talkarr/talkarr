@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data # Store the data from postgres in "./data" directory
+    ports:
+      - "5432:5432"
+
+  app:
+    image: ghcr.io/talkarr/talkarr:latest # from github
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3232:3232"
+    volumes:
+      - /path/to/your/media:/media # in theory, you can mount it wherever you like
+      - ./config:/app/config # Store the config in "./config" directory
+    depends_on:
+      - db
