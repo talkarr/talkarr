@@ -31,21 +31,13 @@ jobs:
           git fetch --unshallow || true  # Ensure we have the full history
 
       - name: Check for translation updates
-        id: check_updates
+        continue-on-error: true
         run: |
           git submodule update --remote --rebase ${TRANSLATION_PATH}
           git diff --exit-code
-          error_code=$?
-          if [ $error_code -ne 0 ]; then
-            echo "Translations have been updated."
-            echo "has_updates=true" >> $GITHUB_OUTPUT
-          else
-            echo "No updates found in translations."
-            echo "has_updates=false" >> $GITHUB_OUTPUT
-          fi
 
       - name: Create Pull Request if translations updated
-        if: steps.check_updates.outputs.has_updates == 'true'
+        if: steps.check-for-translation-updates.outcome != 'success'
         uses: peter-evans/create-pull-request@v7
         with:
           title: 'Update translations'
