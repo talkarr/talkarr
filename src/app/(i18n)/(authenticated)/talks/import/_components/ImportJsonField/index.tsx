@@ -17,7 +17,8 @@ import { monoFont } from '@/theme';
 
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import UploadIcon from '@mui/icons-material/Upload';
-import { styled } from '@mui/material';
+import WarningIcon from '@mui/icons-material/Warning';
+import { alpha, styled, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -44,6 +45,7 @@ const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({
 
 const ImportJsonField: FC = () => {
     const { t } = useTranslation();
+    const theme = useTheme();
 
     const [json, setJson] = useState<string>('');
 
@@ -164,6 +166,36 @@ const ImportJsonField: FC = () => {
                         </Typography>
                         <Typography>
                             {t('pages.importJsonPage.description')}
+                        </Typography>
+                    </Box>
+                    <Box
+                        mb={2}
+                        sx={{
+                            backgroundColor: alpha(
+                                theme.palette.warning.main,
+                                0.33,
+                            ),
+                            borderRadius: 4,
+                            padding: theme.spacing(1, 2),
+                        }}
+                        maxWidth="600px"
+                        display="flex"
+                        flexDirection="row"
+                        gap={2}
+                        alignItems="center"
+                    >
+                        <WarningIcon sx={{ marginX: 1 }} />
+                        <Typography>
+                            {t('pages.importJsonPage.fahrplanWarningText')}{' '}
+                            <a
+                                href="https://github.com/EventFahrplan/EventFahrplan/issues/714"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <strong>
+                                    <i>EventFahrplan Issue #714</i>
+                                </strong>
+                            </a>
                         </Typography>
                     </Box>
                     <Box mb={2}>
