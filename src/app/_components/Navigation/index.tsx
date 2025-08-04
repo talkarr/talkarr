@@ -15,6 +15,7 @@ import { appbarHeight, drawerWidth } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import AnimatedArrowIcon from '@components/AnimatedArrowIcon';
+import ChangeLanguageButton from '@components/ChangeLanguageButton';
 import LogoWithText from '@components/LogoWithText';
 import { navigationItems } from '@components/Navigation/navigation';
 import NavigationItem from '@components/Navigation/NavigationItem';
@@ -31,7 +32,6 @@ import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import ChangeLanguageButton from '@components/ChangeLanguageButton';
 
 const Navigation: FC<PropsWithChildren> = ({ children }) => {
     const theme = useTheme();
