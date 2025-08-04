@@ -4,8 +4,18 @@ Talkarr is a *arr like program that allows you to download and manage videos fro
 
 The idea was to create a program to download the favorites from [**EventFahrplan**](https://github.com/EventFahrplan/EventFahrplan) to be able to watch them at home, for example when you were not able to be at the event.
 
-## Roadmap and Features
+## Features
 
-For a up-to-date list of features and the roadmap, please take a look at the README.md file on GitHub.
+- Search for talks by title, description, speaker, and more
+- Import favorites from EventFahrplan via the JSON sharing
+- NFO files ready for Jellyfin and co
 
-You can find the Roadmap and Features [here](https://github.com/talkarr/talkarr?tab=readme-ov-file#roadmap).
+And many more features to come in future releases!
+
+## Contributing
+
+The easiest way to contribute is by help translating it into your language! You can find more information [here](translating)
+
+## Releases
+
+You can find the latest releases on the [GitHub Releases page](https://github.com/talkarr/talkarr/releases).
