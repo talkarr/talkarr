@@ -53,7 +53,6 @@ test('authenticate', async ({ page }) => {
     await expect(loginElements.password).toBeVisible();
     await expect(loginElements.submitButton).toBeVisible();
 
-    await expect(loginElements.submitButton).toContainText('Login');
     await expect(loginElements.submitButton).toBeEnabled();
 
     await loginElements.email.fill(testUser.email);

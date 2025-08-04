@@ -26,14 +26,16 @@ export const videoBadgeTypeToString = (
     disableOnClick: boolean | undefined,
     t: TFunction,
 ): string =>
-    t(
-        disableOnClick
-            ? `enums.videoBadgeType.${type}.default`
-            : `enums.videoBadgeType.${type}.action`,
-        {
-            defaultValue: type,
-        },
-    );
+    ['duration'].includes(type)
+        ? type
+        : t(
+              disableOnClick
+                  ? `enums.videoBadgeType.${type}.default`
+                  : `enums.videoBadgeType.${type}.action`,
+              {
+                  defaultValue: type,
+              },
+          );
 
 const colorMap = new Map<VideoBadgeType, CustomBadgeProps['color']>([
     ['conference', 'primary'],
