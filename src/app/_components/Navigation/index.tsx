@@ -31,6 +31,7 @@ import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import ChangeLanguageButton from '@components/ChangeLanguageButton';
 
 const Navigation: FC<PropsWithChildren> = ({ children }) => {
     const theme = useTheme();
@@ -213,7 +214,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                             display="flex"
                             flexDirection="row"
                             alignItems="center"
-                            gap={2}
+                            gap={1}
                         >
                             <Tooltip
                                 title={t('components.navigation.information')}
@@ -225,6 +226,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                                     <HelpOutlineIcon />
                                 </IconButton>
                             </Tooltip>
+                            <ChangeLanguageButton />
                             <NavigationUser />
                         </Box>
                     </Toolbar>

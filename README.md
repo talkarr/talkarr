@@ -25,7 +25,17 @@ You can find the installation instructions for the project hosted at [wiki.talka
 ## About
 
 This project was started as a way to download talks because I was not able to go to 38c3.
-It is also a way for keeping everything from the [**Fahrplan app**](https://github.com/EventFahrplan/EventFahrplan) favorite list.
+It is also a way for keeping everything from the [**EventFahrplan**](https://github.com/EventFahrplan/EventFahrplan) favorite list.
+
+## Translation
+
+If you want to help with the project but don't know how to code, you can help with the translation of the project!
+Just go to the [Weblate instance](https://weblate.commanderred.xyz/engage/talkarr/) and start translating!
+
+<a href="https://weblate.commanderred.xyz/engage/talkarr/">
+<img src="https://weblate.commanderred.xyz/widget/talkarr/talkarr/multi-auto.svg" alt="Translation status" />
+</a>
+
 
 ## Roadmap
 
@@ -34,7 +44,7 @@ The project is still in its early stages, so there are a lot of things that need
 ### Planned for initial release
 
 - [ ] Provide basic functionality to download talks
-  - [ ] Includes importing the talks from the Fahrplan app
+  - [x] Includes importing the talks from EventFahrplan
   - [x] Downloading the talks
   - [x] Saving the talks to a specified folder
   - [ ] Managing the downloaded talks
@@ -53,7 +63,7 @@ These are the features that will be implemented:
 
 - [x] Allow the user to specify where the talks should be downloaded to (Root folder)
 - [ ] Allow the user to manage the files and be able to delete or move them
-- [ ] Import the favorite talks from the Fahrplan app
+- [x] Import the favorite talks from the EventFahrplan
 
 (These are just the "advanced" features. Basic things like downloading talks are not needed to be listed here.)
 

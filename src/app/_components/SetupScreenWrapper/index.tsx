@@ -3,6 +3,7 @@
 import type { FC, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import ChangeLanguageButton from '@components/ChangeLanguageButton';
 import Logo from '@components/Logo';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -21,6 +22,7 @@ const SetupScreenWrapper: FC<PropsWithChildren> = ({ children }) => {
                 height: '100vh',
             }}
         >
+            <ChangeLanguageButton position="absolute" top={16} right={16} />
             <Paper
                 sx={{
                     borderRadius: { xs: 0, lg: 12 },

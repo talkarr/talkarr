@@ -40,10 +40,10 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
 const RootLayout: FC<PropsWithChildren> = async ({ children }) => {
     const initialUserInfo = await getUserInfo();
-    const { t } = await getServerSideTranslation();
+    const { t, i18n } = await getServerSideTranslation();
 
     return (
-        <html lang="en">
+        <html lang={i18n.language}>
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
                 <div id="translations-working">{t('application.name')}</div>
                 <AppRouterCacheProvider>

@@ -58,3 +58,6 @@ export const longDateTimeFormat = 'DD.MM.yyyy HH:mm';
 export const longDateFormat = 'DD.MM.yyyy';
 
 export const yearOnlyFormat = 'yyyy';
+
+// external links
+export const weblateUrl = 'https://weblate.commanderred.xyz/engage/talkarr/';

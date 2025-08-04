@@ -72,6 +72,7 @@ const NavigationUser: FC = () => {
                 onClick={handleClick}
                 sx={{
                     borderRadius: '50%',
+                    marginLeft: 1,
                 }}
             >
                 <Avatar
