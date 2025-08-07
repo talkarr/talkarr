@@ -157,7 +157,11 @@ const InformationModal: FC = () => {
                             process.env.NEXT_PUBLIC_CURRENT_VERSION ||
                             t('common.unknown')
                         }
-                        href={versionHref}
+                        href={
+                            process.env.NEXT_PUBLIC_CURRENT_VERSION
+                                ? versionHref
+                                : undefined
+                        }
                     />
                     <InfoBox
                         primaryText={t('modals.informationModal.repository')}

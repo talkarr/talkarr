@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as winston from 'winston';
 
+// eslint-disable-next-line import/no-cycle
 import { configDirectory, logLevel } from '@backend/env';
 
 import 'winston-daily-rotate-file';
