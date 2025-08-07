@@ -224,18 +224,6 @@ jobs:
         with:
           platforms: ${{ env.PLATFORMS }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          flavor: latest=false
-          # create a tag "nightly" which works like "latest" but is updated with every commit instead of only for git tags
-          tags: |
-            type=raw,value=nightly
-
-          images: |
-            ghcr.io/${{ github.repository }}
-
       - name: Generate git stats for building
         id: git-stats
         run: |
@@ -244,12 +232,26 @@ jobs:
           CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
           CURRENT_VERSION=$(git describe --tags --always)
           CURRENT_TAG=$(git describe --tags --abbrev=0 --exact-match 2>/dev/null || echo "false")
-          
+
           echo "CURRENT_COMMIT=${CURRENT_COMMIT}" >> $GITHUB_ENV
           echo "CURRENT_COMMIT_TS=${CURRENT_COMMIT_TS}" >> $GITHUB_ENV
           echo "CURRENT_BRANCH=${CURRENT_BRANCH}" >> $GITHUB_ENV
           echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_ENV
           echo "CURRENT_TAG=${CURRENT_TAG}" >> $GITHUB_ENV
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          flavor: latest=false
+          # create a tag "nightly" which works like "latest" but is updated with every commit instead of only for git tags
+          tags: |
+            type=raw,value=nightly
+          labels: |
+            org.opencontainers.image.version=${{ steps.git-stats.outputs.CURRENT_VERSION }}
+
+          images: |
+            ghcr.io/${{ github.repository }}
 
       - name: Build and push Docker image
         id: docker_build
