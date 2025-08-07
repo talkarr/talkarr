@@ -48,6 +48,10 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export const initEnv = async (): Promise<void> => {
+    // eslint-disable-next-line import/no-cycle
+    const { default: rootLog } = await import('@backend/root-log');
+
+    const log = rootLog.child({ label: 'env' });
     const git = simpleGit();
 
     try {
@@ -58,7 +62,15 @@ export const initEnv = async (): Promise<void> => {
         ]);
         privateGitDescribeResult = privateGitDescribeResult.trim();
 
-        process.env.NEXT_PUBLIC_CURRENT_VERSION = getAppVersion();
+        log.info(
+            `Git commit hash: ${privateGitDescribeResult} (from simple-git), override version: ${overrideCurrentVersion}`,
+        );
+
+        const appVersion = getAppVersion();
+
+        log.info(`App version: ${appVersion}`);
+
+        process.env.NEXT_PUBLIC_CURRENT_VERSION = appVersion;
     } catch (error) {
         console.error('Failed to get git commit hash:', error);
         privateGitDescribeResult = undefined;
