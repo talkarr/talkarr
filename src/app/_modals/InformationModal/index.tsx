@@ -115,8 +115,7 @@ const InformationModal: FC = () => {
     const repoHref = `https://github.com/${repoName}`;
 
     const versionHref = useMemo(() => {
-        const version =
-            process.env.NEXT_PUBLIC_CURRENT_VERSION || t('common.unknown');
+        const version = appInformation?.appVersion || t('common.unknown');
 
         const versionLooksLikeVersion =
             version.startsWith('v') || version.startsWith('V');
@@ -125,8 +124,8 @@ const InformationModal: FC = () => {
             return `${repoHref}/commit/${version}`;
         }
 
-        return `${repoHref}/releases/tag/${process.env.NEXT_PUBLIC_CURRENT_VERSION || t('common.unknown')}`;
-    }, [t, repoHref]);
+        return `${repoHref}/releases/tag/${appInformation?.appVersion || t('common.unknown')}`;
+    }, [t, repoHref, appInformation?.appVersion]);
 
     const githubActionsRunIdHref = useMemo(() => {
         const runId = process.env.NEXT_PUBLIC_GITHUB_ACTIONS_RUN_ID;
@@ -154,13 +153,10 @@ const InformationModal: FC = () => {
                             'modals.informationModal.applicationVersion',
                         )}
                         secondaryText={
-                            process.env.NEXT_PUBLIC_CURRENT_VERSION ||
-                            t('common.unknown')
+                            appInformation.appVersion || t('common.unknown')
                         }
                         href={
-                            process.env.NEXT_PUBLIC_CURRENT_VERSION
-                                ? versionHref
-                                : undefined
+                            appInformation.appVersion ? versionHref : undefined
                         }
                     />
                     <InfoBox

@@ -69,10 +69,4 @@ export const initEnv = async (): Promise<void> => {
     log.info(
         `Git commit hash: ${privateGitDescribeResult} (from simple-git), override version: ${overrideCurrentVersion}`,
     );
-
-    const appVersion = getAppVersion();
-
-    log.info(`App version: ${appVersion}`);
-
-    process.env.NEXT_PUBLIC_CURRENT_VERSION = appVersion;
 };
