@@ -108,21 +108,6 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                             {index < length - 1 ? <Divider /> : null}
                         </Fragment>
                     ))}
-                    <Box
-                        mt="auto"
-                        p={1}
-                        display="flex"
-                        flexDirection="row"
-                        justifyContent="center"
-                    >
-                        <Typography variant="caption" color="textDisabled">
-                            {process.env.NEXT_PUBLIC_CURRENT_VERSION}-
-                            {process.env.NEXT_PUBLIC_IS_INSIDE_DOCKER === 'true'
-                                ? 'docker'
-                                : 'native'}
-                            -{process.env.NEXT_PUBLIC_CURRENT_COMMIT_TIMESTAMP}
-                        </Typography>
-                    </Box>
                 </Drawer>
             </Box>
             <Box
