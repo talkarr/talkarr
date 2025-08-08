@@ -31,7 +31,6 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
 
 const Navigation: FC<PropsWithChildren> = ({ children }) => {
     const theme = useTheme();
