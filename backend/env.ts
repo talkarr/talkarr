@@ -61,18 +61,18 @@ export const initEnv = async (): Promise<void> => {
             '--always',
         ]);
         privateGitDescribeResult = privateGitDescribeResult.trim();
-
-        log.info(
-            `Git commit hash: ${privateGitDescribeResult} (from simple-git), override version: ${overrideCurrentVersion}`,
-        );
-
-        const appVersion = getAppVersion();
-
-        log.info(`App version: ${appVersion}`);
-
-        process.env.NEXT_PUBLIC_CURRENT_VERSION = appVersion;
     } catch (error) {
         console.error('Failed to get git commit hash:', error);
         privateGitDescribeResult = undefined;
     }
+
+    log.info(
+        `Git commit hash: ${privateGitDescribeResult} (from simple-git), override version: ${overrideCurrentVersion}`,
+    );
+
+    const appVersion = getAppVersion();
+
+    log.info(`App version: ${appVersion}`);
+
+    process.env.NEXT_PUBLIC_CURRENT_VERSION = appVersion;
 };
