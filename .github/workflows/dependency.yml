@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: '${{ github.head_ref }}'
+          token: '${{ secrets.PULLREQUEST_PAT }}'
 
       - name: Install dependencies
         uses: actions/setup-node@v4
@@ -26,24 +29,68 @@ jobs:
       - name: Install dependencies
         run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
 
+      - name: Make sure all patches are up-to-date
+        continue-on-error: true
+        id: patch-package
+        run: |
+          yarn patch-package --error-on-fail --error-on-warn
+
+      - name: If patch-package failed, add comment on PR
+        if: ${{ steps.patch-package.outcome != 'success' && github.event_name == 'pull_request' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const comments = await github.rest.issues.listComments({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            const patchPackageComment = comments.data.find(comment => comment.body.includes('Patch package failed'));
+            
+            if (!patchPackageComment) {
+              // Only create a new comment if one doesn't already exist
+              const commentBody = `:warning: **Patch package failed**\n\nPlease run \`yarn patch-package\` locally to update the patches.`;
+              await github.rest.issues.createComment({
+                issue_number: prNumber,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: commentBody,
+              });
+            }
+
+      - name: If patch-package did not fail, remove previous comment
+        if: ${{ steps.patch-package.outcome == 'success' && github.event_name == 'pull_request' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const comments = await github.rest.issues.listComments({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            const patchPackageComment = comments.data.find(comment => comment.body.includes('Patch package failed'));
+            if (patchPackageComment) {
+              await github.rest.issues.deleteComment({
+                comment_id: patchPackageComment.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              });
+            }
+
+      - name: If patch-package failed, fail the job
+        if: ${{ steps.patch-package.outcome != 'success' }}
+        run: exit 1
+
       - name: Generate licenses file
         # should run when installing packages but run it again to be sure
         run: |
           CI_FORCE_GENERATE_LICENSES=true yarn run license-check
 
-      - name: Get branch name
-        id: get_branch_name
-        run: |
-          # check if the event is a pull request
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "branch_name=${{ github.head_ref }}" >> $GITHUB_OUTPUT
-          else
-            echo "branch_name=${{ github.ref_name }}" >> $GITHUB_OUTPUT
-          fi
-
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: 'Update licenses file'
-          branch: '${{ steps.get_branch_name.outputs.branch_name }}'
+          branch: '${{ github.head_ref }}'
           file_pattern: 'backend/licenses.json'
