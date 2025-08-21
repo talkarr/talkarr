@@ -101,13 +101,8 @@ export const addTalk = async ({
                     })),
                 },
                 root_folder: {
-                    connectOrCreate: {
-                        where: {
-                            path: rootFolder,
-                        },
-                        create: {
-                            path: rootFolder,
-                        },
+                    connect: {
+                        path: rootFolder,
                     },
                 },
                 poster_url: event.poster_url,
