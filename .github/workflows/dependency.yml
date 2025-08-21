@@ -1,0 +1,52 @@
+name: Run post-checks after dependency updates
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - package.json
+      - yarn.lock
+      - .github/workflows/dependency.yml
+  pull_request:
+      branches:
+        - main
+      paths:
+      - package.json
+      - yarn.lock
+      - .github/workflows/dependency.yml
+
+jobs:
+  check-licenses-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
+
+      - name: Generate licenses file
+        # should run when installing packages but run it again to be sure
+        run: |
+          yarn run license-check
+
+      - name: Get branch name
+        id: get_branch_name
+        run: |
+          # check if the event is a pull request
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "branch_name=${{ github.head_ref }}" >> $GITHUB_OUTPUT
+          else
+            echo "branch_name=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: 'Update licenses file'
+          branch: '${{ steps.get_branch_name.outputs.branch_name }}'
+          file_pattern: 'backend/licenses.json'
