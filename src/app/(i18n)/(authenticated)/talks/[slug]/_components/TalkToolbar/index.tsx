@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 
-import { enqueueSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
 
@@ -40,6 +40,8 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 
 const TalkToolbar: FC<TalkToolbarProps> = ({ data }) => {
     const router = useRouter();
+    const { enqueueSnackbar } = useSnackbar();
+
     const handleDelete = useApiStore(state => state.handleDeleteTalk);
     const showConfirmationModal = useUiStore(
         state => state.showConfirmationModal,

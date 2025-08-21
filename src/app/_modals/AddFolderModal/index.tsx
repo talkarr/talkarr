@@ -3,8 +3,7 @@
 import type { FC } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { enqueueSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 
 import { addFolder, listFiles } from '@/app/_api/settings/mediamanagement';
 
@@ -39,6 +38,7 @@ const StyledList = styled(List)(({ theme }) => ({
 
 const AddFolderModal: FC = () => {
     const { t } = useTranslation();
+    const { enqueueSnackbar } = useSnackbar();
 
     const addFolderModal = useUiStore(state => state.addFolderModal);
     const close = useUiStore(state => state.closeAddFolderModal);
