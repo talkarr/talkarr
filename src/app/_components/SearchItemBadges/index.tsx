@@ -89,6 +89,7 @@ const SearchItemBadges: FC<SearchItemBadgesProps> = ({
                 text: moment(item.date).format(longDateFormat),
                 type: 'date',
                 icon: <DateIcon />,
+                disableOnClick: true,
             });
         }
 
