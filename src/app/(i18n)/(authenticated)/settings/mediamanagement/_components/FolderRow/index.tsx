@@ -6,7 +6,7 @@ import type { FC } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { enqueueSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 import prettyBytes from 'pretty-bytes';
 
 import type { SuccessData } from '@backend/types';
@@ -37,6 +37,7 @@ const FolderRow: FC<FolderRowProps> = ({ folderData }) => {
     } = folderData;
 
     const { t } = useTranslation();
+    const { enqueueSnackbar } = useSnackbar();
 
     const showConfirmDelete = useUiStore(state => state.showConfirmationModal);
     const openRootFolderErrorModal = useUiStore(

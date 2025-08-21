@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import moment from 'moment';
-import { enqueueSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 
 import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { addEvent } from '@/app/_api/talks/add';
@@ -32,6 +32,7 @@ import Typography from '@mui/material/Typography';
 
 const AddTalkModal: FC = () => {
     const { t } = useTranslation();
+    const { enqueueSnackbar } = useSnackbar();
 
     const addTalkModal = useUiStore(state => state.addTalkModal);
     const close = useUiStore(state => state.closeAddTalkModal);
