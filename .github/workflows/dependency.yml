@@ -1,12 +1,5 @@
 name: Run post-checks after dependency updates
 on:
-  push:
-    branches-ignore:
-      - main
-    paths:
-      - package.json
-      - yarn.lock
-      - .github/workflows/dependency.yml
   pull_request:
       branches:
         - main
