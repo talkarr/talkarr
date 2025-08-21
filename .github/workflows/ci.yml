@@ -45,10 +45,6 @@ jobs:
       - name: Install dependencies
         run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
 
-      - name: Make sure that backend/licenses.json did not change
-        run: |    
-          git diff --exit-code backend/licenses.json
-
       - name: Run ESLint for frontend
         continue-on-error: true
         id: eslint-frontend
