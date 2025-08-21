@@ -158,10 +158,7 @@ export const addTalk = async ({
         >;
     } catch (error) {
         log.error('Error creating talk', {
-            error:
-                error instanceof Prisma.PrismaClientKnownRequestError
-                    ? error.code
-                    : error,
+            error,
             title: event.title,
             guid: event.guid,
             isKnownError: error instanceof Prisma.PrismaClientKnownRequestError,
