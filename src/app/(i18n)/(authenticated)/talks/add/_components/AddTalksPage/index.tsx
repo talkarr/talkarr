@@ -144,6 +144,15 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                         textAlign="center"
                         data-testid="rsearch-results-error"
                     >
+                        {t('pages.addTalksPage.errorOccurred')}
+                    </Typography>
+                    <Typography
+                        variant="subtitle1"
+                        fontWeight="normal"
+                        textAlign="center"
+                        color="textDisabled"
+                        data-testid="search-results-error-message"
+                    >
                         {error}
                     </Typography>
                 </Box>
