@@ -49,6 +49,26 @@ jobs:
               body: commentBody,
             });
 
+      - name: If patch-package did not fail, remove previous comment
+        if: ${{ steps.patch-package.outcome == 'success' && github.event_name == 'pull_request' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const comments = await github.rest.issues.listComments({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            const patchPackageComment = comments.data.find(comment => comment.body.includes('Patch package failed'));
+            if (patchPackageComment) {
+              await github.rest.issues.deleteComment({
+                comment_id: patchPackageComment.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              });
+            }
+
       - name: If patch-package failed, fail the job
         if: ${{ steps.patch-package.outcome != 'success' }}
         run: exit 1
