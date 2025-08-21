@@ -26,6 +26,10 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
 
+      - name: Make sure all patches are up-to-date
+        run: |
+          patch-package --error-on-fail --error-on-warn
+
       - name: Install dependencies
         run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
 
