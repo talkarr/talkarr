@@ -37,6 +37,7 @@ const AddTalkModal: FC = () => {
     const close = useUiStore(state => state.closeAddTalkModal);
     const router = useRouter();
     const theme = useTheme();
+    const [loading, setLoading] = useState<boolean>(false);
 
     const [availableFolders, setAvailableFolders] = useState<string[]>([]);
 
@@ -59,25 +60,36 @@ const AddTalkModal: FC = () => {
             return;
         }
 
-        const response = await addEvent({
-            guid: addTalkModal.guid,
-            root_folder: rootFolder,
-        });
+        setLoading(true);
 
-        if (response) {
-            if (response.success) {
-                enqueueSnackbar('Talk added successfully.', {
-                    variant: 'success',
-                });
-                close();
-                router.refresh();
+        try {
+            const response = await addEvent({
+                guid: addTalkModal.guid,
+                root_folder: rootFolder,
+            });
+
+            setLoading(false);
+
+            if (response) {
+                if (response.success) {
+                    enqueueSnackbar('Talk added successfully.', {
+                        variant: 'success',
+                    });
+                    close();
+                    router.refresh();
+                } else {
+                    enqueueSnackbar(`Error adding talk: ${response.error}`, {
+                        variant: 'error',
+                    });
+                }
             } else {
-                enqueueSnackbar(`Error adding talk: ${response.error}`, {
+                enqueueSnackbar('Error adding talk.', {
                     variant: 'error',
                 });
             }
-        } else {
-            enqueueSnackbar('Error adding talk.', {
+        } catch (error) {
+            setLoading(false);
+            enqueueSnackbar(`Error adding talk: ${error}`, {
                 variant: 'error',
             });
         }
@@ -217,6 +229,7 @@ const AddTalkModal: FC = () => {
                             color="primary"
                             startIcon={<AddIcon />}
                             onClick={handleAddTalk}
+                            loading={loading}
                             data-testid="add-talk-button"
                             data-selected-root-folder={stripInvalidCharsForDataAttribute(
                                 rootFolder,
