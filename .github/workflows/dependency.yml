@@ -30,6 +30,9 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
 
+      - name: Install dependencies
+        run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
+
       - name: Generate licenses file
         # should run when installing packages but run it again to be sure
         run: |
