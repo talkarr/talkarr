@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
@@ -8,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { weblateUrl } from '@/constants';
 import { languages } from '@/i18n';
-import weblateIcon from '@/svg/weblate-icon.svg';
+import WeblateIcon from '@/svg/weblate-icon.svg';
 
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -98,10 +97,9 @@ const LanguageChanger: FC<LanguageChangerProps> = ({ anchorEl, onClose }) => {
                     flexDirection="row"
                     gap={1}
                     alignItems="center"
-                    paddingY={1}
                     paddingX={2}
                 >
-                    <Image src={weblateIcon} alt="Weblate icon" height={36} />
+                    <WeblateIcon height={64} />
                     <Typography align="center" sx={{ textWrap: 'auto' }}>
                         {t('components.languageChanger.weblateInfo')}
                     </Typography>

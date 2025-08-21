@@ -192,6 +192,14 @@ const nextConfig = async (): Promise<NextConfig> => {
             typescript: {
                 ignoreBuildErrors: false,
             },
+            turbopack: {
+                rules: {
+                    '*.svg': {
+                        loaders: ['@svgr/webpack'],
+                        as: '*.js',
+                    }
+                }
+            }
         } as NextConfig,
         unpluginTypiaOptions,
     );
