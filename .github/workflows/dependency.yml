@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: '${{ github.head_ref }}'
+          token: '${{ secrets.PULLREQUEST_PAT }}'
 
       - name: Install dependencies
         uses: actions/setup-node@v4
