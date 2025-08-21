@@ -43,7 +43,9 @@ jobs:
           cache-dependency-path: 'yarn.lock'
 
       - name: Install dependencies
-        run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
+        run: |
+          YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
+          yarn next typegen
 
       - name: Run ESLint for frontend
         continue-on-error: true
