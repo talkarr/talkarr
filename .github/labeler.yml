@@ -11,6 +11,8 @@ bug:
 
 bugfix:
   - head-branch: ['^bug', 'bug']
+  - head-branch: ['^bugfix', 'bugfix']
+  - head-branch: ['^fix', 'fix']
 
 Dependencies:
   - changed-files:
