@@ -41,13 +41,23 @@ jobs:
         with:
           script: |
             const prNumber = context.payload.pull_request.number;
-            const commentBody = `:warning: **Patch package failed**\n\nPlease run \`yarn patch-package\` locally to update the patches.`;
-            await github.rest.issues.createComment({
+            const comments = await github.rest.issues.listComments({
               issue_number: prNumber,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: commentBody,
             });
+            const patchPackageComment = comments.data.find(comment => comment.body.includes('Patch package failed'));
+            
+            if (!patchPackageComment) {
+              // Only create a new comment if one doesn't already exist
+              const commentBody = `:warning: **Patch package failed**\n\nPlease run \`yarn patch-package\` locally to update the patches.`;
+              await github.rest.issues.createComment({
+                issue_number: prNumber,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: commentBody,
+              });
+            }
 
       - name: If patch-package did not fail, remove previous comment
         if: ${{ steps.patch-package.outcome == 'success' && github.event_name == 'pull_request' }}
