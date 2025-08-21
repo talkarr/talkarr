@@ -96,43 +96,6 @@ jobs:
         run: |
           yarn typecheck
 
-# Do not ask me why this one is broken
-#  typecheck:
-#    runs-on: ubuntu-latest
-#    permissions:
-#      actions: read
-#      contents: write
-#      checks: write
-#      pull-requests: write
-#      security-events: write
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Setup Node.js
-#        uses: actions/setup-node@v4
-#        with:
-#          node-version-file: '.nvmrc'
-#          cache: 'yarn'
-#          cache-dependency-path: 'yarn.lock'
-#
-#      - name: Install dependencies
-#        run: yarn install --frozen-lockfile --non-interactive --prefer-offline
-#
-#      - name: Make sure that tsconfig.json exists
-#        run: |
-#          if [ ! -f tsconfig.json ]; then
-#              echo "tsconfig.json does not exist"
-#              exit 1
-#          fi
-#
-#      - name: Run generate and check if something changed
-#        run: yarn generate && git diff --exit-code
-#
-#      - name: Run type checks
-#        run: |
-#          pwd
-#          yarn typecheck
-
   test:
     name: Run unit tests
     runs-on: ubuntu-latest
