@@ -17,7 +17,6 @@ on:
       - 'mkdocs.yml'
 
 env:
-  NODE_VERSION: 24.x
   # PLATFORMS: linux/amd64,linux/arm64 # will activate once we have initial release
   PLATFORMS: linux/amd64
 
@@ -39,7 +38,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
 
@@ -116,7 +115,7 @@ jobs:
 #      - name: Setup Node.js
 #        uses: actions/setup-node@v4
 #        with:
-#          node-version: ${{ env.NODE_VERSION }}
+#          node-version-file: '.nvmrc'
 #          cache: 'yarn'
 #          cache-dependency-path: 'yarn.lock'
 #
@@ -155,7 +154,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
 
@@ -334,7 +333,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
 
