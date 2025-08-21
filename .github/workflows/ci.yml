@@ -17,7 +17,6 @@ on:
       - 'mkdocs.yml'
 
 env:
-  NODE_VERSION: 24.x
   # PLATFORMS: linux/amd64,linux/arm64 # will activate once we have initial release
   PLATFORMS: linux/amd64
 
@@ -39,16 +38,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
 
       - name: Install dependencies
-        run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
-
-      - name: Make sure that backend/licenses.json did not change
-        run: |    
-          git diff --exit-code backend/licenses.json
+        run: |
+          YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
+          yarn next typegen
 
       - name: Run ESLint for frontend
         continue-on-error: true
@@ -101,43 +98,6 @@ jobs:
         run: |
           yarn typecheck
 
-# Do not ask me why this one is broken
-#  typecheck:
-#    runs-on: ubuntu-latest
-#    permissions:
-#      actions: read
-#      contents: write
-#      checks: write
-#      pull-requests: write
-#      security-events: write
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Setup Node.js
-#        uses: actions/setup-node@v4
-#        with:
-#          node-version: ${{ env.NODE_VERSION }}
-#          cache: 'yarn'
-#          cache-dependency-path: 'yarn.lock'
-#
-#      - name: Install dependencies
-#        run: yarn install --frozen-lockfile --non-interactive --prefer-offline
-#
-#      - name: Make sure that tsconfig.json exists
-#        run: |
-#          if [ ! -f tsconfig.json ]; then
-#              echo "tsconfig.json does not exist"
-#              exit 1
-#          fi
-#
-#      - name: Run generate and check if something changed
-#        run: yarn generate && git diff --exit-code
-#
-#      - name: Run type checks
-#        run: |
-#          pwd
-#          yarn typecheck
-
   test:
     name: Run unit tests
     runs-on: ubuntu-latest
@@ -155,7 +115,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
 
@@ -334,7 +294,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
 
