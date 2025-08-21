@@ -1,7 +1,7 @@
 name: Run post-checks after dependency updates
 on:
   push:
-    branches:
+    branches-ignore:
       - main
     paths:
       - package.json
