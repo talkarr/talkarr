@@ -153,7 +153,9 @@ const InformationModal: FC = () => {
                             'modals.informationModal.applicationVersion',
                         )}
                         secondaryText={
-                            appInformation.appVersion || t('common.unknown')
+                            appInformation.appVersion
+                                ? `${appInformation.appVersion} (${appInformation.isNightly ? 'Nightly' : 'Release'})`
+                                : t('common.unknown')
                         }
                         href={
                             appInformation.appVersion ? versionHref : undefined

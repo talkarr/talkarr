@@ -63,7 +63,24 @@ const nextConfig = async (): Promise<NextConfig> => {
         }
 
         if (!currentTag) {
-            currentTag = (await git.tags()).latest;
+            // git describe --tags --abbrev=0 --exact-match
+            try {
+                currentTag = (
+                    await git.raw([
+                        'describe',
+                        '--tags',
+                        '--abbrev=0',
+                        '--exact-match',
+                        currentCommit,
+                    ])
+                ).trim();
+            } catch {
+                console.warn('No tag found for current commit:', currentCommit);
+            } finally {
+                if (!currentTag) {
+                    currentTag = 'false'; // no tag found
+                }
+            }
         }
 
         if (!remoteUrl) {

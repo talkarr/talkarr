@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process';
 
-import { getAppVersion } from '@backend/env';
+import { getAppVersion, getIsNightly } from '@backend/env';
 import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
@@ -24,6 +24,7 @@ const informationHandler = async (
             data: {
                 ytdlpVersion: getYtdlpVersion(),
                 appVersion: getAppVersion(),
+                isNightly: getIsNightly(),
             },
         });
         return;
