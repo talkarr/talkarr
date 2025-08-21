@@ -60,14 +60,16 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
 
         log.info('Found new files:', { files: scanResult.length });
 
-        for await (const file of scanResult) {
+        const handleImportFile = async (
+            file: (typeof scanResult)[number],
+        ): Promise<void> => {
             if (file.guess.confidence !== 100) {
                 log.warn('File has too low confidence:', {
                     file: file.filename,
                     confidence: file.guess.confidence,
                 });
 
-                continue;
+                return;
             }
 
             log.info('Importing file...', { file: file.filename });
@@ -85,7 +87,11 @@ const scanAndImportExistingFiles: TaskFunction = async (job, done) => {
                     { file: file.filename },
                 );
             }
-        }
+        };
+
+        await Promise.all(
+            scanResult.map(scanFile => handleImportFile(scanFile)),
+        );
     }
 
     done();

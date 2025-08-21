@@ -1,4 +1,5 @@
 import type { File } from '@prisma/client';
+import type { Dirent } from 'node:fs';
 
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
@@ -106,7 +107,8 @@ export const scanForExistingFiles = async ({
             // eslint-disable-next-line unicorn/no-await-expression-member
             .filter(dirent => dirent.isDirectory());
 
-        for await (const eventDir of events) {
+        // eslint-disable-next-line unicorn/consistent-function-scoping
+        const handleEvent = async (eventDir: Dirent): Promise<void> => {
             const eventSlug = eventDir.name;
             let eventIsValid = true;
 
@@ -126,7 +128,7 @@ export const scanForExistingFiles = async ({
                     `File does already exist in database, this is not a new file`,
                     { eventPath },
                 );
-                continue;
+                return;
             }
 
             let event;
@@ -137,7 +139,7 @@ export const scanForExistingFiles = async ({
                 log.error(`Error fetching event ${eventSlug}, skipping...`, {
                     error,
                 });
-                continue;
+                return;
             }
 
             if (!event) {
@@ -160,7 +162,7 @@ export const scanForExistingFiles = async ({
 
             if (files.length === 0) {
                 log.warn(`No files found for event ${eventSlug}`);
-                continue;
+                return;
             }
 
             for await (const file of files) {
@@ -229,7 +231,9 @@ export const scanForExistingFiles = async ({
                     filename: file.name,
                 });
             }
-        }
+        };
+
+        await Promise.all(events.map(eventDir => handleEvent(eventDir)));
     }
 
     return existingFiles;
