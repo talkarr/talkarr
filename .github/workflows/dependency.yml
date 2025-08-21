@@ -30,8 +30,28 @@ jobs:
         run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
 
       - name: Make sure all patches are up-to-date
+        continue-on-error: true
+        id: patch-package
         run: |
           yarn patch-package --error-on-fail --error-on-warn
+
+      - name: If patch-package failed, add comment on PR
+        if: ${{ steps.patch-package.outcome != 'success' && github.event_name == 'pull_request' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const commentBody = `:warning: **Patch package failed**\n\nPlease run \`yarn patch-package\` locally to update the patches.`;
+            await github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody,
+            });
+
+      - name: If patch-package failed, fail the job
+        if: ${{ steps.patch-package.outcome != 'success' }}
+        run: exit 1
 
       - name: Generate licenses file
         # should run when installing packages but run it again to be sure
