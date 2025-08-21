@@ -49,11 +49,12 @@ const handleScanEventsRequest = async (
 
     const mappedFiles: components['schemas']['ExtendedFileWithGuess'][] = [];
 
-    for await (const rootFolderPath of foldersToScan) {
-        const files = (await scanForExistingFiles({ rootFolderPath })) ?? [];
+    const scanFolder = async (folderPath: string): Promise<void> => {
+        const files =
+            (await scanForExistingFiles({ rootFolderPath: folderPath })) ?? [];
 
         if (files.length === 0) {
-            continue;
+            return;
         }
 
         const mapped = files.map<
@@ -78,7 +79,9 @@ const handleScanEventsRequest = async (
         );
 
         mappedFiles.push(...mapped);
-    }
+    };
+
+    await Promise.all(foldersToScan.map(folderPath => scanFolder(folderPath)));
 
     res.json({
         success: true,

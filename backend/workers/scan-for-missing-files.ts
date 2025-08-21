@@ -80,7 +80,9 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
 
     let hasErrored = false;
 
-    for await (const event of events) {
+    const handleEvent = async (
+        event: (typeof events)[number],
+    ): Promise<void> => {
         try {
             if (event.root_folder?.did_not_find_mark) {
                 log.warn('Root folder mark was not found', {
@@ -88,7 +90,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                     rootFolder: event.root_folder,
                 });
 
-                continue;
+                return;
             }
 
             const hasFiles = await doesTalkHaveExistingFilesOnDisk({ event });
@@ -107,7 +109,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                 log.error('Error creating new talk info:', {
                     title: event.title,
                 });
-                continue;
+                return;
             }
 
             if (hasFiles?.find(f => f.isVideo)) {
@@ -187,7 +189,9 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
 
             hasErrored = true;
         }
-    }
+    };
+
+    await Promise.all(events.map(element => handleEvent(element)));
 
     if (hasErrored) {
         log.error('Error scanning for missing files');

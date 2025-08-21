@@ -1143,13 +1143,17 @@ export const importEventFahrplanJson = async ({
     slugsToImport = [...new Set(slugsToImport)];
 
     // check with getSpecificTalkBySlug if the talk already exists
-    for await (const slug of slugsToImport) {
-        const existingTalk = await getSpecificTalkBySlug({ slug });
+    await Promise.all(
+        slugsToImport.map(async slug => {
+            const existingTalk = await getSpecificTalkBySlug({
+                slug,
+            });
 
-        if (existingTalk) {
-            existingImports.push(slug);
-        }
-    }
+            if (existingTalk) {
+                existingImports.push(slug);
+            }
+        }),
+    );
 
     slugsToImport = slugsToImport.filter(
         slug => !existingImports.includes(slug),
