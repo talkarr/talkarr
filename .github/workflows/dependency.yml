@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: '${{ github.head_ref }}'
 
       - name: Install dependencies
         uses: actions/setup-node@v4
@@ -31,19 +33,9 @@ jobs:
         run: |
           CI_FORCE_GENERATE_LICENSES=true yarn run license-check
 
-      - name: Get branch name
-        id: get_branch_name
-        run: |
-          # check if the event is a pull request
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "branch_name=${{ github.head_ref }}" >> $GITHUB_OUTPUT
-          else
-            echo "branch_name=${{ github.ref_name }}" >> $GITHUB_OUTPUT
-          fi
-
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: 'Update licenses file'
-          branch: '${{ steps.get_branch_name.outputs.branch_name }}'
+          branch: '${{ github.head_ref }}'
           file_pattern: 'backend/licenses.json'
