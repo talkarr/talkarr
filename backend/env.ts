@@ -70,3 +70,8 @@ export const initEnv = async (): Promise<void> => {
         `Git commit hash: ${privateGitDescribeResult} (from simple-git), override version: ${overrideCurrentVersion}`,
     );
 };
+
+export const getIsNightly = (): boolean => {
+    const overrideCurrentTag = process.env.OVERRIDE_CURRENT_TAG;
+    return overrideCurrentTag === 'false' || overrideCurrentTag === undefined;
+};

@@ -2022,6 +2022,11 @@ export interface components {
              * @example 1.0.0
              */
             appVersion: string;
+            /**
+             * @description True if this is a nightly build
+             * @example false
+             */
+            isNightly: boolean;
         };
         UserRegistration: {
             /**

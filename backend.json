@@ -1074,11 +1074,17 @@
                         "type": "string",
                         "description": "Version of the app",
                         "example": "1.0.0"
+                    },
+                    "isNightly": {
+                        "type": "boolean",
+                        "description": "True if this is a nightly build",
+                        "example": false
                     }
                 },
                 "required": [
                     "ytdlpVersion",
-                    "appVersion"
+                    "appVersion",
+                    "isNightly"
                 ]
             },
             "UserRegistration": {
