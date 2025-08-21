@@ -36,7 +36,7 @@ jobs:
       - name: Generate licenses file
         # should run when installing packages but run it again to be sure
         run: |
-          yarn run license-check
+          CI_FORCE_GENERATE_LICENSES=true yarn run license-check
 
       - name: Get branch name
         id: get_branch_name

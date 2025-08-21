@@ -4,7 +4,7 @@ import packageJson from './package.json' with { type: 'json' };
 
 const isCi = process.env.CI === 'true' || process.env.CI === '1' || process.env.CI === 'yes';
 
-if (isCi) {
+if (isCi && process.env.CI_FORCE_GENERATE_LICENSES !== 'true') {
     console.info('Running in CI mode, skipping license generation.');
     process.exit(0);
 }
