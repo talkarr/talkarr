@@ -3,6 +3,7 @@
 import type { FC } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { useSnackbar } from 'notistack';
 
 import { addFolder, listFiles } from '@/app/_api/settings/mediamanagement';
