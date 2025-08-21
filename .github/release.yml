@@ -18,3 +18,7 @@ changelog:
         - "chore"
         - "docs"
         - "documentation"
+
+    - title: "📦 Dependencies"
+      labels:
+        - "dependencies"
