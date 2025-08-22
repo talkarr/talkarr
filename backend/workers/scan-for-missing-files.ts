@@ -124,13 +124,13 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                         path: file.path,
                     });
 
-                    log.info('Found file', {
-                        title: event.title,
-                        file,
-                        fileIsInDb,
-                    });
-
                     if (!fileIsInDb) {
+                        log.info('Found file that is not in database yet', {
+                            title: event.title,
+                            file,
+                            fileIsInDb,
+                        });
+
                         const addFileToDbResult = await addDownloadedFile({
                             event,
                             file: {

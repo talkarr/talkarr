@@ -124,7 +124,7 @@ export const scanForExistingFiles = async ({
             });
 
             if (eventFromDbByFile) {
-                log.info(
+                log.debug(
                     `File does already exist in database, this is not a new file`,
                     { eventPath },
                 );

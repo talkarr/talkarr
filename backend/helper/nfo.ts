@@ -185,11 +185,6 @@ export const handleConferenceMetadataGeneration = async ({
         conferenceThumbFilename,
     );
 
-    log.debug('Generating conference NFO file...', {
-        conferenceNfoPath,
-        conferencePosterPath,
-    });
-
     await fs_promises.mkdir(
         pathUtils.join(rootFolderPath, conference.acronym),
         {
@@ -210,6 +205,10 @@ export const handleConferenceMetadataGeneration = async ({
     if (conferenceNfoExists) {
         log.debug('Conference NFO file already exists.');
     } else {
+        log.debug('Generating conference NFO file...', {
+            conferenceNfoPath,
+        });
+
         const conferenceNfoContent = generateConferenceNfo({ conference });
 
         // write nfo file
@@ -221,7 +220,9 @@ export const handleConferenceMetadataGeneration = async ({
     if (conferencePosterExists) {
         log.debug('Conference poster already exists.');
     } else {
-        log.info('Generating conference poster...');
+        log.debug('Generating conference poster file...', {
+            conferencePosterPath,
+        });
 
         const url = conference.logo_url;
 
