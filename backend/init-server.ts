@@ -9,6 +9,18 @@ const log = rootLog.child({ label: 'loadingServer' });
 
 const loadingServer = express();
 
+loadingServer.use((_req, res, next) => {
+    res.setHeader(
+        'Cache-Control',
+        'no-store, no-cache, must-revalidate, proxy-revalidate',
+    );
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('Surrogate-Control', 'no-store');
+
+    next();
+});
+
 loadingServer.get('/logo.png', (_req, res) => {
     res.sendFile('logo_cropped.png', {
         root: pathUtils.join(__dirname, '..', 'assets'),
