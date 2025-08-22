@@ -185,7 +185,7 @@ export const handleConferenceMetadataGeneration = async ({
         conferenceThumbFilename,
     );
 
-    log.info('Generating conference NFO file...', {
+    log.debug('Generating conference NFO file...', {
         conferenceNfoPath,
         conferencePosterPath,
     });
@@ -208,7 +208,7 @@ export const handleConferenceMetadataGeneration = async ({
         .catch(() => false);
 
     if (conferenceNfoExists) {
-        log.info('Conference NFO file already exists.');
+        log.debug('Conference NFO file already exists.');
     } else {
         const conferenceNfoContent = generateConferenceNfo({ conference });
 
@@ -219,7 +219,7 @@ export const handleConferenceMetadataGeneration = async ({
     }
 
     if (conferencePosterExists) {
-        log.info('Conference poster already exists.');
+        log.debug('Conference poster already exists.');
     } else {
         log.info('Generating conference poster...');
 
