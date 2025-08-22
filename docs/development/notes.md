@@ -34,3 +34,25 @@ npx ls-engines --mode actual --save
 The `actions/labeler` action is used to automatically add labels to pull requests. The configuration is stored in `.github/labeler.yml`.
 
 You can find the documentation here: [actions/labeler](https://github.com/actions/labeler)
+
+## Creating a release
+
+Run the following command:
+
+```bash
+yarn version --minor # or --patch or --major
+```
+
+This will then create a commit "Publish talkarr vX.Y.Z" and a tag "vX.Y.Z".
+These can be pushed to the remote repository with:
+
+```bash
+git push --follow-tags
+```
+
+After the CI finishes, a new release will be created automatically.
+It will not be published automatically, but set to "draft" so that you can check it.
+
+[Link for quick access to releases](https://github.com/talkarr/talkarr/releases)
+
+After that, you can just publish it and that's it.
