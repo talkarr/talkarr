@@ -46,6 +46,8 @@ const TalkImage: FC<TalkImageProps> = ({
         return null;
     }
 
+    const blurHash = 'poster_url_blur' in data ? data.poster_url_blur : null;
+
     return (
         <div
             style={{
@@ -76,11 +78,12 @@ const TalkImage: FC<TalkImageProps> = ({
                         />
                     ) : null}
                     <Image
-                        loading="lazy"
                         src={generateCacheUrl({
                             url: data.poster_url,
                             cacheKey: `poster-${data.guid}`,
                         })}
+                        placeholder={blurHash ? 'blur' : undefined}
+                        blurDataURL={blurHash ?? undefined}
                         alt={data.title}
                         title={data.title}
                         sizes="300px"
@@ -88,6 +91,7 @@ const TalkImage: FC<TalkImageProps> = ({
                         style={{
                             objectFit: 'contain',
                         }}
+                        priority
                         onLoad={event => {
                             setImageLoading(false);
 

@@ -138,6 +138,7 @@ const CustomBadge: FC<CustomBadgeProps> = ({
                                 sizes="64px"
                                 alt=""
                                 fill
+                                priority
                                 style={{
                                     objectFit: 'contain',
                                     borderRadius: '50%',

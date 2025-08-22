@@ -5,6 +5,7 @@ import {
     check as validateCheckForRootFolders,
     taskName as checkForRootFolders,
 } from './check-for-root-folders';
+import { taskName as generateBlurhashes } from './generate-blurhashes';
 import {
     check as validateGenerateMissingNfo,
     taskName as generateMissingNfo,
@@ -21,12 +22,14 @@ export const taskNames = [
     generateMissingNfo,
     scanForMissingFiles,
     checkForRootFolders,
+    generateBlurhashes,
 ] as const;
 
 export type TaskNames =
     | 'generateMissingNfo'
     | 'scanForMissingFiles'
-    | 'checkForRootFolders';
+    | 'checkForRootFolders'
+    | 'generateBlurhashes';
 
 export type UsableTaskNames = Extract<(typeof taskNames)[number], TaskNames>;
 
@@ -38,10 +41,13 @@ export type TaskValidator = {
     readonly [K in InternalUseableTaskNames]: (data: unknown) => boolean;
 };
 
+const noopValidator = (): true => true;
+
 export const taskValidators: TaskValidator = {
     [generateMissingNfo]: validateGenerateMissingNfo,
     [scanForMissingFiles]: validateScanForMissingFiles,
     [checkForRootFolders]: validateCheckForRootFolders,
+    [generateBlurhashes]: noopValidator,
 } as const;
 
 export const isValidData = <T extends InternalUseableTaskNames>(

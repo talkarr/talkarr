@@ -160,6 +160,11 @@ const nextConfig = async (): Promise<NextConfig> => {
                         search: '',
                     },
                 ],
+                localPatterns: [
+                    {
+                        pathname: '/api/cache/fetch',
+                    },
+                ],
                 minimumCacheTTL: 24 * 60 * 60, // 24 hours
             },
             /*

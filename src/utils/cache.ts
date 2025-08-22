@@ -1,5 +1,7 @@
 import type { paths } from '@backend/generated/schema';
 
+const cacheApiUrl: keyof paths = '/cache/fetch';
+
 export const generateCacheUrl = ({
     url,
     cacheKey,
@@ -10,8 +12,6 @@ export const generateCacheUrl = ({
     if (url.startsWith('data:')) {
         return url;
     }
-
-    const cacheApiUrl: keyof paths = '/cache/fetch';
 
     const encodedUrl = encodeURIComponent(url);
     const encodedCacheKey = encodeURIComponent(cacheKey);

@@ -31,7 +31,7 @@ import {
 } from '@backend/fs';
 import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
 import { acquireLockAndReturn, releaseLock } from '@backend/locks';
-import type { TaskFunction } from '@backend/queue';
+import type { DoneCallback, TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/root-log';
 import type {
@@ -39,7 +39,6 @@ import type {
     ExtendedDbEvent,
     NormalAndConvertedDate,
 } from '@backend/types';
-import DoneCallback = jest.DoneCallback;
 
 const youtubeDl = process.env.YTDLP_PATH_OVERRIDE
     ? createYoutubeDl(process.env.YTDLP_PATH_OVERRIDE)

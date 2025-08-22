@@ -183,6 +183,15 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                             url: initialData.poster_url,
                                             cacheKey: `poster-${initialData.guid}`,
                                         })}
+                                        blurDataURL={
+                                            initialData.poster_url_blur ??
+                                            undefined
+                                        }
+                                        placeholder={
+                                            initialData.poster_url_blur
+                                                ? 'blur'
+                                                : undefined
+                                        }
                                         fill
                                         style={{
                                             objectFit: 'cover',
