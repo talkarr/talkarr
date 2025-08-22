@@ -108,7 +108,9 @@
     const logo = document.getElementById('logo');
 
     const setImageUrl = () => {
-        logo.src = '/logo.png';
+        setTimeout(() => {
+            logo.src = '/logo.png';
+        }, 200);
     };
 
     logo.addEventListener('error', setImageUrl);
