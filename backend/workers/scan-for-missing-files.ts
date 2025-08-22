@@ -97,9 +97,11 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
 
             const hasNfo = await doesEventHaveNfoFile({ event });
 
-            log.info(
-                `${event.title} ${hasFiles ? 'has files' : 'is missing files'}`,
-            );
+            log.debug('Handling event', {
+                title: event.title,
+                slug: event.slug,
+                hasFiles,
+            });
 
             const result = await createNewTalkInfo({ talk: event });
 

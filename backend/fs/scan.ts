@@ -99,7 +99,7 @@ export const scanForExistingFiles = async ({
             continue;
         }
 
-        log.info(`Scanning ${conferenceAcronym}...`);
+        log.info(`Scanning conference '${conferenceAcronym}'...`);
 
         const events = (
             await fs_promises.readdir(scanPath, { withFileTypes: true })
