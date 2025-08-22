@@ -25,6 +25,9 @@ model Conference {
   url          String
   schedule_url String
   Event        Event[]
+
+  // generated
+  logo_url_blur String? // base64 blurhash
 }
 
 model Person {
@@ -71,6 +74,10 @@ model Event {
   original_language String
   frontend_link     String
   duration          BigInt
+
+  // generated
+  poster_url_blur String? // base64 blurhash
+  thumb_url_blur  String? // base64 blurhash
 
   // relations
   persons           Person[]

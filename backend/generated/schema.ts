@@ -1672,6 +1672,11 @@ export interface components {
             aspect_ratio: string;
             /** @example https://example.com/logo.jpg */
             logo_url: string;
+            /**
+             * @description Blurred version of logo_url as data url
+             * @example data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...
+             */
+            logo_url_blur?: string | null;
             /** @example https://api.example.com */
             url: string;
             /** @example https://example.com/schedule */
@@ -1771,6 +1776,16 @@ export interface components {
             thumb_url: string;
             /** @example https://example.com/poster.jpg */
             poster_url: string;
+            /**
+             * @description Blurred version of thumb_url as data url
+             * @example data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...
+             */
+            thumb_url_blur?: string | null;
+            /**
+             * @description Blurred version of poster_url as data url
+             * @example data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...
+             */
+            poster_url_blur?: string | null;
             /** @example eng */
             original_language: string;
             /** @example https://example.com */

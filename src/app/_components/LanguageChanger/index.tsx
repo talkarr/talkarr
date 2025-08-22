@@ -101,7 +101,12 @@ const LanguageChanger: FC<LanguageChangerProps> = ({ anchorEl, onClose }) => {
                     paddingY={1}
                     paddingX={2}
                 >
-                    <Image src={weblateIcon} alt="Weblate icon" height={36} />
+                    <Image
+                        src={weblateIcon}
+                        alt="Weblate icon"
+                        height={36}
+                        priority
+                    />
                     <Typography align="center" sx={{ textWrap: 'auto' }}>
                         {t('components.languageChanger.weblateInfo')}
                     </Typography>
