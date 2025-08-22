@@ -103,13 +103,15 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
 
             const result = await createNewTalkInfo({ talk: event });
 
-            if (result) {
-                log.info('Created new talk info:', { title: event.title });
-            } else {
+            if (!result) {
                 log.error('Error creating new talk info:', {
                     title: event.title,
                 });
                 return;
+            }
+
+            if (result.isNew) {
+                log.info('Created new talk info:', { title: event.title });
             }
 
             if (hasFiles?.find(f => f.isVideo)) {

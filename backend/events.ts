@@ -408,7 +408,7 @@ export const createNewTalkInfo = async ({
     talk,
 }: {
     talk: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
-}): Promise<EventInfo['guid'] | null> => {
+}): Promise<{ guid: EventInfo['guid']; isNew: boolean } | null> => {
     // check if eventinfo already exists
 
     try {
@@ -421,7 +421,7 @@ export const createNewTalkInfo = async ({
         });
 
         if (exists.length === 1) {
-            return exists[0].guid;
+            return { guid: exists[0].guid, isNew: false };
         }
 
         if (exists.length > 1) {
@@ -450,7 +450,7 @@ export const createNewTalkInfo = async ({
             },
         });
 
-        return result.guid;
+        return { guid: result.guid, isNew: true };
     } catch (error) {
         log.error('Error creating new talk info', {
             error,
