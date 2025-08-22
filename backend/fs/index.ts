@@ -44,6 +44,33 @@ export const isVideoFile = (filename: string): boolean => {
 
     return validVideoFileExtensions.includes(ext);
 };
+
+export const getEventFilename = ({
+    event,
+    extension,
+}: {
+    event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
+    extension: string;
+}): string => {
+    const ext = extension.replace(/^\./, '');
+
+    // remove all numbers etc. from the slug. only allow letters, dashes and underscores. replace all spaces with dashes
+    const slugWithoutConference = event.slug.replace(
+        `${event.conference.acronym}-`,
+        '',
+    );
+
+    const slug = slugWithoutConference
+        .replaceAll(' ', '-')
+        .replaceAll(/[^a-zA-Z-_]/g, '')
+        .toLowerCase()
+        .trim()
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+
+    return `${slug}.${ext}`;
+};
+
 export const doesTalkHaveExistingFilesOnDisk = async ({
     event,
 }: {
@@ -99,7 +126,10 @@ export const doesTalkHaveExistingFilesOnDisk = async ({
 
     for await (const extension of validFileExtensions) {
         try {
-            const file = pathUtils.join(filePath, `${event.slug}${extension}`);
+            const file = pathUtils.join(
+                filePath,
+                getEventFilename({ event, extension }),
+            );
 
             await fs_promises.access(
                 file,
@@ -120,7 +150,7 @@ export const doesTalkHaveExistingFilesOnDisk = async ({
                 createdAt: stats.birthtime,
             });
         } catch (error) {
-            log.debug(`File ${event.slug}${extension} does not exist ${error}`);
+            log.debug(`File ${file} does not exist ${error}`);
         }
     }
 
@@ -129,32 +159,6 @@ export const doesTalkHaveExistingFilesOnDisk = async ({
     });
 
     return existingFiles.length > 0 ? existingFiles : null;
-};
-
-export const getEventFilename = ({
-    event,
-    extension,
-}: {
-    event: ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
-    extension: string;
-}): string => {
-    const ext = extension.replace(/^\./, '');
-
-    // remove all numbers etc. from the slug. only allow letters, dashes and underscores. replace all spaces with dashes
-    const slugWithoutConference = event.slug.replace(
-        `${event.conference.acronym}-`,
-        '',
-    );
-
-    const slug = slugWithoutConference
-        .replaceAll(' ', '-')
-        .replaceAll(/[^a-zA-Z-_]/g, '')
-        .toLowerCase()
-        .trim()
-        .replace(/^-+/, '')
-        .replace(/-+$/, '');
-
-    return `${slug}.${ext}`;
 };
 
 export const doesEventHaveNfoFile = async ({
