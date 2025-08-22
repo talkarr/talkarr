@@ -123,7 +123,7 @@ export const addTalk = async ({
                         ? {
                               connectOrCreate: {
                                   where: {
-                                      title: event.conference_title,
+                                      acronym: conference.acronym,
                                   },
                                   create: {
                                       acronym: conference.acronym,
