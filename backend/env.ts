@@ -62,7 +62,7 @@ export const initEnv = async (): Promise<void> => {
         ]);
         privateGitDescribeResult = privateGitDescribeResult.trim();
     } catch (error) {
-        console.error('Failed to get git commit hash:', error);
+        log.debug('Failed to get git commit hash:', error);
         privateGitDescribeResult = undefined;
     }
 
