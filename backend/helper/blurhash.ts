@@ -1,3 +1,4 @@
+import { encode } from 'blurhash';
 import fs from 'node:fs/promises';
 import sharp from 'sharp';
 
@@ -5,62 +6,59 @@ import rootLog from '@backend/root-log';
 
 const log = rootLog.child({ label: 'helper/blurhash' });
 
-const maximumDimension = 96;
+export const encodeCustomBlurhash = (
+    blurhash: string,
+    width: number,
+    height: number,
+): string => `w=${width};h=${height};d=${blurhash}`;
 
-export const generateBlurhashDataUrlFromBuffer = async (
+export const generateBlurhashFromBuffer = async (
     buffer: Buffer,
 ): Promise<string> => {
-    const image = sharp(buffer);
+    // first resize image to max 100x100
+    const resizedBuffer = await sharp(buffer)
+        .resize(100, 100, {
+            fit: 'inside',
+            withoutEnlargement: true,
+        })
+        .ensureAlpha()
+        .raw()
+        .toBuffer({ resolveWithObject: true });
 
-    const metadata = await image.metadata();
-    const imageWidth = metadata.width;
-    const imageHeight = metadata.height;
+    const { data, info } = resizedBuffer;
 
-    if (!imageWidth || !imageHeight) {
-        throw new Error('Invalid image dimensions');
+    if (!info.width || !info.height) {
+        throw new Error('Invalid image dimensions after resize');
     }
 
-    const scale =
-        imageWidth > imageHeight
-            ? maximumDimension / imageWidth
-            : maximumDimension / imageHeight;
-    const resizedWidth = Math.round(imageWidth * scale);
-    const resizedHeight = Math.round(imageHeight * scale);
+    const blurhashencoded = encode(
+        new Uint8ClampedArray(data),
+        info.width,
+        info.height,
+        4,
+        4,
+    );
 
-    log.info('Resizing image for blurhash generation', {
-        originalWidth: imageWidth,
-        originalHeight: imageHeight,
-        resizedWidth,
-        resizedHeight,
-    });
-
-    const resizedBuffer = await sharp(buffer)
-        .resize(resizedWidth, resizedHeight)
-        .blur(10)
-        .toBuffer();
-
-    return `data:image/png;base64,${resizedBuffer.toString('base64')}`;
+    return encodeCustomBlurhash(blurhashencoded, info.width, info.height);
 };
 
-export const generateBlurhashDataUrlFromFilepath = async (
+export const generateBlurhashFromFilepath = async (
     filePath: string,
 ): Promise<string> => {
     try {
         const buffer = await fs.readFile(filePath);
-        return await generateBlurhashDataUrlFromBuffer(buffer);
+        return await generateBlurhashFromBuffer(buffer);
     } catch (error) {
         log.error('Error reading image from filepath:', { filePath, error });
         throw error;
     }
 };
 
-export const generateBlurhashDataUrlFromUrl = async (
-    url: string,
-): Promise<string> => {
+export const generateBlurhashFromUrl = async (url: string): Promise<string> => {
     try {
         const response = await fetch(url);
         const buffer = Buffer.from(await response.arrayBuffer());
-        const result = await generateBlurhashDataUrlFromBuffer(buffer);
+        const result = await generateBlurhashFromBuffer(buffer);
 
         log.info('Successfully generated blurhash from URL', {
             url,
@@ -68,7 +66,10 @@ export const generateBlurhashDataUrlFromUrl = async (
         });
         return result;
     } catch (error) {
-        log.error('Error fetching image from URL:', { url, error });
+        log.error('Error fetching image from URL or during generation:', {
+            url,
+            error,
+        });
 
         throw error;
     }

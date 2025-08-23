@@ -10,7 +10,7 @@ import {
     setEventPosterBlurhash,
     setEventThumbBlurhash,
 } from '@backend/events';
-import { generateBlurhashDataUrlFromUrl } from '@backend/helper/blurhash';
+import { generateBlurhashFromUrl } from '@backend/helper/blurhash';
 import { acquireLockAndReturn, releaseLock } from '@backend/locks';
 import type { DoneCallback, TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
@@ -77,10 +77,11 @@ const generateBlurhashes: TaskFunction<GenerateBlurhashesData> = async (
         });
 
         try {
-            const generatedBlurHashDataUrl =
-                await generateBlurhashDataUrlFromUrl(conference.logo_url);
+            const generatedBlurHash = await generateBlurhashFromUrl(
+                conference.logo_url,
+            );
 
-            if (!generatedBlurHashDataUrl) {
+            if (!generatedBlurHash) {
                 log.error('Error generating blurhash for conference', {
                     acronym: conference.acronym,
                 });
@@ -90,7 +91,7 @@ const generateBlurhashes: TaskFunction<GenerateBlurhashesData> = async (
             if (
                 !(await setConferenceLogoBlurhash({
                     acronym: conference.acronym,
-                    blurHash: generatedBlurHashDataUrl,
+                    blurHash: generatedBlurHash,
                 }))
             ) {
                 log.error('Error saving blurhash for conference', {
@@ -132,10 +133,11 @@ const generateBlurhashes: TaskFunction<GenerateBlurhashesData> = async (
                 return true;
             }
 
-            const generatedBlurHashDataUrl =
-                await generateBlurhashDataUrlFromUrl(event.poster_url);
+            const generatedBlurHash = await generateBlurhashFromUrl(
+                event.poster_url,
+            );
 
-            if (!generatedBlurHashDataUrl) {
+            if (!generatedBlurHash) {
                 log.error('Error generating blurhash for event poster', {
                     guid: event.guid,
                     title: event.title,
@@ -146,7 +148,7 @@ const generateBlurhashes: TaskFunction<GenerateBlurhashesData> = async (
             if (
                 !(await setEventPosterBlurhash({
                     guid: event.guid,
-                    blurHash: generatedBlurHashDataUrl,
+                    blurHash: generatedBlurHash,
                 }))
             ) {
                 log.error('Error saving blurhash for event poster', {
@@ -164,10 +166,11 @@ const generateBlurhashes: TaskFunction<GenerateBlurhashesData> = async (
                 return true;
             }
 
-            const generatedBlurHashDataUrl =
-                await generateBlurhashDataUrlFromUrl(event.thumb_url);
+            const generatedBlurHash = await generateBlurhashFromUrl(
+                event.thumb_url,
+            );
 
-            if (!generatedBlurHashDataUrl) {
+            if (!generatedBlurHash) {
                 log.error('Error generating blurhash for event thumbnail', {
                     guid: event.guid,
                     title: event.title,
@@ -178,7 +181,7 @@ const generateBlurhashes: TaskFunction<GenerateBlurhashesData> = async (
             if (
                 !(await setEventThumbBlurhash({
                     guid: event.guid,
-                    blurHash: generatedBlurHashDataUrl,
+                    blurHash: generatedBlurHash,
                 }))
             ) {
                 log.error('Error saving blurhash for event thumbnail', {
