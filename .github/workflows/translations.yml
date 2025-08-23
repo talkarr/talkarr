@@ -18,6 +18,13 @@ jobs:
     # check that the event is not from a branch to automated/update-translations
     if: ${{ ! endsWith(github.ref, vars.TRANSLATION_BRANCH) && ! startsWith(github.ref, 'refs/tags/') }}
     steps:
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -66,7 +73,5 @@ jobs:
           sign-commits: 'true'
           commit-message: '[automated] Update translations from submodule'
           branch: '${{ vars.TRANSLATION_BRANCH }}'
-          author: '${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>'
-          committer: '${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>'
           body: 'This pull request updates the translations from the submodule. You can find the changes in the [translation repo](https://github.com/talkarr/talkarr-translations)'
-          token: '${{ secrets.PULLREQUEST_PAT }}'
+          token: ${{ steps.generate-token.outputs.token }}
