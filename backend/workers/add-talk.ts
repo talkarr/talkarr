@@ -9,8 +9,8 @@ import {
     youtubeDl as normalYoutubeDl,
 } from 'youtube-dl-exec';
 
-import { startGenerateBlurhashes } from '@backend/workers/generate-blurhashes';
 // eslint-disable-next-line import/no-cycle
+import { startGenerateBlurhashes } from '@backend/workers/generate-blurhashes';
 import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 
 import {

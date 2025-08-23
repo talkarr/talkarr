@@ -1,5 +1,6 @@
 import type { Locks } from '@prisma/client';
 
+// eslint-disable-next-line import/no-cycle
 import {
     getConferencesWithMissingBlurhash,
     getEventsWithMissingBlurhash,
