@@ -1,42 +1,45 @@
-import * as blurhash from 'blurhash';
-import { createCanvas, loadImage } from 'canvas';
 import fs from 'node:fs/promises';
+import sharp from 'sharp';
 
 import rootLog from '@backend/root-log';
 
 const log = rootLog.child({ label: 'helper/blurhash' });
 
+const maximumDimension = 64;
+
 export const generateBlurhashDataUrlFromBuffer = async (
     buffer: Buffer,
 ): Promise<string> => {
-    const image = await loadImage(buffer);
+    const image = sharp(buffer);
 
-    const canvas = createCanvas(image.width, image.height);
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(image, 0, 0);
-    const imageData = ctx.getImageData(0, 0, image.width, image.height);
-    const blurredImage = blurhash.decode(
-        blurhash.encode(
-            new Uint8ClampedArray(imageData.data),
-            image.width,
-            image.height,
-            4,
-            4,
-        ),
-        image.width,
-        image.height,
-    );
+    const metadata = await image.metadata();
+    const imageWidth = metadata.width;
+    const imageHeight = metadata.height;
 
-    const blurredCanvas = createCanvas(image.width, image.height);
-    const blurredCtx = blurredCanvas.getContext('2d');
-    const blurredImageData = blurredCtx.createImageData(
-        image.width,
-        image.height,
-    );
-    blurredImageData.data.set(blurredImage);
-    blurredCtx.putImageData(blurredImageData, 0, 0);
+    if (!imageWidth || !imageHeight) {
+        throw new Error('Invalid image dimensions');
+    }
 
-    return blurredCanvas.toDataURL('image/png');
+    const scale =
+        imageWidth > imageHeight
+            ? maximumDimension / imageWidth
+            : maximumDimension / imageHeight;
+    const resizedWidth = Math.round(imageWidth * scale);
+    const resizedHeight = Math.round(imageHeight * scale);
+
+    log.info('Resizing image for blurhash generation', {
+        originalWidth: imageWidth,
+        originalHeight: imageHeight,
+        resizedWidth,
+        resizedHeight,
+    });
+
+    const resizedBuffer = await sharp(buffer)
+        .resize(resizedWidth, resizedHeight)
+        .blur(10)
+        .toBuffer();
+
+    return `data:image/png;base64,${resizedBuffer.toString('base64')}`;
 };
 
 export const generateBlurhashDataUrlFromFilepath = async (
@@ -57,7 +60,13 @@ export const generateBlurhashDataUrlFromUrl = async (
     try {
         const response = await fetch(url);
         const buffer = Buffer.from(await response.arrayBuffer());
-        return await generateBlurhashDataUrlFromBuffer(buffer);
+        const result = await generateBlurhashDataUrlFromBuffer(buffer);
+
+        log.info('Successfully generated blurhash from URL', {
+            url,
+            length: result.length,
+        });
+        return result;
     } catch (error) {
         log.error('Error fetching image from URL:', { url, error });
 

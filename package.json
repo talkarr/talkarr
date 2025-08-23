@@ -62,7 +62,6 @@
         "@ryoppippi/unplugin-typia": "^2.6.4",
         "@uidotdev/usehooks": "^2.4.1",
         "argon2": "^0.44.0",
-        "blurhash": "^2.0.5",
         "canvas": "^3.2.0",
         "cookie-parser": "^1.4.7",
         "cron-parser": "^5.3.0",

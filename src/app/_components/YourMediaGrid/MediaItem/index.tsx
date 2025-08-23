@@ -193,6 +193,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                                 : undefined
                                         }
                                         fill
+                                        sizes="300px"
                                         style={{
                                             objectFit: 'cover',
                                         }}
