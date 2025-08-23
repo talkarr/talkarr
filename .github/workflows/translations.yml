@@ -39,13 +39,13 @@ jobs:
         with:
           script: |
             const branch = process.env.TRANSLATION_BRANCH;
-            const ref = await github.git.getRef({
+            const ref = await github.rest.git.getRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: `heads/${branch}`
             }).catch(() => null);
             if (ref) {
-              await github.git.deleteRef({
+              await github.rest.git.deleteRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 ref: `heads/${branch}`
