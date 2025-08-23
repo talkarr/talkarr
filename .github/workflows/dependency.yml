@@ -13,11 +13,18 @@ jobs:
     name: Check and update licenses file
     runs-on: ubuntu-latest
     steps:
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: '${{ github.head_ref }}'
-          token: '${{ secrets.PULLREQUEST_PAT }}'
+          token: '${{ steps.generate-token.outputs.token }}'
 
       - name: Install dependencies
         uses: actions/setup-node@v4
