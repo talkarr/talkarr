@@ -1353,9 +1353,16 @@ export const setConferenceLogoBlurhash = async ({
     }
 };
 
-export const getEventsWithMissingBlurhash = async (): Promise<DbEvent[]> => {
+export const getEventsWithMissingBlurhash = async ({
+    overrideEvents,
+}: {
+    overrideEvents?: (
+        | DbEvent
+        | ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>
+    )[];
+}): Promise<DbEvent[]> => {
     try {
-        return await prisma.event.findMany({
+        const eventsFound = await prisma.event.findMany({
             where: {
                 OR: [
                     { poster_url_blur: null },
@@ -1365,6 +1372,13 @@ export const getEventsWithMissingBlurhash = async (): Promise<DbEvent[]> => {
                 ],
             },
         });
+
+        if (overrideEvents) {
+            const overrideGuids = new Set(overrideEvents.map(e => e.guid));
+            return eventsFound.filter(e => overrideGuids.has(e.guid));
+        }
+
+        return eventsFound;
     } catch (error) {
         log.error('Error getting events with missing blurhash', { error });
 
