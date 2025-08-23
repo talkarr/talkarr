@@ -33,6 +33,7 @@ export interface GenerateBlurhashesData {
     event?:
         | DbEvent
         | ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
+    force?: boolean;
 }
 
 export const check = typia.createIs<GenerateBlurhashesData>();
@@ -113,6 +114,7 @@ const generateBlurhashes: TaskFunction<GenerateBlurhashesData> = async (
     // then, generate blurhashes for event posters and thumbnails
     const eventsWithoutBlurhash = await getEventsWithMissingBlurhash({
         overrideEvents: job.data.event ? [job.data.event] : undefined,
+        force: job.data.force,
     });
 
     log.info(`Found ${eventsWithoutBlurhash.length} events without blurhash`, {
