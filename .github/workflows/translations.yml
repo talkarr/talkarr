@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 0 * * *'  # Runs daily at midnight
   workflow_dispatch:  # Allows manual triggering
+  push:
+    paths:
+      - .github/workflows/translations.yml
 
 env:
   TRANSLATION_PATH: src/translations
@@ -31,6 +34,29 @@ jobs:
           git submodule update --remote --rebase ${TRANSLATION_PATH}
           git diff --exit-code
 
+      - name: Delete existing translation branch if it exists
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const branch = process.env.TRANSLATION_BRANCH;
+            const ref = await github.git.getRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${branch}`
+            }).catch(() => null);
+            if (ref) {
+              await github.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `heads/${branch}`
+              });
+              console.log(`Deleted existing branch: ${branch}`);
+            } else {
+              console.log(`Branch ${branch} does not exist, no need to delete.`);
+            }
+        env:
+          TRANSLATION_BRANCH: ${{ vars.TRANSLATION_BRANCH }}
+
       - name: Create Pull Request if translations updated
         if: steps.check-for-translation-updates.outcome != 'success'
         uses: peter-evans/create-pull-request@v7
@@ -40,5 +66,7 @@ jobs:
           sign-commits: 'true'
           commit-message: '[automated] Update translations from submodule'
           branch: '${{ vars.TRANSLATION_BRANCH }}'
+          author: '${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>'
+          committer: '${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>'
           body: 'This pull request updates the translations from the submodule. You can find the changes in the [translation repo](https://github.com/talkarr/talkarr-translations)'
           token: '${{ secrets.PULLREQUEST_PAT }}'
