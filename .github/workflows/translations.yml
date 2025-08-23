@@ -4,9 +4,6 @@ on:
   schedule:
     - cron: '0 0 * * *'  # Runs daily at midnight
   workflow_dispatch:  # Allows manual triggering
-  push:
-    paths:
-      - .github/workflows/translations.yml
 
 env:
   TRANSLATION_PATH: src/translations
