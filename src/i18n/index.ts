@@ -19,7 +19,7 @@ i18n.use(LanguageDetector)
         supportedLngs: languages,
         lng: undefined,
         fallbackLng,
-        debug: process.env.NODE_ENV === 'development',
+        debug: process.env.NODE_ENV === 'development' && !runsOnServer,
         interpolation: {
             escapeValue: false,
         },
