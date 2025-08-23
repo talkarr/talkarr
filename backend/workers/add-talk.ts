@@ -281,11 +281,6 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         throw new Error('Error getting folder path for talk');
     }
 
-    // THIS IS FOR TESTING ONLY; REMOVE BEFORE MERGE!!!
-    if (1 + 1 === 2) {
-        return actualDone();
-    }
-
     await setIsDownloading({ eventGuid: event.guid, isDownloading: true });
 
     let exitCode: number | null = null;
