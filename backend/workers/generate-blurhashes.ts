@@ -1,4 +1,6 @@
-import type { Locks } from '@prisma/client';
+import type { Event as DbEvent, Locks } from '@prisma/client';
+
+import typia from 'typia';
 
 // eslint-disable-next-line import/no-cycle
 import {
@@ -13,6 +15,11 @@ import { acquireLockAndReturn, releaseLock } from '@backend/locks';
 import type { DoneCallback, TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/root-log';
+import type {
+    ConvertBigintToNumberType,
+    ExtendedDbEvent,
+    NormalAndConvertedDate,
+} from '@backend/types';
 
 export const taskName = 'generateBlurhashes';
 
@@ -22,7 +29,24 @@ const lock: Locks = {
     name: taskName,
 };
 
-const generateBlurhashes: TaskFunction = async (job, actualDone) => {
+export interface GenerateBlurhashesData {
+    event?:
+        | DbEvent
+        | ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>;
+}
+
+export const check = typia.createIs<GenerateBlurhashesData>();
+
+const generateBlurhashes: TaskFunction<GenerateBlurhashesData> = async (
+    job,
+    actualDone,
+) => {
+    if (!check(job.data)) {
+        log.error('Invalid data:', { data: job.data });
+
+        throw new Error('Invalid data');
+    }
+
     if (!(await acquireLockAndReturn(lock))) {
         log.error('Could not acquire lock, early returning', {
             lock,
@@ -87,9 +111,13 @@ const generateBlurhashes: TaskFunction = async (job, actualDone) => {
     }
 
     // then, generate blurhashes for event posters and thumbnails
-    const eventsWithoutBlurhash = await getEventsWithMissingBlurhash();
+    const eventsWithoutBlurhash = await getEventsWithMissingBlurhash({
+        overrideEvents: job.data.event ? [job.data.event] : undefined,
+    });
 
-    log.info(`Found ${eventsWithoutBlurhash.length} events without blurhash`);
+    log.info(`Found ${eventsWithoutBlurhash.length} events without blurhash`, {
+        override: !!job.data.event,
+    });
 
     for await (const event of eventsWithoutBlurhash) {
         log.info('Generating blurhash for event', {
@@ -192,8 +220,10 @@ const generateBlurhashes: TaskFunction = async (job, actualDone) => {
     return done();
 };
 
-export const startGenerateBlurhashes = async (): Promise<void> => {
-    await queue.enqueueJob(taskName);
+export const startGenerateBlurhashes = async (
+    data: GenerateBlurhashesData,
+): Promise<void> => {
+    await queue.enqueueJob(taskName, data);
 };
 
 queue.addWorker(taskName, { handler: generateBlurhashes, concurrency: 10 });

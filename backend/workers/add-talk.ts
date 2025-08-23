@@ -438,7 +438,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
 
         await startGenerateMissingNfo({ event });
 
-        await startGenerateBlurhashes();
+        await startGenerateBlurhashes({ event });
 
         if (stderrBuffer) {
             log.error('Error downloading video:', { stderrBuffer });
