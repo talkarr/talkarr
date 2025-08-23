@@ -13,6 +13,13 @@ jobs:
     name: Assign issue to project
     runs-on: ubuntu-latest
     steps:
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Assign bugs to the Bugs project
         if: |
           contains(github.event.issue.labels.*.name, 'bug') ||
@@ -21,7 +28,7 @@ jobs:
         uses: actions/add-to-project@v1.0.2
         with:
           project-url: 'https://github.com/orgs/talkarr/projects/1'
-          github-token: ${{ secrets.PROJECT_PAT }}
+          github-token: ${{ steps.generate-token.outputs.token }}
 
       - name: Assign features to the Features project
         if: |
@@ -32,4 +39,4 @@ jobs:
         uses: actions/add-to-project@v1.0.2
         with:
           project-url: 'https://github.com/orgs/talkarr/projects/2'
-          github-token: ${{ secrets.PROJECT_PAT }}
+          github-token: ${{ steps.generate-token.outputs.token }}
