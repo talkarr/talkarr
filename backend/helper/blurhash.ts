@@ -5,7 +5,7 @@ import rootLog from '@backend/root-log';
 
 const log = rootLog.child({ label: 'helper/blurhash' });
 
-const maximumDimension = 64;
+const maximumDimension = 96;
 
 export const generateBlurhashDataUrlFromBuffer = async (
     buffer: Buffer,
