@@ -1355,22 +1355,26 @@ export const setConferenceLogoBlurhash = async ({
 
 export const getEventsWithMissingBlurhash = async ({
     overrideEvents,
+    force = false,
 }: {
     overrideEvents?: (
         | DbEvent
         | ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>
     )[];
+    force?: boolean;
 }): Promise<DbEvent[]> => {
     try {
         const eventsFound = await prisma.event.findMany({
-            where: {
-                OR: [
-                    { poster_url_blur: null },
-                    { poster_url_blur: '' },
-                    { thumb_url_blur: null },
-                    { thumb_url_blur: '' },
-                ],
-            },
+            where: force
+                ? {}
+                : {
+                      OR: [
+                          { poster_url_blur: null },
+                          { poster_url_blur: '' },
+                          { thumb_url_blur: null },
+                          { thumb_url_blur: '' },
+                      ],
+                  },
         });
 
         if (overrideEvents) {
