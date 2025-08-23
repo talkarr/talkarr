@@ -13,6 +13,7 @@ import type { SuccessData } from '@backend/types';
 
 import useOnScreen from '@/hooks/use-on-screen';
 
+import { generateDataUrlFromBlurhashOnClientSide } from '@/utils/blurhash';
 import { generateCacheUrl } from '@/utils/cache';
 
 import { longDateFormat, specificTalkPageLink } from '@/constants';
@@ -117,6 +118,16 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
         return talkInfo.status;
     }, [initialData.status, talkInfo]);
 
+    const blurDataURL = useMemo(
+        () =>
+            initialData.poster_url_blur
+                ? generateDataUrlFromBlurhashOnClientSide({
+                      customBlurhash: initialData.poster_url_blur,
+                  })
+                : undefined,
+        [initialData.poster_url_blur],
+    );
+
     return (
         <StyledContainer
             size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
@@ -183,7 +194,12 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                             url: initialData.poster_url,
                                             cacheKey: `poster-${initialData.guid}`,
                                         })}
+                                        blurDataURL={blurDataURL}
+                                        placeholder={
+                                            blurDataURL ? 'blur' : undefined
+                                        }
                                         fill
+                                        sizes="300px"
                                         style={{
                                             objectFit: 'cover',
                                         }}

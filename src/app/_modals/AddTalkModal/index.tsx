@@ -77,6 +77,7 @@ const AddTalkModal: FC = () => {
                         variant: 'success',
                     });
                     close();
+                    setLoading(false);
                     router.refresh();
                 } else {
                     enqueueSnackbar(`Error adding talk: ${response.error}`, {
@@ -123,6 +124,7 @@ const AddTalkModal: FC = () => {
             moreWidth
             divider
             testID="add-talk-modal"
+            disableClose={loading}
         >
             <Box
                 mt={2}
@@ -220,6 +222,7 @@ const AddTalkModal: FC = () => {
                     <Box display="flex" justifyContent="flex-end">
                         <Button
                             onClick={close}
+                            disabled={loading}
                             variant="text"
                             data-testid="cancel-button"
                         >

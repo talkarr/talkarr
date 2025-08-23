@@ -259,6 +259,12 @@
                         "type": "string",
                         "example": "https://example.com/logo.jpg"
                     },
+                    "logo_url_blur": {
+                        "type": "string",
+                        "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...",
+                        "nullable": true,
+                        "description": "Blurred version of logo_url as data url"
+                    },
                     "url": {
                         "type": "string",
                         "example": "https://api.example.com"
@@ -470,6 +476,18 @@
                     "poster_url": {
                         "type": "string",
                         "example": "https://example.com/poster.jpg"
+                    },
+                    "thumb_url_blur": {
+                        "type": "string",
+                        "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...",
+                        "nullable": true,
+                        "description": "Blurred version of thumb_url as data url"
+                    },
+                    "poster_url_blur": {
+                        "type": "string",
+                        "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...",
+                        "nullable": true,
+                        "description": "Blurred version of poster_url as data url"
                     },
                     "original_language": {
                         "type": "string",

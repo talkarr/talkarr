@@ -1,5 +1,7 @@
 import type { Job as DatabaseJob } from '@prisma/client';
 
+import { CronExpressionParser } from 'cron-parser';
+
 import type { components } from '@backend/generated/schema';
 import { prisma } from '@backend/prisma';
 import rootLog from '@backend/root-log';
@@ -24,7 +26,7 @@ type QueueEventHandlers = {
 
 type QueueEvents = keyof QueueEventHandlers;
 
-type DoneCallback = (error?: Error | null) => void;
+export type DoneCallback = (error?: Error | null) => void;
 
 export type TaskFunction<T = any> = (
     job: DatabaseJobWithFunctions & { data: T },
@@ -33,7 +35,31 @@ export type TaskFunction<T = any> = (
 
 export interface JobHandler<T = any> {
     handler: TaskFunction<T>;
-    concurrency?: number; // Default is 1
+    // Default is 1
+    concurrency?: number;
+}
+
+export interface RepeatingJobBaseOptions {
+    mode: 'interval' | 'cron';
+}
+
+export interface RepeatingJobIntervalOptions extends RepeatingJobBaseOptions {
+    mode: 'interval';
+    interval: number; // in milliseconds
+    cron?: never;
+}
+
+export interface RepeatingJobCronOptions extends RepeatingJobBaseOptions {
+    mode: 'cron';
+    interval?: never;
+    cron: string; // cron expression
+}
+
+export interface RepeatingJobData {
+    name: string;
+    options: RepeatingJobIntervalOptions | RepeatingJobCronOptions;
+    data?: object | Prisma.JsonObject;
+    lastRunAt: Date | null;
 }
 
 export class Queue {
@@ -49,6 +75,7 @@ export class Queue {
             processing: [],
         };
     private jobHandlers: Record<string, JobHandler> = {};
+    private repeatingJobs: RepeatingJobData[] = [];
 
     public on<QueueEvent extends QueueEvents>(
         event: QueueEvent,
@@ -160,6 +187,33 @@ export class Queue {
         this.jobHandlers[name] = worker as JobHandler;
     }
 
+    public addRepeatingJob(
+        name: string,
+        data: object | Prisma.JsonObject,
+        options: RepeatingJobIntervalOptions | RepeatingJobCronOptions,
+    ): void {
+        if (!this.jobHandlers[name]) {
+            throw new Error(`No handler for job ${name}`);
+        }
+
+        if (
+            this.repeatingJobs.some(
+                job => job.name === name && job.options === options,
+            )
+        ) {
+            throw new Error(
+                `Repeating job ${name} with these options already exists`,
+            );
+        }
+
+        this.repeatingJobs.push({
+            name,
+            options,
+            data,
+            lastRunAt: null,
+        });
+    }
+
     private emit<QueueEvent extends QueueEvents>(
         event: QueueEvent,
         ...args: Parameters<QueueEventHandlers[QueueEvent]>
@@ -180,6 +234,54 @@ export class Queue {
 
     private async handleQueue(): Promise<void> {
         await this.handleWaitingJobs();
+        await this.handleRepeatingJobs();
+    }
+
+    private async handleRepeatingJobs(): Promise<void> {
+        const now = new Date();
+
+        for await (const job of this.repeatingJobs) {
+            let shouldRun = false;
+
+            if (job.options.mode === 'interval') {
+                if (
+                    !job.lastRunAt ||
+                    now.getTime() - job.lastRunAt.getTime() >=
+                        job.options.interval
+                ) {
+                    shouldRun = true;
+                }
+            } else if (job.options.mode === 'cron') {
+                try {
+                    const interval = CronExpressionParser.parse(
+                        job.options.cron,
+                        { currentDate: job.lastRunAt || new Date(0) },
+                    );
+                    const next = interval.next().toDate();
+
+                    if (next <= now) {
+                        shouldRun = true;
+                    }
+                } catch (error) {
+                    log.error(
+                        `Error parsing cron expression for repeating job ${job.name}:`,
+                        { error },
+                    );
+                    continue;
+                }
+            }
+
+            if (shouldRun) {
+                try {
+                    await this.enqueueJob(job.name, job.data);
+                    job.lastRunAt = now;
+                } catch (error) {
+                    log.error(`Error enqueuing repeating job ${job.name}:`, {
+                        error,
+                    });
+                }
+            }
+        }
     }
 
     private async handleWaitingJobs(): Promise<void> {

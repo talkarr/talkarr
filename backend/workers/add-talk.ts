@@ -10,6 +10,7 @@ import {
 } from 'youtube-dl-exec';
 
 // eslint-disable-next-line import/no-cycle
+import { startGenerateBlurhashes } from '@backend/workers/generate-blurhashes';
 import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 
 import {
@@ -31,7 +32,7 @@ import {
 } from '@backend/fs';
 import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
 import { acquireLockAndReturn, releaseLock } from '@backend/locks';
-import type { TaskFunction } from '@backend/queue';
+import type { DoneCallback, TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';
 import rootLog from '@backend/root-log';
 import type {
@@ -39,7 +40,6 @@ import type {
     ExtendedDbEvent,
     NormalAndConvertedDate,
 } from '@backend/types';
-import DoneCallback = jest.DoneCallback;
 
 const youtubeDl = process.env.YTDLP_PATH_OVERRIDE
     ? createYoutubeDl(process.env.YTDLP_PATH_OVERRIDE)
@@ -437,6 +437,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         });
 
         await startGenerateMissingNfo({ event });
+
+        await startGenerateBlurhashes({ event });
 
         if (stderrBuffer) {
             log.error('Error downloading video:', { stderrBuffer });

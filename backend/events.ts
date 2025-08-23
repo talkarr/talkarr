@@ -1,4 +1,9 @@
-import type { Event as DbEvent, EventInfo, File } from '@prisma/client';
+import type {
+    Conference as DbConference,
+    Event as DbEvent,
+    EventInfo,
+    File,
+} from '@prisma/client';
 
 // eslint-disable-next-line import/no-cycle
 import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
@@ -1304,5 +1309,133 @@ export const listTalkFiles = async ({
         log.error('Error listing talk files', { error, eventGuid });
 
         return [];
+    }
+};
+
+export const getConferencesWithMissingBlurhash = async (): Promise<
+    DbConference[]
+> => {
+    try {
+        return await prisma.conference.findMany({
+            where: {
+                OR: [{ logo_url_blur: null }, { logo_url_blur: '' }],
+            },
+        });
+    } catch (error) {
+        log.error('Error getting conferences with missing blurhash', { error });
+
+        return [];
+    }
+};
+
+export const setConferenceLogoBlurhash = async ({
+    acronym,
+    blurHash,
+}: {
+    acronym: DbConference['acronym'];
+    blurHash: string;
+}): Promise<boolean> => {
+    try {
+        await prisma.conference.updateMany({
+            where: {
+                acronym,
+            },
+            data: {
+                logo_url_blur: blurHash,
+            },
+        });
+
+        return true;
+    } catch (error) {
+        log.error('Error setting conference logo blurhash', { error, acronym });
+
+        return false;
+    }
+};
+
+export const getEventsWithMissingBlurhash = async ({
+    overrideEvents,
+    force = false,
+}: {
+    overrideEvents?: (
+        | DbEvent
+        | ConvertBigintToNumberType<NormalAndConvertedDate<ExtendedDbEvent>>
+    )[];
+    force?: boolean;
+}): Promise<DbEvent[]> => {
+    try {
+        const eventsFound = await prisma.event.findMany({
+            where: force
+                ? {}
+                : {
+                      OR: [
+                          { poster_url_blur: null },
+                          { poster_url_blur: '' },
+                          { thumb_url_blur: null },
+                          { thumb_url_blur: '' },
+                      ],
+                  },
+        });
+
+        if (overrideEvents) {
+            const overrideGuids = new Set(overrideEvents.map(e => e.guid));
+            return eventsFound.filter(e => overrideGuids.has(e.guid));
+        }
+
+        return eventsFound;
+    } catch (error) {
+        log.error('Error getting events with missing blurhash', { error });
+
+        return [];
+    }
+};
+
+export const setEventPosterBlurhash = async ({
+    guid,
+    blurHash,
+}: {
+    guid: DbEvent['guid'];
+    blurHash: string;
+}): Promise<boolean> => {
+    try {
+        await prisma.event.updateMany({
+            where: {
+                guid,
+            },
+            data: {
+                poster_url_blur: blurHash,
+            },
+        });
+
+        return true;
+    } catch (error) {
+        log.error('Error setting event poster blurhash', { error, guid });
+
+        return false;
+    }
+};
+
+export const setEventThumbBlurhash = async ({
+    guid,
+    blurHash,
+}: {
+    guid: DbEvent['guid'];
+    blurHash: string;
+}): Promise<boolean> => {
+    try {
+        await prisma.event.updateMany({
+            where: {
+                guid,
+            },
+            data: {
+                thumb_url_blur: blurHash,
+            },
+        });
+
+        return true;
+    } catch (error) {
+        log.error('Error setting event thumb blurhash', { error, guid });
+
+        return false;
     }
 };
