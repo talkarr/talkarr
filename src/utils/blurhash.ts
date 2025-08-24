@@ -26,6 +26,11 @@ export const generateDataUrlFromBlurhashOnClientSide = ({
         throw new Error('No custom blurhash provided');
     }
 
+    if (typeof document === 'undefined') {
+        // Not running in a browser environment
+        return undefined;
+    }
+
     const decoded = decodeCustomBlurhash(customBlurhash);
     if (!decoded) {
         throw new Error('Invalid custom blurhash format');
