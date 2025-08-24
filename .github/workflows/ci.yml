@@ -47,6 +47,11 @@ jobs:
           YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
           yarn next typegen
 
+      - name: Test if the engine version specified is correct
+        run: |
+          npx ls-engines --mode actual --save
+          git diff --exit-code package.json
+
       - name: Run ESLint for frontend
         continue-on-error: true
         id: eslint-frontend
