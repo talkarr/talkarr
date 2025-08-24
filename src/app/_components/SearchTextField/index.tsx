@@ -175,7 +175,11 @@ const SearchTextField: FC<CustomTextFieldProps> = ({
                                 ]
                             }
                         </ListItemIcon>
-                        <ListItemText primary={sortKey} />
+                        <ListItemText
+                            primary={t(
+                                `enums.searchTextFieldSortMethod.${sortKey}`,
+                            )}
+                        />
                     </MenuItem>
                 ))}
             </Menu>
