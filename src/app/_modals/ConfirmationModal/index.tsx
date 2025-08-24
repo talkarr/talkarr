@@ -25,8 +25,10 @@ export interface ConfirmationModalConfig<OptionKeys extends string = string> {
         [key in OptionKeys]: string;
     };
     onConfirm:
-        | (() => void)
-        | ((options?: { [key in OptionKeys]: boolean }) => void);
+        | (() => Promise<void> | void)
+        | ((options?: {
+              [key in OptionKeys]: boolean;
+          }) => Promise<void> | void);
     onCancel?: () => void;
     alignMessage?: TypographyProps['textAlign'];
     confirmColor?: ButtonProps['color'];
@@ -47,6 +49,7 @@ const ConfirmationModal: FC = () => {
         confirmationModal || {};
 
     const [modalState, setModalState] = useState<Record<string, boolean>>({});
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (options) {
@@ -71,8 +74,24 @@ const ConfirmationModal: FC = () => {
     };
 
     const handleConfirm = (): void => {
-        onConfirm?.(modalState);
-        closeConfirmationModal();
+        if (loading) {
+            return;
+        }
+
+        if (!onConfirm) {
+            closeConfirmationModal();
+            return;
+        }
+
+        setLoading(true);
+        const result = onConfirm?.(modalState);
+        if (result instanceof Promise) {
+            result.then(() => {
+                closeConfirmationModal();
+            });
+        } else {
+            closeConfirmationModal();
+        }
     };
 
     return (
@@ -81,6 +100,7 @@ const ConfirmationModal: FC = () => {
             onClose={handleCancel}
             title={title}
             testID="confirmation-modal"
+            disableClose={loading}
         >
             <Box>
                 <Typography variant="body1" textAlign={alignMessage || 'left'}>
@@ -108,6 +128,7 @@ const ConfirmationModal: FC = () => {
                 <Box mt={2} display="flex" justifyContent="flex-end" gap={1}>
                     <Button
                         onClick={handleCancel}
+                        disabled={loading}
                         variant="text"
                         data-testid="cancel-button"
                         startIcon={confirmationModal?.cancelIcon}
@@ -119,6 +140,7 @@ const ConfirmationModal: FC = () => {
                     </Button>
                     <Button
                         onClick={handleConfirm}
+                        loading={loading}
                         variant="text"
                         color={confirmationModal?.confirmColor || 'primary'}
                         startIcon={confirmationModal?.confirmIcon}
