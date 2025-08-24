@@ -387,7 +387,10 @@ export const deleteFilesForEvent = async ({
 
             try {
                 await fs_promises.unlink(file.path);
-                log.info(`Deleted file ${file.path}`, { event });
+                log.info(`Deleted file ${file.path}`, {
+                    guid: event.guid,
+                    title: event.title,
+                });
                 await prisma.file.delete({
                     where: {
                         path: file.path,
