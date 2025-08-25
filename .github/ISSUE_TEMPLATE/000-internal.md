@@ -1,5 +1,5 @@
 ---
-name: Internal Issue
+name: 🚫 Internal Issue
 about: DO NOT USE THIS. ISSUES USING THIS WILL BE CLOSED.
 assignees: CommanderRedYT
 
