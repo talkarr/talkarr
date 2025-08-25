@@ -74,6 +74,7 @@ export const wrapApiCall =
                         ? error.message
                         : 'Unknown error',
                 isFromTryCatch: true,
+                originalError: error,
             } as ReturnType<T>;
         }
     };
