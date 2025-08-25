@@ -1,6 +1,6 @@
 import type { RequestBody } from '@backend/types';
 
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 export type UserLoginBody = RequestBody<'/user/login'>;
 
@@ -22,4 +22,4 @@ export type LoginUserResponse =
     | undefined;
 
 export const loginUser: (body: UserLoginBody) => Promise<LoginUserResponse> =
-    pLoginUser;
+    wrapApiCall(pLoginUser);

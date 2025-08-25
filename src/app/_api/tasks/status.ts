@@ -1,4 +1,4 @@
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pGetTaskStatus = async () => {
@@ -18,4 +18,4 @@ export type GetTaskStatusResponse =
     | undefined;
 
 export const getTaskStatus: () => Promise<GetTaskStatusResponse> =
-    pGetTaskStatus;
+    wrapApiCall(pGetTaskStatus);

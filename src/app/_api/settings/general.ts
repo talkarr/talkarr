@@ -1,6 +1,6 @@
 import type { RequestBody } from '@backend/types';
 
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pGetGeneralSettings = async () => {
@@ -23,7 +23,7 @@ export type GetGeneralSettingsResponse =
     | undefined;
 
 export const getGeneralSettings: () => Promise<GetGeneralSettingsResponse> =
-    pGetGeneralSettings;
+    wrapApiCall(pGetGeneralSettings);
 
 export type SetGeneralSettingsParams = RequestBody<'/settings/general/config'>;
 
@@ -49,4 +49,4 @@ export type SetGeneralSettingsResponse =
 
 export const setGeneralSettings: (
     body: SetGeneralSettingsParams,
-) => Promise<SetGeneralSettingsResponse> = pSetGeneralSettings;
+) => Promise<SetGeneralSettingsResponse> = wrapApiCall(pSetGeneralSettings);

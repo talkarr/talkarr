@@ -1,6 +1,6 @@
 import type { RequestParams } from '@backend/types';
 
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 export type SearchEventsArgs = RequestParams<'/talks/search'>;
 
@@ -32,4 +32,4 @@ export type SearchEventsResponse =
 
 export const searchEvents: (
     query: SearchEventsArgs,
-) => Promise<SearchEventsResponse> = pSearchEvents;
+) => Promise<SearchEventsResponse> = wrapApiCall(pSearchEvents);
