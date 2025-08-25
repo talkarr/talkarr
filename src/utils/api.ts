@@ -58,12 +58,6 @@ const api =
               baseUrl: '/api',
           });
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const createErrorResponse = (message: string) => ({
-    success: false,
-    message,
-});
-
 export const wrapApiCall =
     <T extends (...args: any[]) => Promise<any>>(
         fn: T,
@@ -73,11 +67,14 @@ export const wrapApiCall =
             return await fn(...args);
         } catch (error) {
             console.error(`[${tag}] Error in API call:`, error);
-            return createErrorResponse(
-                error && typeof error === 'object' && 'message' in error
-                    ? error.message
-                    : 'Unknown error',
-            ) as ReturnType<T>;
+            return {
+                success: false,
+                message:
+                    error && typeof error === 'object' && 'message' in error
+                        ? error.message
+                        : 'Unknown error',
+                isFromTryCatch: true,
+            } as ReturnType<T>;
         }
     };
 
