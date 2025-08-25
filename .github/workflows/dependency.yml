@@ -44,7 +44,7 @@ jobs:
 
       - name: If patch-package failed, add comment on PR
         if: ${{ steps.patch-package.outcome != 'success' && github.event_name == 'pull_request' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const prNumber = context.payload.pull_request.number;
@@ -68,7 +68,7 @@ jobs:
 
       - name: If patch-package did not fail, remove previous comment
         if: ${{ steps.patch-package.outcome == 'success' && github.event_name == 'pull_request' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const prNumber = context.payload.pull_request.number;
