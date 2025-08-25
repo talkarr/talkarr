@@ -1,6 +1,6 @@
 import type { RequestBody } from '@backend/types';
 
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 export type VerifyJsonImportBody = RequestBody<'/talks/import/verify'>;
 
@@ -23,7 +23,7 @@ export type VerifyJsonImportResponse =
 
 export const verifyJsonImport: (
     body: VerifyJsonImportBody,
-) => Promise<VerifyJsonImportResponse> = pVerifyJsonImport;
+) => Promise<VerifyJsonImportResponse> = wrapApiCall(pVerifyJsonImport);
 
 export type ImportJsonBody = RequestBody<'/talks/import'>;
 
@@ -43,4 +43,4 @@ const pImportJson = async (body: ImportJsonBody) => {
 export type ImportJsonResponse = Awaited<ReturnType<typeof pImportJson>>;
 
 export const importJson: (body: ImportJsonBody) => Promise<ImportJsonResponse> =
-    pImportJson;
+    wrapApiCall(pImportJson);

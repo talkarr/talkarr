@@ -58,6 +58,27 @@ const api =
               baseUrl: '/api',
           });
 
+export const wrapApiCall =
+    <T extends (...args: any[]) => Promise<any>>(
+        fn: T,
+    ): ((...args: Parameters<T>) => Promise<ReturnType<T> | undefined>) =>
+    async (...args: Parameters<T>): Promise<ReturnType<T> | undefined> => {
+        try {
+            return await fn(...args);
+        } catch (error) {
+            console.error(`[${tag}] Error in API call:`, error);
+            return {
+                success: false,
+                message:
+                    error && typeof error === 'object' && 'message' in error
+                        ? error.message
+                        : 'Unknown error',
+                isFromTryCatch: true,
+                originalError: error,
+            } as ReturnType<T>;
+        }
+    };
+
 api.use(apiMiddleware);
 
 export default api;

@@ -1,6 +1,6 @@
 import type { RequestBody } from '@backend/types';
 
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 export type AddEventBody = RequestBody<'/talks/add'>;
 
@@ -22,4 +22,4 @@ export type AddEventResponse =
     | undefined;
 
 export const addEvent: (body: AddEventBody) => Promise<AddEventResponse> =
-    pAddEvent;
+    wrapApiCall(pAddEvent);

@@ -1,6 +1,6 @@
 import type { RequestBody, RequestParams } from '@backend/types';
 
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 export type MediaManagementFilesArgs =
     RequestParams<'/settings/mediamanagement/files'>;
@@ -30,7 +30,7 @@ export type ListFilesResponse =
 
 export const listFiles: (
     query: MediaManagementFilesArgs,
-) => Promise<ListFilesResponse> = pListFiles;
+) => Promise<ListFilesResponse> = wrapApiCall(pListFiles);
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pGetConfig = async () => {
@@ -50,7 +50,8 @@ export type GetConfigResponse =
     | Awaited<ReturnType<typeof pGetConfig>>
     | undefined;
 
-export const getConfig: () => Promise<GetConfigResponse> = pGetConfig;
+export const getConfig: () => Promise<GetConfigResponse> =
+    wrapApiCall(pGetConfig);
 
 export type MediaManagementAddFolderArgs =
     RequestBody<'/settings/mediamanagement/add'>;
@@ -77,7 +78,7 @@ export type AddFolderResponse =
 
 export const addFolder: (
     query: MediaManagementAddFolderArgs,
-) => Promise<AddFolderResponse> = pAddFolder;
+) => Promise<AddFolderResponse> = wrapApiCall(pAddFolder);
 
 export type MediaManagementRemoveFolderArgs =
     RequestBody<'/settings/mediamanagement/remove'>;
@@ -104,7 +105,7 @@ export type RemoveFolderResponse =
 
 export const removeFolder: (
     query: MediaManagementRemoveFolderArgs,
-) => Promise<RemoveFolderResponse> = pRemoveFolder;
+) => Promise<RemoveFolderResponse> = wrapApiCall(pRemoveFolder);
 
 export type MediaManagementRootFolderFixArgs =
     RequestBody<'/settings/mediamanagement/root-folder-fix'>;
@@ -131,4 +132,4 @@ export type RootFolderFixResponse =
 
 export const rootFolderFix: (
     query: MediaManagementRootFolderFixArgs,
-) => Promise<RootFolderFixResponse> = pRootFolderFix;
+) => Promise<RootFolderFixResponse> = wrapApiCall(pRootFolderFix);
