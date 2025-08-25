@@ -1,6 +1,6 @@
 import type { RequestBody } from '@backend/types';
 
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 export type RegisterInitialUserBody = RequestBody<'/user/register-initial'>;
 
@@ -25,4 +25,4 @@ export type RegisterInitialUserResponse =
 
 export const registerInitialUser: (
     body: RegisterInitialUserBody,
-) => Promise<RegisterInitialUserResponse> = pRegisterInitialUser;
+) => Promise<RegisterInitialUserResponse> = wrapApiCall(pRegisterInitialUser);

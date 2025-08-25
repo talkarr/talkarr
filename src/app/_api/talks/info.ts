@@ -1,6 +1,6 @@
 import type { RequestParams } from '@backend/types';
 
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 export type TalksInfoParams = RequestParams<'/talks/info'>;
 
@@ -25,4 +25,4 @@ export type TalkInfoResponse =
     | undefined;
 
 export const talkInfo: (query: TalksInfoParams) => Promise<TalkInfoResponse> =
-    pTalkInfo;
+    wrapApiCall(pTalkInfo);

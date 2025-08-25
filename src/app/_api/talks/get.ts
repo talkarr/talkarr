@@ -1,6 +1,6 @@
 import type { RequestParams } from '@backend/types';
 
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 export type GetTalkParams = RequestParams<'/talks/get'>;
 
@@ -22,4 +22,4 @@ const pGetTalk = async (query: GetTalkParams) => {
 export type GetTalkResponse = Awaited<ReturnType<typeof pGetTalk>> | undefined;
 
 export const getTalk: (query: GetTalkParams) => Promise<GetTalkResponse> =
-    pGetTalk;
+    wrapApiCall(pGetTalk);
