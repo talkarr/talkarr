@@ -45,7 +45,6 @@ jobs:
       - name: Install dependencies
         run: |
           YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
-          yarn next typegen
 
       - name: Test if the engine version specified is correct
         run: |

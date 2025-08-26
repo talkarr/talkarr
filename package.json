@@ -38,7 +38,11 @@
         "typecheck": "yarn run typecheck:web && yarn run typecheck:backend",
         "typecheck:backend": "tsc --noEmit --project backend/tsconfig.json",
         "typecheck:web": "tsc --noEmit",
-        "typeorm": "typeorm-ts-node-commonjs"
+        "typeorm": "typeorm-ts-node-commonjs",
+        "typegen": "next typegen",
+        "typegen:with-check": "if [ ! -f next-env.d.ts ]; then yarn typegen; fi",
+        "prebuild": "yarn typegen:with-check",
+        "pretypecheck": "yarn typegen:with-check"
     },
     "nodemonConfig": {
         "ext": "ts,json",
