@@ -43,7 +43,7 @@ Run the following command:
 yarn version --minor # or --patch or --major
 ```
 
-This will then create a commit "Publish talkarr vX.Y.Z" and a tag "vX.Y.Z".
+This will then create a commit "Publish Talkarr vX.Y.Z" and a tag "vX.Y.Z".
 These can be pushed to the remote repository with:
 
 ```bash

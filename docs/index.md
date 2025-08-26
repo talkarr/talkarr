@@ -1,4 +1,4 @@
-# talkarr
+# Talkarr
 
 Talkarr is a *arr like program that allows you to download and manage videos from media.ccc.de.
 
