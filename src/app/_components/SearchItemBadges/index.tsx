@@ -5,13 +5,13 @@ import type { VideoBadgeType } from '@components/VideoMetaBadge';
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
 
+import Grid from '@mui/material/Grid';
+
 import TimeIcon from '@mui/icons-material/AccessTime';
 import DateIcon from '@mui/icons-material/DateRange';
 import LanguageIcon from '@mui/icons-material/Language';
 import PersonIcon from '@mui/icons-material/Person';
 import TagIcon from '@mui/icons-material/Tag';
-
-import Grid from '@mui/material/Grid';
 
 import moment from 'moment';
 

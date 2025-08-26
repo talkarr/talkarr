@@ -4,10 +4,10 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 
-import DeleteIcon from '@mui/icons-material/Delete';
-
 import { alpha, styled } from '@mui/material';
 import Box from '@mui/material/Box';
+
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { useSnackbar } from 'notistack';
 

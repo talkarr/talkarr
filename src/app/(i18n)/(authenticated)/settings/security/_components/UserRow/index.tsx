@@ -1,12 +1,12 @@
 import type { FC } from 'react';
 
-import EditIcon from '@mui/icons-material/Edit';
-
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+
+import EditIcon from '@mui/icons-material/Edit';
 
 import type { components } from '@backend/generated/schema';
 

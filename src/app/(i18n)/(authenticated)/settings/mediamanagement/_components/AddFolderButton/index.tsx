@@ -6,9 +6,9 @@ import type { FC } from 'react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import AddFolderIcon from '@mui/icons-material/Folder';
-
 import Button from '@mui/material/Button';
+
+import AddFolderIcon from '@mui/icons-material/Folder';
 
 import { useUiStore } from '@/providers/ui-store-provider';
 

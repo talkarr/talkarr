@@ -4,10 +4,6 @@ import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import FileOpenIcon from '@mui/icons-material/FileOpen';
-import UploadIcon from '@mui/icons-material/Upload';
-import WarningIcon from '@mui/icons-material/Warning';
-
 import { alpha, styled, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -19,6 +15,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Typography from '@mui/material/Typography';
+
+import FileOpenIcon from '@mui/icons-material/FileOpen';
+import UploadIcon from '@mui/icons-material/Upload';
+import WarningIcon from '@mui/icons-material/Warning';
 
 import type { ExtractSuccessData } from '@backend/types';
 

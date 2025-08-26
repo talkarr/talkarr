@@ -125,8 +125,8 @@ export default tseslint.config(
                     ["\\u0000$"],
                     ["^next"],
                     ["^react"],
-                    ['^@mui/icons-material'],
                     ['^@mui/material$', '^@mui/material/'],
+                    ['^@mui/icons-material'],
                     ['^@mui/'],
                     ["^\\w"],
                     [

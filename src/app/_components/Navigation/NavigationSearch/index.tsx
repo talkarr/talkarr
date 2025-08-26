@@ -6,10 +6,10 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import SearchIcon from '@mui/icons-material/SearchRounded';
-
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
+
+import SearchIcon from '@mui/icons-material/SearchRounded';
 
 import { addTalksPageWithSearchLink } from '@/constants';
 

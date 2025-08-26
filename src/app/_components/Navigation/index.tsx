@@ -11,8 +11,6 @@ import type { FC, PropsWithChildren } from 'react';
 import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-
 import { useTheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -22,6 +20,8 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
+
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import { appbarHeight, drawerWidth } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';

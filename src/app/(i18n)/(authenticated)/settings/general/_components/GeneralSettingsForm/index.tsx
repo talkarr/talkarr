@@ -4,14 +4,14 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import AvatarIcon from '@mui/icons-material/AccountCircle';
-import SaveIcon from '@mui/icons-material/SaveRounded';
-
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
+
+import AvatarIcon from '@mui/icons-material/AccountCircle';
+import SaveIcon from '@mui/icons-material/SaveRounded';
 
 import { useSnackbar } from 'notistack';
 

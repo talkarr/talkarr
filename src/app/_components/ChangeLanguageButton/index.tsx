@@ -3,10 +3,10 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 
-import TranslateIcon from '@mui/icons-material/Translate';
-
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
+
+import TranslateIcon from '@mui/icons-material/Translate';
 
 import type { BoxProps } from '@mui/material';
 

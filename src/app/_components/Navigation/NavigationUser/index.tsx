@@ -6,8 +6,6 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LogoutIcon from '@mui/icons-material/Logout';
-
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
@@ -17,6 +15,8 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
+
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import { useSnackbar } from 'notistack';
 
