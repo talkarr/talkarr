@@ -3,6 +3,8 @@
 import type { FC } from 'react';
 import { useEffect } from 'react';
 
+import Box from '@mui/material/Box';
+
 import TalkFiles from '@/app/(i18n)/(authenticated)/talks/[slug]/_components/TalkFiles';
 import TalkHeader from '@/app/(i18n)/(authenticated)/talks/[slug]/_components/TalkHeader';
 import TalkToolbar, {
@@ -11,8 +13,6 @@ import TalkToolbar, {
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
 
 import { useApiStore } from '@/providers/api-store-provider';
-
-import Box from '@mui/material/Box';
 
 export interface TalkWrapperProps {
     initialData: SingleTalkData;

@@ -3,9 +3,9 @@
 import type { FC, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { closeSnackbar, SnackbarProvider } from 'notistack';
-
 import Button from '@mui/material/Button';
+
+import { closeSnackbar, SnackbarProvider } from 'notistack';
 
 const NotistackProvider: FC<PropsWithChildren> = ({ children }) => {
     const { t } = useTranslation();

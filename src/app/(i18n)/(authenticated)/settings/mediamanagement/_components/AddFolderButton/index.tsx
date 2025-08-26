@@ -6,10 +6,11 @@ import type { FC } from 'react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useUiStore } from '@/providers/ui-store-provider';
-
 import AddFolderIcon from '@mui/icons-material/Folder';
+
 import Button from '@mui/material/Button';
+
+import { useUiStore } from '@/providers/ui-store-provider';
 
 const AddFolderButton: FC = () => {
     const { t } = useTranslation();

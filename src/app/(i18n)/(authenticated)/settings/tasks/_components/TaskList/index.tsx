@@ -4,16 +4,16 @@ import type { FC } from 'react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+
 import moment from 'moment';
 
 import type { TasksData } from '@/app/(i18n)/(authenticated)/settings/tasks/page';
 
 import { longDateTimeFormat } from '@/constants';
 import { useApiStore } from '@/providers/api-store-provider';
-
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 
 export interface TaskListProps {
     initialData: TasksData;

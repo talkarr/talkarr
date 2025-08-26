@@ -1,12 +1,12 @@
 import type { Metadata, NextPage } from 'next';
 
+import Box from '@mui/material/Box';
+
 import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { listEvents } from '@/app/_api/talks/list';
 import AddTalksPage from '@/app/(i18n)/(authenticated)/talks/add/_components/AddTalksPage';
 
 import { getServerSideTranslation } from '@/i18n/server-side';
-
-import Box from '@mui/material/Box';
 
 interface PageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

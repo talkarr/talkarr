@@ -4,20 +4,10 @@ import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { ExtractSuccessData } from '@backend/types';
-
-import { getConfig } from '@/app/_api/settings/mediamanagement';
-import type { ImportJsonResponse } from '@/app/_api/talks/import';
-import { importJson, verifyJsonImport } from '@/app/_api/talks/import';
-import ImportJsonRow from '@/app/(i18n)/(authenticated)/talks/import/_components/ImportJsonRow';
-
-import { stripInvalidCharsForDataAttribute } from '@/utils/string';
-
-import { monoFont } from '@/theme';
-
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import UploadIcon from '@mui/icons-material/Upload';
 import WarningIcon from '@mui/icons-material/Warning';
+
 import { alpha, styled, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -29,6 +19,18 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Typography from '@mui/material/Typography';
+
+import type { ExtractSuccessData } from '@backend/types';
+
+import { getConfig } from '@/app/_api/settings/mediamanagement';
+import type { ImportJsonResponse } from '@/app/_api/talks/import';
+import { importJson, verifyJsonImport } from '@/app/_api/talks/import';
+import ImportJsonRow from '@/app/(i18n)/(authenticated)/talks/import/_components/ImportJsonRow';
+
+import { stripInvalidCharsForDataAttribute } from '@/utils/string';
+
+import { monoFont } from '@/theme';
+
 import { useDebounce } from '@uidotdev/usehooks';
 
 const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({

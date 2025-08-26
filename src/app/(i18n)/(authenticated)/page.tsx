@@ -2,6 +2,10 @@ import Link from 'next/link';
 
 import type { FC } from 'react';
 
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
 import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { listEvents } from '@/app/_api/talks/list';
 
@@ -10,9 +14,6 @@ import { getServerSideTranslation } from '@/i18n/server-side';
 
 import YourMediaColorExplanation from '@components/YourMediaColorExplanation';
 import YourMediaGrid from '@components/YourMediaGrid';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 
 const Home: FC = async () => {
     const { t } = await getServerSideTranslation();

@@ -1,12 +1,12 @@
 'use client';
 
-import type { IconButtonProps } from '@mui/material';
-
 import type { FC } from 'react';
 import { useMemo } from 'react';
 
 import { alpha, useTheme } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
+
+import type { IconButtonProps } from '@mui/material';
 
 const alphaFactor = 0.175; // 17.5% alpha
 

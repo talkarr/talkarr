@@ -4,6 +4,10 @@ import type { FC } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useTheme } from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
 import type { MediaItemStatus } from '@backend/talk-utils';
 import {
     generateStatusMap,
@@ -12,10 +16,6 @@ import {
 import type { SuccessData, SuccessResponse } from '@backend/types';
 
 import { useApiStore } from '@/providers/api-store-provider';
-
-import { useTheme } from '@mui/material';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 
 export interface YourMediaColorExplanationProps {
     initialStatusCount: SuccessData<'/talks/list', 'get'>['statusCount'];

@@ -1,11 +1,5 @@
 import type { Metadata, NextPage } from 'next';
 
-import { getConfig } from '@/app/_api/settings/mediamanagement';
-import AddFolderButton from '@/app/(i18n)/(authenticated)/settings/mediamanagement/_components/AddFolderButton';
-import FolderRow from '@/app/(i18n)/(authenticated)/settings/mediamanagement/_components/FolderRow';
-
-import { getServerSideTranslation } from '@/i18n/server-side';
-
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,6 +7,12 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+
+import { getConfig } from '@/app/_api/settings/mediamanagement';
+import AddFolderButton from '@/app/(i18n)/(authenticated)/settings/mediamanagement/_components/AddFolderButton';
+import FolderRow from '@/app/(i18n)/(authenticated)/settings/mediamanagement/_components/FolderRow';
+
+import { getServerSideTranslation } from '@/i18n/server-side';
 
 export const generateMetadata = async (): Promise<Metadata> => {
     const { t } = await getServerSideTranslation();

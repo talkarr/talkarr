@@ -1,14 +1,16 @@
 'use client';
 
-import type { BoxProps } from '@mui/material';
-
 import type { FC } from 'react';
 import { useState } from 'react';
 
-import LanguageChanger from '@components/LanguageChanger';
 import TranslateIcon from '@mui/icons-material/Translate';
+
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
+
+import type { BoxProps } from '@mui/material';
+
+import LanguageChanger from '@components/LanguageChanger';
 
 const ChangeLanguageButton: FC<BoxProps> = props => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

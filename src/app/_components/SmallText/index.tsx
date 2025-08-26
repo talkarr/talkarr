@@ -1,7 +1,6 @@
-import type { TypographyProps } from '@mui/material/Typography';
-
 import type { FC } from 'react';
 
+import type { TypographyProps } from '@mui/material/Typography';
 import Typography from '@mui/material/Typography';
 
 const SmallText: FC<TypographyProps> = ({ children, ...props }) => (

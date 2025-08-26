@@ -11,6 +11,18 @@ import type { FC, PropsWithChildren } from 'react';
 import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+
+import { useTheme } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
+
 import { appbarHeight, drawerWidth } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
 
@@ -21,16 +33,6 @@ import { navigationItems } from '@components/Navigation/navigation';
 import NavigationItem from '@components/Navigation/NavigationItem';
 import NavigationSearch from '@components/Navigation/NavigationSearch';
 import NavigationUser from '@components/Navigation/NavigationUser';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { useTheme } from '@mui/material';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
 
 const Navigation: FC<PropsWithChildren> = ({ children }) => {
     const theme = useTheme();

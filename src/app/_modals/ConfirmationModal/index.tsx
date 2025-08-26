@@ -1,22 +1,23 @@
 'use client';
 
-import type { ButtonProps } from '@mui/material';
-import type { TypographyProps } from '@mui/material/Typography';
-
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useUiStore } from '@/providers/ui-store-provider';
-
-import BaseModal from '@components/CustomModal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Switch from '@mui/material/Switch';
+import type { TypographyProps } from '@mui/material/Typography';
 import Typography from '@mui/material/Typography';
+
+import type { ButtonProps } from '@mui/material';
+
+import { useUiStore } from '@/providers/ui-store-provider';
+
+import BaseModal from '@components/CustomModal';
 
 export interface ConfirmationModalConfig<OptionKeys extends string = string> {
     title: string;

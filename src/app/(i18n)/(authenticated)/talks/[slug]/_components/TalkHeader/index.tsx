@@ -4,6 +4,9 @@ import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
 import moment from 'moment';
 
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
@@ -15,8 +18,6 @@ import { longDateFormat, yearOnlyFormat } from '@/constants';
 import SmallText from '@components/SmallText';
 import TalkImage from '@components/TalkImage';
 import VideoMetaBadge from '@components/VideoMetaBadge';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 
 export interface TalkHeaderProps {
     data: SingleTalkData;

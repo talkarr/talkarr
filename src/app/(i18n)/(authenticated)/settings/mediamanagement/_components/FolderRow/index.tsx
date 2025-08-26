@@ -6,6 +6,13 @@ import type { FC } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import DeleteIcon from '@mui/icons-material/Delete';
+import ErrorIcon from '@mui/icons-material/Error';
+
+import IconButton from '@mui/material/IconButton';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+
 import { useSnackbar } from 'notistack';
 import prettyBytes from 'pretty-bytes';
 
@@ -16,11 +23,6 @@ import { removeFolder } from '@/app/_api/settings/mediamanagement';
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import FancyIconButton from '@components/FancyIconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ErrorIcon from '@mui/icons-material/Error';
-import IconButton from '@mui/material/IconButton';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
 
 export interface FolderRowProps {
     folderData: SuccessData<

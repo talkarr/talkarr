@@ -4,14 +4,8 @@ import type { FC } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useSnackbar } from 'notistack';
-
-import { addFolder, listFiles } from '@/app/_api/settings/mediamanagement';
-
-import { useUiStore } from '@/providers/ui-store-provider';
-
-import BaseModal from '@components/CustomModal';
 import AddIcon from '@mui/icons-material/Add';
+
 import { alpha, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -21,6 +15,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
+
+import { useSnackbar } from 'notistack';
+
+import { addFolder, listFiles } from '@/app/_api/settings/mediamanagement';
+
+import { useUiStore } from '@/providers/ui-store-provider';
+
+import BaseModal from '@components/CustomModal';
 
 const StyledList = styled(List)(({ theme }) => ({
     width: '100%',

@@ -1,11 +1,5 @@
 import type { Metadata, NextPage } from 'next';
 
-import { listUsers } from '@/app/_api/settings/security';
-import UserRow from '@/app/(i18n)/(authenticated)/settings/security/_components/UserRow';
-
-import { getServerSideTranslation } from '@/i18n/server-side';
-
-import MaterialTable from '@components/MaterialTable';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -14,6 +8,13 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+
+import { listUsers } from '@/app/_api/settings/security';
+import UserRow from '@/app/(i18n)/(authenticated)/settings/security/_components/UserRow';
+
+import { getServerSideTranslation } from '@/i18n/server-side';
+
+import MaterialTable from '@components/MaterialTable';
 
 export const generateMetadata = async (): Promise<Metadata> => {
     const { t } = await getServerSideTranslation();

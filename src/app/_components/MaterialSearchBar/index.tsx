@@ -1,11 +1,11 @@
 'use client';
 
-import type { TextFieldProps } from '@mui/material';
-
 import type { FC } from 'react';
 
 import { styled } from '@mui/material';
 import TextField from '@mui/material/TextField';
+
+import type { TextFieldProps } from '@mui/material';
 
 const InternalMaterialSearchBar = styled(TextField)(({ theme }) => ({
     // make background grey

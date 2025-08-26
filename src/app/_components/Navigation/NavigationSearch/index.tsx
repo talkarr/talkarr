@@ -6,12 +6,14 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import SearchIcon from '@mui/icons-material/SearchRounded';
+
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+
 import { addTalksPageWithSearchLink } from '@/constants';
 
 import MaterialSearchBar from '@components/MaterialSearchBar';
-import SearchIcon from '@mui/icons-material/SearchRounded';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 
 const NavigationSearch: FC = () => {
     const router = useRouter();

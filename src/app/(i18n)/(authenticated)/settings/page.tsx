@@ -1,11 +1,12 @@
 import type { Metadata, NextPage } from 'next';
 import Link from 'next/link';
 
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
 import { getServerSideTranslation } from '@/i18n/server-side';
 
 import { settings } from '@components/Navigation/navigation';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 
 export const generateMetadata = async (): Promise<Metadata> => {
     const { t } = await getServerSideTranslation();

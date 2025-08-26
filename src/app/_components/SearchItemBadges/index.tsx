@@ -5,6 +5,14 @@ import type { VideoBadgeType } from '@components/VideoMetaBadge';
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
 
+import TimeIcon from '@mui/icons-material/AccessTime';
+import DateIcon from '@mui/icons-material/DateRange';
+import LanguageIcon from '@mui/icons-material/Language';
+import PersonIcon from '@mui/icons-material/Person';
+import TagIcon from '@mui/icons-material/Tag';
+
+import Grid from '@mui/material/Grid';
+
 import moment from 'moment';
 
 import { formatLanguageCode, formatVideoDuration } from '@/utils/string';
@@ -13,12 +21,6 @@ import { longDateFormat } from '@/constants';
 import type { TalkData } from '@/stores/ui-store';
 
 import VideoMetaBadge from '@components/VideoMetaBadge';
-import TimeIcon from '@mui/icons-material/AccessTime';
-import DateIcon from '@mui/icons-material/DateRange';
-import LanguageIcon from '@mui/icons-material/Language';
-import PersonIcon from '@mui/icons-material/Person';
-import TagIcon from '@mui/icons-material/Tag';
-import Grid from '@mui/material/Grid';
 
 export interface SearchItemBadgesProps {
     item: TalkData | null;

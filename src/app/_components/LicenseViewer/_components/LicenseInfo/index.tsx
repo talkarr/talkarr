@@ -4,14 +4,15 @@ import type { FC } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useUiStore } from '@/providers/ui-store-provider';
-
 import OpenExternalIcon from '@mui/icons-material/OpenInNewRounded';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+
+import { useUiStore } from '@/providers/ui-store-provider';
 
 export interface LicenseInfoProps {
     maxHeight?: string;
