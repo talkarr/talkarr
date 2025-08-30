@@ -1,10 +1,11 @@
 import type { FC } from 'react';
 
+import Box from '@mui/material/Box';
+
 import { licenseList } from '@/utils/licenes';
 
 import LicenseInfo from '@components/LicenseViewer/_components/LicenseInfo';
 import LicenseItem from '@components/LicenseViewer/_components/LicenseItem';
-import Box from '@mui/material/Box';
 
 export interface License {
     name: string;

@@ -1,11 +1,11 @@
-import type { TypographyProps } from '@mui/material/Typography';
-
 import type { FC } from 'react';
 
-import SmallText from '@components/SmallText';
 import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
+import type { TypographyProps } from '@mui/material/Typography';
 import Typography from '@mui/material/Typography';
+
+import SmallText from '@components/SmallText';
 
 export interface TalkAttributeProps {
     name: string;

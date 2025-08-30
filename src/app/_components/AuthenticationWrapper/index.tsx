@@ -4,6 +4,9 @@ import { redirect } from 'next/navigation';
 import type { FC } from 'react';
 import React from 'react';
 
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
 import { getAppStatus } from '@/app/_api/information';
 import { getUserInfo } from '@/app/_api/user/info';
 
@@ -12,8 +15,6 @@ import { getServerSideTranslation } from '@/i18n/server-side';
 
 import AppNotAvailable from '@components/AppNotAvailable';
 import AuthenticationDataUpdater from '@components/AuthenticationDataUpdater';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 
 export interface AuthenticationWrapperProps {
     children: React.ReactNode;

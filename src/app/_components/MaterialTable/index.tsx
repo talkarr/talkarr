@@ -1,11 +1,11 @@
 'use client';
 
-import type { TableContainerProps } from '@mui/material';
-
 import type { FC } from 'react';
 
 import { styled } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
+
+import type { TableContainerProps } from '@mui/material';
 
 const InternalMaterialTable = styled(TableContainer)(({ theme }) => ({
     // more rounded corners

@@ -1,10 +1,10 @@
 import type { Metadata, NextPage } from 'next';
 
+import Typography from '@mui/material/Typography';
+
 import InitialAccountForm from '@/app/(i18n)/welcome/start/_components/InitialAccountForm';
 
 import { getServerSideTranslation } from '@/i18n/server-side';
-
-import Typography from '@mui/material/Typography';
 
 export const generateMetadata = async (): Promise<Metadata> => {
     const { t } = await getServerSideTranslation();

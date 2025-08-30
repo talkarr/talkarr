@@ -4,14 +4,14 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { Enum } from '@backend/types';
-
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
+
+import type { Enum } from '@backend/types';
 
 export interface SettingsEnumItemProps {
     primaryText: string;

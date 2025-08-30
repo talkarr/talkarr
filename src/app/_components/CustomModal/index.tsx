@@ -1,13 +1,14 @@
 import type { FC, ReactElement, ReactNode } from 'react';
 import React from 'react';
 
-import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
+
+import CloseIcon from '@mui/icons-material/Close';
 
 export type ModalCloseReason = 'backdropClick' | 'escapeKeyDown';
 

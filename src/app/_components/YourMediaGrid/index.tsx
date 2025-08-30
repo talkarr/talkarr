@@ -1,9 +1,10 @@
 import type { FC } from 'react';
 
+import Grid from '@mui/material/Grid';
+
 import type { SuccessData } from '@backend/types';
 
 import MediaItem from '@components/YourMediaGrid/MediaItem';
-import Grid from '@mui/material/Grid';
 
 export interface YourMediaGridProps {
     initialData: SuccessData<'/talks/list', 'get'>['events'];

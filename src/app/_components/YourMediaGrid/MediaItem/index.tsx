@@ -6,6 +6,19 @@ import type { FC } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { styled, useTheme } from '@mui/material';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
+import Skeleton from '@mui/material/Skeleton';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+
+import ProblemIcon from '@mui/icons-material/ReportProblem';
+
 import moment from 'moment';
 
 import { getMediaItemStatusColor } from '@backend/talk-utils';
@@ -21,17 +34,6 @@ import { useApiStore } from '@/providers/api-store-provider';
 
 import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
 import InvisibleLink from '@components/InvisibleLink';
-import ProblemIcon from '@mui/icons-material/ReportProblem';
-import { styled, useTheme } from '@mui/material';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import Grid from '@mui/material/Grid';
-import Skeleton from '@mui/material/Skeleton';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
 
 export interface MediaItemProps {
     initialData: SuccessData<'/talks/list', 'get'>['events'][0];

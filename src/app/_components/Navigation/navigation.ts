@@ -1,5 +1,8 @@
 import type SvgIcon from '@mui/material/SvgIcon';
 
+import TalksIcon from '@mui/icons-material/RecordVoiceOverRounded';
+import SettingsIcon from '@mui/icons-material/SettingsRounded';
+
 import {
     addTalksPageLink,
     generalSettingsPageLink,
@@ -12,9 +15,6 @@ import {
     settingsPageLink,
     tasksSettingsPageLink,
 } from '@/constants';
-
-import TalksIcon from '@mui/icons-material/RecordVoiceOverRounded';
-import SettingsIcon from '@mui/icons-material/SettingsRounded';
 
 export type SimpleNavigationItem = Pick<
     NavigationItemType,

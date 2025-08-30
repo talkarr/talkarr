@@ -3,12 +3,14 @@
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+import RefreshIcon from '@mui/icons-material/Refresh';
+
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import BaseModal from '@components/CustomModal';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 
 const VersionChangedModal: FC = () => {
     const { t } = useTranslation();

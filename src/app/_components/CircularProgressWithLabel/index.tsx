@@ -1,10 +1,10 @@
-import type { CircularProgressProps } from '@mui/material';
-
 import type { FC } from 'react';
 
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
+
+import type { CircularProgressProps } from '@mui/material';
 
 export interface CircularProgressWithLabelProps extends CircularProgressProps {
     value: number;

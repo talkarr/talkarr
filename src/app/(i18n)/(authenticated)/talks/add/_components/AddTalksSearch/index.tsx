@@ -11,6 +11,8 @@ import React, {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Box from '@mui/material/Box';
+
 import type { ExtractSuccessData } from '@backend/types';
 
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
@@ -20,7 +22,6 @@ import useSearchExample from '@/hooks/use-search-example';
 import { useApiStore } from '@/providers/api-store-provider';
 
 import SearchTextField from '@components/SearchTextField';
-import Box from '@mui/material/Box';
 import { useDebounce } from '@uidotdev/usehooks';
 
 export interface AddTalksSearchRef {

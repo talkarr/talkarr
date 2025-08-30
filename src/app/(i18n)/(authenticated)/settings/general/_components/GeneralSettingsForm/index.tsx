@@ -4,6 +4,15 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
+
+import AvatarIcon from '@mui/icons-material/AccountCircle';
+import SaveIcon from '@mui/icons-material/SaveRounded';
+
 import { useSnackbar } from 'notistack';
 
 import { ImportIsRecordedFlagBehavior } from '@backend/types/settings';
@@ -17,13 +26,6 @@ import type { GeneralSettings } from '@/app/(i18n)/(authenticated)/settings/gene
 import SettingsEnumDescriptions from '@components/SettingsEnumDescriptions';
 import SettingsEnumItem from '@components/SettingsEnumItem';
 import SettingsSwitchItem from '@components/SettingsSwitchItem';
-import AvatarIcon from '@mui/icons-material/AccountCircle';
-import SaveIcon from '@mui/icons-material/SaveRounded';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
-import Switch from '@mui/material/Switch';
-import Typography from '@mui/material/Typography';
 
 export interface GeneralSettingsFormProps {
     initialData: GeneralSettings;

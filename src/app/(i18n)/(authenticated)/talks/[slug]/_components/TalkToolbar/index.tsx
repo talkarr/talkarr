@@ -4,6 +4,11 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 
+import { alpha, styled } from '@mui/material';
+import Box from '@mui/material/Box';
+
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import { useSnackbar } from 'notistack';
 
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
@@ -13,9 +18,6 @@ import { useApiStore } from '@/providers/api-store-provider';
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import VerticalIconButton from '@components/VerticalIconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { alpha, styled } from '@mui/material';
-import Box from '@mui/material/Box';
 
 export interface TalkToolbarProps {
     data: SingleTalkData;

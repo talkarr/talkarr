@@ -1,5 +1,13 @@
 import type { FC } from 'react';
 
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+
+import EditIcon from '@mui/icons-material/Edit';
+
 import type { components } from '@backend/generated/schema';
 
 import { generateCacheUrl } from '@/utils/cache';
@@ -7,12 +15,6 @@ import { generateCacheUrl } from '@/utils/cache';
 import { userAvatarCacheKey } from '@/cache-keys';
 
 import CustomAvatar from '@components/CustomAvatar';
-import EditIcon from '@mui/icons-material/Edit';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
 
 export interface UserRowProps {
     user: components['schemas']['User'];

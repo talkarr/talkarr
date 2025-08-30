@@ -1,12 +1,12 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
 
-import { welcomeStartPageLink } from '@/constants';
-import { getServerSideTranslation } from '@/i18n/server-side';
-
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+
+import { welcomeStartPageLink } from '@/constants';
+import { getServerSideTranslation } from '@/i18n/server-side';
 
 const Page: NextPage = async () => {
     const { t } = await getServerSideTranslation();

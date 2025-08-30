@@ -1,14 +1,14 @@
 import type { Metadata, NextPage } from 'next';
 
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
 import type { SuccessData } from '@backend/types';
 
 import { getGeneralSettings } from '@/app/_api/settings/general';
 import GeneralSettingsForm from '@/app/(i18n)/(authenticated)/settings/general/_components/GeneralSettingsForm';
 
 import { getServerSideTranslation } from '@/i18n/server-side';
-
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 
 export const generateMetadata = async (): Promise<Metadata> => {
     const { t } = await getServerSideTranslation();

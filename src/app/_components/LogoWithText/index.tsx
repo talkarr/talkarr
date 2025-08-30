@@ -5,12 +5,13 @@ import Link from 'next/link';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { homePageLink } from '@/constants';
-
-import Logo from '@components/Logo';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+
+import { homePageLink } from '@/constants';
+
+import Logo from '@components/Logo';
 
 export interface LogoWithTextProps {
     redirectToHome?: boolean;

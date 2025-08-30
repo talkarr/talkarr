@@ -11,8 +11,6 @@ import { useParams, usePathname } from 'next/navigation';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getFileRoutePath } from '@/utils/route';
-
 import { styled, useTheme } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
@@ -20,6 +18,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+
+import { getFileRoutePath } from '@/utils/route';
 
 const StyledListItem = styled(ListItem, {
     shouldForwardProp: prop => prop !== 'highlighted',

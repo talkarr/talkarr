@@ -6,6 +6,10 @@ import type { FC } from 'react';
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
 import type { ExtractSuccessData, SuccessData } from '@backend/types';
 
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
@@ -20,9 +24,6 @@ import useSearchExample from '@/hooks/use-search-example';
 import { mediaManagementSettingsPageLink } from '@/constants';
 
 import { SearchTextFieldSortMethod } from '@components/SearchTextField';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 
 export interface AddTalksPageProps {
     hasRootFolder: boolean;

@@ -6,20 +6,21 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useSnackbar } from 'notistack';
-
-import { loginUser } from '@/app/_api/user/login';
-
-import { homePageLink } from '@/constants';
-
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
+import { useSnackbar } from 'notistack';
+
+import { loginUser } from '@/app/_api/user/login';
+
+import { homePageLink } from '@/constants';
 
 const StyledForm = styled('form')(({ theme }) => ({
     display: 'flex',

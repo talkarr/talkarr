@@ -4,17 +4,6 @@ import type { FC } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import prettyBytes from 'pretty-bytes';
-
-import { getMediaItemStatusColor, MediaItemStatus } from '@backend/talk-utils';
-
-import TalkAttribute from '@/app/(i18n)/(authenticated)/talks/[slug]/_components/TalkAttribute';
-import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
-
-import { formatVideoDuration } from '@/utils/string';
-
-import DescriptionIcon from '@mui/icons-material/Description';
-import VideoIcon from '@mui/icons-material/VideoLibrary';
 import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -23,6 +12,18 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+
+import DescriptionIcon from '@mui/icons-material/Description';
+import VideoIcon from '@mui/icons-material/VideoLibrary';
+
+import prettyBytes from 'pretty-bytes';
+
+import { getMediaItemStatusColor, MediaItemStatus } from '@backend/talk-utils';
+
+import TalkAttribute from '@/app/(i18n)/(authenticated)/talks/[slug]/_components/TalkAttribute';
+import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
+
+import { formatVideoDuration } from '@/utils/string';
 
 export interface TalkFilesProps {
     data: SingleTalkData;

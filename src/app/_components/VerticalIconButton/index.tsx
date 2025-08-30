@@ -1,7 +1,5 @@
 'use client';
 
-import type { ButtonBaseProps } from '@mui/material';
-
 import type React from 'react';
 import type { FC } from 'react';
 
@@ -9,6 +7,8 @@ import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
+
+import type { ButtonBaseProps } from '@mui/material';
 
 export interface VerticalIconButtonProps
     extends Omit<ButtonBaseProps, 'children'> {

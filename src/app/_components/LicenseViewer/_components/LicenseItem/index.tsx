@@ -4,12 +4,12 @@ import type { License } from '@components/LicenseViewer';
 
 import type { FC } from 'react';
 
-import { useUiStore } from '@/providers/ui-store-provider';
-
 import { useTheme } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+
+import { useUiStore } from '@/providers/ui-store-provider';
 
 export interface LicenseItemProps {
     license: License;

@@ -1,10 +1,10 @@
 import type { Metadata, NextPage } from 'next';
 
+import Box from '@mui/material/Box';
+
 import ImportJsonField from '@/app/(i18n)/(authenticated)/talks/import/_components/ImportJsonField';
 
 import { getServerSideTranslation } from '@/i18n/server-side';
-
-import Box from '@mui/material/Box';
 
 export const generateMetadata = async (): Promise<Metadata> => {
     const { t } = await getServerSideTranslation();

@@ -6,6 +6,14 @@ import type { FC } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+
+import ErrorIcon from '@mui/icons-material/Error';
+import WarningIcon from '@mui/icons-material/Warning';
+
 import { useSnackbar } from 'notistack';
 
 import type { SuccessData } from '@backend/types';
@@ -15,12 +23,6 @@ import { rootFolderFix } from '@/app/_api/settings/mediamanagement';
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import BaseModal from '@components/CustomModal';
-import ErrorIcon from '@mui/icons-material/Error';
-import WarningIcon from '@mui/icons-material/Warning';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 
 export interface RootFolderErrorModalData {
     folderData: SuccessData<

@@ -6,16 +6,16 @@ import { useRouter } from 'next/navigation';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { weblateUrl } from '@/constants';
-import { languages } from '@/i18n';
-import weblateIcon from '@/svg/weblate-icon.svg';
-
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
+
+import { weblateUrl } from '@/constants';
+import { languages } from '@/i18n';
+import weblateIcon from '@/svg/weblate-icon.svg';
 
 export interface LanguageChangerProps {
     anchorEl: HTMLElement | null;

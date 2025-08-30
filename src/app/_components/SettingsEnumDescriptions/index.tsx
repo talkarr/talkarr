@@ -4,10 +4,10 @@ import type { FC } from 'react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { Enum } from '@backend/types';
-
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+
+import type { Enum } from '@backend/types';
 
 export interface SettingsEnumDescriptionsProps {
     options: Enum<unknown>;

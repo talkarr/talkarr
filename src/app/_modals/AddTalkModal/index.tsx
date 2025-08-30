@@ -6,6 +6,17 @@ import type { FC } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { alpha, useTheme } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Typography from '@mui/material/Typography';
+
+import AddIcon from '@mui/icons-material/Add';
+
 import moment from 'moment';
 import { useSnackbar } from 'notistack';
 
@@ -20,15 +31,6 @@ import { useUiStore } from '@/providers/ui-store-provider';
 import BaseModal from '@components/CustomModal';
 import SearchItemBadges from '@components/SearchItemBadges';
 import TalkImage from '@components/TalkImage';
-import AddIcon from '@mui/icons-material/Add';
-import { alpha, useTheme } from '@mui/material';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Typography from '@mui/material/Typography';
 
 const AddTalkModal: FC = () => {
     const { t } = useTranslation();

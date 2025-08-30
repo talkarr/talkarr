@@ -6,17 +6,6 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useSnackbar } from 'notistack';
-
-import useLogout from '@/hooks/use-logout';
-
-import { generateCacheUrl } from '@/utils/cache';
-
-import { userAvatarCacheKey } from '@/cache-keys';
-import { loginPageLink } from '@/constants';
-import { useUserStore } from '@/providers/user-store-provider';
-
-import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
@@ -26,6 +15,18 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
+
+import LogoutIcon from '@mui/icons-material/Logout';
+
+import { useSnackbar } from 'notistack';
+
+import useLogout from '@/hooks/use-logout';
+
+import { generateCacheUrl } from '@/utils/cache';
+
+import { userAvatarCacheKey } from '@/cache-keys';
+import { loginPageLink } from '@/constants';
+import { useUserStore } from '@/providers/user-store-provider';
 
 const NavigationUser: FC = () => {
     const { t } = useTranslation();

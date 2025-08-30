@@ -1,5 +1,7 @@
 'use client';
 
+import { createTheme } from '@mui/material/styles';
+
 import {
     pageBackgroundColor,
     pageBorderColor,
@@ -7,8 +9,6 @@ import {
     pagePrimaryColor,
     pageSecondaryColor,
 } from '@/constants';
-
-import { createTheme } from '@mui/material/styles';
 
 export const normalFont = 'var(--font-geist-sans)';
 

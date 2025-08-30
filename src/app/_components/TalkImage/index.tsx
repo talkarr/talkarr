@@ -5,6 +5,9 @@ import Image from 'next/image';
 import type { CSSProperties, FC } from 'react';
 import { useEffect, useState } from 'react';
 
+import { useTheme } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
 // eslint-disable-next-line import/no-cycle
 import {
@@ -17,8 +20,6 @@ import { generateCacheUrl } from '@/utils/cache';
 import type { TalkData } from '@/stores/ui-store';
 
 import ImageFallback from '@components/ImageFallback';
-import { useTheme } from '@mui/material';
-import Skeleton from '@mui/material/Skeleton';
 
 export interface TalkImageProps {
     data: TalkData | SingleTalkData['db'] | undefined;

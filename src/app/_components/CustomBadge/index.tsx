@@ -1,7 +1,5 @@
 'use client';
 
-import type { BadgeProps } from '@mui/material';
-
 import Image from 'next/image';
 
 import type { FC } from 'react';
@@ -11,6 +9,8 @@ import { darken, styled, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+
+import type { BadgeProps } from '@mui/material';
 
 type Size = 'small' | 'medium' | 'large';
 
