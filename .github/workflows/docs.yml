@@ -9,16 +9,18 @@ on:
       - '.github/workflows/docs.yml'
       - 'mkdocs.yml'
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0 # Required for mkdocs-git-revision-date-localized-plugin
+          persist-credentials: false
 
       - uses: actions/setup-python@v5
         with:
