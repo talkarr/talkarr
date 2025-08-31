@@ -41,3 +41,7 @@ API:
 Translations:
   - changed-files:
       - any-glob-to-any-file: ['src/i18n/**', 'src/translations', 'src/translations/**']
+
+CI/CD:
+  - changed-files:
+      - any-glob-to-any-file: .github/**
