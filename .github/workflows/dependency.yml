@@ -7,6 +7,13 @@ on:
       - package.json
       - yarn.lock
       - .github/workflows/dependency.yml
+  push:
+    branches:
+      - main
+    paths:
+      - package.json
+      - yarn.lock
+      - .github/workflows/dependency.yml
 
 jobs:
   check-licenses-file:
@@ -92,11 +99,13 @@ jobs:
 
       - name: Generate licenses file
         # should run when installing packages but run it again to be sure
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         run: |
           CI_FORCE_GENERATE_LICENSES=true yarn run license-check
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v6
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         with:
           commit_message: 'Update licenses file'
           branch: '${{ github.head_ref }}'
