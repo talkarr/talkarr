@@ -17,6 +17,7 @@ import api from '@backend/api';
 import { initEnv, serverHost, serverPort } from '@backend/env';
 import { clearDownloadingFlagForAllTalks } from '@backend/events';
 import { releaseAllLocks } from '@backend/locks';
+import { isDatabaseConnected } from '@backend/prisma';
 import rootLog from '@backend/root-log';
 import { loadSettings } from '@backend/settings';
 
@@ -28,6 +29,30 @@ log.info('Starting server...', { dev });
 
 initServer.on('listening', async () => {
     await initEnv();
+
+    let errorMode = false;
+
+    if (!(await isDatabaseConnected())) {
+        log.error('Database not connected, going to error mode');
+        errorMode = true;
+    }
+
+    if (errorMode) {
+        log.error(`
+******************************************************
+*                                                    *
+*   Talkarr is in error mode. Please check           *
+*   previous logs for details on what went wrong.    *
+*   After fixing the issue, please restart Talkarr.  *
+*                                                    *
+*   If you need help, please check our wiki:         *
+*   https://wiki.talkarr.app/deployment/faq/         *
+*                                                    *
+******************************************************
+        `);
+        return;
+    }
+
     const app = next({ dev, turbopack: true });
     const handle = app.getRequestHandler();
 

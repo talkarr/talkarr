@@ -1,13 +1,21 @@
 import type http from 'node:http';
 
 import express from 'express';
+import fs from 'node:fs';
 import pathUtils from 'node:path';
 
+import { isDatabaseConnected } from '@backend/prisma';
 import rootLog from '@backend/root-log';
 
 const log = rootLog.child({ label: 'loadingServer' });
 
 const loadingServer = express();
+
+const smallIconBase64 = fs
+    .readFileSync(
+        pathUtils.join(__dirname, '..', 'assets', 'logo_cropped_small.png'),
+    )
+    .toString('base64');
 
 loadingServer.use((_req, res, next) => {
     res.setHeader(
@@ -33,9 +41,9 @@ loadingServer.get('/favicon.ico', (_req, res) => {
     });
 });
 
-loadingServer.get('/small_logo.png', (_req, res) => {
-    res.sendFile('logo_cropped_small.png', {
-        root: pathUtils.join(__dirname, '..', 'assets'),
+loadingServer.get('/_loading/status', async (_req, res) => {
+    res.json({
+        databaseConnected: await isDatabaseConnected(),
     });
 });
 
@@ -59,7 +67,25 @@ loadingServer.get('*_', (req, res) => {
         return;
     }
 
-    res.sendFile('loading.html', { root: __dirname });
+    const loadingHtml = fs.readFileSync(
+        pathUtils.join(__dirname, 'loading.html'),
+        'utf8',
+    );
+
+    const replacements: { match: RegExp; replacement: string }[] = [
+        {
+            match: /<%=logoDataUrl=%>/g,
+            replacement: `data:image/png;base64,${smallIconBase64}`,
+        },
+    ];
+
+    let finalHtml = loadingHtml;
+
+    for (const { match, replacement } of replacements) {
+        finalHtml = finalHtml.replace(match, replacement);
+    }
+
+    res.send(finalHtml);
 });
 
 const port = Number(process.env.PORT) || 3232;

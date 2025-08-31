@@ -28,28 +28,75 @@
             margin: 0.5em 0;
         }
 
+        .mono {
+            font-family: monospace;
+        }
+
         #logo {
             width: 160px;
             height: 160px;
         }
+
+        #container {
+            width: 100%;
+        }
+
+        @media (min-width: 600px) {
+            #container {
+                width: 400px;
+            }
+        }
+
+        @media (min-width: 800px) {
+            #container {
+                width: 600px;
+            }
+        }
+
+        @media (min-width: 1000px) {
+            #container {
+                width: 800px;
+            }
+        }
+
+        #errorDetails {
+            background-color: #ffb3b3;
+            color: #800000;
+            padding: 0.5em 1em;
+            margin-top: 1em;
+            border-radius: 48px;
+        }
+
+        li {
+            text-align: left;
+        }
     </style>
 </head>
 <body>
-<div>
-    <img src="/small_logo.png" alt="" id="logo">
+<div id="container">
+    <img src="<%=logoDataUrl=%>" alt="Logo" id="logo">
     <h1>Starting up Talkarr</h1>
     <p>Please wait...</p>
     <p>The page will automatically refresh when the server is ready.</p>
     <pre id="retryMsg"></pre>
+    <div id="errorDetails"></div>
 </div>
 <script>
     const setRetryMsg = (msg) => {
         document.getElementById('retryMsg').textContent = msg;
     };
 
+    /** @type {number | null} **/
     let retryInterval = null;
+
+    /** @type {string | null} **/
     let lastStatus = null;
+
+    /** @type {number} **/
     let retryMillis = 3000;
+
+    /** @type {{ databaseConnected?: boolean }} **/
+    let loadingState = {};
 
     const updateRetryMsg = () => {
         setRetryMsg(`Retrying in ${retryMillis / 1000} seconds...` + (lastStatus ? `\n(Last status: ${lastStatus})` : ''));
@@ -78,11 +125,52 @@
 
     doRetry();
 
+    const showErrorDetails = () => {
+        const errorDiv = document.getElementById('errorDetails');
+        /** @type {string[]} **/
+        const errors = [];
+
+        if (loadingState.databaseConnected === false) {
+            errors.push('Database connection failed. Please check your database settings and ensure the database server is running.');
+        }
+
+        if (errors.length > 0) {
+            document.getElementById('retryMsg').style.display = 'none';
+            errorDiv.innerHTML = `
+                <h2>Errors detected:</h2>
+                <ul>
+                    ${errors.map(e => `<li class="mono">${e}</li>`).join('')}
+                </ul>
+                <p>Please check the server logs for more details. When everything looks right, restart the application.</p>
+                <p>Also check the wiki for common issues: <a href="https://wiki.talkarr.app/deployment/faq/" target="_blank" rel="noopener noreferrer">https://wiki.talkarr.app/deployment/faq/</a></p>
+            `;
+        } else {
+            document.getElementById('retryMsg').style.display = 'block';
+            errorDiv.innerHTML = '';
+        }
+    };
+
+    const fetchLoadingState = () => {
+        // also fetch /_loading/status to get more detailed status
+        fetch('/_loading/status')
+            .then(response => response.json())
+            .then(data => {
+                loadingState = data;
+                showErrorDetails();
+            })
+            .catch(() => {
+                // ignore
+            });
+    };
+
+    fetchLoadingState();
+
     // try to fetch /api/healthz every 3 seconds
     const check = () => {
         if (retryInterval !== null) {
             clearInterval(retryInterval);
         }
+        fetchLoadingState();
         fetch('/api/healthz')
             .then(response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
