@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # Required for mkdocs-git-revision-date-localized-plugin
 
       - uses: actions/setup-python@v5
         with:
