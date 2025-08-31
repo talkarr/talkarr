@@ -63,6 +63,11 @@ export interface RepeatingJobData {
 }
 
 export class Queue {
+    // Internal queue status state
+    private initialized = false;
+    private paused = false;
+
+    // job states
     private jobQueue: DatabaseJobWithFunctions[] = [];
     private listeners: Record<QueueEvents, QueueEventHandlers[QueueEvents][]> =
         {
@@ -233,6 +238,10 @@ export class Queue {
     }
 
     private async handleQueue(): Promise<void> {
+        if (this.paused || !this.initialized) {
+            return;
+        }
+
         await this.handleWaitingJobs();
         await this.handleRepeatingJobs();
     }
@@ -574,7 +583,7 @@ export class Queue {
         return false;
     }
 
-    private async loadJobsFromDatabase(): Promise<void> {
+    private async loadJobsFromDatabase(): Promise<boolean> {
         try {
             await prisma.job.updateMany({
                 where: {
@@ -609,6 +618,8 @@ export class Queue {
             })) as DatabaseJobWithFunctions[];
 
             log.info(`Loaded ${this.jobQueue.length} jobs from database`);
+
+            return true;
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 log.error('Database error while loading jobs:', {
@@ -619,12 +630,20 @@ export class Queue {
                     error: (error as Error).message,
                 });
             }
+
+            return false;
         }
     }
 
     constructor(debug?: boolean) {
         this.loadJobsFromDatabase()
-            .then(() => {
+            .then(success => {
+                if (!success) {
+                    log.error('Failed to load jobs from database');
+                    return;
+                }
+
+                this.initialized = true;
                 // execute handleQueue in another thread
                 setInterval(async () => {
                     await this.handleQueue();
@@ -660,6 +679,22 @@ export class Queue {
                 }) as components['schemas']['TaskInfo'],
         );
     }
+
+    public pause(): void {
+        this.paused = true;
+    }
+
+    public resume(): void {
+        this.paused = false;
+    }
+
+    public isPaused(): boolean {
+        return this.paused;
+    }
+
+    public isInitialized(): boolean {
+        return this.initialized;
+    }
 }
 
 const queue = new Queue();
@@ -689,69 +724,5 @@ queue.on('stalled', job => {
 queue.on('completed', job => {
     log.info(`Job ${job.id} (${job.name}) completed`);
 });
-
-/* export const isTaskRunning = async (
-    taskName: string,
-    ownId?: number | string,
-): Promise<boolean> => {
-    let jobs = await queue.getJobs(['active', 'waiting', 'delayed']);
-
-    if (ownId) {
-        jobs = jobs.filter(job => job.id !== ownId);
-    }
-
-    return jobs.some(job => job.name === taskName);
-};
-
-export const waitForTaskFinished = async (
-    taskName: string,
-    timeout: number | null = 30000,
-    ownId?: number | string,
-): Promise<void> => {
-    const start = Date.now();
-
-    // eslint-disable-next-line no-await-in-loop
-    while (await isTaskRunning(taskName, ownId)) {
-        if (timeout && Date.now() - start > timeout) {
-            throw new Error('Timeout waiting for task to finish');
-        }
-
-        // eslint-disable-next-line no-await-in-loop
-        await new Promise(resolve => {
-            log.warn('Waiting for task to finish...', {
-                taskName,
-                timeout,
-                ownId,
-            });
-            setTimeout(resolve, 5000);
-        });
-    }
-};
-
-export const removeAllJobs = async (): Promise<number> => {
-    const jobsCount = await queue.getJobCounts();
-    await queue.empty();
-
-    log.info('Removed all jobs from the queue', {
-        active: jobsCount.active,
-        completed: jobsCount.completed,
-        delayed: jobsCount.delayed,
-        failed: jobsCount.failed,
-        waiting: jobsCount.waiting,
-    });
-
-    return jobsCount.active + jobsCount.waiting + jobsCount.delayed;
-};
-
-export const printQueueStatus = async (): Promise<void> => {
-    const jobsCount = await queue.getJobCounts();
-    log.info('Queue status:', {
-        active: jobsCount.active,
-        completed: jobsCount.completed,
-        delayed: jobsCount.delayed,
-        failed: jobsCount.failed,
-        waiting: jobsCount.waiting,
-    });
-}; */
 
 export default queue;

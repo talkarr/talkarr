@@ -12,6 +12,11 @@ The idea was to create a program to download the favorites from [**EventFahrplan
 
 And many more features to come in future releases!
 
+## Problems or Questions?
+
+If you have any problems or questions, please check the [FAQ](deployment/faq.md) first.
+If you can't find a solution there, feel free to open an issue on the [GitHub Issues page](https://github.com/talkarr/talkarr/issues/new/choose)
+
 ## Contributing
 
 The easiest way to contribute is by help translating it into your language! You can find more information [here](translating)
