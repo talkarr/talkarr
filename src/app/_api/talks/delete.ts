@@ -1,6 +1,6 @@
 import type { RequestBody } from '@backend/types';
 
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 export type DeleteEventBody = RequestBody<'/talks/delete'>;
 
@@ -23,4 +23,4 @@ export type DeleteEventResponse =
 
 export const deleteEvent: (
     body: DeleteEventBody,
-) => Promise<DeleteEventResponse> = pDeleteEvent;
+) => Promise<DeleteEventResponse> = wrapApiCall(pDeleteEvent);

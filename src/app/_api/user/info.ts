@@ -1,4 +1,4 @@
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pGetUserInfo = async () => {
@@ -17,4 +17,5 @@ export type GetUserInfoResponse =
     | Awaited<ReturnType<typeof pGetUserInfo>>
     | undefined;
 
-export const getUserInfo: () => Promise<GetUserInfoResponse> = pGetUserInfo;
+export const getUserInfo: () => Promise<GetUserInfoResponse> =
+    wrapApiCall(pGetUserInfo);

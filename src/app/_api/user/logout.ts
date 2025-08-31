@@ -1,4 +1,4 @@
-import api from '@/utils/api';
+import api, { wrapApiCall } from '@/utils/api';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pLogoutUser = async () => {
@@ -15,4 +15,5 @@ export type LogoutUserResponse =
     | Awaited<ReturnType<typeof pLogoutUser>>
     | undefined;
 
-export const logoutUser: () => Promise<LogoutUserResponse> = pLogoutUser;
+export const logoutUser: () => Promise<LogoutUserResponse> =
+    wrapApiCall(pLogoutUser);
