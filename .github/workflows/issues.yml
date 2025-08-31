@@ -8,6 +8,8 @@ on:
 
 name: Assign Issues to Projects
 
+permissions: {}
+
 jobs:
   assign-project:
     name: Assign issue to project

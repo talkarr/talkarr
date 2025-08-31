@@ -19,6 +19,8 @@ on:
   schedule:
     - cron: '19 12 * * 5'
 
+permissions: {}
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
@@ -58,6 +60,7 @@ jobs:
       uses: actions/checkout@v5
       with:
         submodules: 'recursive'
+        persist-credentials: false
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL

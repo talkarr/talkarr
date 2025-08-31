@@ -2,6 +2,8 @@ name: Manage pull requests
 on:
   pull_request_target
 
+permissions: {}
+
 jobs:
   labels:
     permissions:
