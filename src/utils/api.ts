@@ -61,8 +61,8 @@ const api =
 export const wrapApiCall =
     <T extends (...args: any[]) => Promise<any>>(
         fn: T,
-    ): ((...args: Parameters<T>) => Promise<ReturnType<T> | undefined>) =>
-    async (...args: Parameters<T>): Promise<ReturnType<T> | undefined> => {
+    ): ((...args: Parameters<T>) => Promise<Awaited<ReturnType<T>>>) =>
+    async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
         try {
             return await fn(...args);
         } catch (error) {
@@ -75,7 +75,7 @@ export const wrapApiCall =
                         : 'Unknown error',
                 isFromTryCatch: true,
                 originalError: error,
-            } as ReturnType<T>;
+            } as Awaited<ReturnType<T>>;
         }
     };
 
