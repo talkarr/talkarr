@@ -117,10 +117,6 @@ export class Queue {
             throw new Error(`No handler for job ${name}`);
         }
 
-        // log trace of this call
-        const trace = new Error('test').stack;
-        log.info(`Enqueuing job ${name}`, { trace });
-
         const handler = this.jobHandlers[name];
         const concurrency = handler.concurrency || 1;
         const activeJobs = this.jobQueue.filter(
