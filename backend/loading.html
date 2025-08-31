@@ -136,6 +136,7 @@
 
         if (errors.length > 0) {
             document.getElementById('retryMsg').style.display = 'none';
+            errorDiv.style.display = 'block';
             errorDiv.innerHTML = `
                 <h2>Errors detected:</h2>
                 <ul>
@@ -146,6 +147,7 @@
             `;
         } else {
             document.getElementById('retryMsg').style.display = 'block';
+            errorDiv.style.display = 'none';
             errorDiv.innerHTML = '';
         }
     };
