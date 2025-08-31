@@ -56,3 +56,7 @@ It will not be published automatically, but set to "draft" so that you can check
 [Link for quick access to releases](https://github.com/talkarr/talkarr/releases)
 
 After that, you can just publish it and that's it.
+
+## Checking actions for security issues
+
+There is a tool called `zizmor` that can be used to check the actions used in the repository for known security issues.
