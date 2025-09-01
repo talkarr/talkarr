@@ -19,8 +19,6 @@ import Typography from '@mui/material/Typography';
 
 import ProblemIcon from '@mui/icons-material/ReportProblem';
 
-import moment from 'moment';
-
 import { getMediaItemStatusColor } from '@backend/talk-utils';
 import type { SuccessData } from '@backend/types';
 
@@ -34,6 +32,7 @@ import { useApiStore } from '@/providers/api-store-provider';
 
 import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
 import InvisibleLink from '@components/InvisibleLink';
+import NoSsrMoment from '@components/NoSsrMoment';
 
 export interface MediaItemProps {
     initialData: SuccessData<'/talks/list', 'get'>['events'][0];
@@ -56,12 +55,6 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
     const getTalkInfo = useApiStore(state => state.getTalkInfo);
 
     const isVisible = useOnScreen(containerRef);
-
-    const [dateDisplayed, setDateDisplayed] = useState<string>('Loading...');
-
-    useEffect(() => {
-        setDateDisplayed(moment(initialData.date).format(longDateFormat));
-    }, [initialData.date]);
 
     const talkInfo = useApiStore(state => {
         if (initialData.guid in state.talkInfo) {
@@ -197,6 +190,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                             cacheKey: `poster-${initialData.guid}`,
                                         })}
                                         blurDataURL={blurDataURL}
+                                        suppressHydrationWarning // because blurDataURL is generated on client side
                                         placeholder={
                                             blurDataURL ? 'blur' : undefined
                                         }
@@ -212,7 +206,17 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                             </CardMedia>
                             <CardHeader
                                 title={initialData.title}
-                                subheader={`${dateDisplayed} - ${initialData.conference.title}`}
+                                subheader={
+                                    <NoSsrMoment>
+                                        {moment =>
+                                            `${moment(initialData.date).format(
+                                                longDateFormat,
+                                            )} - ${
+                                                initialData.conference.title
+                                            }`
+                                        }
+                                    </NoSsrMoment>
+                                }
                             />
                         </Box>
                     </CardActionArea>
