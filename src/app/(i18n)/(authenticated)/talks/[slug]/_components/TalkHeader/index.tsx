@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
@@ -23,6 +24,7 @@ const bottomPadding = 1;
 
 const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
     const { t } = useTranslation();
+    const theme = useTheme();
 
     return (
         <Box paddingX={2} paddingTop={1}>
@@ -33,7 +35,13 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                 gap={2}
                 flexWrap="wrap"
             >
-                <Box flex={1}>
+                <Box
+                    flex={1}
+                    minWidth={{
+                        xs: `min(${theme.breakpoints.values.md}px, 100%)`,
+                        lg: 300,
+                    }}
+                >
                     <TalkImage data={data.db} maxWidth="100%" height="auto" />
                 </Box>
                 <Box flex={2} display="flex" flexDirection="column" gap={2}>
