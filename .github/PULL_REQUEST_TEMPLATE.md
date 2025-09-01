@@ -1,4 +1,13 @@
 ## Description
+<!-- First, check the title. It should match one of the following prefixes: -->
+<!-- - "feat": A new feature -->
+<!-- - "fix": A bug fix -->
+<!-- - "docs": Documentation only changes -->
+<!-- - "ci": Changes to our CI configuration files and scripts -->
+<!-- - "refactor": A code change that neither fixes a bug nor adds a feature -->
+<!-- - "perf": A code change that improves performance -->
+<!-- - "chore": Other changes that don't modify src or test files -->
+<!-- - "revert": Reverts a previous commit -->
 <!-- Describe the changes made in this pull request. -->
 <!-- If it fixes a bug or resolves a feature request, be sure to link to that issue. -->
 
