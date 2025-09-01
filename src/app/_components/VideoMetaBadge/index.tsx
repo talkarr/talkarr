@@ -6,6 +6,7 @@ import type { TFunction } from 'i18next';
 import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { addTalksPageWithSearchLink } from '@/constants';
@@ -48,7 +49,7 @@ const colorMap = new Map<VideoBadgeType, CustomBadgeProps['color']>([
 
 export interface VideoMetaBadgeProps
     extends Omit<CustomBadgeProps, 'badgeContent' | 'color'> {
-    badgeContent: string;
+    badgeContent: React.ReactNode;
     badgeType: VideoBadgeType;
     disableOnClick?: boolean;
 }
@@ -77,9 +78,13 @@ const VideoMetaBadge: FC<VideoMetaBadgeProps> = ({
                           e.preventDefault();
                           e.stopPropagation();
 
-                          router.push(
-                              addTalksPageWithSearchLink(props.badgeContent),
-                          );
+                          if (typeof props.badgeContent === 'string') {
+                              router.push(
+                                  addTalksPageWithSearchLink(
+                                      props.badgeContent,
+                                  ),
+                              );
+                          }
                       }
             }
             data-testid="video-meta-badge"

@@ -13,13 +13,12 @@ import LanguageIcon from '@mui/icons-material/Language';
 import PersonIcon from '@mui/icons-material/Person';
 import TagIcon from '@mui/icons-material/Tag';
 
-import moment from 'moment';
-
 import { formatLanguageCode, formatVideoDuration } from '@/utils/string';
 
 import { longDateFormat } from '@/constants';
 import type { TalkData } from '@/stores/ui-store';
 
+import NoSsrMoment from '@components/NoSsrMoment';
 import VideoMetaBadge from '@components/VideoMetaBadge';
 
 export interface SearchItemBadgesProps {
@@ -37,7 +36,7 @@ const SearchItemBadges: FC<SearchItemBadgesProps> = ({
         }
 
         const badgesArray: {
-            text: string;
+            text: React.ReactNode;
             type: VideoBadgeType;
             imageUrl?: string;
             icon?: React.ReactNode;
@@ -88,7 +87,11 @@ const SearchItemBadges: FC<SearchItemBadgesProps> = ({
 
         if (item.date) {
             badgesArray.push({
-                text: moment(item.date).format(longDateFormat),
+                text: (
+                    <NoSsrMoment>
+                        {moment => moment(item.date).format(longDateFormat)}
+                    </NoSsrMoment>
+                ),
                 type: 'date',
                 icon: <DateIcon />,
                 disableOnClick: true,

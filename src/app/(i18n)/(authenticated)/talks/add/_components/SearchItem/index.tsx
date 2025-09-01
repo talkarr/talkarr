@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import React, { useMemo } from 'react';
+import React from 'react';
 import Markdown from 'react-markdown';
 
 import { styled } from '@mui/material';
@@ -16,14 +16,13 @@ import Typography from '@mui/material/Typography';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-import moment from 'moment';
-
 import { yearOnlyFormat } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
 import type { TalkData } from '@/stores/ui-store';
 
 import searchItemCss from './searchitem.module.css';
 
+import NoSsrMoment from '@components/NoSsrMoment';
 import SearchItemBadges from '@components/SearchItemBadges';
 // eslint-disable-next-line import/no-cycle
 import TalkImage from '@components/TalkImage';
@@ -88,12 +87,6 @@ export const SearchItemSkeleton: FC = () => (
 const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
     const openAddTalkModal = useUiStore(state => state.openAddTalkModal);
 
-    const title = useMemo(() => {
-        const year = moment(item.date).format(yearOnlyFormat);
-
-        return `${item.title} (${year})`;
-    }, [item]);
-
     return (
         <StyledCard
             sx={{
@@ -129,7 +122,15 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                                         variant="h3"
                                         minWidth="fit-content"
                                     >
-                                        {title}
+                                        <NoSsrMoment>
+                                            {moment => {
+                                                const year = moment(
+                                                    item.date,
+                                                ).format(yearOnlyFormat);
+
+                                                return `${item.title} (${year})`;
+                                            }}
+                                        </NoSsrMoment>
                                     </Typography>
                                     {isAlreadyAdded ? (
                                         <Box display="flex" alignItems="center">

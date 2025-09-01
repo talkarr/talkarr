@@ -1,13 +1,8 @@
-'use client';
-
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-
-import moment from 'moment';
 
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
 
@@ -15,6 +10,7 @@ import { formatLanguageCode } from '@/utils/string';
 
 import { longDateFormat, yearOnlyFormat } from '@/constants';
 
+import NoSsrMoment from '@components/NoSsrMoment';
 import SmallText from '@components/SmallText';
 import TalkImage from '@components/TalkImage';
 import VideoMetaBadge from '@components/VideoMetaBadge';
@@ -27,11 +23,6 @@ const bottomPadding = 1;
 
 const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
     const { t } = useTranslation();
-    const [dateDisplayed, setDateDisplayed] = useState<string>();
-
-    useEffect(() => {
-        setDateDisplayed(moment(data.db.date).format(longDateFormat));
-    }, [data.db.date]);
 
     return (
         <Box paddingX={2} paddingTop={1}>
@@ -47,8 +38,17 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                 </Box>
                 <Box flex={2} display="flex" flexDirection="column" gap={2}>
                     <Typography variant="h2">
-                        {data.db.title} (
-                        {moment(data.db.date).format(yearOnlyFormat)})
+                        <NoSsrMoment>
+                            {moment => (
+                                <>
+                                    {data.db.title} (
+                                    {moment(data.db.date).format(
+                                        yearOnlyFormat,
+                                    )}
+                                    )
+                                </>
+                            )}
+                        </NoSsrMoment>
                     </Typography>
                     <Box>
                         <Typography variant="body1">
@@ -73,19 +73,23 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                                 />
                             </Box>
                         ) : null}
-                        {dateDisplayed ? (
-                            <Box>
-                                <SmallText mb={bottomPadding}>
-                                    {t('talks.date')}
-                                </SmallText>
-                                <VideoMetaBadge
-                                    badgeType="date"
-                                    badgeContent={dateDisplayed}
-                                    size="small"
-                                    disableOnClick
-                                />
-                            </Box>
-                        ) : null}
+                        <Box>
+                            <SmallText mb={bottomPadding}>
+                                {t('talks.date')}
+                            </SmallText>
+                            <NoSsrMoment>
+                                {moment => (
+                                    <VideoMetaBadge
+                                        badgeType="date"
+                                        badgeContent={moment(
+                                            data.db.date,
+                                        ).format(longDateFormat)}
+                                        size="small"
+                                        disableOnClick
+                                    />
+                                )}
+                            </NoSsrMoment>
+                        </Box>
                         {data.db.original_language ? (
                             <Box>
                                 <SmallText mb={bottomPadding}>

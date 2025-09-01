@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { alpha, useTheme } from '@mui/material';
@@ -17,7 +17,6 @@ import Typography from '@mui/material/Typography';
 
 import AddIcon from '@mui/icons-material/Add';
 
-import moment from 'moment';
 import { useSnackbar } from 'notistack';
 
 import { getConfig } from '@/app/_api/settings/mediamanagement';
@@ -29,6 +28,7 @@ import { yearOnlyFormat } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import BaseModal from '@components/CustomModal';
+import NoSsrMoment from '@components/NoSsrMoment';
 import SearchItemBadges from '@components/SearchItemBadges';
 import TalkImage from '@components/TalkImage';
 
@@ -47,16 +47,6 @@ const AddTalkModal: FC = () => {
     const [rootFolder, setRootFolder] = useState<string>('');
 
     const open = !!addTalkModal;
-
-    const title = useMemo(() => {
-        if (!addTalkModal) {
-            return '';
-        }
-
-        const year = moment(addTalkModal.date).format(yearOnlyFormat);
-
-        return `${addTalkModal.title} (${year})`;
-    }, [addTalkModal]);
 
     const handleAddTalk = async (): Promise<void> => {
         if (!addTalkModal?.guid) {
@@ -122,7 +112,21 @@ const AddTalkModal: FC = () => {
         <BaseModal
             open={open}
             onClose={close}
-            title={title}
+            title={
+                <NoSsrMoment>
+                    {moment => {
+                        if (!addTalkModal) {
+                            return '';
+                        }
+
+                        const year = moment(addTalkModal.date).format(
+                            yearOnlyFormat,
+                        );
+
+                        return `${addTalkModal.title} (${year})`;
+                    }}
+                </NoSsrMoment>
+            }
             moreWidth
             divider
             testID="add-talk-modal"

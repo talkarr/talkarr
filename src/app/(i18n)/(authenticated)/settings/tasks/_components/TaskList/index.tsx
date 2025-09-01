@@ -8,12 +8,12 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
-import moment from 'moment';
-
 import type { TasksData } from '@/app/(i18n)/(authenticated)/settings/tasks/page';
 
 import { longDateTimeFormat } from '@/constants';
 import { useApiStore } from '@/providers/api-store-provider';
+
+import NoSsrMoment from '@components/NoSsrMoment';
 
 export interface TaskListProps {
     initialData: TasksData;
@@ -60,16 +60,20 @@ const TaskList: FC<TaskListProps> = ({ initialData }) => {
                             )}
                         </Typography>
                         <Typography variant="body2">
-                            {t(
-                                'pages.taskSettingsPage.components.taskList.startedAt',
-                                {
-                                    startedAt: task.started_at
-                                        ? moment(task.started_at).format(
-                                              longDateTimeFormat,
-                                          )
-                                        : 'N/A',
-                                },
-                            )}
+                            <NoSsrMoment>
+                                {moment =>
+                                    t(
+                                        'pages.taskSettingsPage.components.taskList.startedAt',
+                                        {
+                                            startedAt: task.started_at
+                                                ? moment(
+                                                      task.started_at,
+                                                  ).format(longDateTimeFormat)
+                                                : 'N/A',
+                                        },
+                                    )
+                                }
+                            </NoSsrMoment>
                         </Typography>
                         <Typography variant="body2">
                             {t(

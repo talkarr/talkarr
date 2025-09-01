@@ -23,7 +23,7 @@ export interface ModalProps {
     moreMobileWidth?: boolean;
     moreDesktopWidth?: boolean;
     keepMounted?: boolean;
-    title?: string;
+    title?: React.ReactNode;
     testID: string;
     divider?: boolean;
 }
