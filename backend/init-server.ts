@@ -88,8 +88,8 @@ loadingServer.get('*_', (req, res) => {
     res.send(finalHtml);
 });
 
-const port = Number(process.env.PORT) || 3232;
-const host = process.env.HOST;
+const port = Number(process.env.TALKARR_PORT) || 3232;
+const host = process.env.TALKARR_HOST;
 
 const startInitServer = (): http.Server => {
     let loadingHttpServer: http.Server;
