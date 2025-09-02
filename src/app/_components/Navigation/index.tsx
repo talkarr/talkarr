@@ -249,6 +249,10 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                 </AppBar>
                 <Box
                     bgcolor="background.default"
+                    display="flex"
+                    flexDirection="column"
+                    overflow="hidden"
+                    height={`calc(100vh - ${appbarHeight}px)`}
                     sx={{
                         // make that above only happens for everything above md
                         [theme.breakpoints.up('md')]: {
@@ -262,7 +266,13 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                         borderTopRightRadius: theme.shape.borderRadius * 4,
                     }}
                 >
-                    {children}
+                    <Box
+                        sx={{
+                            overflowY: 'auto',
+                        }}
+                    >
+                        {children}
+                    </Box>
                 </Box>
             </Box>
         </Box>

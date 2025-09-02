@@ -12,6 +12,7 @@ import TalkToolbar, {
 } from '@/app/(i18n)/(authenticated)/talks/[slug]/_components/TalkToolbar';
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
 
+import { appbarHeight } from '@/constants';
 import { useApiStore } from '@/providers/api-store-provider';
 
 export interface TalkWrapperProps {
@@ -56,7 +57,8 @@ const TalkWrapper: FC<TalkWrapperProps> = ({ initialData }) => {
                 flexDirection="column"
                 gap={1}
                 width="100%"
-                style={{ paddingTop: talkToolbarHeight }}
+                pt={1}
+                height={`calc(100vh - ${appbarHeight - talkToolbarHeight}px)`}
             >
                 <Box flex={1}>
                     <TalkHeader data={singleTalkData || initialData} />
