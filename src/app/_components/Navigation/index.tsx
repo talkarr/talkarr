@@ -125,7 +125,6 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                         '& .MuiDrawer-paper': {
                             width: drawerWidth,
                             boxSizing: 'border-box',
-                            borderRight: `1px solid rgba(255, 255, 255, 0.05)`,
                         },
                     }}
                     open={open}
@@ -137,6 +136,29 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                         redirectToHome
                         onClick={() => setOpen(false)}
                     />
+                    <Box
+                        display="flex"
+                        flexDirection="row"
+                        alignItems="center"
+                        justifyContent="center"
+                        gap={2}
+                        marginX={2}
+                        marginY={2}
+                        paddingY={1}
+                        borderRadius={4}
+                        bgcolor="background.paper"
+                        boxShadow={2}
+                    >
+                        <Tooltip
+                            title={t('components.navigation.information')}
+                            arrow
+                        >
+                            <IconButton onClick={() => openInformationModal()}>
+                                <HelpOutlineIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <ChangeLanguageButton />
+                    </Box>
                     {splitItemsByDivider.map((items, index, { length }) => (
                         <Fragment key={`mobile-navigation-item-list-${index}`}>
                             <List
@@ -182,6 +204,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                             paddingRight: 2,
                             gap: 1,
                         }}
+                        data-testid="navigation-appbar"
                     >
                         <Box
                             display={{ xs: 'flex', md: 'none' }}
@@ -208,11 +231,18 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                             >
                                 <IconButton
                                     onClick={() => openInformationModal()}
+                                    sx={{
+                                        display: { xs: 'none', sm: 'block' },
+                                    }}
                                 >
                                     <HelpOutlineIcon />
                                 </IconButton>
                             </Tooltip>
-                            <ChangeLanguageButton />
+                            <ChangeLanguageButton
+                                sx={{
+                                    display: { xs: 'none', sm: 'block' },
+                                }}
+                            />
                             <NavigationUser />
                         </Box>
                     </Toolbar>
