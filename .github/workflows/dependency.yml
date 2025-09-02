@@ -20,6 +20,9 @@ permissions: {}
 jobs:
   check-licenses-file:
     name: Check and update licenses file
+    permissions:
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Generate a token
