@@ -34,7 +34,7 @@ jobs:
         with:
           ref: '${{ github.head_ref }}'
           token: '${{ steps.generate-token.outputs.token }}'
-          persist-credentials: false
+          persist-credentials: 'false'
 
       - name: Install dependencies
         uses: actions/setup-node@v4
@@ -102,14 +102,22 @@ jobs:
 
       - name: Generate licenses file
         # should run when installing packages but run it again to be sure
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.event_name == 'pull_request' }}
         run: |
           CI_FORCE_GENERATE_LICENSES=true yarn run license-check
 
+      - name: Configure git repo
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          git config --global url."https://x-access-token:${{ steps.generate-token.outputs.token }}@github.com/".insteadOf https://github.com/
+
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v6
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.event_name == 'pull_request' }}
         with:
           commit_message: 'Update licenses file'
           branch: '${{ github.head_ref }}'
           file_pattern: 'backend/licenses.json'
+          commit_author: 'talkarr-bot[bot] <228135771+talkarr-bot[bot]@users.noreply.github.com>'
+          commit_user_name: 'talkarr-bot[bot]'
+          commit_user_email: '228135771+talkarr-bot[bot]@users.noreply.github.com'
