@@ -204,6 +204,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                             paddingRight: 2,
                             gap: 1,
                         }}
+                        data-testid="navigation-appbar"
                     >
                         <Box
                             display={{ xs: 'flex', md: 'none' }}

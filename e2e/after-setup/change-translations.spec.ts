@@ -7,6 +7,8 @@ test.describe('Change translations', () => {
     }) => {
         await page.goto('http://localhost:3232/');
 
+        let container = page.getByTestId('navigation-appbar');
+
         // check if we are a mobile device
         // eslint-disable-next-line playwright/no-conditional-in-test
         if (isMobile) {
@@ -16,13 +18,16 @@ test.describe('Change translations', () => {
             );
             // eslint-disable-next-line playwright/no-conditional-expect
             await expect(openNavigationDrawerButton).toBeVisible();
+            await openNavigationDrawerButton.click();
             // eslint-disable-next-line playwright/no-wait-for-timeout
             await page.waitForTimeout(1000);
-            await openNavigationDrawerButton.click();
+            container = page.getByTestId('mobile-navigation-drawer');
         }
 
         // check for the language changer
-        const changeLanguageButton = page.getByTestId('change-language-button');
+        const changeLanguageButton = container.getByTestId(
+            'change-language-button',
+        );
 
         await expect(changeLanguageButton).toBeVisible();
         await changeLanguageButton.click();
