@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>Starting up...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,24 +40,25 @@
         }
 
         #container {
-            width: 100%;
+            width: 90%;
+            max-width: 90%;
         }
 
         @media (min-width: 600px) {
             #container {
-                width: 400px;
+                width: 70%;
             }
         }
 
         @media (min-width: 800px) {
             #container {
-                width: 600px;
+                width: 60%;
             }
         }
 
         @media (min-width: 1000px) {
             #container {
-                width: 800px;
+                width: 50%;
             }
         }
 
@@ -65,6 +68,28 @@
             padding: 0.5em 1em;
             margin-top: 1em;
             border-radius: 48px;
+        }
+
+        ul {
+            padding-left: 0.75em;
+        }
+
+        @media (min-width: 600px) {
+            ul {
+                padding-left: 1em;
+            }
+        }
+
+        @media (min-width: 800px) {
+            ul {
+                padding-left: 2em;
+            }
+        }
+
+        @media (min-width: 1000px) {
+            ul {
+                padding-left: 3em;
+            }
         }
 
         li {
