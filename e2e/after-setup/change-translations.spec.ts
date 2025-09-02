@@ -1,8 +1,20 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Change translations', () => {
-    test('Change translations in the application', async ({ page }) => {
+    test('Change translations in the application', async ({ page, isMobile }) => {
         await page.goto('http://localhost:3232/');
+
+        // check if we are a mobile device
+        // eslint-disable-next-line playwright/no-conditional-in-test
+        if (isMobile) {
+            // open the navigation drawer
+            const openNavigationDrawerButton = page.getByTestId(
+                'mobile-navigation-drawer-toggle',
+            );
+            // eslint-disable-next-line playwright/no-conditional-expect
+            await expect(openNavigationDrawerButton).toBeVisible();
+            await openNavigationDrawerButton.click();
+        }
 
         // check for the language changer
         const changeLanguageButton = page.getByTestId('change-language-button');
