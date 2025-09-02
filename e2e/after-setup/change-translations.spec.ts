@@ -1,7 +1,10 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Change translations', () => {
-    test('Change translations in the application', async ({ page, isMobile }) => {
+    test('Change translations in the application', async ({
+        page,
+        isMobile,
+    }) => {
         await page.goto('http://localhost:3232/');
 
         // check if we are a mobile device
@@ -13,6 +16,8 @@ test.describe('Change translations', () => {
             );
             // eslint-disable-next-line playwright/no-conditional-expect
             await expect(openNavigationDrawerButton).toBeVisible();
+            // eslint-disable-next-line playwright/no-wait-for-timeout
+            await page.waitForTimeout(1000);
             await openNavigationDrawerButton.click();
         }
 
