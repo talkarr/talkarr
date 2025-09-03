@@ -29,6 +29,7 @@ import TalkImage from '@components/TalkImage';
 
 export interface SearchItemProps {
     item: TalkData;
+    index: number;
     isAlreadyAdded?: boolean;
 }
 
@@ -84,7 +85,7 @@ export const SearchItemSkeleton: FC = () => (
     />
 );
 
-const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
+const SearchItem: FC<SearchItemProps> = ({ item, index, isAlreadyAdded }) => {
     const openAddTalkModal = useUiStore(state => state.openAddTalkModal);
 
     return (
@@ -106,6 +107,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                         data={item}
                         maxWidth="100%"
                         maxHeight="fit-content"
+                        priority={index < 5}
                     />
                 </CardMedia>
                 <Box display="flex" flexDirection="column" mb={1}>

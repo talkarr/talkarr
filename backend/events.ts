@@ -913,13 +913,16 @@ export const getEventByFilePath = async ({
         });
 
         if (!result) {
-            log.warn('Event not found by file path', { filePath });
+            log.warn('Event not found in database by file path', { filePath });
             return null;
         }
 
         return result.event;
     } catch (error) {
-        log.error('Error getting event by file path', { error, filePath });
+        log.error('Error getting event from database by file path', {
+            error,
+            filePath,
+        });
 
         return null;
     }

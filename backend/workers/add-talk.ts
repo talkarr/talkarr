@@ -166,6 +166,13 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         return done(new Error('Talk does not have a frontend link'));
     }
 
+    // ===== REMOVE BEFORE COMMIT =====
+    const foo = '1';
+
+    if (foo === '1') {
+        return done();
+    }
+
     try {
         const ytdlInstance = youtubeDl.exec(
             event.frontend_link,

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import type { FC } from 'react';
+import React, { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -31,6 +31,7 @@ import BaseModal from '@components/CustomModal';
 import NoSsrMoment from '@components/NoSsrMoment';
 import SearchItemBadges from '@components/SearchItemBadges';
 import TalkImage from '@components/TalkImage';
+import Markdown from 'react-markdown';
 
 const AddTalkModal: FC = () => {
     const { t } = useTranslation();
@@ -169,7 +170,7 @@ const AddTalkModal: FC = () => {
                     data-testid="add-talk-modal-inner"
                     data-add-modal-slug={addTalkModal?.slug}
                 >
-                    {addTalkModal?.description || addTalkModal?.subtitle ? (
+                    {/*addTalkModal?.description || addTalkModal?.subtitle ? (
                         <Typography
                             variant="body2"
                             mb={2}
@@ -191,7 +192,27 @@ const AddTalkModal: FC = () => {
                             {addTalkModal?.description ||
                                 addTalkModal?.subtitle}
                         </Typography>
-                    ) : null}
+                    ) : null*/}
+                    {addTalkModal?.description ? (
+                        <Box
+                            bgcolor="background.default"
+                            p={1.2}
+                            border={1}
+                            borderColor={alpha(theme.palette.divider, 0.2)}
+                            borderRadius={3}
+                            boxShadow={2}
+                            mb={2}
+                            sx={{
+                                overflowY: 'auto',
+                                maxHeight: 300,
+                                [theme.breakpoints.down('md')]: {
+                                    maxHeight: 'none',
+                                },
+                            }}
+                        >
+                    <Markdown skipHtml>{addTalkModal.description}</Markdown>
+                        </Box>
+                        ) : null}
                     <Box mb={4}>
                         <SearchItemBadges item={addTalkModal} disableOnClick />
                     </Box>
