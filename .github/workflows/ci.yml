@@ -503,6 +503,10 @@ jobs:
   release:
     name: Create Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
     needs:
       - build-linux-container
       - run-e2e-tests

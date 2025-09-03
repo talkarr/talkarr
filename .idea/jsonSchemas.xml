@@ -50,10 +50,10 @@
                     <option name="path" value=".github/ISSUE_TEMPLATE/00*.yml" />
                   </Item>
                   <Item>
-                    <option name="path" value=".github/ISSUE_TEMPLATE/002-feature_request.yml" />
+                    <option name="path" value=".github/ISSUE_TEMPLATE/001-bug_report.yml" />
                   </Item>
                   <Item>
-                    <option name="path" value=".github/ISSUE_TEMPLATE/001-bug_report.yml" />
+                    <option name="path" value=".github/ISSUE_TEMPLATE/002-feature_request.yml" />
                   </Item>
                 </list>
               </option>
