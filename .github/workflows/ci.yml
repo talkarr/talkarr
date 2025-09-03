@@ -195,12 +195,19 @@ jobs:
 
       - name: Generate git stats for building
         id: git-stats
+        env:
+          PR_BRANCH: ${{ github.head_ref }}
         run: |
           CURRENT_COMMIT=$(git rev-parse HEAD)
           CURRENT_COMMIT_TS=$(git show -s --format=%ct HEAD)
           CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
           CURRENT_VERSION=$(git describe --tags --always)
           CURRENT_TAG=$(git describe --tags --abbrev=0 --exact-match 2>/dev/null || echo "false")
+          
+          # set current branch to PR_BRANCH if it is a PR
+          if [ -n "${PR_BRANCH}" ]; then
+              CURRENT_BRANCH=${PR_BRANCH}
+          fi
 
           echo "CURRENT_COMMIT=${CURRENT_COMMIT}" >> $GITHUB_ENV
           echo "CURRENT_COMMIT_TS=${CURRENT_COMMIT_TS}" >> $GITHUB_ENV

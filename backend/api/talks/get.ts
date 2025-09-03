@@ -1,5 +1,4 @@
 import {
-    checkEventForProblems,
     getSpecificTalkByGuid,
     getSpecificTalkBySlug,
     getTalkInfoByGuid,
@@ -76,7 +75,8 @@ const handleGetEventRequest = async (
         return;
     }
 
-    const talkInfo = await getTalkInfoByGuid({ guid: event.guid });
+    const talkInfoData = await getTalkInfoByGuid({ guid: event.guid });
+    const { talkInfo } = talkInfoData;
 
     if (!talkData || !talkInfo) {
         log.error('Talk not found in API.', {
@@ -93,15 +93,8 @@ const handleGetEventRequest = async (
         return;
     }
 
-    const hasProblems =
-        (
-            await checkEventForProblems({
-                rootFolderPath: event.root_folder.path,
-                downloadError: talkInfo.download_error,
-            })
-        )
-            // eslint-disable-next-line unicorn/no-await-expression-member
-            ?.map(problem => problemMap[problem] ?? problem) || null;
+    const mappedProblems =
+        event.problems?.map(problem => problemMap[problem] ?? problem) || null;
 
     res.json({
         success: true,
@@ -110,7 +103,7 @@ const handleGetEventRequest = async (
                 ...(event as unknown as ConvertDateToStringType<ExtendedDbEvent>),
                 persons: event.persons.map(person => person.name),
                 tags: event.tags.map(tag => tag.name),
-                has_problems: hasProblems,
+                mapped_problems: mappedProblems,
                 duration: Number(event.duration),
                 duration_str: event.duration.toString(),
             },
@@ -119,7 +112,7 @@ const handleGetEventRequest = async (
                 ...talkInfo,
                 status: generateMediaItemStatus({
                     talk: {
-                        has_problems: hasProblems,
+                        problems: event.problems,
                     },
                     talkInfo: {
                         files: talkInfo.files,

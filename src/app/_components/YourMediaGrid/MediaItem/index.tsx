@@ -75,7 +75,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
             await getTalkInfo(initialData.guid);
         };
 
-        const intervalMs = initialData.has_problems?.length
+        const intervalMs = initialData.problems?.length
             ? 20_000
             : talkInfo?.is_downloading
               ? 1000
@@ -96,7 +96,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
         getTalkInfo,
         isVisible,
         initialData.guid,
-        initialData.has_problems?.length,
+        initialData.problems?.length,
         initialData.title,
         talkInfo?.is_downloading,
     ]);
@@ -221,7 +221,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                         </Box>
                     </CardActionArea>
                 </InvisibleLink>
-                {initialData.has_problems?.length ? (
+                {initialData.mapped_problems?.length ? (
                     <Box
                         sx={{
                             borderBottomLeftRadius: 8,
@@ -234,7 +234,9 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                         boxShadow={1}
                     >
                         <Tooltip
-                            title={initialData.has_problems.join(', ') || ''}
+                            title={
+                                initialData.mapped_problems?.join(', ') || ''
+                            }
                             arrow
                             placement="top"
                         >

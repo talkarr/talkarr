@@ -35,7 +35,9 @@ export type TaskFunction<T = any> = (
 
 export interface JobHandler<T = any> {
     handler: TaskFunction<T>;
-    // Default is 1
+    /**
+     * @default 1
+     */
     concurrency?: number;
 }
 
@@ -128,12 +130,12 @@ export class Queue {
 
         if (activeJobs >= concurrency) {
             if (options?.addIfOverConcurrencyLimit === false) {
-                log.warn(
+                log.debug(
                     `Job ${name} not added due to concurrency limit reached. Active jobs: ${activeJobs}, Concurrency limit: ${concurrency}`,
                 );
                 return null;
             }
-            log.warn(
+            log.debug(
                 `Job ${name} is waiting due to concurrency limit. Active jobs: ${activeJobs}, Concurrency limit: ${concurrency}`,
             );
         }
@@ -700,7 +702,7 @@ export class Queue {
 const queue = new Queue();
 
 queue.on('enqueued', job => {
-    log.info(`Job ${job.id} (${job.name}) enqueued`);
+    log.debug(`Job ${job.id} (${job.name}) enqueued`);
 });
 
 queue.on('error', err => {
@@ -714,7 +716,7 @@ queue.on('failed', async (job, err) => {
 });
 
 queue.on('progress', (job, progress) => {
-    log.info(`Job ${job.id} (${job.name}) is ${progress}% done`);
+    log.debug(`Job ${job.id} (${job.name}) is ${progress}% done`);
 });
 
 queue.on('stalled', job => {

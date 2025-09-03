@@ -59,8 +59,8 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
         }
 
         return results.events.toSorted((a, b) => {
-            const aDate = new Date(a.date);
-            const bDate = new Date(b.date);
+            const aDate = new Date(a.date ?? 0);
+            const bDate = new Date(b.date ?? 0);
 
             if (sortMethod === SearchTextFieldSortMethod.DateAsc) {
                 return aDate.getTime() - bDate.getTime();
@@ -166,9 +166,10 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                     gap={1}
                     data-testid="search-results"
                 >
-                    {sortedResults.map(event => (
+                    {sortedResults.map((event, index) => (
                         <SearchItem
                             key={`event-${event.guid}`}
+                            index={index}
                             item={event}
                             isAlreadyAdded={events?.some(
                                 e => e.guid === event.guid,

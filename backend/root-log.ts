@@ -68,7 +68,16 @@ const rootLog = winston.createLogger({
     transports: [
         new winston.transports.Console({
             format: winston.format.combine(
-                winston.format.colorize(),
+                winston.format.colorize({
+                    colors: {
+                        error: 'red',
+                        warn: 'yellow',
+                        info: 'green',
+                        http: 'magenta',
+                        verbose: 'cyan',
+                        debug: 'blue',
+                    },
+                }),
                 winston.format.splat(),
                 winston.format.timestamp(),
                 hformat,

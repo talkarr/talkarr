@@ -83,7 +83,8 @@
                     "schedule_url": {
                         "type": "string",
                         "example": "https://example.com/schedule",
-                        "description": "Can be empty string"
+                        "description": "Can be empty string",
+                        "nullable": true
                     },
                     "slug": {
                         "type": "string",
@@ -271,7 +272,8 @@
                     },
                     "schedule_url": {
                         "type": "string",
-                        "example": "https://example.com/schedule"
+                        "example": "https://example.com/schedule",
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -336,7 +338,8 @@
                     "date": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2022-01-01T00:00:00Z"
+                        "example": "2022-01-01T00:00:00Z",
+                        "nullable": true
                     },
                     "release_date": {
                         "type": "string",
@@ -439,7 +442,8 @@
                     "date": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2022-01-01T00:00:00Z"
+                        "example": "2022-01-01T00:00:00Z",
+                        "nullable": true
                     },
                     "release_date": {
                         "type": "string",
@@ -525,7 +529,10 @@
                             "did_not_find_mark"
                         ]
                     },
-                    "has_problems": {
+                    "problems": {
+                        "$ref": "#/components/schemas/Problems"
+                    },
+                    "mapped_problems": {
                         "$ref": "#/components/schemas/Problems"
                     },
                     "date_added": {
@@ -551,7 +558,8 @@
                     "duration_str",
                     "root_folder",
                     "root_folder_has_mark",
-                    "has_problems",
+                    "problems",
+                    "mapped_problems",
                     "date_added"
                 ]
             },

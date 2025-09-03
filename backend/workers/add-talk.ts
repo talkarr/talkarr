@@ -10,6 +10,7 @@ import {
 } from 'youtube-dl-exec';
 
 // eslint-disable-next-line import/no-cycle
+import { startCheckEventsForProblems } from '@backend/workers/check-events-for-problems';
 import { startGenerateBlurhashes } from '@backend/workers/generate-blurhashes';
 import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 
@@ -164,6 +165,13 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         });
 
         return done(new Error('Talk does not have a frontend link'));
+    }
+
+    // ===== REMOVE BEFORE COMMIT =====
+    const foo = '1';
+
+    if (foo === '1') {
+        return done();
     }
 
     try {
@@ -439,6 +447,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         await startGenerateMissingNfo({ event });
 
         await startGenerateBlurhashes({ event });
+
+        await startCheckEventsForProblems({ event });
 
         if (stderrBuffer) {
             log.error('Error downloading video:', { stderrBuffer });

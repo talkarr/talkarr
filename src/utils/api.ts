@@ -66,7 +66,16 @@ export const wrapApiCall =
         try {
             return await fn(...args);
         } catch (error) {
-            console.error(`[${tag}] Error in API call:`, error);
+            if (
+                // Do not log AbortError as it is expected when aborting a request
+                error instanceof DOMException &&
+                error.name === 'AbortError'
+            ) {
+                console.log(`[${tag}] API call aborted`);
+            } else {
+                console.error(`[${tag}] Error in API call:`, error);
+            }
+
             return {
                 success: false,
                 message:
