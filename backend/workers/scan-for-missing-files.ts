@@ -176,7 +176,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                         title: event.title,
                     });
                 } else {
-                    log.info('Event is not downloading, starting add talk', {
+                    log.debug('Event is not downloading, starting add talk', {
                         title: event.title,
                         eventGuid: event.guid,
                     });

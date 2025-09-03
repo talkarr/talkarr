@@ -98,6 +98,7 @@ const handleGetEventRequest = async (
             await checkEventForProblems({
                 rootFolderPath: event.root_folder.path,
                 downloadError: talkInfo.download_error,
+                cacheFilesystemCheck: false,
             })
         )
             // eslint-disable-next-line unicorn/no-await-expression-member

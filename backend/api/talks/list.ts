@@ -3,7 +3,6 @@ import {
     listEvents,
     mapResultFiles,
 } from '@backend/events';
-import { isFolderMarked } from '@backend/fs';
 import rootLog from '@backend/root-log';
 import {
     generateMediaItemStatus,
@@ -15,7 +14,7 @@ import type {
     ExpressResponse,
     ExtendedDbEvent,
 } from '@backend/types';
-import { problemMap } from '@backend/types';
+import { problemMap, ProblemType } from '@backend/types';
 
 const log = rootLog.child({ label: 'api/talks/list' });
 
@@ -25,23 +24,45 @@ const handleListEventsRequest = async (
 ): Promise<void> => {
     const events = await listEvents();
 
+    const start = Date.now();
+
     const mappedEvents = await Promise.all(
         events.map(async (event, index, { length }) => {
+            const debugTimeMarks: Record<string, number> = {
+                start_0: 0,
+                checkProblems_1: 0,
+                mapFiles_2: 0,
+                generateStatus_3: 0,
+                end_4: 0,
+            };
+
+            debugTimeMarks.start_0 = Date.now();
+
+            const problems = await checkEventForProblems({
+                rootFolderPath: event.root_folder.path,
+                eventInfoGuid: event.eventInfo?.guid,
+                cacheFilesystemCheck: true,
+            });
+
+            debugTimeMarks.checkProblems_1 = Date.now();
+            log.info(
+                `checkProblems took ${debugTimeMarks.checkProblems_1 - debugTimeMarks.start_0}ms`,
+            );
+
             const hasProblems =
-                (
-                    await checkEventForProblems({
-                        rootFolderPath: event.root_folder.path,
-                        eventInfoGuid: event.eventInfo?.guid,
-                    })
-                )
-                    // eslint-disable-next-line unicorn/no-await-expression-member
-                    ?.map(problem => problemMap[problem] ?? problem) || null;
+                problems?.map(problem => problemMap[problem] ?? problem) ||
+                null;
 
             const file = event.file?.map(f =>
                 mapResultFiles({
                     file: f,
                     rootFolderPath: event.root_folder.path,
                 }),
+            );
+
+            debugTimeMarks.mapFiles_2 = Date.now();
+            log.info(
+                `mapFiles took ${debugTimeMarks.mapFiles_2 - debugTimeMarks.checkProblems_1}ms`,
             );
 
             const status = generateMediaItemStatus({
@@ -54,6 +75,11 @@ const handleListEventsRequest = async (
                 },
             });
 
+            debugTimeMarks.generateStatus_3 = Date.now();
+            log.info(
+                `generateStatus took ${debugTimeMarks.generateStatus_3 - debugTimeMarks.mapFiles_2}ms`,
+            );
+
             log.debug('Processing event', {
                 index,
                 length,
@@ -65,13 +91,18 @@ const handleListEventsRequest = async (
             // eslint-disable-next-line @typescript-eslint/naming-convention
             const { file: _, ...eventWithoutFile } = event;
 
+            debugTimeMarks.end_4 = Date.now();
+            log.info(
+                `Total processing took ${debugTimeMarks.end_4 - debugTimeMarks.start_0}ms`,
+            );
+
             return {
                 ...(eventWithoutFile as unknown as ConvertDateToStringType<ExtendedDbEvent>),
                 persons: event.persons.map(person => person.name),
                 tags: event.tags.map(tag => tag.name),
-                root_folder_has_mark: await isFolderMarked({
-                    rootFolderPath: event.rootFolderPath,
-                }),
+                root_folder_has_mark: problems?.includes(
+                    ProblemType.RootFolderMarkNotFound,
+                ),
                 has_problems: hasProblems,
                 status,
                 duration: Number(event.duration),
@@ -79,6 +110,8 @@ const handleListEventsRequest = async (
             };
         }),
     );
+
+    log.info(`Mapped ${mappedEvents.length} events in ${Date.now() - start}ms`);
 
     res.json({
         success: true,
