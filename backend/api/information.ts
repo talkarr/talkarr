@@ -1,18 +1,8 @@
-import { execSync } from 'node:child_process';
-
-import { getAppVersion, getIsNightly } from '@backend/env';
+import { getAppVersion, getIsNightly, getYtdlpVersion } from '@backend/env';
 import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'informationHandler' });
-
-const getYtdlpVersion = (): string => {
-    try {
-        return execSync('yt-dlp --version', { encoding: 'utf8' }).trim();
-    } catch {
-        return 'unknown';
-    }
-};
 
 const informationHandler = async (
     _req: ExpressRequest<'/information', 'get'>,
