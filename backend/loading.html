@@ -223,6 +223,12 @@
     const logo = document.getElementById('logo');
 
     const setImageUrl = () => {
+        if (logo.src.endsWith('/logo.png')) {
+            logo.removeEventListener('error', setImageUrl);
+            logo.src = '<%=logoDataUrl=%>';
+            return;
+        }
+
         setTimeout(() => {
             logo.src = '/logo.png';
         }, 200);
