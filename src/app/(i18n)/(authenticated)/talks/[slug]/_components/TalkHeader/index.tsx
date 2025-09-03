@@ -5,6 +5,8 @@ import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+import moment from 'moment';
+
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
 
 import { formatLanguageCode } from '@/utils/string';
@@ -46,17 +48,8 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                 </Box>
                 <Box flex={2} display="flex" flexDirection="column" gap={2}>
                     <Typography variant="h2">
-                        <NoSsrMoment>
-                            {moment => (
-                                <>
-                                    {data.db.title} (
-                                    {moment(data.db.date).format(
-                                        yearOnlyFormat,
-                                    )}
-                                    )
-                                </>
-                            )}
-                        </NoSsrMoment>
+                        {data.db.title} (
+                        {moment(data.db.date).format(yearOnlyFormat)})
                     </Typography>
                     <Box>
                         <Typography variant="body1">
@@ -86,10 +79,10 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                                 {t('talks.date')}
                             </SmallText>
                             <NoSsrMoment>
-                                {moment => (
+                                {noSsrMoment => (
                                     <VideoMetaBadge
                                         badgeType="date"
-                                        badgeContent={moment(
+                                        badgeContent={noSsrMoment(
                                             data.db.date,
                                         ).format(longDateFormat)}
                                         size="small"
