@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
 
-import { alpha, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -33,13 +33,11 @@ const StyledContainer = styled(Box)(({ theme }) => ({
     justifyContent: 'flex-start',
     alignItems: 'center',
     padding: theme.spacing(0.5, 4),
-    borderBottom: `1px solid ${alpha(theme.palette.divider, 0.12)}`,
     backgroundColor: theme.palette.grey[800],
-    position: 'fixed',
+    position: 'sticky',
+    top: 0,
+    left: 0,
     zIndex: theme.zIndex.appBar,
-    [theme.breakpoints.up('md')]: {
-        borderTopLeftRadius: theme.shape.borderRadius * 4,
-    },
 }));
 
 const TalkToolbar: FC<TalkToolbarProps> = ({ data }) => {
