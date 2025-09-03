@@ -1,4 +1,5 @@
 import { config } from 'dotenv';
+import { execSync } from 'node:child_process';
 import path from 'node:path';
 import { simpleGit } from 'simple-git';
 
@@ -11,6 +12,23 @@ config({
 });
 
 let privateGitDescribeResult: string | undefined;
+let privateYtdlpVersion: string | undefined;
+
+export const getYtdlpVersion = (): string => {
+    if (privateYtdlpVersion) {
+        return privateYtdlpVersion;
+    }
+
+    try {
+        privateYtdlpVersion = execSync('yt-dlp --version', {
+            encoding: 'utf8',
+        }).trim();
+    } catch {
+        privateYtdlpVersion = 'unknown';
+    }
+
+    return privateYtdlpVersion;
+};
 
 const overrideCurrentVersion = process.env.OVERRIDE_CURRENT_VERSION;
 export const getAppVersion = (): string =>
@@ -69,6 +87,9 @@ export const initEnv = async (): Promise<void> => {
     log.info(
         `Git commit hash: ${privateGitDescribeResult} (from simple-git), override version: ${overrideCurrentVersion}`,
     );
+
+    // get yt-dlp version
+    log.info(`yt-dlp version: ${getYtdlpVersion()}`);
 };
 
 export const getIsNightly = (): boolean => {
