@@ -15,4 +15,4 @@ jobs:
       - name: Label the PR
         uses: actions/labeler@v5
         with:
-          sync-labels: 'true'
+          sync-labels: 'false'
