@@ -23,7 +23,8 @@ export const generateDataUrlFromBlurhashOnClientSide = ({
     customBlurhash: string;
 }): string | undefined => {
     if (!customBlurhash) {
-        throw new Error('No custom blurhash provided');
+        console.error('No custom blurhash provided');
+        return undefined;
     }
 
     if (typeof document === 'undefined') {
@@ -33,7 +34,8 @@ export const generateDataUrlFromBlurhashOnClientSide = ({
 
     const decoded = decodeCustomBlurhash(customBlurhash);
     if (!decoded) {
-        throw new Error('Invalid custom blurhash format');
+        console.error('Invalid custom blurhash format');
+        return undefined;
     }
 
     const { width, height, blurhash } = decoded;
