@@ -9,7 +9,11 @@ let searchEventsHandle: AbortController | null = null;
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pSearchEvents = async (query: SearchEventsArgs) => {
     if (searchEventsHandle) {
-        searchEventsHandle.abort();
+        try {
+            searchEventsHandle.abort();
+        } catch {
+            // do nothing
+        }
     }
 
     const { data, error, response } = await api.GET('/talks/search', {
