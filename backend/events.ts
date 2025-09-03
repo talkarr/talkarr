@@ -1059,8 +1059,11 @@ export const checkEventForProblems = async ({
     rootFolderPath,
     eventInfoGuid,
     downloadError,
+    cacheFilesystemCheck,
 }: {
     rootFolderPath: string;
+    // if forceFilesystemCheck is false, the filesystem check will be cached for 5 minutes
+    cacheFilesystemCheck: boolean;
 } & (
     | {
           eventInfoGuid: EventInfo['guid'] | undefined;
@@ -1089,6 +1092,7 @@ export const checkEventForProblems = async ({
 
     const hasMark = await isFolderMarked({
         rootFolderPath,
+        cacheFilesystemCheck,
     });
 
     if (!hasMark) {
