@@ -38,7 +38,8 @@ export const generateMediaItemStatus = ({
         | null;
     talk:
         | SuccessData<'/talks/list', 'get'>['events'][0]
-        | Pick<SuccessData<'/talks/list', 'get'>['events'][0], 'has_problems'>;
+        | Pick<SuccessData<'/talks/list', 'get'>['events'][0], 'problems'>
+        | null;
 }): MediaItemStatus | null => {
     let status: MediaItemStatus | null;
 
@@ -48,7 +49,7 @@ export const generateMediaItemStatus = ({
 
     const videoFiles = talkInfo?.files?.filter(file => file.is_video);
 
-    if (talk.has_problems?.length) {
+    if (talk?.problems?.length) {
         status = MediaItemStatus.Problem;
     } else if (talkInfo?.is_downloading) {
         status = MediaItemStatus.Downloading;

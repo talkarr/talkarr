@@ -53,6 +53,13 @@ model File {
   eventGuid String
 }
 
+enum EventProblemType {
+  NoRootFolder
+  NoEventInfoGuid
+  RootFolderMarkNotFound
+  HasDownloadError
+}
+
 model Event {
   // general fields
   date_added DateTime @default(now())
@@ -92,6 +99,9 @@ model Event {
 
   // infos
   eventInfo EventInfo?
+
+  // problems
+  problems EventProblemType[]
 }
 
 model EventInfo {

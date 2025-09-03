@@ -1802,7 +1802,8 @@ export interface components {
                 marked: boolean;
                 did_not_find_mark: boolean;
             };
-            has_problems: components["schemas"]["Problems"];
+            problems: components["schemas"]["Problems"];
+            mapped_problems: components["schemas"]["Problems"];
             /**
              * Format: date-time
              * @example 2022-01-01T00:00:00Z
