@@ -1598,7 +1598,7 @@ export interface components {
              * @description Can be empty string
              * @example https://example.com/schedule
              */
-            schedule_url: string;
+            schedule_url: string | null;
             /** @example conf-slug */
             slug: string;
             /**
@@ -1680,7 +1680,7 @@ export interface components {
             /** @example https://api.example.com */
             url: string;
             /** @example https://example.com/schedule */
-            schedule_url: string;
+            schedule_url: string | null;
         };
         Event: {
             /** @example c7b3b1b0-7b3b-4b3b-8b3b-3b3b3b3b3b3b */
@@ -1707,7 +1707,7 @@ export interface components {
              * Format: date-time
              * @example 2022-01-01T00:00:00Z
              */
-            date: string;
+            date: string | null;
             /**
              * Format: date-time
              * @example 2022-01-01T00:00:00Z
@@ -1753,7 +1753,7 @@ export interface components {
              * Format: date-time
              * @example 2022-01-01T00:00:00Z
              */
-            date: string;
+            date: string | null;
             /**
              * Format: date-time
              * @example 2022-01-01T00:00:00Z

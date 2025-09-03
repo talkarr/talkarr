@@ -23,6 +23,9 @@ router.use(
         meta: false,
         // responseWhitelist: ['body'],
         level: 'http',
+        msg: '{{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
+        expressFormat: false,
+        colorize: true,
     }),
 );
 router.use(cookieParser());
