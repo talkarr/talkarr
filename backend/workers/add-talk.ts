@@ -10,6 +10,7 @@ import {
 } from 'youtube-dl-exec';
 
 // eslint-disable-next-line import/no-cycle
+import { startCheckEventsForProblems } from '@backend/workers/check-events-for-problems';
 import { startGenerateBlurhashes } from '@backend/workers/generate-blurhashes';
 import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 
@@ -446,6 +447,8 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         await startGenerateMissingNfo({ event });
 
         await startGenerateBlurhashes({ event });
+
+        await startCheckEventsForProblems({ event });
 
         if (stderrBuffer) {
             log.error('Error downloading video:', { stderrBuffer });

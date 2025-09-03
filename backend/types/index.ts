@@ -14,6 +14,8 @@ import type { PathsWithMethod } from 'openapi-typescript-helpers';
 
 import type { components, paths } from '@backend/generated/schema';
 
+import { EventProblemType } from '@prisma/client';
+
 export type ExtractSuccessData<T> = T extends { success: true; data: infer D }
     ? D
     : never;
@@ -136,19 +138,13 @@ export type TalkInfo = components['schemas']['TalkInfo'];
 
 export type ImportJsonResponse = components['schemas']['ImportJsonResponse'];
 
-export enum ProblemType {
-    NoRootFolder,
-    NoEventInfoGuid,
-    RootFolderMarkNotFound,
-    HasDownloadError,
-}
-
-export const problemMap: Record<ProblemType, string> = {
-    [ProblemType.NoRootFolder]: 'No root folder',
-    [ProblemType.NoEventInfoGuid]: 'No event info guid',
-    [ProblemType.RootFolderMarkNotFound]:
+export const problemMap: Record<EventProblemType, string> = {
+    [EventProblemType.NoRootFolder]: 'No root folder',
+    [EventProblemType.NoEventInfoGuid]: 'No event info guid',
+    [EventProblemType.RootFolderMarkNotFound]:
         'Root folder mark not found, possibly unmounted filesystem',
-    [ProblemType.HasDownloadError]: 'Has download error, check media item page',
+    [EventProblemType.HasDownloadError]:
+        'Has download error, check media item page',
 };
 
 export enum AddTalkFailure {

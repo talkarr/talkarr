@@ -35,7 +35,9 @@ export type TaskFunction<T = any> = (
 
 export interface JobHandler<T = any> {
     handler: TaskFunction<T>;
-    // Default is 1
+    /**
+     * @default 1
+     */
     concurrency?: number;
 }
 

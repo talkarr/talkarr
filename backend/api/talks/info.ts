@@ -1,5 +1,5 @@
 import {
-    checkEventForProblems,
+    getProblemsByGuid,
     getTalkInfoByGuid,
     getTalkInfoBySlug,
 } from '@backend/events';
@@ -33,11 +33,15 @@ const handleEventInfoRequest = async (
     }
 
     let talk: Omit<TalkInfo, 'status'> | null = null;
+    let guidFromSlug: string | null = null;
 
     if (guid) {
-        talk = await getTalkInfoByGuid({ guid });
+        const data = await getTalkInfoByGuid({ guid });
+        talk = data.talkInfo;
     } else if (slug) {
-        talk = await getTalkInfoBySlug({ slug });
+        const data = await getTalkInfoBySlug({ slug });
+        talk = data.talkInfo;
+        guidFromSlug = data.guid;
     }
 
     if (!talk) {
@@ -51,16 +55,12 @@ const handleEventInfoRequest = async (
         return;
     }
 
-    const hasProblems =
-        (
-            await checkEventForProblems({
-                rootFolderPath: talk.root_folder,
-                downloadError: talk.download_error,
-                cacheFilesystemCheck: false,
-            })
-        )
-            // eslint-disable-next-line unicorn/no-await-expression-member
-            ?.map(problem => problemMap[problem] ?? problem) || null;
+    const problems = await getProblemsByGuid({
+        guid: guid || guidFromSlug!,
+    });
+
+    const mappedProblems =
+        problems?.map(problem => problemMap[problem] ?? problem) || null;
 
     res.json({
         success: true,
@@ -68,7 +68,8 @@ const handleEventInfoRequest = async (
             ...talk,
             status: generateMediaItemStatus({
                 talk: {
-                    has_problems: hasProblems,
+                    problems,
+                    mapped_problems: mappedProblems,
                 },
                 talkInfo: {
                     files: talk.files,

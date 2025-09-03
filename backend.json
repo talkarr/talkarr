@@ -529,7 +529,10 @@
                             "did_not_find_mark"
                         ]
                     },
-                    "has_problems": {
+                    "problems": {
+                        "$ref": "#/components/schemas/Problems"
+                    },
+                    "mapped_problems": {
                         "$ref": "#/components/schemas/Problems"
                     },
                     "date_added": {
@@ -555,7 +558,8 @@
                     "duration_str",
                     "root_folder",
                     "root_folder_has_mark",
-                    "has_problems",
+                    "problems",
+                    "mapped_problems",
                     "date_added"
                 ]
             },
