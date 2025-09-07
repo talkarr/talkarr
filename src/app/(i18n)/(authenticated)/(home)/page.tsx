@@ -1,6 +1,6 @@
+import type { NextPage } from 'next';
 import Link from 'next/link';
-
-import type { FC } from 'react';
+import { notFound } from 'next/navigation';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -15,12 +15,27 @@ import { getServerSideTranslation } from '@/i18n/server-side';
 import YourMediaColorExplanation from '@components/YourMediaColorExplanation';
 import YourMediaGrid from '@components/YourMediaGrid';
 
-const Home: FC = async () => {
+const Home: NextPage<{
+    searchParams: { [key: string]: string | string[] | undefined };
+}> = async ({ searchParams }) => {
+    const page = Number(searchParams.page ?? '1');
+
+    if (Number.isNaN(page) || page < 1) {
+        notFound();
+    }
+
     const { t } = await getServerSideTranslation();
-    const eventsResponse = await listEvents(defaultListEventsParams);
+    const eventsResponse = await listEvents({
+        ...defaultListEventsParams,
+        page,
+    });
     const configResponse = await getConfig();
 
     const eventData = eventsResponse?.success ? eventsResponse.data : null;
+
+    if (page > 1 && (!eventData || eventData.events.length === 0)) {
+        notFound();
+    }
 
     const hasRootFolders =
         configResponse?.success && configResponse.data.folders.length > 0;
