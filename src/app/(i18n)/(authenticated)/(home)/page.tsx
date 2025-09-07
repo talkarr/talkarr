@@ -14,11 +14,13 @@ import { getServerSideTranslation } from '@/i18n/server-side';
 
 import YourMediaColorExplanation from '@components/YourMediaColorExplanation';
 import YourMediaGrid from '@components/YourMediaGrid';
+import YourMediaPageControls from '@components/YourMediaPageControls';
 
 const Home: NextPage<{
-    searchParams: { [key: string]: string | string[] | undefined };
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }> = async ({ searchParams }) => {
-    const page = Number(searchParams.page ?? '1');
+    const params = await searchParams;
+    const page = Number(params.page ?? '1');
 
     if (Number.isNaN(page) || page < 1) {
         notFound();
@@ -87,10 +89,8 @@ const Home: NextPage<{
             }}
         >
             <YourMediaGrid initialData={eventData.events} />
-            <YourMediaColorExplanation
-                initialStatusCount={eventData.statusCount}
-                initialData={eventData}
-            />
+            <YourMediaPageControls initialData={eventData} />
+            <YourMediaColorExplanation initialData={eventData} />
         </Box>
     );
 };
