@@ -16,9 +16,22 @@ import { problemMap } from '@backend/types';
 const log = rootLog.child({ label: 'api/talks/list' });
 
 const handleListEventsRequest = async (
-    _req: ExpressRequest<'/talks/list', 'get'>,
+    req: ExpressRequest<'/talks/list', 'get'>,
     res: ExpressResponse<'/talks/list', 'get'>,
 ): Promise<void> => {
+    const { query } = req;
+
+    const { page, limit } = query;
+
+    // if one of page or limit is provided, both must be provided
+    if ((page && !limit) || (!page && limit)) {
+        res.status(400).json({
+            success: false,
+            error: 'Both page and limit must be provided',
+        });
+        return;
+    }
+
     const events = await listEvents();
 
     const start = Date.now();
@@ -106,10 +119,18 @@ const handleListEventsRequest = async (
 
     log.info(`Mapped ${mappedEvents.length} events in ${Date.now() - start}ms`);
 
+    const limitedEvents =
+        typeof page !== 'undefined' && typeof limit !== 'undefined'
+            ? mappedEvents.slice((page - 1) * limit, page * limit)
+            : mappedEvents;
+
     res.json({
         success: true,
         data: {
-            events: mappedEvents,
+            events: limitedEvents,
+            total: mappedEvents.length,
+            page: page ? Number(page) : null,
+            limit: limit ? Number(limit) : null,
             statusCount: generateStatusMap(mappedEvents),
         },
     });

@@ -415,7 +415,10 @@ export interface paths {
         };
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    page?: number;
+                    limit?: number;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -434,6 +437,21 @@ export interface paths {
                                     status: components["schemas"]["MediaItemStatus"] | null;
                                 })[];
                                 statusCount: components["schemas"]["MediaItemStatusCount"];
+                                /**
+                                 * @description Total number of events in the database
+                                 * @example 100
+                                 */
+                                total: number;
+                                /**
+                                 * @description Current page number
+                                 * @example 1
+                                 */
+                                page: number | null;
+                                /**
+                                 * @description Number of events per page
+                                 * @example 25
+                                 */
+                                limit: number | null;
                             };
                         };
                     };

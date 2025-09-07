@@ -19,7 +19,7 @@ import { useApiStore } from '@/providers/api-store-provider';
 
 export interface YourMediaColorExplanationProps {
     initialStatusCount: SuccessData<'/talks/list', 'get'>['statusCount'];
-    initialData: SuccessData<'/talks/list', 'get'>['events'];
+    initialData: SuccessData<'/talks/list', 'get'>;
 }
 
 const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
@@ -34,7 +34,7 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
     const talkInfoMap = useApiStore(state => state.talkInfo);
 
     const updatedStatusCount = useMemo(() => {
-        const initial = initialData.map(({ status, guid }) => ({
+        const initial = initialData.events.map(({ status, guid }) => ({
             status: status as MediaItemStatus,
             key: guid,
         }));
@@ -125,7 +125,7 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
                 />
                 <Typography>
                     {t('components.yourMediaColorExplanation.totalEvents')}:{' '}
-                    {initialData.length}
+                    {initialData.total}
                 </Typography>
             </Box>
         </>

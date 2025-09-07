@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import { getConfig } from '@/app/_api/settings/mediamanagement';
-import { listEvents } from '@/app/_api/talks/list';
+import { defaultListEventsParams, listEvents } from '@/app/_api/talks/list';
 
 import { addTalksPageLink, mediaManagementSettingsPageLink } from '@/constants';
 import { getServerSideTranslation } from '@/i18n/server-side';
@@ -17,7 +17,7 @@ import YourMediaGrid from '@components/YourMediaGrid';
 
 const Home: FC = async () => {
     const { t } = await getServerSideTranslation();
-    const eventsResponse = await listEvents();
+    const eventsResponse = await listEvents(defaultListEventsParams);
     const configResponse = await getConfig();
 
     const eventData = eventsResponse?.success ? eventsResponse.data : null;
@@ -74,7 +74,7 @@ const Home: FC = async () => {
             <YourMediaGrid initialData={eventData.events} />
             <YourMediaColorExplanation
                 initialStatusCount={eventData.statusCount}
-                initialData={eventData.events}
+                initialData={eventData}
             />
         </Box>
     );
