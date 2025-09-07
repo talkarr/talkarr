@@ -60,12 +60,8 @@ const TalkWrapper: FC<TalkWrapperProps> = ({ initialData }) => {
                 pt={1}
                 height={`calc(100vh - ${appbarHeight - talkToolbarHeight}px)`}
             >
-                <Box flex={1}>
-                    <TalkHeader data={singleTalkData || initialData} />
-                </Box>
-                <Box flex={1}>
-                    <TalkFiles data={singleTalkData || initialData} />
-                </Box>
+                <TalkHeader data={singleTalkData || initialData} />
+                <TalkFiles data={singleTalkData || initialData} />
             </Box>
         </>
     );
