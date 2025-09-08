@@ -1773,7 +1773,6 @@
             }
         },
         "/talks/basic-list": {
-            "description": "Same as /talks/list but only returns basic information about the events (no status)",
             "get": {
                 "responses": {
                     "200": {
