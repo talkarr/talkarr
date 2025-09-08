@@ -7,7 +7,7 @@ import type {
     ExpressResponse,
 } from '@backend/types';
 
-const handleListEventsRequest = async (
+const handleBasicListEventsRequest = async (
     _req: ExpressRequest<'/talks/basic-list', 'get'>,
     res: ExpressResponse<'/talks/basic-list', 'get'>,
 ): Promise<void> => {
@@ -23,4 +23,4 @@ const handleListEventsRequest = async (
     });
 };
 
-export default handleListEventsRequest;
+export default handleBasicListEventsRequest;
