@@ -475,6 +475,52 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/talks/basic-list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["DbEvent"][];
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/talks/info": {
         parameters: {
             query?: never;
@@ -1813,15 +1859,7 @@ export interface components {
              * @example 0
              */
             duration: number;
-            /** @example String representation of duration */
-            duration_str: string;
-            root_folder: {
-                path: string;
-                marked: boolean;
-                did_not_find_mark: boolean;
-            };
             problems: components["schemas"]["Problems"];
-            mapped_problems: components["schemas"]["Problems"];
             /**
              * Format: date-time
              * @example 2022-01-01T00:00:00Z
@@ -1834,6 +1872,14 @@ export interface components {
             persons: components["schemas"]["Persons"];
             tags: components["schemas"]["Tags"];
             conference: components["schemas"]["PrismaConference"];
+            /** @example String representation of duration */
+            duration_str: string;
+            root_folder: {
+                path: string;
+                marked: boolean;
+                did_not_find_mark: boolean;
+            };
+            mapped_problems: components["schemas"]["Problems"];
         };
         DownloadedFile: {
             /** @example /path/to/file.jpg */

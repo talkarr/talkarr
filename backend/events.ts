@@ -210,7 +210,11 @@ export const listEvents = async (): Promise<
 
 export const simpleListTalks = async (): Promise<DbEvent[]> => {
     try {
-        return await prisma.event.findMany();
+        return await prisma.event.findMany({
+            orderBy: {
+                date_added: 'desc',
+            },
+        });
     } catch (error) {
         log.error('Error listing talks', { error });
 

@@ -27,7 +27,7 @@ import { SearchTextFieldSortMethod } from '@components/SearchTextField';
 
 export interface AddTalksPageProps {
     hasRootFolder: boolean;
-    events: SuccessData<'/talks/list', 'get'>['events'] | null;
+    events: SuccessData<'/talks/basic-list', 'get'> | null;
 }
 
 const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {

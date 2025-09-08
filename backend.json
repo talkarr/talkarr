@@ -510,29 +510,7 @@
                         "type": "string",
                         "example": "String representation of duration"
                     },
-                    "root_folder": {
-                        "type": "object",
-                        "properties": {
-                            "path": {
-                                "type": "string"
-                            },
-                            "marked": {
-                                "type": "boolean"
-                            },
-                            "did_not_find_mark": {
-                                "type": "boolean"
-                            }
-                        },
-                        "required": [
-                            "path",
-                            "marked",
-                            "did_not_find_mark"
-                        ]
-                    },
                     "problems": {
-                        "$ref": "#/components/schemas/Problems"
-                    },
-                    "mapped_problems": {
                         "$ref": "#/components/schemas/Problems"
                     },
                     "date_added": {
@@ -556,10 +534,8 @@
                     "frontend_link",
                     "duration",
                     "duration_str",
-                    "root_folder",
                     "root_folder_has_mark",
                     "problems",
-                    "mapped_problems",
                     "date_added"
                 ]
             },
@@ -594,12 +570,36 @@
                             },
                             "conference": {
                                 "$ref": "#/components/schemas/PrismaConference"
+                            },
+                            "root_folder": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "marked": {
+                                        "type": "boolean"
+                                    },
+                                    "did_not_find_mark": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "path",
+                                    "marked",
+                                    "did_not_find_mark"
+                                ]
+                            },
+                            "mapped_problems": {
+                                "$ref": "#/components/schemas/Problems"
                             }
                         },
                         "required": [
                             "persons",
                             "tags",
-                            "conference"
+                            "conference",
+                            "root_folder",
+                            "mapped_problems"
                         ]
                     }
                 ]
@@ -1743,6 +1743,55 @@
                                                         "page",
                                                         "limit"
                                                     ]
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/talks/basic-list": {
+            "description": "Same as /talks/list but only returns basic information about the events (no status)",
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/DbEvent"
+                                                    }
                                                 }
                                             },
                                             "required": [
