@@ -1859,6 +1859,8 @@ export interface components {
              * @example 0
              */
             duration: number;
+            /** @example String representation of duration */
+            duration_str: string;
             problems: components["schemas"]["Problems"];
             /**
              * Format: date-time
@@ -1872,8 +1874,6 @@ export interface components {
             persons: components["schemas"]["Persons"];
             tags: components["schemas"]["Tags"];
             conference: components["schemas"]["PrismaConference"];
-            /** @example String representation of duration */
-            duration_str: string;
             root_folder: {
                 path: string;
                 marked: boolean;
