@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0 # Required for mkdocs-git-revision-date-localized-plugin
           persist-credentials: true # Required for mkdocs gh-deploy
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: 3.x
       - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV

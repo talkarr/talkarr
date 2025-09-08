@@ -42,7 +42,7 @@ jobs:
           git diff --exit-code
 
       - name: Delete existing translation branch if it exists
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const branch = process.env.TRANSLATION_BRANCH;
