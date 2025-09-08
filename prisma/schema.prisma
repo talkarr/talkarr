@@ -23,7 +23,7 @@ model Conference {
   // urls
   logo_url     String
   url          String
-  schedule_url String
+  schedule_url String?
   Event        Event[]
 
   // generated
@@ -53,17 +53,24 @@ model File {
   eventGuid String
 }
 
+enum EventProblemType {
+  NoRootFolder
+  NoEventInfoGuid
+  RootFolderMarkNotFound
+  HasDownloadError
+}
+
 model Event {
   // general fields
   date_added DateTime @default(now())
 
   // media.ccc.de specific fields
   // datetimes
-  guid         String   @id
-  date         DateTime
+  guid         String    @id
+  date         DateTime?
   release_date DateTime
   updated_at   DateTime
-  slug         String   @unique
+  slug         String    @unique
 
   // meta
   title             String
@@ -92,6 +99,9 @@ model Event {
 
   // infos
   eventInfo EventInfo?
+
+  // problems
+  problems EventProblemType[]
 }
 
 model EventInfo {

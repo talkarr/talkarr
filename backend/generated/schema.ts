@@ -415,7 +415,10 @@ export interface paths {
         };
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    page?: number;
+                    limit?: number;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -434,7 +437,68 @@ export interface paths {
                                     status: components["schemas"]["MediaItemStatus"] | null;
                                 })[];
                                 statusCount: components["schemas"]["MediaItemStatusCount"];
+                                /**
+                                 * @description Total number of events in the database
+                                 * @example 100
+                                 */
+                                total: number;
+                                /**
+                                 * @description Current page number
+                                 * @example 1
+                                 */
+                                page: number | null;
+                                /**
+                                 * @description Number of events per page
+                                 * @example 25
+                                 */
+                                limit: number | null;
                             };
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/talks/basic-list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["DbEvent"][];
                         };
                     };
                 };
@@ -1598,7 +1662,7 @@ export interface components {
              * @description Can be empty string
              * @example https://example.com/schedule
              */
-            schedule_url: string;
+            schedule_url: string | null;
             /** @example conf-slug */
             slug: string;
             /**
@@ -1680,7 +1744,7 @@ export interface components {
             /** @example https://api.example.com */
             url: string;
             /** @example https://example.com/schedule */
-            schedule_url: string;
+            schedule_url: string | null;
         };
         Event: {
             /** @example c7b3b1b0-7b3b-4b3b-8b3b-3b3b3b3b3b3b */
@@ -1707,7 +1771,7 @@ export interface components {
              * Format: date-time
              * @example 2022-01-01T00:00:00Z
              */
-            date: string;
+            date: string | null;
             /**
              * Format: date-time
              * @example 2022-01-01T00:00:00Z
@@ -1753,7 +1817,7 @@ export interface components {
              * Format: date-time
              * @example 2022-01-01T00:00:00Z
              */
-            date: string;
+            date: string | null;
             /**
              * Format: date-time
              * @example 2022-01-01T00:00:00Z
@@ -1797,12 +1861,7 @@ export interface components {
             duration: number;
             /** @example String representation of duration */
             duration_str: string;
-            root_folder: {
-                path: string;
-                marked: boolean;
-                did_not_find_mark: boolean;
-            };
-            has_problems: components["schemas"]["Problems"];
+            problems: components["schemas"]["Problems"];
             /**
              * Format: date-time
              * @example 2022-01-01T00:00:00Z
@@ -1815,6 +1874,12 @@ export interface components {
             persons: components["schemas"]["Persons"];
             tags: components["schemas"]["Tags"];
             conference: components["schemas"]["PrismaConference"];
+            root_folder: {
+                path: string;
+                marked: boolean;
+                did_not_find_mark: boolean;
+            };
+            mapped_problems: components["schemas"]["Problems"];
         };
         DownloadedFile: {
             /** @example /path/to/file.jpg */

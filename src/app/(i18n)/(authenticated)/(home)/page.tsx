@@ -1,26 +1,43 @@
+import type { NextPage } from 'next';
 import Link from 'next/link';
-
-import type { FC } from 'react';
+import { notFound } from 'next/navigation';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import { getConfig } from '@/app/_api/settings/mediamanagement';
-import { listEvents } from '@/app/_api/talks/list';
+import { defaultListEventsParams, listEvents } from '@/app/_api/talks/list';
 
 import { addTalksPageLink, mediaManagementSettingsPageLink } from '@/constants';
 import { getServerSideTranslation } from '@/i18n/server-side';
 
 import YourMediaColorExplanation from '@components/YourMediaColorExplanation';
 import YourMediaGrid from '@components/YourMediaGrid';
+import YourMediaPageControls from '@components/YourMediaPageControls';
 
-const Home: FC = async () => {
+const Home: NextPage<{
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}> = async ({ searchParams }) => {
+    const params = await searchParams;
+    const page = Number(params.page ?? '1');
+
+    if (Number.isNaN(page) || page < 1) {
+        notFound();
+    }
+
     const { t } = await getServerSideTranslation();
-    const eventsResponse = await listEvents();
+    const eventsResponse = await listEvents({
+        ...defaultListEventsParams,
+        page,
+    });
     const configResponse = await getConfig();
 
     const eventData = eventsResponse?.success ? eventsResponse.data : null;
+
+    if (page > 1 && (!eventData || eventData.events.length === 0)) {
+        notFound();
+    }
 
     const hasRootFolders =
         configResponse?.success && configResponse.data.folders.length > 0;
@@ -72,10 +89,8 @@ const Home: FC = async () => {
             }}
         >
             <YourMediaGrid initialData={eventData.events} />
-            <YourMediaColorExplanation
-                initialStatusCount={eventData.statusCount}
-                initialData={eventData.events}
-            />
+            <YourMediaPageControls initialData={eventData} />
+            <YourMediaColorExplanation initialData={eventData} />
         </Box>
     );
 };

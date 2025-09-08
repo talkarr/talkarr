@@ -1,6 +1,7 @@
 import express from 'express';
 
 import handleAddEventRequest from '@backend/api/talks/add';
+import handleBasicListEventsRequest from '@backend/api/talks/basic-list';
 import handleDeleteEventRequest from '@backend/api/talks/delete';
 import handleGetEventRequest from '@backend/api/talks/get';
 import handleImportJsonRequest from '@backend/api/talks/import';
@@ -18,6 +19,8 @@ router.get('/search', handleSearchEventsRequest);
 router.post('/add', handleAddEventRequest);
 
 router.get('/list', handleListEventsRequest);
+
+router.get('/basic-list', handleBasicListEventsRequest);
 
 router.post('/delete', handleDeleteEventRequest);
 

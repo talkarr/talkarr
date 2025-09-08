@@ -30,10 +30,10 @@ import type {
     NormalAndConvertedDate,
     TalkInfo,
 } from '@backend/types';
-import { AddTalkFailure, ProblemType } from '@backend/types';
+import { AddTalkFailure } from '@backend/types';
 import { ImportIsRecordedFlagBehavior } from '@backend/types/settings';
 
-import { Prisma } from '@prisma/client';
+import { EventProblemType, Prisma } from '@prisma/client';
 
 const log = rootLog.child({ label: 'events' });
 
@@ -210,7 +210,11 @@ export const listEvents = async (): Promise<
 
 export const simpleListTalks = async (): Promise<DbEvent[]> => {
     try {
-        return await prisma.event.findMany();
+        return await prisma.event.findMany({
+            orderBy: {
+                date_added: 'desc',
+            },
+        });
     } catch (error) {
         log.error('Error listing talks', { error });
 
@@ -271,7 +275,10 @@ export const getTalkInfoByGuid = async ({
     guid,
 }: {
     guid: string;
-}): Promise<Omit<TalkInfo, 'status'> | null> => {
+}): Promise<{
+    talkInfo: Omit<TalkInfo, 'status'> | null;
+    guid: string | null;
+}> => {
     try {
         const result = await prisma.event.findUnique({
             where: {
@@ -287,12 +294,12 @@ export const getTalkInfoByGuid = async ({
 
         if (!result) {
             log.warn('Talk not found', { guid });
-            return null;
+            return { talkInfo: null, guid };
         }
 
         if (!result.eventInfo) {
             log.warn('Event info not found for talk', { title: result.title });
-            return null;
+            return { talkInfo: null, guid };
         }
 
         const folder = await getFolderPathForTalk({
@@ -302,7 +309,7 @@ export const getTalkInfoByGuid = async ({
 
         if (!folder) {
             log.warn('Folder not found for talk', { title: result.title });
-            return null;
+            return { talkInfo: null, guid };
         }
 
         const mappedFiles = result.file.map<
@@ -312,27 +319,30 @@ export const getTalkInfoByGuid = async ({
         );
 
         return {
-            title: result.title,
-            files: mappedFiles,
-            root_folder: result.root_folder.path,
-            download_progress: result.eventInfo.download_progress,
-            is_downloading: result.eventInfo.is_downloading,
-            download_error: result.eventInfo.download_error,
-            has_files: result.file.length > 0,
-            folder,
+            talkInfo: {
+                title: result.title,
+                files: mappedFiles,
+                root_folder: result.root_folder.path,
+                download_progress: result.eventInfo.download_progress,
+                is_downloading: result.eventInfo.is_downloading,
+                download_error: result.eventInfo.download_error,
+                has_files: result.file.length > 0,
+                folder,
+            },
+            guid,
         };
     } catch (error) {
         log.error('Error getting talk info', { error, guid });
     }
 
-    return null;
+    return { talkInfo: null, guid };
 };
 
 export const getTalkInfoBySlug = async ({
     slug,
 }: {
     slug: string;
-}): Promise<Omit<TalkInfo, 'status'> | null> => {
+}): Promise<Awaited<ReturnType<typeof getTalkInfoByGuid>>> => {
     try {
         // get guid and call getTalkInfoByGuid
         const result = await prisma.event.findFirst({
@@ -345,7 +355,7 @@ export const getTalkInfoBySlug = async ({
         });
 
         if (!result) {
-            return null;
+            return { talkInfo: null, guid: null };
         }
 
         return await getTalkInfoByGuid({ guid: result.guid });
@@ -913,13 +923,16 @@ export const getEventByFilePath = async ({
         });
 
         if (!result) {
-            log.warn('Event not found by file path', { filePath });
+            log.warn('Event not found in database by file path', { filePath });
             return null;
         }
 
         return result.event;
     } catch (error) {
-        log.error('Error getting event by file path', { error, filePath });
+        log.error('Error getting event from database by file path', {
+            error,
+            filePath,
+        });
 
         return null;
     }
@@ -1056,8 +1069,11 @@ export const checkEventForProblems = async ({
     rootFolderPath,
     eventInfoGuid,
     downloadError,
+    cacheFilesystemCheck,
 }: {
     rootFolderPath: string;
+    // if forceFilesystemCheck is false, the filesystem check will be cached for 5 minutes
+    cacheFilesystemCheck: boolean;
 } & (
     | {
           eventInfoGuid: EventInfo['guid'] | undefined;
@@ -1067,31 +1083,32 @@ export const checkEventForProblems = async ({
           eventInfoGuid?: never;
           downloadError: string | null | undefined;
       }
-)): Promise<ProblemType[] | null> => {
-    const problems: ProblemType[] = [];
+)): Promise<EventProblemType[] | null> => {
+    const problems: EventProblemType[] = [];
 
     // ==== Start of problem checks ====
 
     if (!rootFolderPath) {
         log.debug('Event has no root folder', { rootFolderPath });
 
-        problems.push(ProblemType.NoRootFolder);
+        problems.push(EventProblemType.NoRootFolder);
     }
 
     if (!eventInfoGuid && typeof downloadError === 'undefined') {
         log.debug('Event has no event info', { eventInfoGuid });
 
-        problems.push(ProblemType.NoEventInfoGuid);
+        problems.push(EventProblemType.NoEventInfoGuid);
     }
 
     const hasMark = await isFolderMarked({
         rootFolderPath,
+        cacheFilesystemCheck,
     });
 
     if (!hasMark) {
         log.debug('Root folder is not marked', { rootFolderPath });
 
-        problems.push(ProblemType.RootFolderMarkNotFound);
+        problems.push(EventProblemType.RootFolderMarkNotFound);
     }
 
     const downloadErrorResult =
@@ -1105,7 +1122,7 @@ export const checkEventForProblems = async ({
     if (downloadErrorResult) {
         log.debug('Download error found', { downloadErrorResult });
 
-        problems.push(ProblemType.HasDownloadError);
+        problems.push(EventProblemType.HasDownloadError);
     }
 
     // ==== End of problem checks ====
@@ -1437,5 +1454,53 @@ export const setEventThumbBlurhash = async ({
         log.error('Error setting event thumb blurhash', { error, guid });
 
         return false;
+    }
+};
+
+export const updateEventProblems = async ({
+    guid,
+    problems,
+}: {
+    guid: DbEvent['guid'];
+    problems: EventProblemType[];
+}): Promise<boolean> => {
+    try {
+        await prisma.event.updateMany({
+            where: {
+                guid,
+            },
+            data: {
+                problems,
+            },
+        });
+
+        return true;
+    } catch (error) {
+        log.error('Error updating event problems', { error, guid });
+
+        return false;
+    }
+};
+
+export const getProblemsByGuid = async ({
+    guid,
+}: {
+    guid: DbEvent['guid'];
+}): Promise<EventProblemType[] | null> => {
+    try {
+        const event = await prisma.event.findUnique({
+            where: {
+                guid,
+            },
+            select: {
+                problems: true,
+            },
+        });
+
+        return event?.problems || null;
+    } catch (error) {
+        log.error('Error getting event problems', { error, guid });
+
+        return null;
     }
 };

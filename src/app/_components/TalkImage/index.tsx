@@ -26,6 +26,7 @@ export interface TalkImageProps {
     maxWidth?: CSSProperties['maxWidth'];
     height?: CSSProperties['height'];
     maxHeight?: CSSProperties['maxHeight'];
+    priority?: boolean;
 }
 
 const TalkImage: FC<TalkImageProps> = ({
@@ -33,6 +34,7 @@ const TalkImage: FC<TalkImageProps> = ({
     maxWidth,
     height,
     maxHeight,
+    priority = true,
 }) => {
     const theme = useTheme();
 
@@ -92,7 +94,7 @@ const TalkImage: FC<TalkImageProps> = ({
                         style={{
                             objectFit: 'contain',
                         }}
-                        priority
+                        priority={priority}
                         onLoad={event => {
                             setImageLoading(false);
 

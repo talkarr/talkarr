@@ -83,7 +83,8 @@
                     "schedule_url": {
                         "type": "string",
                         "example": "https://example.com/schedule",
-                        "description": "Can be empty string"
+                        "description": "Can be empty string",
+                        "nullable": true
                     },
                     "slug": {
                         "type": "string",
@@ -271,7 +272,8 @@
                     },
                     "schedule_url": {
                         "type": "string",
-                        "example": "https://example.com/schedule"
+                        "example": "https://example.com/schedule",
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -336,7 +338,8 @@
                     "date": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2022-01-01T00:00:00Z"
+                        "example": "2022-01-01T00:00:00Z",
+                        "nullable": true
                     },
                     "release_date": {
                         "type": "string",
@@ -439,7 +442,8 @@
                     "date": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2022-01-01T00:00:00Z"
+                        "example": "2022-01-01T00:00:00Z",
+                        "nullable": true
                     },
                     "release_date": {
                         "type": "string",
@@ -506,26 +510,7 @@
                         "type": "string",
                         "example": "String representation of duration"
                     },
-                    "root_folder": {
-                        "type": "object",
-                        "properties": {
-                            "path": {
-                                "type": "string"
-                            },
-                            "marked": {
-                                "type": "boolean"
-                            },
-                            "did_not_find_mark": {
-                                "type": "boolean"
-                            }
-                        },
-                        "required": [
-                            "path",
-                            "marked",
-                            "did_not_find_mark"
-                        ]
-                    },
-                    "has_problems": {
+                    "problems": {
                         "$ref": "#/components/schemas/Problems"
                     },
                     "date_added": {
@@ -549,9 +534,8 @@
                     "frontend_link",
                     "duration",
                     "duration_str",
-                    "root_folder",
                     "root_folder_has_mark",
-                    "has_problems",
+                    "problems",
                     "date_added"
                 ]
             },
@@ -586,12 +570,36 @@
                             },
                             "conference": {
                                 "$ref": "#/components/schemas/PrismaConference"
+                            },
+                            "root_folder": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "marked": {
+                                        "type": "boolean"
+                                    },
+                                    "did_not_find_mark": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "path",
+                                    "marked",
+                                    "did_not_find_mark"
+                                ]
+                            },
+                            "mapped_problems": {
+                                "$ref": "#/components/schemas/Problems"
                             }
                         },
                         "required": [
                             "persons",
                             "tags",
-                            "conference"
+                            "conference",
+                            "root_folder",
+                            "mapped_problems"
                         ]
                     }
                 ]
@@ -1641,6 +1649,29 @@
         },
         "/talks/list": {
             "get": {
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 25,
+                            "minimum": 1,
+                            "maximum": 100
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "content": {
@@ -1686,12 +1717,80 @@
                                                         },
                                                         "statusCount": {
                                                             "$ref": "#/components/schemas/MediaItemStatusCount"
+                                                        },
+                                                        "total": {
+                                                            "type": "integer",
+                                                            "example": 100,
+                                                            "description": "Total number of events in the database"
+                                                        },
+                                                        "page": {
+                                                            "type": "integer",
+                                                            "example": 1,
+                                                            "description": "Current page number",
+                                                            "nullable": true
+                                                        },
+                                                        "limit":  {
+                                                            "type": "integer",
+                                                            "example": 25,
+                                                            "description": "Number of events per page",
+                                                            "nullable": true
                                                         }
                                                     },
                                                     "required": [
                                                         "events",
-                                                        "statusCount"
+                                                        "statusCount",
+                                                        "total",
+                                                        "page",
+                                                        "limit"
                                                     ]
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/talks/basic-list": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/DbEvent"
+                                                    }
                                                 }
                                             },
                                             "required": [

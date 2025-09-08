@@ -2,6 +2,7 @@ import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'node:path';
 
+import cache from '@backend/cache';
 import { prisma } from '@backend/prisma';
 import rootLog from '@backend/root-log';
 import type {
@@ -257,18 +258,35 @@ export const markRootFolder = async ({
 
 export const isFolderMarked = async ({
     rootFolderPath,
+    cacheFilesystemCheck = false,
 }: {
     rootFolderPath: string;
+    cacheFilesystemCheck?: boolean;
 }): Promise<boolean> => {
+    const cacheKey = `fs/isFolderMarked/${rootFolderPath}`;
+
     const filePath = pathUtils.join(rootFolderPath, rootFolderMarkName);
+
+    if (cacheFilesystemCheck) {
+        const cacheResult = cache.get(cacheKey) ?? null;
+
+        if (typeof cacheResult === 'boolean') {
+            return cacheResult;
+        }
+    }
+
+    let hasMark: boolean;
 
     try {
         await fs_promises.access(filePath);
-
-        return true;
+        hasMark = true;
     } catch {
-        return false;
+        hasMark = false;
     }
+
+    cache.put(cacheKey, hasMark, 5 * 60 * 1000); // cache for 5 minutes
+
+    return hasMark;
 };
 
 type GetFolderPathForTalkEvent = Pick<

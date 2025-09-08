@@ -3,7 +3,7 @@ import type { Metadata, NextPage } from 'next';
 import Box from '@mui/material/Box';
 
 import { getConfig } from '@/app/_api/settings/mediamanagement';
-import { listEvents } from '@/app/_api/talks/list';
+import { basicListEvents } from '@/app/_api/talks/basic-list';
 import AddTalksPage from '@/app/(i18n)/(authenticated)/talks/add/_components/AddTalksPage';
 
 import { getServerSideTranslation } from '@/i18n/server-side';
@@ -27,7 +27,7 @@ const Page: NextPage<PageProps> = async () => {
 
     const data = config?.success ? config.data : null;
 
-    const eventsResponse = await listEvents();
+    const eventsResponse = await basicListEvents();
 
     const eventsData = eventsResponse?.success ? eventsResponse.data : null;
 
@@ -40,7 +40,7 @@ const Page: NextPage<PageProps> = async () => {
         >
             <AddTalksPage
                 hasRootFolder={!!data?.folders.length}
-                events={eventsData?.events || null}
+                events={eventsData || null}
             />
         </Box>
     );
