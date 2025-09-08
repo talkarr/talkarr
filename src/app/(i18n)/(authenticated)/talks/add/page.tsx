@@ -3,7 +3,7 @@ import type { Metadata, NextPage } from 'next';
 import Box from '@mui/material/Box';
 
 import { getConfig } from '@/app/_api/settings/mediamanagement';
-import { basicListEvents } from '@/app/_api/talks/list';
+import { basicListEvents } from '@/app/_api/talks/basic-list';
 import AddTalksPage from '@/app/(i18n)/(authenticated)/talks/add/_components/AddTalksPage';
 
 import { getServerSideTranslation } from '@/i18n/server-side';
