@@ -41,7 +41,6 @@ jobs:
       - name: Cleanup
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-          GH_REF: ${{ github.ref }}
         run: |
           REPO=${{ github.repository }}
           
