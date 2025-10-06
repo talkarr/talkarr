@@ -19,7 +19,7 @@ If you can't find a solution there, feel free to open an issue on the [GitHub Is
 
 ## Contributing
 
-The easiest way to contribute is by help translating it into your language! You can find more information [here](translating)
+The easiest way to contribute is by help translating it into your language! You can find more information [here](translating/index.md).
 
 ## Releases
 

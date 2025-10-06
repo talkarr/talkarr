@@ -45,6 +45,7 @@ theme:
     - navigation.top
     - search
     - search.suggest
+    - search.highlight
     - content.code.copy
     - content.code.highlight
     - content.tooltips
@@ -62,3 +63,4 @@ markdown_extensions:
 
 plugins:
   - git-revision-date-localized
+  - search
