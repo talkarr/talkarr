@@ -70,7 +70,7 @@ jobs:
           for cacheKey in $cacheKeysForPR
           do
               echo "Deleting cache with key: $cacheKey"
-              gh cache delete -R $REPO --key "$cacheKey" --confirm
+              gh cache delete -R $REPO "$cacheKey"
           done
           set -e
           echo "Done"
