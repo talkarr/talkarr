@@ -5,6 +5,8 @@ import type {
     File,
 } from '@prisma/client';
 
+import { isBlurhashValid } from 'blurhash';
+
 // eslint-disable-next-line import/no-cycle
 import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
 
@@ -1348,7 +1350,7 @@ export const getConferencesWithMissingBlurhash = async (): Promise<
                 return true;
             }
 
-            return c.logo_url_blur.startsWith('data:image/');
+            return !isBlurhashValid(c.logo_url_blur).result;
         });
     } catch (error) {
         log.error('Error getting conferences with missing blurhash', { error });
@@ -1404,13 +1406,13 @@ export const getEventsWithMissingBlurhash = async ({
                 !e.poster_url ||
                 !e.poster_url_blur ||
                 e.poster_url_blur === '' ||
-                e.poster_url_blur.startsWith('data:image/');
+                !isBlurhashValid(e.poster_url_blur).result;
 
             const thumbMissing =
                 !e.thumb_url ||
                 !e.thumb_url_blur ||
                 e.thumb_url_blur === '' ||
-                e.thumb_url_blur.startsWith('data:image/');
+                !isBlurhashValid(e.thumb_url_blur).result;
 
             return posterMissing || thumbMissing;
         });
