@@ -660,7 +660,7 @@ export class Queue {
                             colors: true,
                         });
                     }
-                }, 500);
+                }, 150);
             })
             .catch(error => {
                 log.error('Error loading jobs from database:', {

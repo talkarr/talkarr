@@ -1504,3 +1504,24 @@ export const getProblemsByGuid = async ({
         return null;
     }
 };
+
+export const getConferencesFromEvents = async ({
+    events,
+}: {
+    events: {
+        conferenceAcronym: DbConference['acronym'];
+    }[];
+}): Promise<DbConference[]> => {
+    try {
+        return await prisma.conference.findMany({
+            where: {
+                acronym: {
+                    in: events.map(e => e.conferenceAcronym),
+                },
+            },
+        });
+    } catch (error) {
+        log.error('Error getting conferences from events', { error });
+        return [];
+    }
+};

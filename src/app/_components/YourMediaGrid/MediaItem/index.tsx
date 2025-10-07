@@ -1,9 +1,7 @@
 'use client';
 
-import Image from 'next/image';
-
 import type { FC } from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { styled, useTheme } from '@mui/material';
@@ -13,7 +11,6 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
-import Skeleton from '@mui/material/Skeleton';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
@@ -32,10 +29,13 @@ import { useApiStore } from '@/providers/api-store-provider';
 
 import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
 import InvisibleLink from '@components/InvisibleLink';
+// import NoSsrCustomImage from '@components/NoSsrCustomImage';
+import CustomImage from '@components/NoSsrCustomImage/components/CustomImage';
 import NoSsrMoment from '@components/NoSsrMoment';
 
 export interface MediaItemProps {
     initialData: SuccessData<'/talks/list', 'get'>['events'][0];
+    conference: SuccessData<'/talks/list', 'get'>['conferences'][0];
 }
 
 const StyledContainer = styled(Grid)(({ theme }) => ({
@@ -44,11 +44,9 @@ const StyledContainer = styled(Grid)(({ theme }) => ({
     overflow: 'hidden',
 }));
 
-const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
+const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
     const { t } = useTranslation();
     const theme = useTheme();
-
-    const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -160,21 +158,6 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                             }}
                         >
                             <CardMedia>
-                                {imageLoaded ? null : (
-                                    <Skeleton
-                                        variant="rectangular"
-                                        animation="wave"
-                                        sx={{
-                                            aspectRatio: '16/9',
-                                            width: '100%',
-                                            height: 'auto',
-                                            position: 'absolute',
-                                            top: 0,
-                                            left: 0,
-                                            borderRadius: 3,
-                                        }}
-                                    />
-                                )}
                                 <Box
                                     sx={{
                                         position: 'relative',
@@ -184,23 +167,15 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                         boxShadow: 1,
                                     }}
                                 >
-                                    <Image
+                                    <CustomImage
                                         src={generateCacheUrl({
                                             url: initialData.poster_url,
                                             cacheKey: `poster-${initialData.guid}`,
                                         })}
                                         blurDataURL={blurDataURL}
-                                        suppressHydrationWarning // because blurDataURL is generated on client side
-                                        placeholder={
-                                            blurDataURL ? 'blur' : undefined
-                                        }
-                                        fill
                                         sizes="300px"
-                                        style={{
-                                            objectFit: 'cover',
-                                        }}
                                         alt={initialData.title}
-                                        onLoad={() => setImageLoaded(true)}
+                                        suppressHydrationWarning
                                     />
                                 </Box>
                             </CardMedia>
@@ -211,9 +186,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData }) => {
                                         {moment =>
                                             `${moment(initialData.date).format(
                                                 longDateFormat,
-                                            )} - ${
-                                                initialData.conference.title
-                                            }`
+                                            )} - ${conference.title}`
                                         }
                                     </NoSsrMoment>
                                 }

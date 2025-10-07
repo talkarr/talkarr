@@ -1,9 +1,9 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import type { FC } from 'react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -24,6 +24,13 @@ const YourMediaPageControls: FC<YourMediaPageControlsProps> = ({
     const { total, page, limit } = initialData;
     const pathname = usePathname();
     const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const [isNavigating, setIsNavigating] = useState<boolean>(false);
+
+    useEffect(() => {
+        setIsNavigating(false);
+    }, [pathname, searchParams]);
 
     const canGoToPreviousPage = useMemo(() => (page ?? 0) > 1, [page]);
     const canGoToNextPage = useMemo(
@@ -37,8 +44,13 @@ const YourMediaPageControls: FC<YourMediaPageControlsProps> = ({
     );
 
     const goToPage = (newPage: number): void => {
+        if (isNavigating) {
+            return;
+        }
+
         const url = new URL(pathname ?? '', window.location.origin);
         url.searchParams.set('page', newPage.toString());
+        setIsNavigating(true);
         router.push(url.pathname + url.search);
     };
 
@@ -70,7 +82,7 @@ const YourMediaPageControls: FC<YourMediaPageControlsProps> = ({
             >
                 <IconButton
                     color="primary"
-                    disabled={!canGoToPreviousPage}
+                    disabled={!canGoToPreviousPage || isNavigating}
                     onClick={goToPreviousPage}
                 >
                     <PreviousPageIcon />
@@ -80,7 +92,7 @@ const YourMediaPageControls: FC<YourMediaPageControlsProps> = ({
                 </Box>
                 <IconButton
                     color="primary"
-                    disabled={!canGoToNextPage}
+                    disabled={!canGoToNextPage || isNavigating}
                     onClick={goToNextPage}
                 >
                     <NextPageIcon />
