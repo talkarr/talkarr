@@ -1333,10 +1333,22 @@ export const getConferencesWithMissingBlurhash = async (): Promise<
     DbConference[]
 > => {
     try {
-        return await prisma.conference.findMany({
-            where: {
-                OR: [{ logo_url_blur: null }, { logo_url_blur: '' }],
-            },
+        const conferences = await prisma.conference.findMany({});
+
+        if (conferences.length === 0) {
+            return [];
+        }
+
+        return conferences.filter(c => {
+            if (!c.logo_url) {
+                return false;
+            }
+
+            if (!c.logo_url_blur || c.logo_url_blur === '') {
+                return true;
+            }
+
+            return c.logo_url_blur.startsWith('data:image/');
         });
     } catch (error) {
         log.error('Error getting conferences with missing blurhash', { error });
@@ -1381,18 +1393,31 @@ export const getEventsWithMissingBlurhash = async ({
     force?: boolean;
 }): Promise<DbEvent[]> => {
     try {
-        const eventsFound = await prisma.event.findMany({
-            where: force
-                ? {}
-                : {
-                      OR: [
-                          { poster_url_blur: null },
-                          { poster_url_blur: '' },
-                          { thumb_url_blur: null },
-                          { thumb_url_blur: '' },
-                      ],
-                  },
+        const events = await prisma.event.findMany({});
+
+        const eventsFound = events.filter(e => {
+            if (force) {
+                return true;
+            }
+
+            const posterMissing =
+                !e.poster_url ||
+                !e.poster_url_blur ||
+                e.poster_url_blur === '' ||
+                e.poster_url_blur.startsWith('data:image/');
+
+            const thumbMissing =
+                !e.thumb_url ||
+                !e.thumb_url_blur ||
+                e.thumb_url_blur === '' ||
+                e.thumb_url_blur.startsWith('data:image/');
+
+            return posterMissing || thumbMissing;
         });
+
+        if (eventsFound.length === 0) {
+            return [];
+        }
 
         if (overrideEvents) {
             const overrideGuids = new Set(overrideEvents.map(e => e.guid));
