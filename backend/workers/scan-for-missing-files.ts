@@ -181,7 +181,9 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                         eventGuid: event.guid,
                     });
 
-                    await startAddTalk({ event });
+                    if (process.env.DISABLE_DOWNLOADS !== 'true') {
+                        await startAddTalk({ event });
+                    }
                 }
             }
 

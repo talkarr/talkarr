@@ -1,4 +1,10 @@
-import { listEvents, mapResultFiles } from '@backend/events';
+import type { Conference as DbConference } from '@prisma/client';
+
+import {
+    getConferencesFromEvents,
+    listEvents,
+    mapResultFiles,
+} from '@backend/events';
 import { isFolderMarked } from '@backend/fs';
 import rootLog from '@backend/root-log';
 import {
@@ -81,6 +87,8 @@ const handleListEventsRequest = async (
                 status,
                 duration: Number(event.duration),
                 duration_str: event.duration.toString(),
+                conference: undefined,
+                description: null,
             };
         }),
     );
@@ -90,6 +98,10 @@ const handleListEventsRequest = async (
             ? mappedEvents.slice((page - 1) * limit, page * limit)
             : mappedEvents;
 
+    const conferencesFromEvents = await getConferencesFromEvents({
+        events,
+    });
+
     res.json({
         success: true,
         data: {
@@ -98,6 +110,10 @@ const handleListEventsRequest = async (
             page: page ? Number(page) : null,
             limit: limit ? Number(limit) : null,
             statusCount: generateStatusMap(mappedEvents),
+            conferences: conferencesFromEvents.map(conference => ({
+                ...(conference as unknown as ConvertDateToStringType<DbConference>),
+                updated_at: conference.updated_at.toISOString(),
+            })),
         },
     });
 };

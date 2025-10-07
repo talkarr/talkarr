@@ -88,7 +88,10 @@ const Home: NextPage<{
                 paddingY: 3,
             }}
         >
-            <YourMediaGrid initialData={eventData.events} />
+            <YourMediaGrid
+                initialData={eventData.events}
+                conferences={eventData.conferences}
+            />
             <YourMediaPageControls initialData={eventData} />
             <YourMediaColorExplanation initialData={eventData} />
         </Box>

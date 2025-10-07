@@ -1,7 +1,9 @@
+import { fileTypeFromFile } from 'file-type';
 import fs from 'node:fs';
 import path from 'node:path';
 
 import { configDirectory } from '@backend/env';
+import { defaultMimeType } from '@backend/fs';
 import rootLog from '@backend/root-log';
 import { libravatarDomain } from '@backend/users';
 
@@ -29,6 +31,7 @@ export const getCachedImageFromUrl = async ({
     cachePathOnFs: string;
     // remaining cache duration in milliseconds
     remainingCacheDuration: number;
+    mimeType: string;
 } | null> => {
     if (!url) {
         log.error('URL is required to get cached image.');
@@ -76,6 +79,7 @@ export const getCachedImageFromUrl = async ({
 
     try {
         const stats = await fs.promises.stat(cacheFilePath);
+        const mimeType = await fileTypeFromFile(cacheFilePath);
 
         const now = Date.now();
         const fileAge = now - stats.mtimeMs;
@@ -89,6 +93,7 @@ export const getCachedImageFromUrl = async ({
         return {
             cachePathOnFs: cacheFilePath,
             remainingCacheDuration: cacheDuration - fileAge,
+            mimeType: mimeType?.mime || defaultMimeType,
         };
     } catch (error) {
         log.debug(`Cached image not found for ${url}, fetching...`, { error });
@@ -126,6 +131,7 @@ export const getCachedImageFromUrl = async ({
         return {
             cachePathOnFs: cacheFilePath,
             remainingCacheDuration: cacheDuration,
+            mimeType: contentType,
         };
     } catch (error) {
         log.error(

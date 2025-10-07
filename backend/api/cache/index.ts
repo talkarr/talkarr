@@ -38,7 +38,7 @@ router.get(
             return;
         }
 
-        const { cachePathOnFs, remainingCacheDuration } = cachedFile;
+        const { cachePathOnFs, remainingCacheDuration, mimeType } = cachedFile;
 
         const normalizedPath = pathUtils.normalize(cachePathOnFs);
 
@@ -52,6 +52,7 @@ router.get(
         }
 
         // send file from the path 'cachedFile'
+        res.setHeader('Content-Type', mimeType);
         res.status(200).sendFile(
             cachePathOnFs,
             {

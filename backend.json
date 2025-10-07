@@ -554,6 +554,25 @@
                 ],
                 "description": "List of problems"
             },
+            "ExtendedDbEventWithConference": {
+                "description": "Unfortunately, this is the only way to properly do Pick<> in OpenAPI",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ExtendedDbEvent"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "conference": {
+                                "$ref": "#/components/schemas/PrismaConference"
+                            }
+                        },
+                        "required": [
+                            "conference"
+                        ]
+                    }
+                ]
+            },
             "ExtendedDbEvent": {
                 "allOf": [
                     {
@@ -567,9 +586,6 @@
                             },
                             "tags": {
                                 "$ref": "#/components/schemas/Tags"
-                            },
-                            "conference": {
-                                "$ref": "#/components/schemas/PrismaConference"
                             },
                             "root_folder": {
                                 "type": "object",
@@ -597,7 +613,6 @@
                         "required": [
                             "persons",
                             "tags",
-                            "conference",
                             "root_folder",
                             "mapped_problems"
                         ]
@@ -1706,10 +1721,14 @@
                                                                                         "type": "null"
                                                                                     }
                                                                                 ]
+                                                                            },
+                                                                            "conferenceAcronym": {
+                                                                                "type": "string"
                                                                             }
                                                                         },
                                                                         "required": [
-                                                                            "status"
+                                                                            "status",
+                                                                            "conferenceAcronym"
                                                                         ]
                                                                     }
                                                                 ]
@@ -1734,6 +1753,12 @@
                                                             "example": 25,
                                                             "description": "Number of events per page",
                                                             "nullable": true
+                                                        },
+                                                        "conferences": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/PrismaConference"
+                                                            }
                                                         }
                                                     },
                                                     "required": [
@@ -1741,7 +1766,8 @@
                                                         "statusCount",
                                                         "total",
                                                         "page",
-                                                        "limit"
+                                                        "limit",
+                                                        "conferences"
                                                     ]
                                                 }
                                             },
@@ -1947,7 +1973,7 @@
                                                     "type": "object",
                                                     "properties": {
                                                         "db": {
-                                                            "$ref": "#/components/schemas/ExtendedDbEvent"
+                                                            "$ref": "#/components/schemas/ExtendedDbEventWithConference"
                                                         },
                                                         "talk": {
                                                             "$ref": "#/components/schemas/Event"

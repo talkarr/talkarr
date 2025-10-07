@@ -435,6 +435,7 @@ export interface paths {
                             data: {
                                 events: (components["schemas"]["ExtendedDbEvent"] & {
                                     status: components["schemas"]["MediaItemStatus"] | null;
+                                    conferenceAcronym: string;
                                 })[];
                                 statusCount: components["schemas"]["MediaItemStatusCount"];
                                 /**
@@ -452,6 +453,7 @@ export interface paths {
                                  * @example 25
                                  */
                                 limit: number | null;
+                                conferences: components["schemas"]["PrismaConference"][];
                             };
                         };
                     };
@@ -616,7 +618,7 @@ export interface paths {
                         "application/json": components["schemas"]["SuccessResponse"] & {
                             /** @description "db" is the data from the database, "talk" is the data from the API (fetched every time), "info" is the data from the filesystem */
                             data: {
-                                db: components["schemas"]["ExtendedDbEvent"];
+                                db: components["schemas"]["ExtendedDbEventWithConference"];
                                 talk: components["schemas"]["Event"];
                                 info: components["schemas"]["TalkInfo"];
                             };
@@ -1870,10 +1872,13 @@ export interface components {
         };
         /** @description List of problems */
         Problems: string[] | null;
+        /** @description Unfortunately, this is the only way to properly do Pick<> in OpenAPI */
+        ExtendedDbEventWithConference: components["schemas"]["ExtendedDbEvent"] & {
+            conference: components["schemas"]["PrismaConference"];
+        };
         ExtendedDbEvent: components["schemas"]["DbEvent"] & {
             persons: components["schemas"]["Persons"];
             tags: components["schemas"]["Tags"];
-            conference: components["schemas"]["PrismaConference"];
             root_folder: {
                 path: string;
                 marked: boolean;
