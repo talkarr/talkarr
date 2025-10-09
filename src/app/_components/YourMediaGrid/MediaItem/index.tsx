@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { styled, useTheme } from '@mui/material';
@@ -11,6 +11,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
+import Skeleton from '@mui/material/Skeleton';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
@@ -21,7 +22,7 @@ import type { SuccessData } from '@backend/types';
 
 import useOnScreen from '@/hooks/use-on-screen';
 
-import { generateDataUrlFromBlurhashOnClientSide } from '@/utils/blurhash';
+import { convertBlurhashToDataURL } from '@/utils/blurhash';
 import { generateCacheUrl } from '@/utils/cache';
 
 import { longDateFormat, specificTalkPageLink } from '@/constants';
@@ -30,7 +31,9 @@ import { useApiStore } from '@/providers/api-store-provider';
 import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
 import InvisibleLink from '@components/InvisibleLink';
 // import NoSsrCustomImage from '@components/NoSsrCustomImage';
-import CustomImage from '@components/NoSsrCustomImage/components/CustomImage';
+import CustomImage, {
+    BlurhashNotAvailableYet,
+} from '@components/NoSsrCustomImage/components/CustomImage';
 import NoSsrMoment from '@components/NoSsrMoment';
 
 export interface MediaItemProps {
@@ -47,6 +50,8 @@ const StyledContainer = styled(Grid)(({ theme }) => ({
 const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
     const { t } = useTranslation();
     const theme = useTheme();
+
+    const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -114,7 +119,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
     const blurDataURL = useMemo(
         () =>
             initialData.poster_url_blur
-                ? generateDataUrlFromBlurhashOnClientSide({
+                ? convertBlurhashToDataURL({
                       customBlurhash: initialData.poster_url_blur,
                   })
                 : undefined,
@@ -158,6 +163,21 @@ const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
                             }}
                         >
                             <CardMedia>
+                                {imageLoaded && !blurDataURL ? null : (
+                                    <Skeleton
+                                        variant="rectangular"
+                                        animation="wave"
+                                        sx={{
+                                            aspectRatio: '16/9',
+                                            width: '100%',
+                                            height: 'auto',
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            borderRadius: 3,
+                                        }}
+                                    />
+                                )}
                                 <Box
                                     sx={{
                                         position: 'relative',
@@ -172,10 +192,16 @@ const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
                                             url: initialData.poster_url,
                                             cacheKey: `poster-${initialData.guid}`,
                                         })}
-                                        blurDataURL={blurDataURL}
+                                        blurDataURL={
+                                            blurDataURL ||
+                                            BlurhashNotAvailableYet
+                                        }
                                         sizes="300px"
-                                        alt={initialData.title}
+                                        alt={
+                                            imageLoaded ? initialData.title : ''
+                                        }
                                         suppressHydrationWarning
+                                        onLoad={() => setImageLoaded(true)}
                                     />
                                 </Box>
                             </CardMedia>

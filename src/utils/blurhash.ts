@@ -1,7 +1,7 @@
 // see backend/helper/blurhash.ts for more details
 import { decode, isBlurhashValid } from 'blurhash';
 
-export const decodeCustomBlurhash = (
+export const clientDecodeCustomBlurhash = (
     customBlurhash: string,
 ): { width: number; height: number; blurhash: string } | null => {
     const match = customBlurhash.match(/^w=(\d+);h=(\d+);d=(.+)$/);
@@ -17,22 +17,17 @@ export const decodeCustomBlurhash = (
 };
 
 // Arguments are object to make sure only customBlurhash is passed and not the direct output of encode() function
-export const generateDataUrlFromBlurhashOnClientSide = ({
+export const extractBlurhashFromCustomFormat = ({
     customBlurhash,
 }: {
     customBlurhash: string;
-}): string | undefined => {
+}): [Uint8ClampedArray, number, number] | undefined => {
     if (!customBlurhash) {
         console.error('No custom blurhash provided');
         return undefined;
     }
 
-    if (typeof document === 'undefined') {
-        // Not running in a browser environment
-        return undefined;
-    }
-
-    const decoded = decodeCustomBlurhash(customBlurhash);
+    const decoded = clientDecodeCustomBlurhash(customBlurhash);
     if (!decoded) {
         console.error('Invalid custom blurhash format');
         return undefined;
@@ -44,7 +39,22 @@ export const generateDataUrlFromBlurhashOnClientSide = ({
         throw new Error('Invalid blurhash string');
     }
 
-    const pixels = decode(blurhash, width, height);
+    return [decode(blurhash, width, height), width, height];
+};
+
+export const convertBlurhashToClientDataURL = ({
+    pixels,
+    width,
+    height,
+}: {
+    pixels: Uint8ClampedArray;
+    width: number;
+    height: number;
+}): string | undefined => {
+    if (typeof document === 'undefined') {
+        // Not running in a browser environment
+        return undefined;
+    }
 
     const canvasElement = document.createElement('canvas');
     canvasElement.width = width;
@@ -58,4 +68,34 @@ export const generateDataUrlFromBlurhashOnClientSide = ({
     ctx.putImageData(imageData, 0, 0);
 
     return canvasElement.toDataURL();
+};
+
+export const convertBlurhashToDataURL = ({
+    customBlurhash,
+}: {
+    customBlurhash: string;
+}): string | undefined => {
+    if (!customBlurhash) {
+        console.error('No custom blurhash provided');
+        return undefined;
+    }
+
+    const decoded = extractBlurhashFromCustomFormat({ customBlurhash });
+
+    if (!decoded) {
+        console.error('Error decoding custom blurhash');
+        return undefined;
+    }
+
+    const [pixels, width, height] = decoded;
+
+    const isClient =
+        typeof window !== 'undefined' && typeof document !== 'undefined';
+
+    // either run client side or server side
+    if (isClient) {
+        return convertBlurhashToClientDataURL({ pixels, width, height });
+    }
+
+    return undefined;
 };
