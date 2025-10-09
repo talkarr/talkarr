@@ -1,6 +1,8 @@
 import type { CSSProperties, FC } from 'react';
 import { useEffect, useState } from 'react';
 
+export const BlurhashNotAvailableYet = 'not_available_yet' as const;
+
 export interface CustomImageProps {
     src: string;
     blurDataURL: string | undefined;
@@ -49,7 +51,7 @@ const CustomImage: FC<CustomImageProps> = ({
     return (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-            src={imageSrc}
+            src={imageSrc === BlurhashNotAvailableYet ? undefined : imageSrc}
             alt={alt}
             style={{
                 ...style,
@@ -60,7 +62,6 @@ const CustomImage: FC<CustomImageProps> = ({
                 transition: 'filter 0.3s ease-in-out',
                 filter: imageSrc === blurDataURL ? 'blur(8px)' : 'none',
             }}
-            loading="lazy"
             draggable={false}
             decoding="async"
             onLoad={() => {

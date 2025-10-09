@@ -284,9 +284,11 @@ export class Queue {
 
             if (shouldRun) {
                 try {
-                    await this.enqueueJob(job.name, job.data);
+                    log.info(`Enqueuing repeating job ${job.name}`);
                     job.lastRunAt = now;
+                    await this.enqueueJob(job.name, job.data);
                 } catch (error) {
+                    job.lastRunAt = null;
                     log.error(`Error enqueuing repeating job ${job.name}:`, {
                         error,
                     });

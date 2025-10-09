@@ -19,6 +19,7 @@ import {
 import type { ExistingFileWithGuessedInformation } from '@backend/fs/scan';
 import type { components } from '@backend/generated/schema';
 import { getConferenceFromEvent, getTalkFromApiBySlug } from '@backend/helper';
+import { serverDecodeCustomBlurhash } from '@backend/helper/blurhash';
 import { prisma } from '@backend/prisma';
 import rootLog from '@backend/root-log';
 import { getSettings } from '@backend/settings';
@@ -1350,7 +1351,13 @@ export const getConferencesWithMissingBlurhash = async (): Promise<
                 return true;
             }
 
-            return !isBlurhashValid(c.logo_url_blur).result;
+            const decoded = serverDecodeCustomBlurhash(c.logo_url_blur);
+
+            if (!decoded) {
+                return true;
+            }
+
+            return !isBlurhashValid(decoded.blurhash).result;
         });
     } catch (error) {
         log.error('Error getting conferences with missing blurhash', { error });
@@ -1402,17 +1409,26 @@ export const getEventsWithMissingBlurhash = async ({
                 return true;
             }
 
+            const decodedPoster =
+                (e.poster_url_blur
+                    ? serverDecodeCustomBlurhash(e.poster_url_blur)?.blurhash
+                    : null) || '';
+            const decodedThumb =
+                (e.thumb_url_blur
+                    ? serverDecodeCustomBlurhash(e.thumb_url_blur)?.blurhash
+                    : null) || '';
+
             const posterMissing =
                 !e.poster_url ||
                 !e.poster_url_blur ||
                 e.poster_url_blur === '' ||
-                !isBlurhashValid(e.poster_url_blur).result;
+                !isBlurhashValid(decodedPoster).result;
 
             const thumbMissing =
                 !e.thumb_url ||
                 !e.thumb_url_blur ||
                 e.thumb_url_blur === '' ||
-                !isBlurhashValid(e.thumb_url_blur).result;
+                !isBlurhashValid(decodedThumb).result;
 
             return posterMissing || thumbMissing;
         });

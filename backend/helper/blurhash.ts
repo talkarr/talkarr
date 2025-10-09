@@ -12,6 +12,21 @@ export const encodeCustomBlurhash = (
     height: number,
 ): string => `w=${width};h=${height};d=${blurhash}`;
 
+export const serverDecodeCustomBlurhash = (
+    customBlurhash: string,
+): { width: number; height: number; blurhash: string } | null => {
+    const match = customBlurhash.match(/^w=(\d+);h=(\d+);d=(.+)$/);
+    if (!match) {
+        return null;
+    }
+
+    const width = Number.parseInt(match[1], 10);
+    const height = Number.parseInt(match[2], 10);
+    const blurhash = match[3];
+
+    return { width, height, blurhash };
+};
+
 export const generateBlurhashFromBuffer = async (
     buffer: Buffer,
 ): Promise<string> => {
