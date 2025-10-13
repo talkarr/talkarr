@@ -115,7 +115,7 @@ jobs:
           git config --global url."https://x-access-token:${{ steps.generate-token.outputs.token }}@github.com/".insteadOf https://github.com/
 
       - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v6
+        uses: stefanzweifel/git-auto-commit-action@v7
         if: ${{ github.event_name == 'pull_request' }}
         with:
           commit_message: 'Update licenses file'
