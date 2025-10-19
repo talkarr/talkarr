@@ -56,13 +56,13 @@ const LanguageChanger: FC<LanguageChangerProps> = ({ anchorEl, onClose }) => {
             onClose={onClose}
             anchorOrigin={{
                 vertical: 'bottom',
-                horizontal: 'right',
+                horizontal: 'left',
             }}
             slotProps={{
                 paper: {
                     sx: {
                         minWidth: 150,
-                        maxWidth: 400,
+                        maxWidth: 'min(400px, 90vw)',
                         borderRadius: 2,
                     },
                     elevation: 3,
