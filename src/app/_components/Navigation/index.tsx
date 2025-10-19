@@ -232,7 +232,10 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                                 <IconButton
                                     onClick={() => openInformationModal()}
                                     sx={{
-                                        display: { xs: 'none', sm: 'block' },
+                                        display: {
+                                            xs: 'none',
+                                            sm: 'inline-flex',
+                                        },
                                     }}
                                 >
                                     <HelpOutlineIcon />
@@ -240,7 +243,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                             </Tooltip>
                             <ChangeLanguageButton
                                 sx={{
-                                    display: { xs: 'none', sm: 'block' },
+                                    display: { xs: 'none', sm: 'inline-flex' },
                                 }}
                             />
                             <NavigationUser />
