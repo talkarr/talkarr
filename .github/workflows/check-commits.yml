@@ -12,9 +12,79 @@ jobs:
     permissions:
       pull-requests: write
     steps:
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: PR Conventional Commit Validation
         uses: ytanikin/PRConventionalCommits@1.3.0
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         with:
           task_types: '["feat","fix","docs","ci","refactor","perf","chore","revert"]'
-          add_label: 'true'
-          custom_labels: '{"feat":"feature","fix":"bugfix","ci":"CI/CD"}'
+          add_label: 'false'
+
+      - name: Extract the type from the PR title and set as label
+        uses: actions/github-script@v8
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+        with:
+          script: |
+            const title = process.env.TITLE;
+            const typeMatch = title.match(/^(\w+)(\(.+\))?:/);
+            
+            const supportedLabels = [
+              "feat",
+              "fix",
+              "docs",
+              "ci",
+              "refactor",
+              "perf",
+              "chore",
+              "revert"
+            ];
+
+            // remove existing supported labels and add new ones if not present based on PR title
+            const existingLabels = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const labelsToRemove = existingLabels.data
+              .map(label => label.name)
+              .filter(name => supportedLabels.includes(name));
+
+            for (const label of labelsToRemove) {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                name: label,
+              });
+            }
+
+            if (typeMatch) {
+              const type = typeMatch[1];
+              if (supportedLabels.includes(type)) {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  labels: [type],
+                });
+              }
+            }
+
+            if (labelsToRemove.length > 0) {
+              console.log(`Removed labels: ${labelsToRemove.join(", ")}`);
+            }
+            if (typeMatch) {
+              console.log(`Added label: ${typeMatch[1]}`);
+            } else {
+              console.log("No valid type found in PR title to add as label.");
+            }
