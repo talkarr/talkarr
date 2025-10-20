@@ -12,8 +12,17 @@ jobs:
     permissions:
       pull-requests: write
     steps:
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: PR Conventional Commit Validation
         uses: ytanikin/PRConventionalCommits@1.3.0
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         with:
           task_types: '["feat","fix","docs","ci","refactor","perf","chore","revert"]'
           add_label: 'false'
@@ -22,6 +31,7 @@ jobs:
         uses: actions/github-script@v8
         env:
           TITLE: ${{ github.event.pull_request.title }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         with:
           script: |
             const title = process.env.TITLE;
