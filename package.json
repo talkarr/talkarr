@@ -121,9 +121,9 @@
     "devDependencies": {
         "@eslint/compat": "^1.4.0",
         "@eslint/eslintrc": "^3",
-        "@eslint/js": "^9.37.0",
+        "@eslint/js": "^9.38.0",
         "@microsoft/eslint-formatter-sarif": "^3.1.0",
-        "@playwright/test": "^1.56.0",
+        "@playwright/test": "^1.56.1",
         "@types/cookie-parser": "^1.4.9",
         "@types/express": "^5.0.3",
         "@types/gravatar": "^1.8.6",
@@ -141,7 +141,7 @@
         "eslint": "^9",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-airbnb-typescript": "^18.0.0",
-        "eslint-config-next": "15.5.4",
+        "eslint-config-next": "15.5.6",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-deprecation": "^3.0.0",
         "eslint-plugin-import": "^2.32.0",
@@ -157,7 +157,7 @@
         "prettier": "^3.6.2",
         "ts-jest": "^29.4.5",
         "ts-node-dev": "^2.0.0",
-        "typescript-eslint": "^8.46.0",
+        "typescript-eslint": "^8.46.2",
         "wait-on": "^9.0.1"
     },
     "engines": {
