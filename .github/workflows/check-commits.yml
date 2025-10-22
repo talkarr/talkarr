@@ -55,19 +55,6 @@ jobs:
               issue_number: context.issue.number,
             });
 
-            const labelsToRemove = existingLabels.data
-              .map(label => label.name)
-              .filter(name => supportedLabels.includes(name));
-
-            for (const label of labelsToRemove) {
-              await github.rest.issues.removeLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                name: label,
-              });
-            }
-
             if (typeMatch) {
               const type = typeMatch[1];
               if (supportedLabels.includes(type)) {
@@ -78,6 +65,19 @@ jobs:
                   labels: [type],
                 });
               }
+            }
+            
+            const labelsToRemove = existingLabels.data
+              .map(label => label.name)
+              .filter(name => supportedLabels.includes(name) && (!typeMatch || name !== typeMatch[1]));
+
+            for (const label of labelsToRemove) {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                name: label,
+              });
             }
 
             if (labelsToRemove.length > 0) {
