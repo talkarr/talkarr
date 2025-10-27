@@ -191,9 +191,6 @@ const nextConfig = async (): Promise<NextConfig> => {
                 ];
             },
             */
-            eslint: {
-                ignoreDuringBuilds: false,
-            },
             typescript: {
                 ignoreBuildErrors: false,
             },
