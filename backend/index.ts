@@ -115,13 +115,23 @@ initServer.on('listening', async () => {
                 log.info('Startup server closed');
 
                 if (serverHost) {
-                    server.listen(serverPort, serverHost, () => {
+                    server.listen(serverPort, serverHost, error => {
+                        if (error) {
+                            log.error(error);
+                            process.exit(1);
+                        }
+
                         log.info(
                             `Server ready on http://${serverHost}:${serverPort}/`,
                         );
                     });
                 } else {
-                    server.listen(serverPort, () => {
+                    server.listen(serverPort, error => {
+                        if (error) {
+                            log.error(error);
+                            process.exit(1);
+                        }
+
                         log.info(
                             `Server ready on http://localhost:${serverPort}/`,
                         );

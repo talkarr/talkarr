@@ -13,6 +13,7 @@ import type { Method } from 'openapi-typescript';
 import type { PathsWithMethod } from 'openapi-typescript-helpers';
 
 import type { components, paths } from '@backend/generated/schema';
+import type { UserWithPassword } from '@backend/users';
 
 import { EventProblemType } from '@prisma/client';
 
@@ -88,18 +89,16 @@ export type ExpressGetRequest<
     RequestParams<P, M>
 >;
 
-type User = components['schemas']['User'] | null;
-
 export type ExpressRequest<
     P extends PathsWithMethod<paths, M>,
     M extends Method,
 > = M extends 'get'
     ? ExpressGetRequest<P, M> & {
-          user?: User;
+          user?: UserWithPassword | null;
       }
     : M extends 'post'
       ? ExpressPostRequest<P, M> & {
-            user?: User;
+            user?: UserWithPassword | null;
         }
       : never;
 

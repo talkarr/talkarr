@@ -16,19 +16,20 @@ import {
     tasksSettingsPageLink,
 } from '@/constants';
 
-export type SimpleNavigationItem = Pick<
-    NavigationItemType,
-    'title' | 'path' | 'visible' | 'slug'
->;
-
 export interface NavigationItemType {
-    title: `navigation.${string}` | '__unset__';
+    title: `navigation.${string}`;
     Icon: typeof SvgIcon;
     subitems?: SimpleNavigationItem[];
     path: string | { href: string; as: string };
     visible?: false;
     slug: string;
+    aliasPaths?: string[];
 }
+
+export type SimpleNavigationItem = Pick<
+    NavigationItemType,
+    'title' | 'path' | 'visible' | 'slug' | 'aliasPaths'
+>;
 
 export type SplitNavigationItems = SimpleNavigationItem[][];
 
@@ -47,6 +48,7 @@ export const settings: (SimpleNavigationItem & {
         path: securitySettingsPageLink,
         description: 'navigation.settings.security.description',
         slug: 'security',
+        aliasPaths: ['/settings/security/users/[uid]'],
     },
     {
         title: 'navigation.settings.mediaManagement.title',
@@ -90,13 +92,8 @@ export const navigationItems: NavigationItemType[] = [
                 path: importTalksPageLink,
                 slug: 'import-fahrplan',
             },
-            {
-                title: '__unset__',
-                path: '/talks/[slug]',
-                visible: false,
-                slug: 'specific-talk',
-            },
         ],
+        aliasPaths: ['/talks/[slug]'],
     },
     {
         title: 'navigation.settings.title',

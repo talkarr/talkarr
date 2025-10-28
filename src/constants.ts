@@ -34,6 +34,8 @@ export const mediaManagementSettingsPageLink = '/settings/mediamanagement';
 export const securitySettingsPageLink = '/settings/security';
 export const tasksSettingsPageLink = '/settings/tasks';
 export const licensesSettingsPageLink = '/settings/licenses';
+export const specificUserSecurityPageLink = (uid: string): string =>
+    `${securitySettingsPageLink}/users/${uid}`;
 
 // === User ===
 export const loginPageLink = '/login';
@@ -61,3 +63,6 @@ export const yearOnlyFormat = 'yyyy';
 
 // external links
 export const weblateUrl = 'https://weblate.commanderred.xyz/engage/talkarr/';
+
+// === Errors ===
+export const newRequestInitiatedError = 'new request initiated' as const;

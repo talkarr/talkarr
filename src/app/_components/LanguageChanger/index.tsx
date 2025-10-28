@@ -22,6 +22,8 @@ export interface LanguageChangerProps {
     onClose: () => void;
 }
 
+const devLanguage = process.env.NODE_ENV === 'development' ? ['dev'] : [];
+
 const LanguageChanger: FC<LanguageChangerProps> = ({ anchorEl, onClose }) => {
     const router = useRouter();
     const { t, i18n } = useTranslation();
@@ -32,7 +34,7 @@ const LanguageChanger: FC<LanguageChangerProps> = ({ anchorEl, onClose }) => {
         router.refresh();
     };
 
-    const mappedLanguages = languages.map(lang => {
+    const mappedLanguages = [...languages, ...devLanguage].map(lang => {
         // use the intl api to get the language name
         const languageName =
             new Intl.DisplayNames([lang], { type: 'language' }).of(lang) ||

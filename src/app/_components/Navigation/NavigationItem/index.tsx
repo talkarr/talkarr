@@ -83,10 +83,23 @@ const NavigationItem: FC<NavigationItemProps> = ({
             : [];
 
     const fileRoutePath = getFileRoutePath(pathname, params);
-    const selected = pathname === href;
+
+    const thisHasAlias = item.aliasPaths?.includes(fileRoutePath);
+
+    const isAlias =
+        thisHasAlias ||
+        ('subitems' in item && item.subitems
+            ? item.subitems.some(subitem =>
+                  subitem.aliasPaths?.includes(fileRoutePath),
+              )
+            : false);
+
+    const selected = pathname === href || thisHasAlias;
     const subitemSelected =
-        subItemHrefs.includes(pathname) || subItemHrefs.includes(fileRoutePath);
-    const highlighted = selected || subitemSelected || isSubitem;
+        subItemHrefs.includes(pathname) ||
+        subItemHrefs.includes(fileRoutePath) ||
+        isAlias;
+    const highlighted = selected || subitemSelected || isSubitem || isAlias;
 
     const inner = (
         <>
@@ -101,11 +114,9 @@ const NavigationItem: FC<NavigationItemProps> = ({
                     <ListItemIcon>
                         <item.Icon
                             sx={{
-                                color:
-                                    (selected || subitemSelected) &&
-                                    !subitemSelected
-                                        ? theme.palette.primary.main
-                                        : undefined,
+                                color: selected
+                                    ? theme.palette.primary.main
+                                    : undefined,
                             }}
                         />
                     </ListItemIcon>
@@ -115,11 +126,9 @@ const NavigationItem: FC<NavigationItemProps> = ({
                     slotProps={{
                         primary: {
                             sx: {
-                                color:
-                                    (selected || subitemSelected) &&
-                                    !subitemSelected
-                                        ? theme.palette.primary.main
-                                        : undefined,
+                                color: selected
+                                    ? theme.palette.primary.main
+                                    : undefined,
                             },
                         },
                     }}

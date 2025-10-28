@@ -3,8 +3,10 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import backend from 'i18next-resources-to-backend';
 
+const dev = process.env.NODE_ENV === 'development';
+
 export const languages = ['en', 'de'];
-export const fallbackLng = 'en';
+export const fallbackLng = dev ? 'dev' : 'en';
 export const cookieName = 'i18nextLng';
 
 const runsOnServer = typeof window === 'undefined';
@@ -16,10 +18,10 @@ i18n.use(LanguageDetector)
         ),
     )
     .init({
-        supportedLngs: languages,
+        supportedLngs: [...languages, ...(dev ? ['dev'] : [])],
         lng: undefined,
         fallbackLng,
-        debug: process.env.NODE_ENV === 'development' && !runsOnServer,
+        debug: dev && !runsOnServer,
         interpolation: {
             escapeValue: false,
         },

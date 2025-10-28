@@ -251,6 +251,17 @@ export const requireUser = async (
     return true;
 };
 
+export const sanitizeUser = (user: UserWithPassword): SchemaUser => ({
+    id: user.id,
+    email: user.email,
+    avatarUrl: user.avatarUrl,
+    createdAt: user.createdAt,
+    permissions: user.permissions,
+    displayName: user.displayName,
+    isActive: user.isActive,
+    updatedAt: user.updatedAt,
+});
+
 export const verifyPassword = async (
     user: UserWithPassword,
     password?: string,
