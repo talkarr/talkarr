@@ -28,6 +28,8 @@ import { userAvatarCacheKey } from '@/cache-keys';
 import { loginPageLink } from '@/constants';
 import { useUserStore } from '@/providers/user-store-provider';
 
+import UserAvatar from '@components/UserAvatar';
+
 const NavigationUser: FC = () => {
     const { t } = useTranslation();
     const router = useRouter();
@@ -76,17 +78,7 @@ const NavigationUser: FC = () => {
                     marginLeft: 1,
                 }}
             >
-                <Avatar
-                    src={
-                        user
-                            ? generateCacheUrl({
-                                  url: user.avatarUrl,
-                                  cacheKey: userAvatarCacheKey(user),
-                              })
-                            : undefined
-                    }
-                    alt={user?.displayName || user?.email}
-                />
+                <UserAvatar user={user} />
             </ButtonBase>
             <Popover
                 open={!!anchorEl}

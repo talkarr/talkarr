@@ -96,12 +96,22 @@ const startInitServer = (): http.Server => {
 
     if (host) {
         log.info(`Starting startup server on http://${host}:${port}/ ...`);
-        loadingHttpServer = loadingServer.listen(port, host, () => {
+        loadingHttpServer = loadingServer.listen(port, host, error => {
+            if (error) {
+                log.error(error);
+                process.exit(1);
+            }
+
             log.info(`Startup server listening on http://${host}:${port}/`);
         });
     } else {
         log.info(`Starting startup server on http://localhost:${port}/ ...`);
-        loadingHttpServer = loadingServer.listen(port, () => {
+        loadingHttpServer = loadingServer.listen(port, error => {
+            if (error) {
+                log.error(error);
+                process.exit(1);
+            }
+
             log.info(`Startup server listening on http://localhost:${port}/`);
         });
     }

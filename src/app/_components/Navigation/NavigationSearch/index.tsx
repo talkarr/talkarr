@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import type { FC } from 'react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Box from '@mui/material/Box';
@@ -16,6 +16,7 @@ import { addTalksPageWithSearchLink } from '@/constants';
 import MaterialSearchBar from '@components/MaterialSearchBar';
 
 const NavigationSearch: FC = () => {
+    const params = useSearchParams();
     const router = useRouter();
     const { t } = useTranslation();
 
@@ -26,6 +27,12 @@ const NavigationSearch: FC = () => {
 
         router.push(addTalksPageWithSearchLink(search));
     };
+
+    useEffect(() => {
+        const updatedSearch = params.get('search') || '';
+
+        setSearch(updatedSearch);
+    }, [params]);
 
     return (
         <form onSubmit={handleSearch} style={{ width: '100%' }}>

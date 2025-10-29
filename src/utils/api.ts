@@ -6,6 +6,8 @@ import type { paths } from '@backend/generated/schema';
 
 import { getCookiesForApi } from '@/app/_api';
 
+import { newRequestInitiatedError } from '@/constants';
+
 const tag = `API-${typeof window === 'undefined' ? 'SERVER-SIDE' : 'CLIENT-SIDE'}`;
 
 const apiMiddleware: Middleware = {
@@ -68,8 +70,9 @@ export const wrapApiCall =
         } catch (error) {
             if (
                 // Do not log AbortError as it is expected when aborting a request
-                error instanceof DOMException &&
-                error.name === 'AbortError'
+                (error instanceof DOMException &&
+                    error.name === 'AbortError') ||
+                error === newRequestInitiatedError
             ) {
                 console.log(`[${tag}] API call aborted`);
             } else {

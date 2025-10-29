@@ -2,6 +2,8 @@ import type { RequestParams } from '@backend/types';
 
 import api, { wrapApiCall } from '@/utils/api';
 
+import { newRequestInitiatedError } from '@/constants';
+
 export type SearchEventsArgs = RequestParams<'/talks/search'>;
 
 let searchEventsHandle: AbortController | null = null;
@@ -9,7 +11,7 @@ let searchEventsHandle: AbortController | null = null;
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const pSearchEvents = async (query: SearchEventsArgs) => {
     if (searchEventsHandle) {
-        searchEventsHandle.abort('new request initiated');
+        searchEventsHandle.abort(newRequestInitiatedError);
     }
 
     const { data, error, response } = await api.GET('/talks/search', {
