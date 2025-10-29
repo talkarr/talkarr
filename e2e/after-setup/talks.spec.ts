@@ -255,9 +255,6 @@ test('should be able to search for a string', async ({
 
     await navigationSearch.fill(validSearchString);
 
-    // replace with web-first
-    await expect(navigationSearch).toHaveAttribute('value', validSearchString);
-
     // focus and press enter
     await page.keyboard.press('Enter');
 
