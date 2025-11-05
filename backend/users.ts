@@ -1,4 +1,7 @@
-import type { Permission, User as DbUser } from '@prisma/client';
+import type {
+    Permission as DbPermission,
+    User as DbUser,
+} from '@prisma/client';
 import type express from 'express';
 import type { Algorithm } from 'jsonwebtoken';
 
@@ -337,7 +340,7 @@ export const createUser = async ({
     email: string;
     password: string;
     displayName: string;
-    initialPermissions: Permission[];
+    initialPermissions: DbPermission[];
 }): Promise<DbUser> => {
     const passwordHash = await hashPassword(password);
 
@@ -361,4 +364,48 @@ export const createUser = async ({
     log.info(`User created with ID: ${user.id}`);
 
     return user;
+};
+
+export const verifyPermissions = async (
+    req: express.Request,
+    res: express.Response,
+    permissions: DbPermission[],
+): Promise<boolean> => {
+    const hasUser = await requireUser(req, res);
+
+    if (!hasUser) {
+        // error handled by requireUser() function
+        return false;
+    }
+
+    const userId = (req as unknown as { user: UserWithPassword }).user.id;
+
+    const user = await getUserWithPasswordById(userId);
+
+    if (!user) {
+        log.warn('User not found');
+        res.status(400).json({
+            success: false,
+            error: 'Invalid request',
+        });
+        return false;
+    }
+
+    const hasPermissions = permissions.every(permissionToTest =>
+        user.permissions.includes(permissionToTest),
+    );
+
+    if (!hasPermissions) {
+        log.warn('User has insufficient permissions', {
+            required: permissions,
+            provided: user.permissions,
+        });
+        res.status(401).json({
+            success: false,
+            error: 'User does not have sufficient permissions',
+        });
+        return false;
+    }
+
+    return true;
 };

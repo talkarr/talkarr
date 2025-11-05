@@ -1,11 +1,16 @@
 import queue from '@backend/queue';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { verifyPermissions } from '@backend/users';
 import { isValidData, taskValidators } from '@backend/workers';
 
 const handleExecuteTaskRequest = async (
     req: ExpressRequest<'/tasks/execute', 'post'>,
     res: ExpressResponse<'/tasks/execute', 'post'>,
 ): Promise<void> => {
+    if (!(await verifyPermissions(req, res, ['Admin']))) {
+        return;
+    }
+
     const { task_name: taskName, data } = req.body;
 
     if (!taskName) {

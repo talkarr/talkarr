@@ -1,6 +1,10 @@
 import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
-import { getUserWithPasswordById, sanitizeUser } from '@backend/users';
+import {
+    getUserWithPasswordById,
+    sanitizeUser,
+    verifyPermissions,
+} from '@backend/users';
 
 const log = rootLog.child({ label: 'user/details' });
 
@@ -8,6 +12,10 @@ const handleUserDetailsRequest = async (
     req: ExpressRequest<'/user/details', 'get'>,
     res: ExpressResponse<'/user/details', 'get'>,
 ): Promise<void> => {
+    if (!(await verifyPermissions(req, res, ['Admin']))) {
+        return;
+    }
+
     const { uid } = req.query;
 
     if (!uid) {

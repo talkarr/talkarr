@@ -6,6 +6,7 @@ import {
     imageCacheDirectory,
 } from '@backend/image-cache';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { requireUser } from '@backend/users';
 
 const router = express.Router();
 
@@ -15,6 +16,10 @@ router.get(
         req: ExpressRequest<'/cache/fetch', 'get'>,
         res: ExpressResponse<'/cache/fetch', 'get'>,
     ) => {
+        if (!(await requireUser(req, res))) {
+            return;
+        }
+
         const { url, key } = req.query;
 
         if (!url || !key) {
