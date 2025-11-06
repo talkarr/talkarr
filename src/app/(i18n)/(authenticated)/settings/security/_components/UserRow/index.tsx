@@ -23,7 +23,7 @@ export interface UserRowProps {
 const UserRow: FC<UserRowProps> = ({ user }) => (
     <TableRow>
         <TableCell component="th" scope="row">
-            <Box display="flex" flexDirection="row" alignItems="center">
+            <Box display="flex" flexDirection="row" alignItems="center" gap={2}>
                 <UserAvatar user={user} />
                 <Box>
                     {user.displayName ? (

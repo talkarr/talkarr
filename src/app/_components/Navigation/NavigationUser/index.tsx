@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import ButtonBase from '@mui/material/ButtonBase';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -71,15 +70,7 @@ const NavigationUser: FC = () => {
 
     return (
         <>
-            <ButtonBase
-                onClick={handleClick}
-                sx={{
-                    borderRadius: '50%',
-                    marginLeft: 1,
-                }}
-            >
-                <UserAvatar user={user} />
-            </ButtonBase>
+            <UserAvatar user={user} onClick={handleClick} />
             <Popover
                 open={!!anchorEl}
                 anchorEl={anchorEl}
