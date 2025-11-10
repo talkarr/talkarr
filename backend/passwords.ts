@@ -20,7 +20,7 @@ export const validatePassword = (password: string): boolean => {
     }
 
     // Check if password contains at least one special character
-    const specialCharacters = /[!@#$%^&*(),.?":{}|<>]/;
+    const specialCharacters = /[!@#$%^&*(),.?":{}|<>\-_]/;
     if (!specialCharacters.test(password)) {
         return false;
     }

@@ -242,7 +242,7 @@ export const requireUser = async (
     res: express.Response,
 ): Promise<boolean> => {
     if (!(req as any).user) {
-        log.warn('User is not authenticated');
+        log.debug('User is not authenticated');
         res.status(401).json({
             success: false,
             error: 'User is not authenticated',
