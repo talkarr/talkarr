@@ -58,11 +58,9 @@ async function main(): Promise<void> {
                     email: 'test@example.com',
                     password: await argon2.hash('Passwort_123'),
                     permissions: {
-                        createMany: {
-                            data: createUserPermissions(Permission.Admin).map(
-                                permission => ({ permission }),
-                            ),
-                        },
+                        create: createUserPermissions(Permission.Admin).map(
+                            permission => ({ permission }),
+                        ),
                     },
                 },
             });

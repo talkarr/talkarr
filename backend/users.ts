@@ -326,11 +326,9 @@ export const createInitialUser = async ({
             password: passwordHash,
             displayName,
             permissions: {
-                createMany: {
-                    data: createUserPermissions([Permission.Admin]).map(
-                        permission => ({ permission }),
-                    ),
-                },
+                create: createUserPermissions([Permission.Admin]).map(
+                    permission => ({ permission }),
+                ),
             },
         },
     });
@@ -361,11 +359,9 @@ export const createUser = async ({
             ...(initialPermissions.length > 0
                 ? {
                       permissions: {
-                          createMany: {
-                              data: createUserPermissions(
-                                  initialPermissions,
-                              ).map(permission => ({ permission })),
-                          },
+                          create: createUserPermissions(initialPermissions).map(
+                              permission => ({ permission }),
+                          ),
                       },
                   }
                 : {}),
