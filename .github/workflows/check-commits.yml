@@ -35,7 +35,7 @@ jobs:
         with:
           script: |
             const title = process.env.TITLE;
-            const typeMatch = title.match(/^(\w+)(\(.+\))?:/);
+            let typeMatch = title.match(/^(\w+)(\(.+\))?:/);
             
             const supportedLabels = [
               "feat",
@@ -47,6 +47,15 @@ jobs:
               "chore",
               "revert"
             ];
+            
+            const labelMap = {
+              "feat": "feature",
+              "fix": "bugfix",
+            };
+            
+            if (typeMatch in labelMap) {
+              typeMatch = labelMap[typeMatch];
+            }
 
             // remove existing supported labels and add new ones if not present based on PR title
             const existingLabels = await github.rest.issues.listLabelsOnIssue({
