@@ -1,21 +1,17 @@
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
-import { sanitizeUser } from '@backend/users';
+import { requireUser, sanitizeUser } from '@backend/users';
 
 const handleUserInfoRequest = async (
     req: ExpressRequest<'/user/info', 'get'>,
     res: ExpressResponse<'/user/info', 'get'>,
 ): Promise<void> => {
-    if (!req.user) {
-        res.status(401).json({
-            success: false,
-            error: 'You are not logged in.',
-        });
+    if (!(await requireUser(req, res))) {
         return;
     }
 
     res.status(200).json({
         success: true,
-        data: sanitizeUser(req.user),
+        data: sanitizeUser(req.user!),
     });
 };
 

@@ -42,6 +42,7 @@ export const logLevel =
     (process.env.NODE_ENV === 'production' ? 'info' : 'debug');
 export const configDirectory =
     process.env.TALKARR_CONFIG_DIRECTORY || path.join(process.cwd(), 'config');
+export const disableDownloads = process.env.DISABLE_DOWNLOADS === 'true';
 
 if (!serverSecret) {
     throw new Error(
@@ -62,6 +63,7 @@ if (process.env.NODE_ENV === 'development') {
         serverSecret,
         logLevel,
         configDirectory,
+        disableDownloads,
     });
 }
 

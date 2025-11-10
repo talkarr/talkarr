@@ -1,8 +1,11 @@
 import { validate as validateEmail } from 'email-validator';
 
 import { validatePassword } from '@backend/passwords';
+import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import { createInitialUser, doesEmailExist } from '@backend/users';
+
+const log = rootLog.child({ label: 'user/register-initial' });
 
 const handleRegisterInitialRequest = async (
     req: ExpressRequest<'/user/register-initial', 'post'>,
@@ -64,7 +67,7 @@ const handleRegisterInitialRequest = async (
             data: null,
         });
     } catch (error) {
-        console.error('Error during password verification:', error);
+        log.error('Error during password verification:', error);
         res.status(500).json({
             success: false,
             error: 'Internal server error during login.',

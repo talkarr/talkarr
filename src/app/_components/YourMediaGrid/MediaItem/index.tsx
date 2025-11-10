@@ -17,6 +17,8 @@ import Typography from '@mui/material/Typography';
 
 import ProblemIcon from '@mui/icons-material/ReportProblem';
 
+import moment from 'moment-timezone';
+
 import { getMediaItemStatusColor } from '@backend/talk-utils';
 import type { SuccessData } from '@backend/types';
 
@@ -25,16 +27,18 @@ import useOnScreen from '@/hooks/use-on-screen';
 import { convertBlurhashToDataURL } from '@/utils/blurhash';
 import { generateCacheUrl } from '@/utils/cache';
 
-import { longDateFormat, specificTalkPageLink } from '@/constants';
+import {
+    longDateFormat,
+    specificTalkPageLink,
+    voctowebTimezone,
+} from '@/constants';
 import { useApiStore } from '@/providers/api-store-provider';
 
 import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
 import InvisibleLink from '@components/InvisibleLink';
-// import NoSsrCustomImage from '@components/NoSsrCustomImage';
 import CustomImage, {
     BlurhashNotAvailableYet,
 } from '@components/NoSsrCustomImage/components/CustomImage';
-import NoSsrMoment from '@components/NoSsrMoment';
 
 export interface MediaItemProps {
     initialData: SuccessData<'/talks/list', 'get'>['events'][0];
@@ -207,15 +211,11 @@ const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
                             </CardMedia>
                             <CardHeader
                                 title={initialData.title}
-                                subheader={
-                                    <NoSsrMoment>
-                                        {moment =>
-                                            `${moment(initialData.date).format(
-                                                longDateFormat,
-                                            )} - ${conference.title}`
-                                        }
-                                    </NoSsrMoment>
-                                }
+                                subheader={`${moment(initialData.date)
+                                    .tz(voctowebTimezone)
+                                    .format(
+                                        longDateFormat,
+                                    )} - ${conference.title}`}
                             />
                         </Box>
                     </CardActionArea>

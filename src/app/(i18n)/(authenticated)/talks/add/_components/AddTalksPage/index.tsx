@@ -166,10 +166,9 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                     gap={1}
                     data-testid="search-results"
                 >
-                    {sortedResults.map((event, index) => (
+                    {sortedResults.map(event => (
                         <SearchItem
                             key={`event-${event.guid}`}
-                            index={index}
                             item={event}
                             isAlreadyAdded={events?.some(
                                 e => e.guid === event.guid,

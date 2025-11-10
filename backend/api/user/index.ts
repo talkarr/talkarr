@@ -6,12 +6,12 @@ import handleLoginRequest from '@backend/api/user/login';
 import handleLogoutRequest from '@backend/api/user/logout';
 import handleRegisterInitialRequest from '@backend/api/user/register-initial';
 
-const router = express.Router();
+const userRouter = express.Router();
 
-router.post('/login', handleLoginRequest);
-router.post('/logout', handleLogoutRequest);
-router.get('/info', handleUserInfoRequest);
-router.post('/register-initial', handleRegisterInitialRequest);
-router.get('/details', handleUserDetailsRequest);
+userRouter.post('/login', handleLoginRequest);
+userRouter.post('/logout', handleLogoutRequest);
+userRouter.get('/info', handleUserInfoRequest);
+userRouter.post('/register-initial', handleRegisterInitialRequest);
+userRouter.get('/details', handleUserDetailsRequest);
 
-export default router;
+export default userRouter;

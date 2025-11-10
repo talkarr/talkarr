@@ -1,4 +1,6 @@
 import { deleteTalk } from '@backend/events';
+import { verifyPermissions } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
 import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
@@ -8,6 +10,10 @@ const handleDeleteEventRequest = async (
     req: ExpressRequest<'/talks/delete', 'post'>,
     res: ExpressResponse<'/talks/delete', 'post'>,
 ): Promise<void> => {
+    if (!(await verifyPermissions(req, res, Permission.DeleteEvents))) {
+        return;
+    }
+
     const { guid, delete_files: deleteFiles } = req.body;
 
     if (!guid) {

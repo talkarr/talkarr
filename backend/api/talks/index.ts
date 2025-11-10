@@ -11,29 +11,32 @@ import handleListEventsRequest from '@backend/api/talks/list';
 import handleScanEventsRequest from '@backend/api/talks/scan';
 import handleSearchEventsRequest from '@backend/api/talks/search';
 import handleUpdateEventRequest from '@backend/api/talks/update';
+import { requireUserMiddleware } from '@backend/users';
 
-const router = express.Router();
+const talkRouter = express.Router();
 
-router.get('/search', handleSearchEventsRequest);
+talkRouter.use(requireUserMiddleware);
 
-router.post('/add', handleAddEventRequest);
+talkRouter.get('/search', handleSearchEventsRequest);
 
-router.get('/list', handleListEventsRequest);
+talkRouter.post('/add', handleAddEventRequest);
 
-router.get('/basic-list', handleBasicListEventsRequest);
+talkRouter.get('/list', handleListEventsRequest);
 
-router.post('/delete', handleDeleteEventRequest);
+talkRouter.get('/basic-list', handleBasicListEventsRequest);
 
-router.post('/update', handleUpdateEventRequest);
+talkRouter.post('/delete', handleDeleteEventRequest);
 
-router.get('/info', handleEventInfoRequest);
+talkRouter.post('/update', handleUpdateEventRequest);
 
-router.get('/get', handleGetEventRequest);
+talkRouter.get('/info', handleEventInfoRequest);
 
-router.post('/scan', handleScanEventsRequest);
+talkRouter.get('/get', handleGetEventRequest);
 
-router.post('/import', handleImportJsonRequest);
+talkRouter.post('/scan', handleScanEventsRequest);
 
-router.post('/import/verify', handleVerifyJsonRequest);
+talkRouter.post('/import', handleImportJsonRequest);
 
-export default router;
+talkRouter.post('/import/verify', handleVerifyJsonRequest);
+
+export default talkRouter;

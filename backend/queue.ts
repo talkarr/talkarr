@@ -443,12 +443,18 @@ export class Queue {
 
                                 // remove job from queue
                                 if (!job.keepAfterSuccess) {
-                                    await prisma.job.delete({
-                                        where: { id: job.id },
-                                    });
-                                    this.jobQueue = this.jobQueue.filter(
-                                        j => j.id !== job.id,
-                                    );
+                                    try {
+                                        await prisma.job.delete({
+                                            where: { id: job.id },
+                                        });
+                                        this.jobQueue = this.jobQueue.filter(
+                                            j => j.id !== job.id,
+                                        );
+                                    } catch (deleteError) {
+                                        log.warn('Unable to delete job', {
+                                            deleteError,
+                                        });
+                                    }
                                 }
                             }
                         } catch (error_) {
@@ -506,11 +512,16 @@ export class Queue {
 
                     this.emit('failed', job, error as Error);
                     // remove job from queue
-                    this.jobQueue = this.jobQueue.filter(j => j.id !== job.id);
-
-                    await prisma.job.delete({
-                        where: { id: job.id },
-                    });
+                    try {
+                        await prisma.job.delete({
+                            where: { id: job.id },
+                        });
+                        this.jobQueue = this.jobQueue.filter(
+                            j => j.id !== job.id,
+                        );
+                    } catch (deleteError) {
+                        log.warn('Unable to delete job', { deleteError });
+                    }
                 }
             }, 0);
         }

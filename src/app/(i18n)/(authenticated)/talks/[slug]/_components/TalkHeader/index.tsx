@@ -5,15 +5,14 @@ import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
 
 import { formatLanguageCode } from '@/utils/string';
 
-import { longDateFormat, yearOnlyFormat } from '@/constants';
+import { longDateFormat, voctowebTimezone, yearOnlyFormat } from '@/constants';
 
-import NoSsrMoment from '@components/NoSsrMoment';
 import SmallText from '@components/SmallText';
 import TalkImage from '@components/TalkImage';
 import VideoMetaBadge from '@components/VideoMetaBadge';
@@ -78,18 +77,15 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                             <SmallText mb={bottomPadding}>
                                 {t('talks.date')}
                             </SmallText>
-                            <NoSsrMoment>
-                                {noSsrMoment => (
-                                    <VideoMetaBadge
-                                        badgeType="date"
-                                        badgeContent={noSsrMoment(
-                                            data.db.date,
-                                        ).format(longDateFormat)}
-                                        size="small"
-                                        disableOnClick
-                                    />
-                                )}
-                            </NoSsrMoment>
+
+                            <VideoMetaBadge
+                                badgeType="date"
+                                badgeContent={moment(data.db.date)
+                                    .tz(voctowebTimezone)
+                                    .format(longDateFormat)}
+                                size="small"
+                                disableOnClick
+                            />
                         </Box>
                         {data.db.original_language ? (
                             <Box>

@@ -16,20 +16,20 @@ import Typography from '@mui/material/Typography';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-import { yearOnlyFormat } from '@/constants';
+import moment from 'moment-timezone';
+
+import { voctowebTimezone, yearOnlyFormat } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
 import type { TalkData } from '@/stores/ui-store';
 
 import searchItemCss from './searchitem.module.css';
 
-import NoSsrMoment from '@components/NoSsrMoment';
 import SearchItemBadges from '@components/SearchItemBadges';
 // eslint-disable-next-line import/no-cycle
 import TalkImage from '@components/TalkImage';
 
 export interface SearchItemProps {
     item: TalkData;
-    index: number;
     isAlreadyAdded?: boolean;
 }
 
@@ -85,8 +85,10 @@ export const SearchItemSkeleton: FC = () => (
     />
 );
 
-const SearchItem: FC<SearchItemProps> = ({ item, index, isAlreadyAdded }) => {
+const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
     const openAddTalkModal = useUiStore(state => state.openAddTalkModal);
+
+    const year = moment(item.date).tz(voctowebTimezone).format(yearOnlyFormat);
 
     return (
         <StyledCard
@@ -107,7 +109,6 @@ const SearchItem: FC<SearchItemProps> = ({ item, index, isAlreadyAdded }) => {
                         data={item}
                         maxWidth="100%"
                         maxHeight="fit-content"
-                        priority={index < 5}
                     />
                 </CardMedia>
                 <Box display="flex" flexDirection="column" mb={1}>
@@ -124,15 +125,7 @@ const SearchItem: FC<SearchItemProps> = ({ item, index, isAlreadyAdded }) => {
                                         variant="h3"
                                         minWidth="fit-content"
                                     >
-                                        <NoSsrMoment>
-                                            {moment => {
-                                                const year = moment(
-                                                    item.date,
-                                                ).format(yearOnlyFormat);
-
-                                                return `${item.title} (${year})`;
-                                            }}
-                                        </NoSsrMoment>
+                                        {item.title} ({year})
                                     </Typography>
                                     {isAlreadyAdded ? (
                                         <Box display="flex" alignItems="center">

@@ -17,6 +17,7 @@ import Select from '@mui/material/Select';
 
 import AddIcon from '@mui/icons-material/Add';
 
+import moment from 'moment-timezone';
 import { useSnackbar } from 'notistack';
 
 import { getConfig } from '@/app/_api/settings/mediamanagement';
@@ -28,7 +29,6 @@ import { yearOnlyFormat } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import BaseModal from '@components/CustomModal';
-import NoSsrMoment from '@components/NoSsrMoment';
 import SearchItemBadges from '@components/SearchItemBadges';
 import TalkImage from '@components/TalkImage';
 
@@ -113,19 +113,9 @@ const AddTalkModal: FC = () => {
             open={open}
             onClose={close}
             title={
-                <NoSsrMoment>
-                    {moment => {
-                        if (!addTalkModal) {
-                            return '';
-                        }
-
-                        const year = moment(addTalkModal.date).format(
-                            yearOnlyFormat,
-                        );
-
-                        return `${addTalkModal.title} (${year})`;
-                    }}
-                </NoSsrMoment>
+                addTalkModal
+                    ? `${addTalkModal.title} (${moment(addTalkModal.date).format(yearOnlyFormat)})`
+                    : ''
             }
             moreWidth
             divider

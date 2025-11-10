@@ -1,5 +1,7 @@
 import { updateTalk } from '@backend/events';
 import { getTalkFromApiByGuid } from '@backend/helper';
+import { verifyPermissions } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
 import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
@@ -9,6 +11,10 @@ const handleUpdateEventRequest = async (
     req: ExpressRequest<'/talks/update', 'post'>,
     res: ExpressResponse<'/talks/update', 'post'>,
 ): Promise<void> => {
+    if (!(await verifyPermissions(req, res, Permission.EditEvents))) {
+        return;
+    }
+
     const { guid } = req.body;
 
     if (!guid) {
@@ -51,7 +57,6 @@ const handleUpdateEventRequest = async (
         return;
     }
 
-    // Add talk to database
     const result = await updateTalk({ guid, event });
 
     if (typeof result !== 'object') {

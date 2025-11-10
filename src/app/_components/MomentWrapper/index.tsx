@@ -3,9 +3,9 @@
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 
-export interface InternalNoSsrMomentProps {
+export interface MomentWrapperProps {
     children?: ((momentImport: typeof moment) => React.ReactNode) | undefined;
     /**
      * How often to rerender the component to update the moment value.
@@ -15,7 +15,7 @@ export interface InternalNoSsrMomentProps {
     rerenderMs?: number | false;
 }
 
-export const InternalNoSsrMoment: FC<InternalNoSsrMomentProps> = ({
+export const MomentWrapper: FC<MomentWrapperProps> = ({
     children,
     rerenderMs = false,
 }) => {
@@ -42,4 +42,4 @@ export const InternalNoSsrMoment: FC<InternalNoSsrMomentProps> = ({
     return <>{children}</>;
 };
 
-export default InternalNoSsrMoment;
+export default MomentWrapper;

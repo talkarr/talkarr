@@ -998,14 +998,7 @@
             },
             "UserPermission": {
                 "type": "string",
-                "enum": [
-                    "None",
-                    "ViewEvents",
-                    "AddEvents",
-                    "EditDeleteEvents",
-                    "Admin"
-                ],
-                "description": "User permissions"
+                "description": "User permissions. Enum defined in code"
             },
             "User": {
                 "type": "object",

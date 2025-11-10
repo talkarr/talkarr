@@ -2090,11 +2090,8 @@ export interface components {
             /** @example 0 */
             Problem: number;
         };
-        /**
-         * @description User permissions
-         * @enum {string}
-         */
-        UserPermission: "None" | "ViewEvents" | "AddEvents" | "EditDeleteEvents" | "Admin";
+        /** @description User permissions. Enum defined in code */
+        UserPermission: string;
         User: {
             /**
              * @description CUID of user

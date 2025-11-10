@@ -1,5 +1,7 @@
 import { scanForExistingFiles } from '@backend/fs/scan';
 import type { components } from '@backend/generated/schema';
+import { verifyPermissions } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
 import { listRootFolders } from '@backend/root-folder';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
@@ -7,6 +9,10 @@ const handleScanEventsRequest = async (
     req: ExpressRequest<'/talks/scan', 'post'>,
     res: ExpressResponse<'/talks/scan', 'post'>,
 ): Promise<void> => {
+    if (!(await verifyPermissions(req, res, Permission.Admin))) {
+        return;
+    }
+
     const { root_folder: rootFolder } = req.body;
 
     // eslint-disable-next-line unicorn/no-await-expression-member

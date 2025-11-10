@@ -6,10 +6,13 @@ import {
     imageCacheDirectory,
 } from '@backend/image-cache';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { requireUserMiddleware } from '@backend/users';
 
-const router = express.Router();
+const cacheRouter = express.Router();
 
-router.get(
+cacheRouter.use(requireUserMiddleware);
+
+cacheRouter.get(
     '/fetch',
     async (
         req: ExpressRequest<'/cache/fetch', 'get'>,
@@ -74,4 +77,4 @@ router.get(
     },
 );
 
-export default router;
+export default cacheRouter;

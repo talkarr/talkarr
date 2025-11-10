@@ -1,11 +1,14 @@
 import { validate as validateEmail } from 'email-validator';
 
+import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import {
     getUserWithPasswordByEmail,
     setUserCookie,
     verifyPassword,
 } from '@backend/users';
+
+const log = rootLog.child({ label: 'user/login' });
 
 const handleLoginRequest = async (
     req: ExpressRequest<'/user/login', 'post'>,
@@ -65,7 +68,7 @@ const handleLoginRequest = async (
             data: null,
         });
     } catch (error) {
-        console.error('Error during password verification:', error);
+        log.error('Error during password verification:', error);
         res.status(500).json({
             success: false,
             error: 'Internal server error during login.',

@@ -1,7 +1,5 @@
 'use client';
 
-import Image from 'next/image';
-
 import type { CSSProperties, FC } from 'react';
 import { useEffect, useState } from 'react';
 
@@ -20,13 +18,13 @@ import { generateCacheUrl } from '@/utils/cache';
 import type { TalkData } from '@/stores/ui-store';
 
 import ImageFallback from '@components/ImageFallback';
+import CustomImage from '@components/NoSsrCustomImage/components/CustomImage';
 
 export interface TalkImageProps {
     data: TalkData | SingleTalkData['db'] | undefined;
     maxWidth?: CSSProperties['maxWidth'];
     height?: CSSProperties['height'];
     maxHeight?: CSSProperties['maxHeight'];
-    priority?: boolean;
 }
 
 const TalkImage: FC<TalkImageProps> = ({
@@ -34,7 +32,6 @@ const TalkImage: FC<TalkImageProps> = ({
     maxWidth,
     height,
     maxHeight,
-    priority = true,
 }) => {
     const theme = useTheme();
 
@@ -80,21 +77,14 @@ const TalkImage: FC<TalkImageProps> = ({
                             }}
                         />
                     ) : null}
-                    <Image
+                    <CustomImage
                         src={generateCacheUrl({
                             url: data.poster_url,
                             cacheKey: `poster-${data.guid}`,
                         })}
-                        placeholder={blurHash ? 'blur' : undefined}
                         blurDataURL={blurHash ?? undefined}
                         alt={data.title}
                         title={data.title}
-                        sizes="300px"
-                        fill
-                        style={{
-                            objectFit: 'contain',
-                        }}
-                        priority={priority}
                         onLoad={event => {
                             setImageLoading(false);
 

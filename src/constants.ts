@@ -61,6 +61,8 @@ export const longDateFormat = 'DD.MM.yyyy';
 
 export const yearOnlyFormat = 'yyyy';
 
+export const voctowebTimezone = 'Europe/Berlin';
+
 // external links
 export const weblateUrl = 'https://weblate.commanderred.xyz/engage/talkarr/';
 

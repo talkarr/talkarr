@@ -2,11 +2,15 @@ import express from 'express';
 
 import handleExecuteTaskRequest from '@backend/api/tasks/execute';
 import handleTaskInfoRequest from '@backend/api/tasks/status';
+import { verifyPermissionsMiddleware } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
 
-const router = express.Router();
+const tasksRouter = express.Router();
 
-router.post('/execute', handleExecuteTaskRequest);
+tasksRouter.use(verifyPermissionsMiddleware(Permission.Admin));
 
-router.get('/status', handleTaskInfoRequest);
+tasksRouter.post('/execute', handleExecuteTaskRequest);
 
-export default router;
+tasksRouter.get('/status', handleTaskInfoRequest);
+
+export default tasksRouter;

@@ -14,6 +14,7 @@ import { startCheckEventsForProblems } from '@backend/workers/check-events-for-p
 import { startGenerateBlurhashes } from '@backend/workers/generate-blurhashes';
 import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 
+import { disableDownloads } from '@backend/env';
 import {
     addDownloadedFile,
     clearDownloadError,
@@ -167,7 +168,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         return done(new Error('Talk does not have a frontend link'));
     }
 
-    if (process.env.DISABLE_DOWNLOADS === 'true') {
+    if (disableDownloads) {
         log.warn('Downloads are disabled, early returning');
 
         return done();
@@ -361,7 +362,7 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
         videoSubprocess.stderr?.on('data', data => {
             const stderr = data.toString();
 
-            console.log('stderr:', stderr);
+            log.info('stderr:', stderr);
 
             stderrBuffer += stderr;
         });

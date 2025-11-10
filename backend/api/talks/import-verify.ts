@@ -1,5 +1,7 @@
 import typia from 'typia';
 
+import { verifyPermissions } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
 import rootLog from '@backend/root-log';
 import type {
     EventFahrplanJsonImport,
@@ -15,6 +17,10 @@ const handleVerifyJsonRequest = async (
     req: ExpressRequest<'/talks/import/verify', 'post'>,
     res: ExpressResponse<'/talks/import/verify', 'post'>,
 ): Promise<void> => {
+    if (!(await verifyPermissions(req, res, Permission.AddEvents))) {
+        return;
+    }
+
     const { json } = req.body;
 
     if (!json) {

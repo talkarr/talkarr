@@ -1,5 +1,6 @@
-import type { Permission, User as DbUser } from '@prisma/client';
+import type { User as DbUser } from '@prisma/client';
 import type express from 'express';
+import type { RequestHandler } from 'express-serve-static-core';
 import type { Algorithm } from 'jsonwebtoken';
 
 import argon2 from 'argon2';
@@ -9,6 +10,7 @@ import { generateIdenticonDataUrl } from 'simple-identicon';
 
 import { serverSecret } from '@backend/env';
 import type { components } from '@backend/generated/schema';
+import { createUserPermissions, Permission } from '@backend/permissions';
 import { prisma } from '@backend/prisma';
 import rootLog from '@backend/root-log';
 import { getSettings } from '@backend/settings';
@@ -22,7 +24,7 @@ type SchemaUser = components['schemas']['User'];
 
 const log = rootLog.child({ label: 'user' });
 
-export interface UserWithPassword extends SchemaUser {
+export interface SchemaUserWithPassword extends SchemaUser {
     password: string;
 }
 
@@ -73,7 +75,7 @@ export const getUsers = async (): Promise<components['schemas']['User'][]> => {
 
 export const getUserWithPasswordByEmail = async (
     email: string,
-): Promise<UserWithPassword | null> => {
+): Promise<SchemaUserWithPassword | null> => {
     const user = await prisma.user.findUnique({
         where: { email },
         include: {
@@ -104,7 +106,7 @@ export const getUserWithPasswordByEmail = async (
 
 export const getUserWithPasswordById = async (
     id: components['schemas']['User']['id'],
-): Promise<UserWithPassword | null> => {
+): Promise<SchemaUserWithPassword | null> => {
     const user = await prisma.user.findUnique({
         where: { id },
         include: {
@@ -148,7 +150,7 @@ export const hasAdminUsers = async (): Promise<boolean> => {
         where: {
             permissions: {
                 some: {
-                    permission: 'Admin',
+                    permission: Permission.Admin,
                 },
             },
         },
@@ -209,11 +211,11 @@ export const validateUserCookie = async (
 
             return await getUserWithPasswordById(decoded.id);
         } catch (error) {
-            console.error('Invalid token:', error);
+            log.error('Invalid token:', error);
             return null;
         }
     } catch (error) {
-        console.error('Error validating user cookie:', error);
+        log.error('Error validating user cookie:', error);
         return null;
     }
 };
@@ -236,11 +238,11 @@ export const userMiddleware = async (
 };
 
 export const requireUser = async (
-    req: express.Request,
+    req: express.Request<any, any, any, any>,
     res: express.Response,
 ): Promise<boolean> => {
     if (!(req as any).user) {
-        log.warn('User is not authenticated');
+        log.debug('User is not authenticated');
         res.status(401).json({
             success: false,
             error: 'User is not authenticated',
@@ -251,7 +253,15 @@ export const requireUser = async (
     return true;
 };
 
-export const sanitizeUser = (user: UserWithPassword): SchemaUser => ({
+export const requireUserMiddleware: RequestHandler = async (req, res, next) => {
+    if (!(await requireUser(req, res))) {
+        return;
+    }
+
+    next();
+};
+
+export const sanitizeUser = (user: SchemaUserWithPassword): SchemaUser => ({
     id: user.id,
     email: user.email,
     avatarUrl: user.avatarUrl,
@@ -263,7 +273,7 @@ export const sanitizeUser = (user: UserWithPassword): SchemaUser => ({
 });
 
 export const verifyPassword = async (
-    user: UserWithPassword,
+    user: SchemaUserWithPassword,
     password?: string,
 ): Promise<boolean> => {
     try {
@@ -316,9 +326,9 @@ export const createInitialUser = async ({
             password: passwordHash,
             displayName,
             permissions: {
-                create: {
-                    permission: 'Admin',
-                },
+                create: createUserPermissions([Permission.Admin]).map(
+                    permission => ({ permission }),
+                ),
             },
         },
     });
@@ -349,9 +359,9 @@ export const createUser = async ({
             ...(initialPermissions.length > 0
                 ? {
                       permissions: {
-                          create: initialPermissions.map(permission => ({
-                              permission,
-                          })),
+                          create: createUserPermissions(initialPermissions).map(
+                              permission => ({ permission }),
+                          ),
                       },
                   }
                 : {}),

@@ -121,7 +121,7 @@ if (!fs.existsSync(logDir)) {
 try {
     fs.accessSync(logDir, fs.constants.W_OK);
 } catch (error) {
-    console.error('Error accessing logs directory:', { error });
+    rootLog.error('Error accessing logs directory:', { error });
     process.exit(1);
 }
 
