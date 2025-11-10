@@ -4,7 +4,7 @@ const config: Config = {
     preset: 'ts-jest',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
     moduleNameMapper: {
-        '@backend/(.*)': '<rootDir>/',
+        '^@backend/(.*)$': '<rootDir>/$1',
     },
 };
 
