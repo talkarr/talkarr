@@ -14,6 +14,7 @@ import { startCheckEventsForProblems } from '@backend/workers/check-events-for-p
 import { startGenerateBlurhashes } from '@backend/workers/generate-blurhashes';
 import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 
+import { disableDownloads } from '@backend/env';
 import {
     addDownloadedFile,
     clearDownloadError,
@@ -41,7 +42,6 @@ import type {
     ExtendedDbEvent,
     NormalAndConvertedDate,
 } from '@backend/types';
-import { disableDownloads } from '@backend/env';
 
 const youtubeDl = process.env.YTDLP_PATH_OVERRIDE
     ? createYoutubeDl(process.env.YTDLP_PATH_OVERRIDE)
