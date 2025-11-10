@@ -6,20 +6,18 @@ import {
     imageCacheDirectory,
 } from '@backend/image-cache';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
-import { requireUser } from '@backend/users';
+import { requireUserMiddleware } from '@backend/users';
 
-const router = express.Router();
+const cacheRouter = express.Router();
 
-router.get(
+cacheRouter.use(requireUserMiddleware);
+
+cacheRouter.get(
     '/fetch',
     async (
         req: ExpressRequest<'/cache/fetch', 'get'>,
         res: ExpressResponse<'/cache/fetch', 'get'>,
     ) => {
-        if (!(await requireUser(req, res))) {
-            return;
-        }
-
         const { url, key } = req.query;
 
         if (!url || !key) {
@@ -79,4 +77,4 @@ router.get(
     },
 );
 
-export default router;
+export default cacheRouter;

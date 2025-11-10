@@ -152,18 +152,10 @@ model Job {
   keepAfterSuccess Boolean   @default(false)
 }
 
-enum Permission {
-  None
-  ViewEvents
-  AddEvents
-  EditDeleteEvents
-  Admin
-}
-
 model UserPermission {
-  userId     String     @id
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  permission Permission @default(None)
+  userId     String @id
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permission String
 }
 
 model User {

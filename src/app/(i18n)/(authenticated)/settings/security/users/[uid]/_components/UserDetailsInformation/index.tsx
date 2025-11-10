@@ -3,11 +3,17 @@
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Button from '@mui/material/Button';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import List from '@mui/material/List';
 
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import EditIcon from '@mui/icons-material/Edit';
 import PersonIcon from '@mui/icons-material/Person';
+
+import moment from 'moment-timezone';
 
 import type { components } from '@backend/generated/schema';
 
@@ -15,8 +21,6 @@ import UserDetailsCard from '@/app/(i18n)/(authenticated)/settings/security/user
 import UserDetailsItem from '@/app/(i18n)/(authenticated)/settings/security/users/[uid]/_components/UserDetailsItem';
 
 import { longDateTimeFormat } from '@/constants';
-
-import NoSsrMoment from '@components/NoSsrMoment';
 
 export interface UserDetailsInformationProps {
     user: components['schemas']['User'];
@@ -30,6 +34,17 @@ const UserDetailsInformation: FC<UserDetailsInformationProps> = ({ user }) => {
             <CardHeader
                 avatar={<PersonIcon />}
                 title={t('pages.userDetailsPage.profile')}
+                action={
+                    <Button
+                        endIcon={<EditIcon />}
+                        onClick={() =>
+                            // eslint-disable-next-line no-alert
+                            alert('Not implemented yet')
+                        }
+                    >
+                        Edit
+                    </Button>
+                }
             />
             <CardContent>
                 <List>
@@ -43,27 +58,15 @@ const UserDetailsInformation: FC<UserDetailsInformationProps> = ({ user }) => {
                     />
                     <UserDetailsItem
                         primary={t('pages.userDetailsPage.createdAt')}
-                        secondary={
-                            <NoSsrMoment>
-                                {moment =>
-                                    moment(user.createdAt).format(
-                                        longDateTimeFormat,
-                                    )
-                                }
-                            </NoSsrMoment>
-                        }
+                        secondary={moment(user.createdAt).format(
+                            longDateTimeFormat,
+                        )}
                     />
                     <UserDetailsItem
                         primary={t('pages.userDetailsPage.updatedAt')}
-                        secondary={
-                            <NoSsrMoment>
-                                {moment =>
-                                    moment(user.updatedAt).format(
-                                        longDateTimeFormat,
-                                    )
-                                }
-                            </NoSsrMoment>
-                        }
+                        secondary={moment(user.updatedAt).format(
+                            longDateTimeFormat,
+                        )}
                     />
                     <UserDetailsItem
                         primary={t('pages.userDetailsPage.accountState')}
@@ -72,10 +75,22 @@ const UserDetailsInformation: FC<UserDetailsInformationProps> = ({ user }) => {
                                 ? t('pages.userDetailsPage.active')
                                 : t('pages.userDetailsPage.deactivated')
                         }
+                        icon={
+                            user.isActive ? (
+                                <CheckCircleIcon color="primary" />
+                            ) : (
+                                <CancelIcon color="error" />
+                            )
+                        }
                     />
                     <UserDetailsItem
                         primary={t('pages.userDetailsPage.userId')}
                         secondary={user.id}
+                        slotProps={{
+                            secondary: {
+                                fontFamily: 'monospace',
+                            },
+                        }}
                     />
                 </List>
             </CardContent>

@@ -3,6 +3,7 @@ import { execSync } from 'node:child_process';
 import waitOn from 'wait-on';
 
 import { markRootFolder } from '@backend/fs';
+import { createUserPermissions, Permission } from '@backend/permissions';
 
 import { PrismaClient } from '@prisma/client';
 
@@ -57,8 +58,10 @@ async function main(): Promise<void> {
                     email: 'test@example.com',
                     password: await argon2.hash('Passwort_123'),
                     permissions: {
-                        create: {
-                            permission: 'Admin',
+                        createMany: {
+                            data: createUserPermissions(Permission.Admin).map(
+                                permission => ({ permission }),
+                            ),
                         },
                     },
                 },

@@ -13,12 +13,13 @@ import LanguageIcon from '@mui/icons-material/Language';
 import PersonIcon from '@mui/icons-material/Person';
 import TagIcon from '@mui/icons-material/Tag';
 
+import moment from 'moment-timezone';
+
 import { formatLanguageCode, formatVideoDuration } from '@/utils/string';
 
-import { longDateFormat } from '@/constants';
+import { longDateFormat, voctowebTimezone } from '@/constants';
 import type { TalkData } from '@/stores/ui-store';
 
-import NoSsrMoment from '@components/NoSsrMoment';
 import VideoMetaBadge from '@components/VideoMetaBadge';
 
 export interface SearchItemBadgesProps {
@@ -87,11 +88,9 @@ const SearchItemBadges: FC<SearchItemBadgesProps> = ({
 
         if (item.date) {
             badgesArray.push({
-                text: (
-                    <NoSsrMoment>
-                        {moment => moment(item.date).format(longDateFormat)}
-                    </NoSsrMoment>
-                ),
+                text: moment(item.date)
+                    .tz(voctowebTimezone)
+                    .format(longDateFormat),
                 type: 'date',
                 icon: <DateIcon />,
                 disableOnClick: true,

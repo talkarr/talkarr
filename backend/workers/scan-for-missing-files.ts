@@ -7,6 +7,7 @@ import typia from 'typia';
 import { startAddTalk } from '@backend/workers/add-talk';
 import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 
+import { disableDownloads } from '@backend/env';
 import {
     addDownloadedFile,
     checkIfFileIsInDb,
@@ -181,7 +182,7 @@ const scanForMissingFiles: TaskFunction<ScanForMissingFilesData> = async (
                         eventGuid: event.guid,
                     });
 
-                    if (process.env.DISABLE_DOWNLOADS !== 'true') {
+                    if (!disableDownloads) {
                         await startAddTalk({ event });
                     }
                 }

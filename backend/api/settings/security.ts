@@ -1,10 +1,9 @@
 import express from 'express';
 
+import { Permission } from '@backend/permissions';
 import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import { getUsers } from '@backend/users';
-
-import { Permission } from '@prisma/client';
 
 const log = rootLog.child({ label: 'settings/security' });
 
@@ -22,7 +21,9 @@ router.get(
             res.json({
                 success: true,
                 data: {
-                    available_permissions: Object.values(Permission),
+                    available_permissions: Object.values(Permission).filter(
+                        permission => typeof permission === 'string',
+                    ),
                     users,
                 },
             });

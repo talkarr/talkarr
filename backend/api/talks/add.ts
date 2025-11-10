@@ -2,6 +2,8 @@ import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-file
 
 import { addTalk, fixBigintInExtendedDbEvent } from '@backend/events';
 import { getTalkFromApiByGuid } from '@backend/helper';
+import { verifyPermissions } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
 import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import { AddTalkFailure } from '@backend/types';
@@ -12,6 +14,10 @@ const handleAddEventRequest = async (
     req: ExpressRequest<'/talks/add', 'post'>,
     res: ExpressResponse<'/talks/add', 'post'>,
 ): Promise<void> => {
+    if (!(await verifyPermissions(req, res, Permission.AddEvents))) {
+        return;
+    }
+
     const { guid, root_folder: rootFolder } = req.body;
 
     if (!guid) {

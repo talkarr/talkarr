@@ -37,8 +37,6 @@ const checkEventsForProblems: TaskFunction<CheckEventsForProblemsData> = async (
     job,
     actualDone,
 ): Promise<void> => {
-    log.info('Checking events for problems...');
-
     if (!check(job.data)) {
         const jobDataValid = typia.validate<CheckEventsForProblemsData>(
             job.data,
@@ -67,6 +65,8 @@ const checkEventsForProblems: TaskFunction<CheckEventsForProblemsData> = async (
         ? [job.data.event]
         : // eslint-disable-next-line unicorn/no-await-expression-member
           (await listEvents()).map(e => fixBigintInExtendedDbEvent(e));
+
+    log.info('Checking event(s) for problems...', { count: events.length });
 
     let hasErrored = false;
 

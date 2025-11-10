@@ -1,15 +1,16 @@
-import type { CSSProperties, FC } from 'react';
+import type { CSSProperties, FC, ImgHTMLAttributes } from 'react';
 import { useEffect, useState } from 'react';
 
 export const BlurhashNotAvailableYet = 'not_available_yet' as const;
 
 export interface CustomImageProps {
     src: string;
-    blurDataURL: string | undefined;
     alt: string;
+    title?: string;
+    blurDataURL?: string | undefined;
     style?: CSSProperties;
     sizes?: string;
-    onLoad?: () => void;
+    onLoad?: ImgHTMLAttributes<HTMLImageElement>['onLoad'];
     onError?: () => void;
     suppressHydrationWarning?: boolean;
 }
@@ -18,19 +19,30 @@ const CustomImage: FC<CustomImageProps> = ({
     src,
     blurDataURL,
     alt,
+    title,
     style,
     onLoad,
     onError,
     sizes,
     suppressHydrationWarning,
 }) => {
-    const [imageSrc, setImageSrc] = useState<string>(blurDataURL ?? src);
+    const [imageSrc, setImageSrc] = useState<string>(src);
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
     useEffect(() => {
-        setImageSrc(blurDataURL ?? src);
-        setImageLoaded(false);
-    }, [src, blurDataURL]);
+        if (src) {
+            const img = new Image();
+            img.src = src;
+
+            setImageLoaded(false);
+
+            if (img.complete) {
+                setImageSrc(src);
+            } else if (blurDataURL) {
+                setImageSrc(blurDataURL);
+            }
+        }
+    }, [blurDataURL, imageSrc, src]);
 
     useEffect(() => {
         if (imageLoaded && imageSrc !== src) {
@@ -40,19 +52,22 @@ const CustomImage: FC<CustomImageProps> = ({
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            setImageSrc(src);
+            if (imageSrc !== src) {
+                setImageSrc(src);
+            }
         }, 1000);
 
         return () => {
             clearTimeout(timeout);
         };
-    }, [src]);
+    }, [src, imageSrc]);
 
     return (
         // eslint-disable-next-line @next/next/no-img-element
         <img
             src={imageSrc === BlurhashNotAvailableYet ? undefined : imageSrc}
             alt={alt}
+            title={title}
             style={{
                 ...style,
                 objectFit: 'cover',
@@ -64,9 +79,9 @@ const CustomImage: FC<CustomImageProps> = ({
             }}
             draggable={false}
             decoding="async"
-            onLoad={() => {
+            onLoad={event => {
                 setImageLoaded(true);
-                onLoad?.();
+                onLoad?.(event);
             }}
             sizes={sizes}
             onError={() => {
