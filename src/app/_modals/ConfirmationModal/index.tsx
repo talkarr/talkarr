@@ -89,9 +89,11 @@ const ConfirmationModal: FC = () => {
         if (result instanceof Promise) {
             result.then(() => {
                 closeConfirmationModal();
+                setLoading(false);
             });
         } else {
             closeConfirmationModal();
+            setLoading(false);
         }
     };
 
