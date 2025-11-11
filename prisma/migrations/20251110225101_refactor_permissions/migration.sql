@@ -7,8 +7,10 @@
 -- AlterTable
 ALTER TABLE "UserPermission" RENAME "permission" TO "permission_backup";
 
-ALTER TABLE "UserPermission" ADD COLUMN  "permission" TEXT NOT NULL;
+ALTER TABLE "UserPermission" ADD COLUMN  "permission" TEXT NOT NULL DEFAULT '';
 UPDATE "UserPermission" SET permission = 'Admin' WHERE "UserPermission".permission_backup = 'Admin';
+
+ALTER TABLE "UserPermission" ALTER COLUMN "permission" DROP DEFAULT;
 
 ALTER TABLE "UserPermission" DROP COLUMN "permission_backup";
 
