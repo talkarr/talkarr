@@ -41,8 +41,9 @@ const CustomImage: FC<CustomImageProps> = ({
             setImageLoaded(false);
 
             if (img.complete) {
-                onLoad?.();
                 setImageSrc(src);
+                setImageLoaded(true);
+                onLoad?.();
             } else if (blurDataURL) {
                 setImageSrc(blurDataURL);
             }
