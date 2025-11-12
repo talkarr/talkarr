@@ -462,6 +462,7 @@ export class Queue {
                                     } catch (deleteError) {
                                         log.warn('Unable to delete job', {
                                             deleteError,
+                                            jobId: job.id,
                                         });
                                     }
                                 }
@@ -529,7 +530,10 @@ export class Queue {
                             j => j.id !== job.id,
                         );
                     } catch (deleteError) {
-                        log.warn('Unable to delete job', { deleteError });
+                        log.warn('Unable to delete job', {
+                            deleteError,
+                            jobId: job.id,
+                        });
                     }
                 }
             }, 0);

@@ -2,8 +2,11 @@
 
 import { cccApiBaseUrl, conferenceCacheKey } from '@backend/constants';
 import apiFetch from '@backend/fetch';
+import rootLog from '@backend/root-log';
 import type { ApiConference, ApiEvent } from '@backend/types';
 import { hasAdminUsers } from '@backend/users';
+
+const log = rootLog.child({ label: 'helper' });
 
 export const getTalkFromApiByGuid = async ({
     guid,
@@ -23,6 +26,9 @@ export const getTalkFromApiByGuid = async ({
     );
 
     if (!response.ok) {
+        log.error(
+            `Unable to fetch talk by guid, API returned ${response.status}`,
+        );
         return null;
     }
 
@@ -41,6 +47,9 @@ export const getConferenceFromEvent = async ({
     const response = await apiFetch(event.conference_url);
 
     if (!response.ok) {
+        log.error(
+            `Unable to fetch conference from event, API returned ${response.status}`,
+        );
         return null;
     }
 
@@ -59,6 +68,9 @@ export const getConferenceFromAcronym = async ({
     );
 
     if (!response.ok) {
+        log.error(
+            `Unable to conference by acronym, API returned ${response.status}`,
+        );
         return null;
     }
 
@@ -87,6 +99,9 @@ export const getTalkFromApiBySlug = async ({
     );
 
     if (!response.ok) {
+        log.error(
+            `Unable to fetch talk by slug, API returned ${response.status}`,
+        );
         return null;
     }
 

@@ -99,8 +99,16 @@ export const getCachedImageFromUrl = async ({
         log.debug(`Cached image not found for ${url}, fetching...`, { error });
     }
 
+    const abortController = new AbortController();
+
+    setTimeout(() => {
+        abortController.abort();
+    }, 3000);
+
     try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+            signal: abortController.signal,
+        });
 
         if (!response.ok) {
             log.warn(
