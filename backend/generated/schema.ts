@@ -619,7 +619,7 @@ export interface paths {
                             /** @description "db" is the data from the database, "talk" is the data from the API (fetched every time), "info" is the data from the filesystem */
                             data: {
                                 db: components["schemas"]["ExtendedDbEventWithConference"];
-                                talk: components["schemas"]["Event"];
+                                talk: components["schemas"]["Event"] | null;
                                 info: components["schemas"]["TalkInfo"];
                             };
                         };

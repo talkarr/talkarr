@@ -1969,7 +1969,12 @@
                                                             "$ref": "#/components/schemas/ExtendedDbEventWithConference"
                                                         },
                                                         "talk": {
-                                                            "$ref": "#/components/schemas/Event"
+                                                            "anyOf": [
+                                                                {"$ref": "#/components/schemas/Event"},
+                                                                {
+                                                                    "type": "null"
+                                                                }
+                                                            ]
                                                         },
                                                         "info": {
                                                             "$ref": "#/components/schemas/TalkInfo"

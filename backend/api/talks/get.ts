@@ -52,7 +52,7 @@ const handleGetEventRequest = async (
         return;
     }
 
-    let talkData;
+    let talkData = null;
 
     try {
         talkData = await getTalkFromApiByGuid({
@@ -62,17 +62,10 @@ const handleGetEventRequest = async (
             },
         });
     } catch (error) {
-        log.error('Error fetching talk from API:', {
+        log.warn('Unable to fetch talk from API:', {
             error,
             guid: event.guid,
         });
-
-        res.status(500).json({
-            success: false,
-            error: 'Error fetching talk from API.',
-        });
-
-        return;
     }
 
     const talkInfoData = await getTalkInfoByGuid({ guid: event.guid });

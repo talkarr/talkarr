@@ -26,7 +26,7 @@ const TalkWrapper: FC<TalkWrapperProps> = ({ initialData }) => {
 
     useEffect(() => {
         const func = async (): Promise<void> => {
-            await getSingleTalkData({ guid: initialData.talk.guid });
+            await getSingleTalkData({ guid: initialData.db.guid });
         };
 
         const intervalMs = initialData.info.is_downloading ? 1000 : 5000;
@@ -46,7 +46,7 @@ const TalkWrapper: FC<TalkWrapperProps> = ({ initialData }) => {
         clearSingleTalkData,
         getSingleTalkData,
         initialData.info.is_downloading,
-        initialData.talk.guid,
+        initialData.db.guid,
     ]);
 
     return (

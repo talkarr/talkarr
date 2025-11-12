@@ -60,7 +60,7 @@ const TalkToolbar: FC<TalkToolbarProps> = ({ data }) => {
             },
             onConfirm: async options => {
                 const result = await handleDelete(
-                    data.talk.guid,
+                    data.db.guid,
                     options?.deleteFiles ?? false,
                 );
 
