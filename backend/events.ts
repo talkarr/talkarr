@@ -736,7 +736,7 @@ export const addDownloadedFile = async ({
         if (eventInfoGuid) {
             await setDownloadError({
                 eventInfoGuid,
-                error: 'Error adding downloaded file',
+                error: `Error adding downloaded file: ${error instanceof Error ? error.message : 'unknown message'}`,
             });
         }
 
