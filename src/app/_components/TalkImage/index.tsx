@@ -36,7 +36,7 @@ const TalkImage: FC<TalkImageProps> = ({
     const theme = useTheme();
 
     const [showFallback, setShowFallback] = useState<boolean>(false);
-    const [imageLoading, setImageLoading] = useState<boolean>(true);
+    const [imageLoading, setImageLoading] = useState<boolean>(false);
 
     useEffect(() => {
         setShowFallback(false);
@@ -68,12 +68,13 @@ const TalkImage: FC<TalkImageProps> = ({
                         <Skeleton
                             variant="rectangular"
                             width={maxWidth}
-                            height={maxHeight ?? searchItemMinHeight}
+                            height={maxHeight ?? 'auto'}
                             sx={{
                                 position: 'absolute',
                                 top: 0,
                                 left: 0,
                                 borderRadius: '4px',
+                                aspectRatio: '16 / 9',
                             }}
                         />
                     ) : null}
@@ -85,10 +86,14 @@ const TalkImage: FC<TalkImageProps> = ({
                         blurDataURL={blurHash ?? undefined}
                         alt={data.title}
                         title={data.title}
+                        onLoadStart={() => {
+                            setImageLoading(true);
+                        }}
                         onLoad={event => {
                             setImageLoading(false);
 
                             if (
+                                event &&
                                 (event.target as HTMLImageElement)
                                     .naturalWidth === 0
                             ) {

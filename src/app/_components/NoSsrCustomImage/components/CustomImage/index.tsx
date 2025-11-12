@@ -1,4 +1,5 @@
-import type { CSSProperties, FC, ImgHTMLAttributes } from 'react';
+import type React from 'react';
+import type { CSSProperties, FC } from 'react';
 import { useEffect, useState } from 'react';
 
 export const BlurhashNotAvailableYet = 'not_available_yet' as const;
@@ -10,7 +11,8 @@ export interface CustomImageProps {
     blurDataURL?: string | undefined;
     style?: CSSProperties;
     sizes?: string;
-    onLoad?: ImgHTMLAttributes<HTMLImageElement>['onLoad'];
+    onLoad?: (event?: React.SyntheticEvent<HTMLImageElement>) => void;
+    onLoadStart?: () => void;
     onError?: () => void;
     suppressHydrationWarning?: boolean;
 }
@@ -25,24 +27,27 @@ const CustomImage: FC<CustomImageProps> = ({
     onError,
     sizes,
     suppressHydrationWarning,
+    onLoadStart,
 }) => {
     const [imageSrc, setImageSrc] = useState<string>(src);
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
     useEffect(() => {
         if (src) {
+            onLoadStart?.();
             const img = new Image();
             img.src = src;
 
             setImageLoaded(false);
 
             if (img.complete) {
+                onLoad?.();
                 setImageSrc(src);
             } else if (blurDataURL) {
                 setImageSrc(blurDataURL);
             }
         }
-    }, [blurDataURL, imageSrc, src]);
+    }, [blurDataURL, imageSrc, src, onLoad, onLoadStart]);
 
     useEffect(() => {
         if (imageLoaded && imageSrc !== src) {
@@ -79,6 +84,7 @@ const CustomImage: FC<CustomImageProps> = ({
             }}
             draggable={false}
             decoding="async"
+            onLoadStart={onLoadStart}
             onLoad={event => {
                 setImageLoaded(true);
                 onLoad?.(event);
