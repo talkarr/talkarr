@@ -379,6 +379,8 @@ jobs:
               exit 1
           fi
           
+          echo "TALKARR_LOG_LEVEL=debug" >> .env # make sure full debug logging is activated
+          
           mkdir -p config
           chmod 777 -R config
           
