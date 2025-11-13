@@ -53,7 +53,7 @@ jobs:
               "fix": "bugfix",
             };
             
-            const labelType = typeMatch ? typeMatch in labelMap ? labelMap[typeMatch[1]] : typeMatch[1] : null;
+            const labelType = typeMatch ? typeMatch[1] in labelMap ? labelMap[typeMatch[1]] : typeMatch[1] : null;
 
             // remove existing supported labels and add new ones if not present based on PR title
             const existingLabels = await github.rest.issues.listLabelsOnIssue({
