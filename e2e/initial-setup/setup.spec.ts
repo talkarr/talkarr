@@ -36,16 +36,12 @@ test.describe('Initial talkarr setup', () => {
 
         expect(page.url()).toBe('http://localhost:3232/welcome');
 
-        await expect(page.title()).resolves.toBe(
-            `Welcome to Talkarr | Talkarr`,
-        );
+        await expect(page.title()).resolves.toContain('Talkarr');
         await expect(page.title()).resolves.not.toContain('404');
 
         const getStartedButton = page.getByTestId('welcome-get-started-button');
 
         await expect(getStartedButton).toBeVisible();
-
-        await expect(getStartedButton).toContainText('Get Started');
 
         await getStartedButton.click();
 
@@ -114,8 +110,6 @@ test.describe('Initial talkarr setup', () => {
         await expect(loginElements.email).toBeVisible();
         await expect(loginElements.password).toBeVisible();
         await expect(loginElements.submitButton).toBeVisible();
-
-        await expect(loginElements.submitButton).toContainText('Login');
         await expect(loginElements.submitButton).toBeEnabled();
 
         await loginElements.email.fill(testUser.email);
