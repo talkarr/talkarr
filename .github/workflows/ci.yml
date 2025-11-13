@@ -319,6 +319,10 @@ jobs:
       - name: Install dependencies
         run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
 
+      - name: Generate all types
+        run: |
+          yarn run generate
+
       - name: Install playwright dependencies
         run: |
           yarn playwright install-deps
