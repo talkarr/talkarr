@@ -13,9 +13,9 @@
         "dev:ensure-db": "bash -c 'if ! nc -z localhost 5432; then yarn run dev:db; else echo \"Database is already running\"; fi'",
         "dev:nodemon": "nodemon --exec ts-node --project backend/tsconfig.json -r tsconfig-paths/register backend/index.ts",
         "dev:tsnd": "ts-node-dev --respawn --transpile-only --no-notify --project backend/tsconfig.json -r tsconfig-paths/register --watch backend --ignore-watch .next --ignore-watch src backend/index.ts",
-        "generate": "yarn run generate:openapi-backend",
+        "generate": "yarn run generate:openapi-backend && yarn prisma generate",
         "generate:openapi-backend": "openapi-typescript ./backend.json --output backend/generated/schema.ts",
-        "postinstall": "patch-package && yarn run license-check",
+        "postinstall": "patch-package && yarn run license-check && yarn run generate",
         "license-check": "node generate-licenses.mjs",
         "lint": "yarn run lint:frontend && yarn run lint:backend && yarn run lint:e2e",
         "lint:backend": "eslint backend",
@@ -39,11 +39,10 @@
         "typecheck": "yarn run typecheck:web && yarn run typecheck:backend",
         "typecheck:backend": "tsc --noEmit --project backend/tsconfig.json",
         "typecheck:web": "tsc --noEmit",
-        "typeorm": "typeorm-ts-node-commonjs",
         "typegen": "next typegen",
         "typegen:with-check": "if [ ! -f next-env.d.ts ]; then yarn typegen; fi",
-        "prebuild": "yarn typegen:with-check",
-        "pretypecheck": "yarn typegen:with-check"
+        "prebuild": "yarn run typegen:with-check && yarn run generate",
+        "pretypecheck": "yarn run typegen:with-check && yarn run generate"
     },
     "nodemonConfig": {
         "ext": "ts,json",
