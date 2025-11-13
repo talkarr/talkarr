@@ -1,3 +1,5 @@
+'use client';
+
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,9 +11,11 @@ import moment from 'moment-timezone';
 
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
 
+import useUserTimezone from '@/hooks/use-user-timezone';
+
 import { formatLanguageCode } from '@/utils/string';
 
-import { longDateFormat, voctowebTimezone, yearOnlyFormat } from '@/constants';
+import { longDateFormat, yearOnlyFormat } from '@/constants';
 
 import SmallText from '@components/SmallText';
 import TalkImage from '@components/TalkImage';
@@ -26,6 +30,7 @@ const bottomPadding = 1;
 const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
     const { t } = useTranslation();
     const theme = useTheme();
+    const timezone = useUserTimezone();
 
     return (
         <Box paddingX={2} paddingTop={1}>
@@ -48,7 +53,10 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                 <Box flex={2} display="flex" flexDirection="column" gap={2}>
                     <Typography variant="h2">
                         {data.db.title} (
-                        {moment(data.db.date).format(yearOnlyFormat)})
+                        {moment(data.db.date)
+                            .tz(timezone)
+                            .format(yearOnlyFormat)}
+                        )
                     </Typography>
                     <Box>
                         <Typography variant="body1">
@@ -81,7 +89,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                             <VideoMetaBadge
                                 badgeType="date"
                                 badgeContent={moment(data.db.date)
-                                    .tz(voctowebTimezone)
+                                    .tz(timezone)
                                     .format(longDateFormat)}
                                 size="small"
                                 disableOnClick

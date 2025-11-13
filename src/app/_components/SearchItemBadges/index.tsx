@@ -15,9 +15,11 @@ import TagIcon from '@mui/icons-material/Tag';
 
 import moment from 'moment-timezone';
 
+import useUserTimezone from '@/hooks/use-user-timezone';
+
 import { formatLanguageCode, formatVideoDuration } from '@/utils/string';
 
-import { longDateFormat, voctowebTimezone } from '@/constants';
+import { longDateFormat } from '@/constants';
 import type { TalkData } from '@/stores/ui-store';
 
 import VideoMetaBadge from '@components/VideoMetaBadge';
@@ -31,6 +33,8 @@ const SearchItemBadges: FC<SearchItemBadgesProps> = ({
     item,
     disableOnClick,
 }) => {
+    const timezone = useUserTimezone();
+
     const badges = useMemo(() => {
         if (!item) {
             return null;
@@ -88,9 +92,7 @@ const SearchItemBadges: FC<SearchItemBadgesProps> = ({
 
         if (item.date) {
             badgesArray.push({
-                text: moment(item.date)
-                    .tz(voctowebTimezone)
-                    .format(longDateFormat),
+                text: moment(item.date).tz(timezone).format(longDateFormat),
                 type: 'date',
                 icon: <DateIcon />,
                 disableOnClick: true,
@@ -105,7 +107,7 @@ const SearchItemBadges: FC<SearchItemBadgesProps> = ({
         });
 
         return badgesArray;
-    }, [item]);
+    }, [item, timezone]);
 
     if (!item || !badges?.length) {
         return null;

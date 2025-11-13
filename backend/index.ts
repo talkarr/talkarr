@@ -12,6 +12,7 @@ import swaggerUi from 'swagger-ui-express';
 import '@backend/workers/add-talk';
 import '@backend/workers/generate-missing-nfo';
 import { startCheckForRootFolders } from '@backend/workers/check-for-root-folders';
+import { startValidateUserPreferences } from '@backend/workers/validate-user-preferences';
 
 import api from '@backend/api';
 import { initEnv, serverHost, serverPort } from '@backend/env';
@@ -56,14 +57,14 @@ initServer.on('listening', async () => {
     const app = next({ dev, turbopack: true });
     const handle = app.getRequestHandler();
 
+    await loadSettings();
+
     log.info('Preparing server...');
 
     app.prepare()
         .then(async () => {
             log.info('Server prepared');
             const server = express();
-
-            await loadSettings();
 
             if (process.env.NODE_ENV === 'production') {
                 server.set('trust proxy', 1);
@@ -155,6 +156,8 @@ initServer.on('listening', async () => {
 
     // mark everything as not downloading
     await clearDownloadingFlagForAllTalks();
+
+    await startValidateUserPreferences();
 
     await startCheckForRootFolders({ isInit: true });
 });

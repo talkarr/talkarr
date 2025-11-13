@@ -11,6 +11,7 @@ export type InvisibleLinkProps = LinkProps & {
     disabled?: boolean;
 };
 
+// Link component without any styles
 const InvisibleLink: FC<InvisibleLinkProps> = ({
     children,
     style,

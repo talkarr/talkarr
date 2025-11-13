@@ -2,11 +2,14 @@ import type { User as DbUser } from '@prisma/client';
 import type express from 'express';
 import type { RequestHandler } from 'express-serve-static-core';
 import type { Algorithm } from 'jsonwebtoken';
+import type { PartialDeep } from 'type-fest';
 
 import argon2 from 'argon2';
 import gravatar from 'gravatar';
 import jwt from 'jsonwebtoken';
+import moment from 'moment-timezone';
 import { generateIdenticonDataUrl } from 'simple-identicon';
+import typia from 'typia';
 
 import { serverSecret } from '@backend/env';
 import type { components } from '@backend/generated/schema';
@@ -27,6 +30,28 @@ const log = rootLog.child({ label: 'user' });
 export interface SchemaUserWithPassword extends SchemaUser {
     password: string;
 }
+
+export interface UserPreferences {
+    timezone: string;
+}
+
+export type UserPreferencesKey = keyof UserPreferences;
+
+export const defaultUserPreferences: UserPreferences = {
+    timezone: 'UTC',
+};
+
+export type UserPreferencesValidateFunction<
+    T1 = keyof UserPreferences,
+    T2 = UserPreferences[keyof UserPreferences],
+> = (key: T1, value: T2) => boolean;
+
+export const userPreferencesValidators: Record<
+    keyof UserPreferences,
+    UserPreferencesValidateFunction
+> = {
+    timezone: (_key, value) => !!moment.tz.zone(value),
+};
 
 export const libravatarBaseUrl = 'https://seccdn.libravatar.org/';
 export const libravatarDomain = new URL(libravatarBaseUrl).hostname;
@@ -56,6 +81,7 @@ export const getUsers = async (): Promise<components['schemas']['User'][]> => {
         },
     });
 
+    // If prisma users change, update this
     const promises = users.map(
         async user =>
             ({
@@ -67,6 +93,7 @@ export const getUsers = async (): Promise<components['schemas']['User'][]> => {
                 createdAt: user.createdAt.toISOString(),
                 updatedAt: user.updatedAt.toISOString(),
                 avatarUrl: await generateAvatarUrl(user),
+                preferences: user.preferences,
             }) as components['schemas']['User'],
     );
 
@@ -101,6 +128,7 @@ export const getUserWithPasswordByEmail = async (
         createdAt: user.createdAt.toISOString(),
         updatedAt: user.updatedAt.toISOString(),
         avatarUrl: await generateAvatarUrl(user),
+        preferences: user.preferences,
     };
 };
 
@@ -132,6 +160,7 @@ export const getUserWithPasswordById = async (
         createdAt: user.createdAt.toISOString(),
         updatedAt: user.updatedAt.toISOString(),
         avatarUrl: await generateAvatarUrl(user),
+        preferences: user.preferences,
     };
 };
 
@@ -270,6 +299,7 @@ export const sanitizeUser = (user: SchemaUserWithPassword): SchemaUser => ({
     displayName: user.displayName,
     isActive: user.isActive,
     updatedAt: user.updatedAt,
+    preferences: user.preferences,
 });
 
 export const verifyPassword = async (
@@ -371,4 +401,80 @@ export const createUser = async ({
     log.info(`User created with ID: ${user.id}`);
 
     return user;
+};
+
+export const validateUserPreferences = (
+    userPreferences: UserPreferences,
+): boolean => {
+    for (const preferencesKey of Object.keys(userPreferences)) {
+        const key = preferencesKey as UserPreferencesKey;
+
+        if (key in userPreferencesValidators) {
+            if (!userPreferencesValidators[key](key, userPreferences[key])) {
+                return false;
+            }
+        } else {
+            log.warn(`No validator found for ${key}`);
+        }
+    }
+
+    return true;
+};
+
+export const normalizeUserPreferences = (
+    userPreferences: PartialDeep<UserPreferences> | Record<string, any>,
+): UserPreferences => {
+    const normalizedPreferences: typeof userPreferences = {
+        ...userPreferences,
+    };
+
+    for (const key of Object.keys(defaultUserPreferences)) {
+        if (!(key in normalizedPreferences)) {
+            normalizedPreferences[key as UserPreferencesKey] =
+                defaultUserPreferences[key as UserPreferencesKey];
+        }
+    }
+
+    for (const preferencesKey of Object.keys(normalizedPreferences)) {
+        const key = preferencesKey as UserPreferencesKey;
+
+        if (!(key in defaultUserPreferences)) {
+            delete normalizedPreferences[key];
+            continue;
+        }
+
+        if (key in userPreferencesValidators) {
+            if (
+                !userPreferencesValidators[key](key, normalizedPreferences[key])
+            ) {
+                normalizedPreferences[key] = defaultUserPreferences[key];
+            }
+        } else {
+            log.warn(`No validator found for ${key}`);
+        }
+    }
+
+    const isUserPreferences = typia.is<UserPreferences>(normalizedPreferences);
+
+    if (isUserPreferences) {
+        return normalizedPreferences;
+    }
+
+    return defaultUserPreferences;
+};
+
+export const updateUserPreferences = async (
+    id: components['schemas']['User']['id'],
+    updatedPreferences: UserPreferences,
+): Promise<DbUser> => {
+    const normalizedPreferences = normalizeUserPreferences(updatedPreferences);
+
+    return prisma.user.update({
+        where: {
+            id,
+        },
+        data: {
+            preferences: normalizedPreferences,
+        },
+    });
 };

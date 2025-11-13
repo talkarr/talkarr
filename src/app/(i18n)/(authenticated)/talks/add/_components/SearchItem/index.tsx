@@ -18,7 +18,9 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import moment from 'moment-timezone';
 
-import { voctowebTimezone, yearOnlyFormat } from '@/constants';
+import useUserTimezone from '@/hooks/use-user-timezone';
+
+import { yearOnlyFormat } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
 import type { TalkData } from '@/stores/ui-store';
 
@@ -86,9 +88,10 @@ export const SearchItemSkeleton: FC = () => (
 );
 
 const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
+    const timezone = useUserTimezone();
     const openAddTalkModal = useUiStore(state => state.openAddTalkModal);
 
-    const year = moment(item.date).tz(voctowebTimezone).format(yearOnlyFormat);
+    const year = moment(item.date).tz(timezone).format(yearOnlyFormat);
 
     return (
         <StyledCard

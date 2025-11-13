@@ -28,13 +28,16 @@ export const taskNames = [
     generateBlurhashes,
 ] as const;
 
-export type TaskNames =
+export type ExecutableTaskNames =
     | 'generateMissingNfo'
     | 'scanForMissingFiles'
     | 'checkForRootFolders'
     | 'generateBlurhashes';
 
-export type UsableTaskNames = Extract<(typeof taskNames)[number], TaskNames>;
+export type UsableTaskNames = Extract<
+    (typeof taskNames)[number],
+    ExecutableTaskNames
+>;
 
 type InternalUseableTaskNames = UsableTaskNames extends never
     ? '__NEVER__'

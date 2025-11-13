@@ -23,6 +23,8 @@ import { useSnackbar } from 'notistack';
 import { getConfig } from '@/app/_api/settings/mediamanagement';
 import { addEvent } from '@/app/_api/talks/add';
 
+import useUserTimezone from '@/hooks/use-user-timezone';
+
 import { stripInvalidCharsForDataAttribute } from '@/utils/string';
 
 import { yearOnlyFormat } from '@/constants';
@@ -35,6 +37,7 @@ import TalkImage from '@components/TalkImage';
 const AddTalkModal: FC = () => {
     const { t } = useTranslation();
     const { enqueueSnackbar } = useSnackbar();
+    const timezone = useUserTimezone();
 
     const addTalkModal = useUiStore(state => state.addTalkModal);
     const close = useUiStore(state => state.closeAddTalkModal);
@@ -114,7 +117,7 @@ const AddTalkModal: FC = () => {
             onClose={close}
             title={
                 addTalkModal
-                    ? `${addTalkModal.title} (${moment(addTalkModal.date).format(yearOnlyFormat)})`
+                    ? `${addTalkModal.title} (${moment(addTalkModal.date).tz(timezone).format(yearOnlyFormat)})`
                     : ''
             }
             moreWidth

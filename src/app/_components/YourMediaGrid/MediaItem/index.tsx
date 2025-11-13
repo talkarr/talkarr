@@ -23,15 +23,12 @@ import { getMediaItemStatusColor } from '@backend/talk-utils';
 import type { SuccessData } from '@backend/types';
 
 import useOnScreen from '@/hooks/use-on-screen';
+import useUserTimezone from '@/hooks/use-user-timezone';
 
 import { convertBlurhashToDataURL } from '@/utils/blurhash';
 import { generateCacheUrl } from '@/utils/cache';
 
-import {
-    longDateFormat,
-    specificTalkPageLink,
-    voctowebTimezone,
-} from '@/constants';
+import { longDateFormat, specificTalkPageLink } from '@/constants';
 import { useApiStore } from '@/providers/api-store-provider';
 
 import CircularProgressWithLabel from '@components/CircularProgressWithLabel';
@@ -54,6 +51,7 @@ const StyledContainer = styled(Grid)(({ theme }) => ({
 const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
     const { t } = useTranslation();
     const theme = useTheme();
+    const timezone = useUserTimezone();
 
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
@@ -212,7 +210,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
                             <CardHeader
                                 title={initialData.title}
                                 subheader={`${moment(initialData.date)
-                                    .tz(voctowebTimezone)
+                                    .tz(timezone)
                                     .format(
                                         longDateFormat,
                                     )} - ${conference.title}`}
