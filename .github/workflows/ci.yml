@@ -54,6 +54,10 @@ jobs:
           npx ls-engines --mode actual --save
           git diff --exit-code package.json
 
+      - name: Generate prisma types
+        run: |
+          yarn prisma generate
+
       - name: Run ESLint for frontend
         continue-on-error: true
         id: eslint-frontend
