@@ -59,8 +59,7 @@ ENV OVERRIDE_CURRENT_VERSION=$OVERRIDE_CURRENT_VERSION
 
 ENV YTDLP_PATH_OVERRIDE=/usr/bin/yt-dlp
 
-RUN yarn prisma generate && \
-    yarn build
+RUN yarn build
 
 # Production image, copy all the files and run next
 FROM base AS runner
