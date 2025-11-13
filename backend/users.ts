@@ -372,11 +372,13 @@ export const createUser = async ({
     email,
     password,
     displayName,
+    isActive,
     initialPermissions = [],
 }: {
     email: string;
     password: string;
     displayName: string;
+    isActive: boolean;
     initialPermissions: Permission[];
 }): Promise<DbUser> => {
     const passwordHash = await hashPassword(password);
@@ -386,6 +388,8 @@ export const createUser = async ({
             email,
             password: passwordHash,
             displayName,
+            isActive,
+            preferences: defaultUserPreferences,
             ...(initialPermissions.length > 0
                 ? {
                       permissions: {

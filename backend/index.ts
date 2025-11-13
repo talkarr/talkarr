@@ -59,6 +59,17 @@ initServer.on('listening', async () => {
 
     await loadSettings();
 
+    try {
+        const locksReleased = await releaseAllLocks();
+        log.info('Released all existing locks', {
+            locksReleased,
+        });
+    } catch {
+        log.warn('Error when trying to release existing locks');
+    }
+
+    await startValidateUserPreferences();
+
     log.info('Preparing server...');
 
     app.prepare()
@@ -145,19 +156,8 @@ initServer.on('listening', async () => {
             process.exit(1);
         });
 
-    try {
-        const locksReleased = await releaseAllLocks();
-        log.info('Released all existing locks', {
-            locksReleased,
-        });
-    } catch {
-        log.warn('Error when trying to release existing locks');
-    }
-
     // mark everything as not downloading
     await clearDownloadingFlagForAllTalks();
-
-    await startValidateUserPreferences();
 
     await startCheckForRootFolders({ isInit: true });
 });

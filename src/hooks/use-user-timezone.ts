@@ -1,3 +1,5 @@
+'use client';
+
 import { defaultTimezone } from '@/constants';
 import { useUserStore } from '@/providers/user-store-provider';
 
