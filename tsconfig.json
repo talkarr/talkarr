@@ -19,10 +19,8 @@
     "incremental": true,
     "experimentalDecorators": true,
     "baseUrl": "src",
-    "sourceMap": true,
     "inlineSourceMap": true,
     "inlineSources": true,
-    "mapRoot": "file:///",
     "plugins": [
       {
         "name": "next"

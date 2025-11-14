@@ -15,10 +15,8 @@
                 "*"
             ]
         },
-        "sourceMap": true,
         "inlineSourceMap": true,
-        "inlineSources": true,
-        "mapRoot": "file:///"
+        "inlineSources": true
     },
     "include": [
         "**/*.ts"
