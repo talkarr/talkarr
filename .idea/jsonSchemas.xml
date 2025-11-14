@@ -17,6 +17,9 @@
                   <Item>
                     <option name="path" value=".github/workflows/ci.yml" />
                   </Item>
+                  <Item>
+                    <option name="path" value=".github/workflows/cache-cleanup.yml" />
+                  </Item>
                 </list>
               </option>
             </SchemaInfo>
