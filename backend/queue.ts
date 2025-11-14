@@ -386,6 +386,15 @@ export class Queue {
                 };
                 this.emit('processing', job);
             } catch (error) {
+                if (error instanceof TypeError) {
+                    // this is a magic error that only occurs in prod, so we need some debugging here
+                    console.log(error);
+                    console.dir({
+                        jobQueue: this.jobQueue,
+                        job,
+                    });
+                }
+
                 if (error instanceof Prisma.PrismaClientKnownRequestError) {
                     log.error(
                         `Database error while updating job ${job.id} status to active:`,

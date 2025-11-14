@@ -70,6 +70,11 @@ initServer.on('listening', async () => {
 
     await startValidateUserPreferences();
 
+    // mark everything as not downloading
+    await clearDownloadingFlagForAllTalks();
+
+    await startCheckForRootFolders({ isInit: true });
+
     log.info('Preparing server...');
 
     app.prepare()
@@ -124,7 +129,7 @@ initServer.on('listening', async () => {
                     process.exit(1);
                 }
 
-                log.info('Startup server closed');
+                log.info('Startup server closed, trying to listen now...');
 
                 if (serverHost) {
                     server.listen(serverPort, serverHost, error => {
@@ -155,11 +160,6 @@ initServer.on('listening', async () => {
             log.error('Catched Error', { stack: error.stack });
             process.exit(1);
         });
-
-    // mark everything as not downloading
-    await clearDownloadingFlagForAllTalks();
-
-    await startCheckForRootFolders({ isInit: true });
 });
 
 process.on('uncaughtException', err => {
