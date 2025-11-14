@@ -355,6 +355,7 @@ export const createInitialUser = async ({
             email,
             password: passwordHash,
             displayName,
+            preferences: defaultUserPreferences,
             permissions: {
                 create: createUserPermissions([Permission.Admin]).map(
                     permission => ({ permission }),
