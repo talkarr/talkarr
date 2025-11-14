@@ -14,7 +14,11 @@
             "@backend/*": [
                 "*"
             ]
-        }
+        },
+        "sourceMap": true,
+        "inlineSourceMap": true,
+        "inlineSources": true,
+        "mapRoot": "file:///"
     },
     "include": [
         "**/*.ts"

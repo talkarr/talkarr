@@ -163,6 +163,6 @@ initServer.on('listening', async () => {
 });
 
 process.on('uncaughtException', err => {
-    log.error('Uncaught Exception:', { err });
+    log.error(`Uncaught Exception: ${err.stack}`, { err });
     process.exit(1);
 });

@@ -68,6 +68,7 @@ export class Queue {
     // Internal queue status state
     private initialized = false;
     private paused = false;
+    private isHandlingWaitingJobs = false;
 
     // job states
     private jobQueue: DatabaseJobWithFunctions[] = [];
@@ -177,11 +178,11 @@ export class Queue {
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 log.error(`Database error while enqueuing job ${name}:`, {
-                    error: error.message,
+                    error,
                 });
             } else {
                 log.error(`Error while enqueuing job ${name}:`, {
-                    error: (error as Error).message,
+                    error,
                 });
             }
         }
@@ -310,6 +311,11 @@ export class Queue {
     }
 
     private async handleWaitingJobs(): Promise<void> {
+        if (this.isHandlingWaitingJobs) {
+            log.debug('Already handling waiting jobs, returning...');
+            return;
+        }
+
         const jobsToProcess = this.jobQueue.filter(
             job => job.status === JobStatus.Waiting,
         );
@@ -318,24 +324,30 @@ export class Queue {
             return;
         }
 
+        this.isHandlingWaitingJobs = true;
+
+        log.debug(`Found ${jobsToProcess.length} jobs to process`, {
+            jobsToProcess,
+        });
+
         for await (const job of jobsToProcess) {
             // Check for concurrency limit
             const handler = this.jobHandlers[job.name];
 
-            if (handler) {
-                const concurrency = handler.concurrency || 1;
-                const activeJobs = this.jobQueue.filter(
-                    j => j.name === job.name && j.status === JobStatus.Active,
-                ).length;
-
-                if (activeJobs >= concurrency) {
-                    log.debug(
-                        `Job ${job.id} (${job.name}) is waiting due to concurrency limit`,
-                    );
-                    continue;
-                }
-            } else {
+            if (!handler) {
                 log.error(`No handler found for job ${job.name}`);
+                continue;
+            }
+
+            const concurrency = handler.concurrency || 1;
+            const activeJobs = this.jobQueue.filter(
+                j => j.name === job.name && j.status === JobStatus.Active,
+            ).length;
+
+            if (activeJobs >= concurrency) {
+                log.debug(
+                    `Job ${job.id} (${job.name}) is waiting due to concurrency limit`,
+                );
                 continue;
             }
 
@@ -378,14 +390,14 @@ export class Queue {
                     log.error(
                         `Database error while updating job ${job.id} status to active:`,
                         {
-                            error: error.message,
+                            error,
                         },
                     );
                 } else {
                     log.error(
                         `Error while updating job ${job.id} status to active:`,
                         {
-                            error: (error as Error).message,
+                            error,
                         },
                     );
                 }
@@ -394,6 +406,10 @@ export class Queue {
             // Execute the job handler
             setTimeout(async () => {
                 try {
+                    log.debug('Executing job handler', {
+                        id: job.id,
+                        name: job.name,
+                    });
                     await handler.handler(job, async (error?: Error | null) => {
                         log.debug('done() called for job', {
                             id: job.id,
@@ -483,9 +499,20 @@ export class Queue {
                                                 id: job.id,
                                             },
                                         );
-                                        await prisma.job.delete({
-                                            where: { id: job.id },
-                                        });
+                                        // use deleteMany to not throw if a record wasn't found
+                                        const { count } =
+                                            await prisma.job.deleteMany({
+                                                where: { id: job.id },
+                                            });
+
+                                        log.debug(
+                                            `Successfully deleted ${count} jobs from database`,
+                                            {
+                                                id: job.id,
+                                                count,
+                                            },
+                                        );
+
                                         this.jobQueue = this.jobQueue.filter(
                                             j => j.id !== job.id,
                                         );
@@ -561,9 +588,19 @@ export class Queue {
                         log.debug('Remove failed job from database', {
                             id: job.id,
                         });
-                        await prisma.job.delete({
+                        // use deleteMany to not throw if a record wasn't found
+                        const { count } = await prisma.job.deleteMany({
                             where: { id: job.id },
                         });
+
+                        log.debug(
+                            `Successfully deleted ${count} jobs from database`,
+                            {
+                                id: job.id,
+                                count,
+                            },
+                        );
+
                         this.jobQueue = this.jobQueue.filter(
                             j => j.id !== job.id,
                         );
@@ -576,6 +613,8 @@ export class Queue {
                 }
             }, 0);
         }
+
+        this.isHandlingWaitingJobs = false;
     }
 
     private async updateJobProgress(
@@ -640,12 +679,12 @@ export class Queue {
                 log.error(
                     `Database error while updating progress for job ${jobId}:`,
                     {
-                        error: error.message,
+                        error,
                     },
                 );
             } else {
                 log.error(`Error while updating progress for job ${jobId}:`, {
-                    error: (error as Error).message,
+                    error,
                 });
             }
         }
@@ -656,6 +695,13 @@ export class Queue {
     private async loadJobsFromDatabase(): Promise<boolean> {
         const loadLog = log.child({ label: 'loadJobsFromDatabase' });
         try {
+            loadLog.debug('Marking waiting jobs as stale');
+            await prisma.job.deleteMany({
+                where: {
+                    status: JobStatus.Waiting,
+                },
+            });
+
             loadLog.debug('Marking active jobs as waiting');
             await prisma.job.updateMany({
                 where: {
@@ -663,6 +709,8 @@ export class Queue {
                 },
                 data: {
                     status: JobStatus.Waiting,
+                    progress: 0,
+                    startedAt: null,
                 },
             });
 
@@ -670,7 +718,7 @@ export class Queue {
             const jobs = await prisma.job.findMany({
                 where: {
                     status: {
-                        in: [JobStatus.Active, JobStatus.Waiting],
+                        in: [JobStatus.Waiting],
                     },
                 },
                 select: {
@@ -696,11 +744,11 @@ export class Queue {
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 log.error('Database error while loading jobs:', {
-                    error: error.message,
+                    error,
                 });
             } else {
                 log.error('Error while loading jobs:', {
-                    error: (error as Error).message,
+                    error,
                 });
             }
 
@@ -717,7 +765,6 @@ export class Queue {
                 }
 
                 this.initialized = true;
-                // execute handleQueue in another thread
                 setInterval(async () => {
                     await this.handleQueue();
                     // jobQueue without all the data attributes
