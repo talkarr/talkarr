@@ -25,10 +25,6 @@ export const taskName = 'generateBlurhashes';
 
 const log = rootLog.child({ label: 'workers/generateBlurhashes' });
 
-const lock: Locks = {
-    name: taskName,
-};
-
 export interface GenerateBlurhashesData {
     event?:
         | DbEvent
@@ -47,6 +43,10 @@ const generateBlurhashes: TaskFunction<GenerateBlurhashesData> = async (
 
         throw new Error('Invalid data');
     }
+
+    const lock: Locks = {
+        name: `${taskName}-${job.data.event?.guid || 'unknown'}`,
+    };
 
     if (!(await acquireLockAndReturn(lock))) {
         log.error('Could not acquire lock, early returning', {
