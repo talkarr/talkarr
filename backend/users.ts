@@ -7,7 +7,6 @@ import type { PartialDeep } from 'type-fest';
 import argon2 from 'argon2';
 import gravatar from 'gravatar';
 import jwt from 'jsonwebtoken';
-import moment from 'moment-timezone';
 import { generateIdenticonDataUrl } from 'simple-identicon';
 import typia from 'typia';
 
@@ -18,6 +17,14 @@ import { prisma } from '@backend/prisma';
 import rootLog from '@backend/root-log';
 import { getSettings } from '@backend/settings';
 import type { ExpressResponse } from '@backend/types';
+import type {
+    UserPreferences,
+    UserPreferencesKey,
+} from '@backend/user-preferences';
+import {
+    defaultUserPreferences,
+    userPreferencesValidators,
+} from '@backend/user-preferences';
 
 export const jwtAlgorithm: Algorithm = 'HS512';
 export const tokenCookieName = 'talkarr_token';
@@ -30,28 +37,6 @@ const log = rootLog.child({ label: 'user' });
 export interface SchemaUserWithPassword extends SchemaUser {
     password: string;
 }
-
-export interface UserPreferences {
-    timezone: string;
-}
-
-export type UserPreferencesKey = keyof UserPreferences;
-
-export const defaultUserPreferences: UserPreferences = {
-    timezone: 'UTC',
-};
-
-export type UserPreferencesValidateFunction<
-    T1 = keyof UserPreferences,
-    T2 = UserPreferences[keyof UserPreferences],
-> = (key: T1, value: T2) => boolean;
-
-export const userPreferencesValidators: Record<
-    keyof UserPreferences,
-    UserPreferencesValidateFunction
-> = {
-    timezone: (_key, value) => !!moment.tz.zone(value),
-};
 
 export const libravatarBaseUrl = 'https://seccdn.libravatar.org/';
 export const libravatarDomain = new URL(libravatarBaseUrl).hostname;

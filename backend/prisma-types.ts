@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-import type { UserPreferences as CodeUserPreferences } from '@backend/users';
+import type { UserPreferences as CodeUserPreferences } from '@backend/user-preferences';
 
 declare global {
     namespace PrismaJson {

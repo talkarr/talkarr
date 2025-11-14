@@ -3,7 +3,7 @@ import typia from 'typia';
 
 import rootLog from '@backend/root-log';
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
-import type { UserPreferences } from '@backend/users';
+import type { UserPreferences } from '@backend/user-preferences';
 import {
     getUserWithPasswordById,
     requireUser,

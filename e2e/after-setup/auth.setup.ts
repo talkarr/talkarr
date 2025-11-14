@@ -2,7 +2,7 @@ import argon2 from 'argon2';
 import path from 'node:path';
 
 import { prisma } from '@backend/prisma';
-import { defaultUserPreferences } from '@backend/users';
+import { defaultUserPreferences } from '@backend/user-preferences';
 
 import { expect, test } from '@playwright/test';
 
