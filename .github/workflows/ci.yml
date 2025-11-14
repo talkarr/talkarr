@@ -402,6 +402,7 @@ jobs:
         continue-on-error: true
         if: steps.start-container.outcome == 'success'
         run: |
+          yarn ts-patch check
           yarn test:e2e:ci
           echo "TESTING_STATUS=$?" >> $GITHUB_ENV
 
