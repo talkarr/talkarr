@@ -19,6 +19,8 @@
     "incremental": true,
     "experimentalDecorators": true,
     "baseUrl": "src",
+    "inlineSourceMap": true,
+    "inlineSources": true,
     "plugins": [
       {
         "name": "next"
