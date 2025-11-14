@@ -44,6 +44,41 @@ export const acquireLockAndReturn = async (data: Locks): Promise<boolean> => {
     }
 };
 
+// Returns false if timeout was hit
+export const acquireLockOrWait = async (
+    data: Locks,
+    timeoutMs = 5000,
+): Promise<boolean> =>
+    new Promise(resolve => {
+        let checkInterval: NodeJS.Timeout | null = null;
+        let timeout: NodeJS.Timeout | null = null;
+
+        const resolveProxy = (returnValue: boolean): void => {
+            if (timeout !== null) {
+                clearTimeout(timeout);
+            }
+
+            if (checkInterval !== null) {
+                clearInterval(checkInterval);
+            }
+
+            resolve(returnValue);
+        };
+
+        checkInterval = setInterval(async () => {
+            const locked = await acquireLockAndReturn(data);
+
+            if (locked) {
+                resolveProxy(true);
+            }
+        }, 100);
+
+        timeout = setTimeout(() => {
+            timeout = null;
+            resolveProxy(false);
+        }, timeoutMs);
+    });
+
 export const releaseLock = async (
     data: Locks,
     throwIfNotFound = true,

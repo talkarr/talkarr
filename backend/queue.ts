@@ -141,6 +141,9 @@ export class Queue {
         }
 
         try {
+            log.debug('Creating job because of enqueueJob()', {
+                name,
+            });
             const databaseEntry = await prisma.job.create({
                 data: {
                     name,
@@ -340,10 +343,15 @@ export class Queue {
                 const jobIndex = this.jobQueue.findIndex(j => j.id === job.id);
 
                 if (jobIndex === -1) {
-                    log.error(`Job ${job.id} not found in queue`);
+                    log.error(
+                        `Job ${job.id} not found in queue to mark as active`,
+                    );
                     continue;
                 }
 
+                log.debug('Marking job as active', {
+                    id: job.id,
+                });
                 const updatedJob = await prisma.job.update({
                     where: { id: job.id },
                     data: {
@@ -387,17 +395,30 @@ export class Queue {
             setTimeout(async () => {
                 try {
                     await handler.handler(job, async (error?: Error | null) => {
+                        log.debug('done() called for job', {
+                            id: job.id,
+                            name: job.name,
+                        });
+
                         const jobIndex = this.jobQueue.findIndex(
                             j => j.id === job.id,
                         );
 
                         if (jobIndex === -1) {
-                            log.error(`Job ${job.id} not found in queue`);
+                            log.error(
+                                `Job ${job.id} not found in queue in done callback`,
+                            );
                             return;
                         }
 
                         try {
                             if (error) {
+                                log.debug(
+                                    'Marking job as failed inside done callback',
+                                    {
+                                        id: job.id,
+                                    },
+                                );
                                 const updatedJob = await prisma.job.update({
                                     where: { id: job.id },
                                     data: {
@@ -426,6 +447,9 @@ export class Queue {
                                     j => j.id !== job.id,
                                 );
                             } else {
+                                log.debug('Marking job as completed', {
+                                    id: job.id,
+                                });
                                 const updatedJob = await prisma.job.update({
                                     where: { id: job.id },
                                     data: {
@@ -453,6 +477,12 @@ export class Queue {
                                 // remove job from queue
                                 if (!job.keepAfterSuccess) {
                                     try {
+                                        log.debug(
+                                            'Removing job from database because keepAfterSuccess=false',
+                                            {
+                                                id: job.id,
+                                            },
+                                        );
                                         await prisma.job.delete({
                                             where: { id: job.id },
                                         });
@@ -494,10 +524,15 @@ export class Queue {
                     );
 
                     if (jobIndex === -1) {
-                        log.error(`Job ${job.id} not found in queue`);
+                        log.error(
+                            `Job ${job.id} not found in queue in handler`,
+                        );
                         return;
                     }
 
+                    log.debug('Marking job as failed in handler', {
+                        id: job.id,
+                    });
                     const updatedJob = await prisma.job.update({
                         where: { id: job.id },
                         data: {
@@ -523,6 +558,9 @@ export class Queue {
                     this.emit('failed', job, error as Error);
                     // remove job from queue
                     try {
+                        log.debug('Remove failed job from database', {
+                            id: job.id,
+                        });
                         await prisma.job.delete({
                             where: { id: job.id },
                         });
@@ -571,6 +609,10 @@ export class Queue {
         }
 
         try {
+            log.debug('Update progress of job', {
+                id: job.id,
+                progress,
+            });
             const updatedJob = await prisma.job.update({
                 where: { id: jobId },
                 data: { progress },
@@ -612,7 +654,9 @@ export class Queue {
     }
 
     private async loadJobsFromDatabase(): Promise<boolean> {
+        const loadLog = log.child({ label: 'loadJobsFromDatabase' });
         try {
+            loadLog.debug('Marking active jobs as waiting');
             await prisma.job.updateMany({
                 where: {
                     status: JobStatus.Active,
@@ -622,6 +666,7 @@ export class Queue {
                 },
             });
 
+            loadLog.debug('Select all jobs that are active or waiting');
             const jobs = await prisma.job.findMany({
                 where: {
                     status: {

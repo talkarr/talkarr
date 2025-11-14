@@ -3,6 +3,7 @@ import type {
     Event as DbEvent,
     EventInfo,
     File,
+    Locks,
 } from '@prisma/client';
 
 import { isBlurhashValid } from 'blurhash';
@@ -20,6 +21,7 @@ import type { ExistingFileWithGuessedInformation } from '@backend/fs/scan';
 import type { components } from '@backend/generated/schema';
 import { getConferenceFromEvent, getTalkFromApiBySlug } from '@backend/helper';
 import { serverDecodeCustomBlurhash } from '@backend/helper/blurhash';
+import { acquireLockOrWait, releaseLock } from '@backend/locks';
 import { prisma } from '@backend/prisma';
 import rootLog from '@backend/root-log';
 import { getSettings } from '@backend/settings';
@@ -967,6 +969,19 @@ export const importExistingFileFromFilesystem = async ({
         return false;
     }
 
+    const lock: Locks = {
+        name: `import-existing-file-${file.guess.slug}`,
+    };
+
+    if (!(await acquireLockOrWait(lock))) {
+        log.error('Unable to acquire lock for importing existing file', {
+            slug: file.guess.slug,
+        });
+        return false;
+    }
+
+    // NOTE: Always call the unlock function on return calls
+
     try {
         let conference = await prisma.conference.findFirst({
             where: {
@@ -1003,6 +1018,8 @@ export const importExistingFileFromFilesystem = async ({
                 acronym: file.guess.conferenceAcronym,
             });
 
+            await releaseLock(lock, false);
+
             return false;
         }
 
@@ -1016,6 +1033,8 @@ export const importExistingFileFromFilesystem = async ({
             log.error('Event still does not exist in db after adding', {
                 slug: file.guess.slug,
             });
+
+            await releaseLock(lock, false);
 
             return false;
         }
@@ -1036,6 +1055,8 @@ export const importExistingFileFromFilesystem = async ({
                     file: file.path,
                     filesInDb: filesForGuid,
                 });
+
+                await releaseLock(lock, false);
 
                 return false;
             }
@@ -1060,9 +1081,13 @@ export const importExistingFileFromFilesystem = async ({
 
         log.info('Created file', { createdFile: createdFile.path });
 
+        await releaseLock(lock, false);
+
         return true;
     } catch (error) {
         log.error('Error importing file', { error, file });
+
+        await releaseLock(lock, false);
 
         return false;
     }
