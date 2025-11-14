@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Avatar from '@mui/material/Avatar';
@@ -16,6 +16,7 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 
 import LogoutIcon from '@mui/icons-material/Logout';
+import PreferencesIcon from '@mui/icons-material/Settings';
 
 import { useSnackbar } from 'notistack';
 
@@ -24,14 +25,16 @@ import useLogout from '@/hooks/use-logout';
 import { generateCacheUrl } from '@/utils/cache';
 
 import { userAvatarCacheKey } from '@/cache-keys';
-import { loginPageLink } from '@/constants';
+import { loginPageLink, userPreferencesLink } from '@/constants';
 import { useUserStore } from '@/providers/user-store-provider';
 
+import InvisibleLink from '@components/InvisibleLink';
 import UserAvatar from '@components/UserAvatar';
 
 const NavigationUser: FC = () => {
     const { t } = useTranslation();
     const router = useRouter();
+    const pathname = usePathname();
 
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -67,6 +70,12 @@ const NavigationUser: FC = () => {
                 );
             });
     };
+
+    useEffect(() => {
+        if (pathname) {
+            handleClose();
+        }
+    }, [pathname]);
 
     return (
         <>
@@ -125,6 +134,14 @@ const NavigationUser: FC = () => {
                     </Box>
                 </Box>
                 <Divider sx={{ my: 2 }} />
+                <InvisibleLink href={userPreferencesLink}>
+                    <MenuItem>
+                        <ListItemIcon>
+                            <PreferencesIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Preferences" />
+                    </MenuItem>
+                </InvisibleLink>
                 <MenuItem>
                     <ListItemIcon>
                         <LogoutIcon />

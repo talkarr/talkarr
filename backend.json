@@ -1000,6 +1000,18 @@
                 "type": "string",
                 "description": "User permissions. Enum defined in code"
             },
+            "UserPreferences": {
+                "type": "object",
+                "description": "User preferences that can be changed in the UI",
+                "properties": {
+                    "timezone": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "timezone"
+                ]
+            },
             "User": {
                 "type": "object",
                 "properties": {
@@ -1048,6 +1060,9 @@
                         "description": "Avatar URL of user. Needs to be encoded data url",
                         "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...",
                         "format": "data-url"
+                    },
+                    "preferences": {
+                        "$ref": "#/components/schemas/UserPreferences"
                     }
                 },
                 "required": [
@@ -1058,7 +1073,8 @@
                     "isActive",
                     "createdAt",
                     "updatedAt",
-                    "avatarUrl"
+                    "avatarUrl",
+                    "preferences"
                 ]
             },
             "GeneralConfig": {
@@ -3137,6 +3153,81 @@
                             }
                         },
                         "description": "User not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/user/preferences": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/UserPreferences"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserPreferences"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        },
+                        "description": "Success"
                     },
                     "500": {
                         "content": {

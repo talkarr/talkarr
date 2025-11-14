@@ -39,6 +39,7 @@ export const specificUserSecurityPageLink = (uid: string): string =>
 
 // === User ===
 export const loginPageLink = '/login';
+export const userPreferencesLink = '/user-preferences';
 
 // === API ===
 export const apiBaseUrl = `http://${process.env.HOST || 'localhost'}:${process.env.PORT || 3232}`;
@@ -61,7 +62,7 @@ export const longDateFormat = 'DD.MM.yyyy';
 
 export const yearOnlyFormat = 'yyyy';
 
-export const voctowebTimezone = 'Europe/Berlin';
+export const defaultTimezone = 'UTC';
 
 // external links
 export const weblateUrl = 'https://weblate.commanderred.xyz/engage/talkarr/';

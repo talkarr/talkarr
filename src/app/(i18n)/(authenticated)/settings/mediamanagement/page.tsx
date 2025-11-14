@@ -1,6 +1,7 @@
 import type { Metadata, NextPage } from 'next';
 
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,6 +14,8 @@ import AddFolderButton from '@/app/(i18n)/(authenticated)/settings/mediamanageme
 import FolderRow from '@/app/(i18n)/(authenticated)/settings/mediamanagement/_components/FolderRow';
 
 import { getServerSideTranslation } from '@/i18n/server-side';
+
+import MaterialTable from '@components/MaterialTable';
 
 export const generateMetadata = async (): Promise<Metadata> => {
     const { t } = await getServerSideTranslation();
@@ -32,64 +35,70 @@ const Page: NextPage = async () => {
     return (
         <Box data-testid="media-management-settings">
             <Box>
-                <Typography variant="h4">
-                    {t('pages.mediaManagementSettingsPage.rootFolders.title')}
-                </Typography>
-                <Typography variant="body1">
-                    {t(
-                        'pages.mediaManagementSettingsPage.rootFolders.description',
-                    )}
-                </Typography>
-                <Table
-                    sx={{
-                        // Thanks to Google Chrome for being such a nice browser
-                        tableLayout: 'fixed',
-                        maxWidth: '100%',
+                <Box mb={2}>
+                    <Typography variant="h4">
+                        {t(
+                            'pages.mediaManagementSettingsPage.rootFolders.title',
+                        )}
+                    </Typography>
+                    <Typography variant="body1">
+                        {t(
+                            'pages.mediaManagementSettingsPage.rootFolders.description',
+                        )}
+                    </Typography>
+                </Box>
+                <MaterialTable component={Paper}>
+                    <Table
+                        sx={{
+                            // Thanks to Google Chrome for being such a nice browser
+                            tableLayout: 'fixed',
+                            maxWidth: '100%',
 
-                        // set word-wrap for all inner td elements
-                        '& td': {
-                            wordWrap: 'break-word',
-                        },
-                    }}
-                >
-                    <TableHead>
-                        <TableRow>
-                            <TableCell padding="checkbox" />
-                            <TableCell>
-                                {t(
-                                    'pages.mediaManagementSettingsPage.rootFolders.columns.folderName',
-                                )}
-                            </TableCell>
-                            <TableCell>
-                                {t(
-                                    'pages.mediaManagementSettingsPage.rootFolders.columns.freeSpace',
-                                )}
-                            </TableCell>
-                            <TableCell align="right">
-                                {t(
-                                    'pages.mediaManagementSettingsPage.rootFolders.columns.actions',
-                                )}
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data?.folders.map(folderData => (
-                            <FolderRow
-                                folderData={folderData}
-                                key={folderData.folder}
-                            />
-                        ))}
-                        {data?.folders.length === 0 ? (
-                            <TableRow data-testid="no-root-folder">
-                                <TableCell colSpan={4}>
+                            // set word-wrap for all inner td elements
+                            '& td': {
+                                wordWrap: 'break-word',
+                            },
+                        }}
+                    >
+                        <TableHead>
+                            <TableRow>
+                                <TableCell padding="checkbox" />
+                                <TableCell>
                                     {t(
-                                        'pages.mediaManagementSettingsPage.rootFolders.noRootFoldersConfigured',
+                                        'pages.mediaManagementSettingsPage.rootFolders.columns.folderName',
+                                    )}
+                                </TableCell>
+                                <TableCell>
+                                    {t(
+                                        'pages.mediaManagementSettingsPage.rootFolders.columns.freeSpace',
+                                    )}
+                                </TableCell>
+                                <TableCell align="right">
+                                    {t(
+                                        'pages.mediaManagementSettingsPage.rootFolders.columns.actions',
                                     )}
                                 </TableCell>
                             </TableRow>
-                        ) : null}
-                    </TableBody>
-                </Table>
+                        </TableHead>
+                        <TableBody>
+                            {data?.folders.map(folderData => (
+                                <FolderRow
+                                    folderData={folderData}
+                                    key={folderData.folder}
+                                />
+                            ))}
+                            {data?.folders.length === 0 ? (
+                                <TableRow data-testid="no-root-folder">
+                                    <TableCell colSpan={4}>
+                                        {t(
+                                            'pages.mediaManagementSettingsPage.rootFolders.noRootFoldersConfigured',
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            ) : null}
+                        </TableBody>
+                    </Table>
+                </MaterialTable>
                 <Box mt={2}>
                     <AddFolderButton />
                 </Box>

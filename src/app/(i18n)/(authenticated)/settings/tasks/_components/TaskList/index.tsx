@@ -12,6 +12,8 @@ import moment from 'moment-timezone';
 
 import type { TasksData } from '@/app/(i18n)/(authenticated)/settings/tasks/page';
 
+import useUserTimezone from '@/hooks/use-user-timezone';
+
 import { longDateTimeFormat } from '@/constants';
 import { useApiStore } from '@/providers/api-store-provider';
 
@@ -21,6 +23,7 @@ export interface TaskListProps {
 
 const TaskList: FC<TaskListProps> = ({ initialData }) => {
     const { t } = useTranslation();
+    const timezone = useUserTimezone();
 
     const taskStatus = useApiStore(store => store.taskStatus);
     const getTaskStatusData = useApiStore(store => store.getTaskStatusData);
@@ -64,9 +67,9 @@ const TaskList: FC<TaskListProps> = ({ initialData }) => {
                                 'pages.taskSettingsPage.components.taskList.startedAt',
                                 {
                                     startedAt: task.started_at
-                                        ? moment(task.started_at).format(
-                                              longDateTimeFormat,
-                                          )
+                                        ? moment(task.started_at)
+                                              .tz(timezone)
+                                              .format(longDateTimeFormat)
                                         : 'N/A',
                                 },
                             )}

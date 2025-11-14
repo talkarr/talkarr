@@ -1685,6 +1685,84 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/user/preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["UserPreferences"];
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserPreferences"];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2092,6 +2170,10 @@ export interface components {
         };
         /** @description User permissions. Enum defined in code */
         UserPermission: string;
+        /** @description User preferences that can be changed in the UI */
+        UserPreferences: {
+            timezone: string;
+        };
         User: {
             /**
              * @description CUID of user
@@ -2134,6 +2216,7 @@ export interface components {
              * @example data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...
              */
             avatarUrl: string;
+            preferences: components["schemas"]["UserPreferences"];
         };
         GeneralConfig: {
             /**

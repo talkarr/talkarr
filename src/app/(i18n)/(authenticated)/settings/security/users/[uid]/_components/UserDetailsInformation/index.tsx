@@ -20,6 +20,8 @@ import type { components } from '@backend/generated/schema';
 import UserDetailsCard from '@/app/(i18n)/(authenticated)/settings/security/users/[uid]/_components/UserDetailsCard';
 import UserDetailsItem from '@/app/(i18n)/(authenticated)/settings/security/users/[uid]/_components/UserDetailsItem';
 
+import useUserTimezone from '@/hooks/use-user-timezone';
+
 import { longDateTimeFormat } from '@/constants';
 
 export interface UserDetailsInformationProps {
@@ -28,6 +30,7 @@ export interface UserDetailsInformationProps {
 
 const UserDetailsInformation: FC<UserDetailsInformationProps> = ({ user }) => {
     const { t } = useTranslation();
+    const timezone = useUserTimezone();
 
     return (
         <UserDetailsCard>
@@ -58,15 +61,15 @@ const UserDetailsInformation: FC<UserDetailsInformationProps> = ({ user }) => {
                     />
                     <UserDetailsItem
                         primary={t('pages.userDetailsPage.createdAt')}
-                        secondary={moment(user.createdAt).format(
-                            longDateTimeFormat,
-                        )}
+                        secondary={moment(user.createdAt)
+                            .tz(timezone)
+                            .format(longDateTimeFormat)}
                     />
                     <UserDetailsItem
                         primary={t('pages.userDetailsPage.updatedAt')}
-                        secondary={moment(user.updatedAt).format(
-                            longDateTimeFormat,
-                        )}
+                        secondary={moment(user.updatedAt)
+                            .tz(timezone)
+                            .format(longDateTimeFormat)}
                     />
                     <UserDetailsItem
                         primary={t('pages.userDetailsPage.accountState')}

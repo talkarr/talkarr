@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import type { Metadata, NextPage } from 'next';
 import { notFound } from 'next/navigation';
 
 import Box from '@mui/material/Box';
@@ -10,11 +10,42 @@ import { getUserDetails } from '@/app/_api/user/details';
 import UserDetailsInformation from '@/app/(i18n)/(authenticated)/settings/security/users/[uid]/_components/UserDetailsInformation';
 import UserDetailsPermissions from '@/app/(i18n)/(authenticated)/settings/security/users/[uid]/_components/UserDetailsPermissions';
 
+import { getServerSideTranslation } from '@/i18n/server-side';
+
 import UserAvatar from '@components/UserAvatar';
 
 interface PageProps {
     params: Promise<{ [key: string]: string | string[] | undefined }>;
 }
+
+export const generateMetadata = async ({
+    params,
+}: PageProps): Promise<Metadata> => {
+    const { t } = await getServerSideTranslation();
+
+    const { uid } = await params;
+
+    if (typeof uid !== 'string') {
+        return {
+            title: t('pages.userDetailsPage.title'),
+        };
+    }
+
+    const response = await getUserDetails({ uid });
+    const data = response?.success ? response.data : null;
+
+    if (!data) {
+        return {
+            title: t('pages.userDetailsPage.title'),
+        };
+    }
+
+    return {
+        title: t('pages.userDetailsPage.titleTemplate', {
+            username: data.displayName,
+        }),
+    };
+};
 
 const Page: NextPage<PageProps> = async ({ params }) => {
     const { uid } = await params;

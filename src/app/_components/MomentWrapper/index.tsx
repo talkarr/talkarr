@@ -5,8 +5,12 @@ import React, { useEffect, useState } from 'react';
 
 import moment from 'moment-timezone';
 
+import useUserTimezone from '@/hooks/use-user-timezone';
+
 export interface MomentWrapperProps {
-    children?: ((momentImport: typeof moment) => React.ReactNode) | undefined;
+    children?:
+        | ((momentImport: typeof moment, timezone: string) => React.ReactNode)
+        | undefined;
     /**
      * How often to rerender the component to update the moment value.
      *
@@ -19,6 +23,8 @@ export const MomentWrapper: FC<MomentWrapperProps> = ({
     children,
     rerenderMs = false,
 }) => {
+    const timezone = useUserTimezone();
+
     const [, setCounter] = useState<number>(0);
 
     useEffect(() => {
@@ -36,7 +42,7 @@ export const MomentWrapper: FC<MomentWrapperProps> = ({
     }, [rerenderMs]);
 
     if (typeof children === 'function') {
-        return <>{children(moment)}</>;
+        return <>{children(moment, timezone)}</>;
     }
 
     return <>{children}</>;

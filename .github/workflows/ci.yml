@@ -319,6 +319,10 @@ jobs:
       - name: Install dependencies
         run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
 
+      - name: Generate all types
+        run: |
+          yarn run generate
+
       - name: Install playwright dependencies
         run: |
           yarn playwright install-deps
@@ -375,6 +379,8 @@ jobs:
               exit 1
           fi
           
+          echo "TALKARR_LOG_LEVEL=debug" >> .env # make sure full debug logging is activated
+          
           mkdir -p config
           chmod 777 -R config
           
@@ -396,6 +402,7 @@ jobs:
         continue-on-error: true
         if: steps.start-container.outcome == 'success'
         run: |
+          yarn ts-patch check
           yarn test:e2e:ci
           echo "TESTING_STATUS=$?" >> $GITHUB_ENV
 

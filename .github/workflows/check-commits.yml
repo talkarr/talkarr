@@ -53,9 +53,7 @@ jobs:
               "fix": "bugfix",
             };
             
-            if (typeMatch in labelMap) {
-              typeMatch = labelMap[typeMatch];
-            }
+            const labelType = typeMatch ? typeMatch[1] in labelMap ? labelMap[typeMatch[1]] : typeMatch[1] : null;
 
             // remove existing supported labels and add new ones if not present based on PR title
             const existingLabels = await github.rest.issues.listLabelsOnIssue({
@@ -64,21 +62,20 @@ jobs:
               issue_number: context.issue.number,
             });
 
-            if (typeMatch) {
-              const type = typeMatch[1];
-              if (supportedLabels.includes(type)) {
+            if (labelType) {
+              if (supportedLabels.includes(labelType)) {
                 await github.rest.issues.addLabels({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: context.issue.number,
-                  labels: [type],
+                  labels: [labelType],
                 });
               }
             }
             
             const labelsToRemove = existingLabels.data
               .map(label => label.name)
-              .filter(name => supportedLabels.includes(name) && (!typeMatch || name !== typeMatch[1]));
+              .filter(name => supportedLabels.includes(name) && (!labelType || name !== labelType));
 
             for (const label of labelsToRemove) {
               await github.rest.issues.removeLabel({
@@ -93,7 +90,7 @@ jobs:
               console.log(`Removed labels: ${labelsToRemove.join(", ")}`);
             }
             if (typeMatch) {
-              console.log(`Added label: ${typeMatch[1]}`);
+              console.log(`Added label: ${labelType}`);
             } else {
               console.log("No valid type found in PR title to add as label.");
             }

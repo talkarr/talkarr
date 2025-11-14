@@ -1,5 +1,9 @@
 import type { ExpressRequest, ExpressResponse } from '@backend/types';
-import { requireUser, sanitizeUser } from '@backend/users';
+import {
+    getUserWithPasswordById,
+    requireUser,
+    sanitizeUser,
+} from '@backend/users';
 
 const handleUserInfoRequest = async (
     req: ExpressRequest<'/user/info', 'get'>,
@@ -9,9 +13,19 @@ const handleUserInfoRequest = async (
         return;
     }
 
+    const user = await getUserWithPasswordById(req.user!.id);
+
+    if (!user) {
+        res.status(400).json({
+            success: false,
+            error: 'User not found',
+        });
+        return;
+    }
+
     res.status(200).json({
         success: true,
-        data: sanitizeUser(req.user!),
+        data: sanitizeUser(user),
     });
 };
 
