@@ -1,6 +1,6 @@
 name: 🐛 Bug report
 description: Create a report to help us improve
-title: "[BUG]: "
+title: "bug: "
 labels: ["bug", "maintainer Check"]
 projects:
   - talkarr/1
