@@ -33,7 +33,7 @@ jobs:
       pull-requests: write
       security-events: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           submodules: 'recursive'
           persist-credentials: false
@@ -115,7 +115,7 @@ jobs:
       pull-requests: write
       security-events: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           submodules: 'recursive'
           persist-credentials: false
@@ -173,7 +173,7 @@ jobs:
               sudo apt-get install -y numfmt
           fi
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           submodules: 'recursive'
           persist-credentials: false
@@ -305,7 +305,7 @@ jobs:
       - test
       - build-linux-container
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -484,7 +484,7 @@ jobs:
     # only for main branch or tags
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -528,7 +528,7 @@ jobs:
       - lint
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
 
