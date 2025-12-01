@@ -74,7 +74,7 @@
         "dotenv": "^17.2.3",
         "dotenv-cli": "^11.0.0",
         "email-validator": "^2.0.4",
-        "express": "^5.1.0",
+        "express": "^5.2.0",
         "express-winston": "^4.2.0",
         "file-type": "^21.1.0",
         "gravatar": "^1.8.2",
