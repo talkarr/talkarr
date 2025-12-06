@@ -27,8 +27,7 @@ import type {
 const log = rootLog.child({ label: 'fs/scan' });
 
 export interface ExistingFileWithGuessedInformation
-    extends ExistingFile,
-        Pick<File, 'filename'> {
+    extends ExistingFile, Pick<File, 'filename'> {
     guess: {
         conferenceAcronym: string | null;
         conference: ApiConference | null;

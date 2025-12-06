@@ -10,8 +10,10 @@ import Typography from '@mui/material/Typography';
 
 import type { ButtonBaseProps } from '@mui/material';
 
-export interface VerticalIconButtonProps
-    extends Omit<ButtonBaseProps, 'children'> {
+export interface VerticalIconButtonProps extends Omit<
+    ButtonBaseProps,
+    'children'
+> {
     icon: React.ReactNode;
     children: string;
     square?: boolean;
