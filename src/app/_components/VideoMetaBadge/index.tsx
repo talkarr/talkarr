@@ -47,8 +47,10 @@ const colorMap = new Map<VideoBadgeType, CustomBadgeProps['color']>([
     ['duration', 'warning'],
 ]);
 
-export interface VideoMetaBadgeProps
-    extends Omit<CustomBadgeProps, 'badgeContent' | 'color'> {
+export interface VideoMetaBadgeProps extends Omit<
+    CustomBadgeProps,
+    'badgeContent' | 'color'
+> {
     badgeContent: React.ReactNode;
     badgeType: VideoBadgeType;
     disableOnClick?: boolean;
