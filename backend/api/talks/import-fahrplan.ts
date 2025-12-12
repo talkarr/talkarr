@@ -10,13 +10,13 @@ import type {
     ExpressResponse,
 } from '@backend/types';
 
-const verifyJson = typia.createIs<EventFahrplanJsonImport>();
+const verifyFahrplanJson = typia.createIs<EventFahrplanJsonImport>();
 
-const log = rootLog.child({ label: 'talks/import' });
+const log = rootLog.child({ label: 'talks/import/fahrplan' });
 
-const handleImportJsonRequest = async (
-    req: ExpressRequest<'/talks/import', 'post'>,
-    res: ExpressResponse<'/talks/import', 'post'>,
+const handleImportFahrplanJsonRequest = async (
+    req: ExpressRequest<'/talks/import/fahrplan', 'post'>,
+    res: ExpressResponse<'/talks/import/fahrplan', 'post'>,
 ): Promise<void> => {
     if (!(await verifyPermissions(req, res, Permission.AddEvents))) {
         return;
@@ -45,7 +45,7 @@ const handleImportJsonRequest = async (
     try {
         const data = JSON.parse(json);
 
-        const valid = verifyJson(data);
+        const valid = verifyFahrplanJson(data);
 
         if (!valid) {
             res.status(400).json({
@@ -82,4 +82,4 @@ const handleImportJsonRequest = async (
     }
 };
 
-export default handleImportJsonRequest;
+export default handleImportFahrplanJsonRequest;

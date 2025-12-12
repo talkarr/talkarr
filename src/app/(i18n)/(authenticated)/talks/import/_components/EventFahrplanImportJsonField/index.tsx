@@ -7,27 +7,22 @@ import { useTranslation } from 'react-i18next';
 import { alpha, styled, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import InputLabel from '@mui/material/InputLabel';
+import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Typography from '@mui/material/Typography';
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import UploadIcon from '@mui/icons-material/Upload';
 import WarningIcon from '@mui/icons-material/Warning';
 
 import type { ExtractSuccessData } from '@backend/types';
 
-import { getConfig } from '@/app/_api/settings/mediamanagement';
 import type { ImportJsonResponse } from '@/app/_api/talks/import';
 import { importJson, verifyJsonImport } from '@/app/_api/talks/import';
 import ImportJsonRow from '@/app/(i18n)/(authenticated)/talks/import/_components/ImportJsonRow';
-
-import { stripInvalidCharsForDataAttribute } from '@/utils/string';
 
 import { monoFont } from '@/theme';
 
@@ -45,7 +40,15 @@ const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({
     fontFamily: monoFont,
 }));
 
-const ImportJsonField: FC = () => {
+export interface EventFahrplanImportJsonFieldProps {
+    rootFolder: string;
+    goBack: () => void;
+}
+
+const EventFahrplanImportJsonField: FC<EventFahrplanImportJsonFieldProps> = ({
+    rootFolder,
+    goBack,
+}) => {
     const { t } = useTranslation();
     const theme = useTheme();
 
@@ -60,36 +63,12 @@ const ImportJsonField: FC = () => {
         useState<ExtractSuccessData<ImportJsonResponse> | null>(null);
     const [processing, setProcessing] = useState<boolean>(false);
 
-    const [availableRootFolders, setAvailableRootFolders] = useState<string[]>(
-        [],
-    );
-    const [rootFolder, setRootFolder] = useState<string>('');
-
     const resetImport = useCallback((): void => {
         setJson('');
         setError(null);
         setHasCheckedJson(false);
         setImportResult(null);
         setProcessing(false);
-        setAvailableRootFolders([]);
-        setRootFolder('');
-    }, []);
-
-    useEffect(() => {
-        const func = async (): Promise<void> => {
-            const config = await getConfig();
-
-            const data = config?.success ? config.data : null;
-
-            if (data) {
-                setAvailableRootFolders(data.folders.map(f => f.folder));
-                if (data.folders.length > 0) {
-                    setRootFolder(data.folders[0].folder);
-                }
-            }
-        };
-
-        func();
     }, []);
 
     const loadJsonFile = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -116,7 +95,9 @@ const ImportJsonField: FC = () => {
             });
 
             if (!result) {
-                setError(t('pages.importJsonPage.checkJsonError'));
+                setError(
+                    t('pages.importJsonPage.eventFahrplan.checkJsonError'),
+                );
             } else if (result.success === false) {
                 setError(result.error);
             } else {
@@ -162,16 +143,27 @@ const ImportJsonField: FC = () => {
         <Box>
             {importResult === null ? (
                 <>
-                    <Box mb={2}>
-                        <Typography variant="h2" mb={1}>
-                            {t('pages.importJsonPage.title')}
-                        </Typography>
-                        <Typography>
-                            {t('pages.importJsonPage.description')}
+                    <Box
+                        mb={2}
+                        display="flex"
+                        flexDirection="row"
+                        alignItems="center"
+                        gap={3}
+                    >
+                        <IconButton
+                            onClick={() => {
+                                resetImport();
+                                goBack();
+                            }}
+                        >
+                            <ArrowBackIcon />
+                        </IconButton>
+                        <Typography variant="h2">
+                            {t('pages.importJsonPage.eventFahrplan.title')}
                         </Typography>
                     </Box>
                     <Box
-                        mb={2}
+                        mb={3}
                         sx={{
                             backgroundColor: alpha(
                                 theme.palette.warning.main,
@@ -188,7 +180,9 @@ const ImportJsonField: FC = () => {
                     >
                         <WarningIcon sx={{ marginX: 1 }} />
                         <Typography>
-                            {t('pages.importJsonPage.fahrplanWarningText')}{' '}
+                            {t(
+                                'pages.importJsonPage.eventFahrplan.fahrplanWarningText',
+                            )}{' '}
                             <a
                                 href="https://github.com/EventFahrplan/EventFahrplan/issues/714"
                                 target="_blank"
@@ -200,14 +194,14 @@ const ImportJsonField: FC = () => {
                             </a>
                         </Typography>
                     </Box>
-                    <Box mb={2}>
+                    <Box mb={3}>
                         <StyledTextareaAutosize
                             value={json}
                             onChange={e => setJson(e.target.value)}
                             minRows={10}
                             maxRows={20}
                             placeholder={t(
-                                'pages.importJsonPage.pasteJsonHere',
+                                'pages.importJsonPage.eventFahrplan.pasteJsonHere',
                             )}
                             spellCheck="false"
                             autoCorrect="off"
@@ -218,58 +212,12 @@ const ImportJsonField: FC = () => {
                             </FormHelperText>
                         )}
                     </Box>
-                    <Box mb={2}>
-                        <FormControl fullWidth>
-                            <InputLabel id="root-folder-label">
-                                {t('pages.importJsonPage.selectRootFolder')}
-                            </InputLabel>
-                            <Select
-                                variant="outlined"
-                                fullWidth
-                                value={rootFolder}
-                                onChange={e =>
-                                    setRootFolder(e.target.value as string)
-                                }
-                                labelId="root-folder-label"
-                                label={t(
-                                    'pages.importJsonPage.selectRootFolder',
-                                )}
-                                data-testid="root-folder-select"
-                            >
-                                {availableRootFolders.map(folder => (
-                                    <MenuItem
-                                        key={folder}
-                                        value={folder}
-                                        data-testid={`root-folder-${stripInvalidCharsForDataAttribute(folder)}`}
-                                    >
-                                        {folder}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Box>
                     <Box
                         display="flex"
                         flexDirection="row"
-                        justifyContent="flex-end"
+                        justifyContent="flex"
                         gap={2}
                     >
-                        <Button
-                            component="label"
-                            role={undefined}
-                            variant="text"
-                            tabIndex={-1}
-                            startIcon={<FileOpenIcon />}
-                            disabled={processing}
-                        >
-                            {t('pages.importJsonPage.loadJsonFromFile')}
-                            <input
-                                type="file"
-                                accept=".json"
-                                hidden
-                                onChange={loadJsonFile}
-                            />
-                        </Button>
                         <Button
                             variant="contained"
                             color="primary"
@@ -277,8 +225,7 @@ const ImportJsonField: FC = () => {
                                 !json ||
                                 error !== null ||
                                 !hasCheckedJson ||
-                                !rootFolder ||
-                                availableRootFolders.length === 0
+                                !rootFolder
                             }
                             loading={processing}
                             sx={{
@@ -288,6 +235,24 @@ const ImportJsonField: FC = () => {
                             onClick={handleImport}
                         >
                             {t('pages.importJsonPage.importButton')}
+                        </Button>
+                        <Button
+                            component="label"
+                            role={undefined}
+                            variant="text"
+                            tabIndex={-1}
+                            startIcon={<FileOpenIcon />}
+                            disabled={processing}
+                        >
+                            {t(
+                                'pages.importJsonPage.eventFahrplan.loadJsonFromFile',
+                            )}
+                            <input
+                                type="file"
+                                accept=".json"
+                                hidden
+                                onChange={loadJsonFile}
+                            />
                         </Button>
                     </Box>
                 </>
@@ -328,4 +293,4 @@ const ImportJsonField: FC = () => {
     );
 };
 
-export default ImportJsonField;
+export default EventFahrplanImportJsonField;

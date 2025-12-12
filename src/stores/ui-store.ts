@@ -22,6 +22,7 @@ export interface UiState {
     informationModal: boolean;
     licenseSelected: License;
     versionChangedModal: boolean;
+    importScheduleSelectedGuids: string[];
 }
 
 export interface UiActions {
@@ -53,6 +54,10 @@ export interface UiActions {
     // versionChangedModal
     showVersionChangedModal: () => void;
     closeVersionChangedModal: () => void;
+
+    // importSchedule
+    importScheduleToggleGuid: (guid: string) => void;
+    clearImportScheduleSelectedGuids: () => void;
 }
 
 export type UiStore = UiState & UiActions;
@@ -65,13 +70,14 @@ export const defaultUiState: UiState = {
     informationModal: false,
     licenseSelected: licenseList[0],
     versionChangedModal: false,
+    importScheduleSelectedGuids: [],
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const createUiStore = (initialState?: PartialDeep<UiState>) =>
     createStore<UiStore>()(
         devtools(
-            set => ({
+            (set, get) => ({
                 ...(deepmerge(defaultUiState, initialState || {}) as UiState),
                 openAddTalkModal: talk => set({ addTalkModal: talk }),
                 closeAddTalkModal: () => set({ addTalkModal: null }),
@@ -92,6 +98,27 @@ export const createUiStore = (initialState?: PartialDeep<UiState>) =>
                     set({ versionChangedModal: true }),
                 closeVersionChangedModal: () =>
                     set({ versionChangedModal: false }),
+                importScheduleToggleGuid: guid => {
+                    const { importScheduleSelectedGuids } = get();
+
+                    if (importScheduleSelectedGuids.includes(guid)) {
+                        set({
+                            importScheduleSelectedGuids:
+                                importScheduleSelectedGuids.filter(
+                                    value => value !== guid,
+                                ),
+                        });
+                    } else {
+                        set({
+                            importScheduleSelectedGuids: [
+                                ...importScheduleSelectedGuids,
+                                guid,
+                            ],
+                        });
+                    }
+                },
+                clearImportScheduleSelectedGuids: () =>
+                    set({ importScheduleSelectedGuids: [] }),
             }),
             {
                 name: 'uiStore',

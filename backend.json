@@ -2136,7 +2136,7 @@
                 }
             }
         },
-        "/talks/import/verify": {
+        "/talks/import/fahrplan/verify": {
             "post": {
                 "requestBody": {
                     "content": {
@@ -2190,7 +2190,7 @@
                 }
             }
         },
-        "/talks/import": {
+        "/talks/import/fahrplan": {
             "post": {
                 "requestBody": {
                     "content": {
@@ -2208,6 +2208,119 @@
                                 },
                                 "required": [
                                     "json",
+                                    "root_folder"
+                                ]
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SuccessResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/ImportJsonResponse"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Invalid JSON"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/talks/import/schedule": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "selected_events": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "guid": {
+                                                    "type": "string"
+                                                },
+                                                "slug": {
+                                                    "type": "string"
+                                                },
+                                                "title": {
+                                                    "type": "string"
+                                                },
+                                                "description": {
+                                                    "type": "string"
+                                                },
+                                                "abstract": {
+                                                    "type": "string"
+                                                },
+                                                "language": {
+                                                    "type": "string"
+                                                },
+                                                "persons":  {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "guid",
+                                                "slug",
+                                                "title",
+                                                "description",
+                                                "abstract",
+                                                "language",
+                                                "persons"
+                                            ]
+                                        },
+                                        "description": "An array of events"
+                                    },
+                                    "root_folder": {
+                                        "type": "string",
+                                        "example": "/folder"
+                                    }
+                                },
+                                "required": [
+                                    "selected_events",
                                     "root_folder"
                                 ]
                             }
