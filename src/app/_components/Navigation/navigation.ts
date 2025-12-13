@@ -86,6 +86,7 @@ export const navigationItems: NavigationItemType[] = [
                 title: 'navigation.scanFiles',
                 path: scanFilesPageLink,
                 slug: 'scan-files',
+                visible: false,
             },
             {
                 title: 'navigation.importTalks',

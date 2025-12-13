@@ -11,6 +11,7 @@ import { isBlurhashValid } from 'blurhash';
 // eslint-disable-next-line import/no-cycle
 import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
 
+import type { ScheduleImport } from '@backend/api/talks/import-schedule';
 import {
     deleteFilesForEvent,
     getFolderPathForTalk,
@@ -1298,6 +1299,121 @@ export const importEventFahrplanJson = async ({
                 slug,
                 title: lecture?.title || '',
                 isRecorded: wasRecorded ?? null,
+                error: 'Error adding talk to database',
+            });
+
+            continue;
+        }
+
+        successfulImports.push({
+            slug,
+            title: result.title,
+        });
+
+        await startScanForMissingFiles({
+            event: fixBigintInExtendedDbEvent(result),
+        });
+    }
+
+    return {
+        existing_imports: existingImports,
+        parsed_slugs: slugs,
+        total_imports: slugsToImport.length,
+        successful_imports: successfulImports,
+        errors,
+    };
+};
+
+export const importScheduleJson = async ({
+    scheduleEvents,
+    rootFolder,
+}: {
+    scheduleEvents: ScheduleImport['selected_events'];
+    rootFolder: string;
+}): Promise<ImportJsonResponse> => {
+    if (scheduleEvents.length === 0) {
+        return {
+            successful_imports: [],
+            existing_imports: [],
+            total_imports: 0,
+            parsed_slugs: [],
+            errors: [],
+        };
+    }
+
+    const slugs = scheduleEvents.map(({ slug }) => slug);
+    let slugsToImport = slugs.filter(
+        slug => slug && slug.length > 0,
+    ) as string[];
+
+    const existingImports: ImportJsonResponse['existing_imports'] = [];
+
+    const successfulImports: ImportJsonResponse['successful_imports'] = [];
+
+    const errors: ImportJsonResponse['errors'] = [];
+
+    slugsToImport = [...new Set(slugsToImport)];
+
+    // check with getSpecificTalkBySlug if the talk already exists
+    await Promise.all(
+        slugsToImport.map(async slug => {
+            const existingTalk = await getSpecificTalkBySlug({
+                slug,
+            });
+
+            if (existingTalk) {
+                existingImports.push(slug);
+            }
+        }),
+    );
+
+    slugsToImport = slugsToImport.filter(
+        slug => !existingImports.includes(slug),
+    );
+
+    for await (const slug of slugsToImport) {
+        log.info('Importing talk', { slug });
+        const lecture = scheduleEvents.find(l => l.slug === slug);
+
+        let apiEvent;
+
+        try {
+            apiEvent = await getTalkFromApiBySlug({ slug });
+
+            if (!apiEvent) {
+                log.error('Talk not found', { slug });
+
+                errors.push({
+                    slug,
+                    title: lecture?.title || '',
+                    isRecorded: null,
+                    error: 'Talk not found',
+                });
+
+                continue;
+            }
+        } catch (error) {
+            log.error('Error fetching talk from API', {
+                error,
+                slug,
+                title: lecture?.title || '<no title found>',
+            });
+
+            continue;
+        }
+
+        const result = await addTalk({ event: apiEvent, rootFolder });
+
+        if (typeof result !== 'object') {
+            log.error('Error adding talk to database', {
+                result,
+                slug,
+            });
+
+            errors.push({
+                slug,
+                title: lecture?.title || '',
+                isRecorded: null,
                 error: 'Error adding talk to database',
             });
 

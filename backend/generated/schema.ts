@@ -719,7 +719,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/talks/import/verify": {
+    "/talks/import/fahrplan/verify": {
         parameters: {
             query?: never;
             header?: never;
@@ -778,7 +778,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/talks/import": {
+    "/talks/import/fahrplan": {
         parameters: {
             query?: never;
             header?: never;
@@ -798,6 +798,78 @@ export interface paths {
                 content: {
                     "application/json": {
                         json: string;
+                        /** @example /folder */
+                        root_folder: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SuccessResponse"] & {
+                            data: components["schemas"]["ImportJsonResponse"];
+                        };
+                    };
+                };
+                /** @description Invalid JSON */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/talks/import/schedule": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @description An array of events */
+                        selected_events: {
+                            guid: string;
+                            slug: string;
+                            title: string;
+                            description: string;
+                            abstract: string;
+                            language: string;
+                            persons: string[];
+                        }[];
                         /** @example /folder */
                         root_folder: string;
                     };

@@ -2,7 +2,7 @@ import type { Metadata, NextPage } from 'next';
 
 import Box from '@mui/material/Box';
 
-import ImportJsonField from '@/app/(i18n)/(authenticated)/talks/import/_components/ImportJsonField';
+import ImportWrapper from '@/app/(i18n)/(authenticated)/talks/import/_components/ImportWrapper';
 
 import { getServerSideTranslation } from '@/i18n/server-side';
 
@@ -21,7 +21,7 @@ const Page: NextPage = () => (
             paddingY: 2,
         }}
     >
-        <ImportJsonField />
+        <ImportWrapper />
     </Box>
 );
 

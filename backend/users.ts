@@ -135,6 +135,10 @@ export const getUserWithPasswordById = async (
         return null;
     }
 
+    if (!user.preferences) {
+        return null;
+    }
+
     return {
         id: user.id,
         email: user.email,
