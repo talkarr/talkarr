@@ -422,21 +422,21 @@ jobs:
           comment-title: 'Playwright after setup test results'
           report-tag: 'after-setup'
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: initial-setup-report
           path: initial-setup-report/
           retention-days: 30
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: after-setup-report
           path: after-setup-report/
           retention-days: 30
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: playwright-trace
@@ -449,7 +449,7 @@ jobs:
           docker logs $(docker ps -q --filter ancestor=${{ env.container_ref }}) > config/logs/container.log
 
       - name: Upload logs folder
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: logs
           path: config/logs/
