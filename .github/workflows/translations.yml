@@ -66,7 +66,7 @@ jobs:
 
       - name: Create Pull Request if translations updated
         if: steps.check-for-translation-updates.outcome != 'success'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           title: 'Update translations'
           reviewers: 'CommanderRedYT'
