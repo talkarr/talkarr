@@ -118,7 +118,7 @@
         "zustand": "^5.0.7"
     },
     "devDependencies": {
-        "@eslint/compat": "^2.0.0",
+        "@eslint/compat": "^2.0.1",
         "@eslint/eslintrc": "^3",
         "@eslint/js": "^9.39.2",
         "@microsoft/eslint-formatter-sarif": "^3.1.0",
@@ -146,7 +146,7 @@
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-mui-path-imports": "^0.0.15",
         "eslint-plugin-no-relative-import-paths": "^1.6.1",
-        "eslint-plugin-playwright": "^2.4.0",
+        "eslint-plugin-playwright": "^2.5.0",
         "eslint-plugin-prettier": "^5.5.4",
         "eslint-plugin-simple-import-sort": "^12.1.1",
         "eslint-plugin-unicorn": "^62.0.0",
@@ -154,10 +154,10 @@
         "license-checker": "^25.0.1",
         "nodemon": "^3.1.11",
         "prettier": "^3.7.4",
-        "prisma-json-types-generator": "^4.0.1",
+        "prisma-json-types-generator": "^4.1.0",
         "ts-jest": "^29.4.6",
         "ts-node-dev": "^2.0.0",
-        "typescript-eslint": "^8.51.0",
+        "typescript-eslint": "^8.52.0",
         "wait-on": "^9.0.3"
     },
     "engines": {
