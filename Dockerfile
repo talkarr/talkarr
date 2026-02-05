@@ -88,11 +88,10 @@ USER nextjs
 COPY --chown=nextjs:nodejs ./package.json ./package.json
 COPY --from=deps /app/node_modules ./node_modules
 
-# copy the generated files from node_modules from builder
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-
 # use these for non-standalone output
 COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
+
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
 
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/public ./public

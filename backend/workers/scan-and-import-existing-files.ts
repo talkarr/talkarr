@@ -1,4 +1,4 @@
-import type { Locks } from '@prisma/client';
+import type { Locks } from '@prisma-generated/client';
 
 import { importExistingFileFromFilesystem } from '@backend/events';
 import { isFolderMarked } from '@backend/fs';

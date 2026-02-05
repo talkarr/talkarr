@@ -4,7 +4,7 @@ import type {
     EventInfo,
     File,
     Locks,
-} from '@prisma/client';
+} from '@prisma-generated/client';
 
 import { isBlurhashValid } from 'blurhash';
 
@@ -39,7 +39,7 @@ import type {
 import { AddTalkFailure } from '@backend/types';
 import { ImportIsRecordedFlagBehavior } from '@backend/types/settings';
 
-import { EventProblemType, Prisma } from '@prisma/client';
+import { EventProblemType, Prisma } from '@prisma-generated/client';
 
 const log = rootLog.child({ label: 'events' });
 

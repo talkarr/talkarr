@@ -50,3 +50,6 @@ after-setup-report/
 **/*video-info-error*
 **/results.json
 .env.local
+
+# prisma
+backend/generated/prisma/

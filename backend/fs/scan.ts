@@ -1,4 +1,4 @@
-import type { File } from '@prisma/client';
+import type { File } from '@prisma-generated/client';
 import type { Dirent } from 'node:fs';
 
 import mime from 'mime-types';

@@ -1,4 +1,4 @@
-import type { Locks } from '@prisma/client';
+import type { Locks } from '@prisma-generated/client';
 
 import pathUtils from 'node:path';
 import typia from 'typia';

@@ -1,4 +1,4 @@
-import type { Locks } from '@prisma/client';
+import type { Locks } from '@prisma-generated/client';
 
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';

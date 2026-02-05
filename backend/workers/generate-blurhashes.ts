@@ -1,4 +1,4 @@
-import type { Event as DbEvent, Locks } from '@prisma/client';
+import type { Event as DbEvent, Locks } from '@prisma-generated/client';
 
 import typia from 'typia';
 

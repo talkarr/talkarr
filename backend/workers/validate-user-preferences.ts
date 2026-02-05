@@ -1,4 +1,4 @@
-import type { Locks } from '@prisma/client';
+import type { Locks } from '@prisma-generated/client';
 
 import { acquireLockAndReturn } from '@backend/locks';
 import type { TaskFunction } from '@backend/queue';
