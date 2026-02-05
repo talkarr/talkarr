@@ -91,6 +91,8 @@ COPY --from=deps /app/node_modules ./node_modules
 # use these for non-standalone output
 COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
 
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
+
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/public ./public
 
