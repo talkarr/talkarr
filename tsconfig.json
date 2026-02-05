@@ -38,6 +38,9 @@
       ],
       "@backend/*": [
         "../backend/*"
+      ],
+      "@prisma-generated/*": [
+        "../backend/generated/prisma/*"
       ]
     },
     "strictNullChecks": true

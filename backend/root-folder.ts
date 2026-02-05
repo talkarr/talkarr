@@ -1,10 +1,10 @@
-import type { File, RootFolder } from '@prisma/client';
+import type { File, RootFolder } from '@prisma-generated/client';
 
 import { deleteTalk } from '@backend/events';
 import { prisma } from '@backend/prisma';
 import rootLog from '@backend/root-log';
 
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma-generated/client';
 
 export enum AddRootFolderResponse {
     Success,

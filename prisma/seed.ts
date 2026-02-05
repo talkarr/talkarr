@@ -5,7 +5,8 @@ import waitOn from 'wait-on';
 import { markRootFolder } from '@backend/fs';
 import { createUserPermissions, Permission } from '@backend/permissions';
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '@prisma-generated/client';
 
 waitOn({
     resources: ['tcp:5432'],
@@ -23,7 +24,11 @@ waitOn({
 const buf = execSync('prisma db push --skip-generate');
 console.log(buf.toString());
 
-const prisma = new PrismaClient();
+const adapter = new PrismaPg({
+    connectionString: process.env.DATABASE_URL,
+});
+
+const prisma = new PrismaClient({ adapter });
 
 async function main(): Promise<void> {
     const applyLaptopPreset =

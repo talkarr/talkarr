@@ -1,4 +1,4 @@
-import type { Conference as DbConference } from '@prisma/client';
+import type { Conference as DbConference } from '@prisma-generated/client';
 
 import {
     getConferencesFromEvents,

@@ -1,4 +1,4 @@
-import type { User as DbUser } from '@prisma/client';
+import type { User as DbUser } from '@prisma-generated/client';
 import type express from 'express';
 import type { RequestHandler } from 'express-serve-static-core';
 import type { Algorithm } from 'jsonwebtoken';

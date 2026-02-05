@@ -1,4 +1,4 @@
-import type { Job as DatabaseJob } from '@prisma/client';
+import type { Job as DatabaseJob } from '@prisma-generated/client';
 
 import { CronExpressionParser } from 'cron-parser';
 
@@ -6,7 +6,7 @@ import type { components } from '@backend/generated/schema';
 import { prisma } from '@backend/prisma';
 import rootLog from '@backend/root-log';
 
-import { JobStatus, Prisma } from '@prisma/client';
+import { JobStatus, Prisma } from '@prisma-generated/client';
 
 const log = rootLog.child({ label: 'queue' });
 

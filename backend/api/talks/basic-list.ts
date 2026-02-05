@@ -1,4 +1,4 @@
-import type { Event as DbEvent } from '@prisma/client';
+import type { Event as DbEvent } from '@prisma-generated/client';
 
 import { simpleListTalks } from '@backend/events';
 import type {

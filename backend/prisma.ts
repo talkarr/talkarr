@@ -1,10 +1,17 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '@prisma-generated/client';
 
 type ExternalPrisma = PrismaClient & {
     $disconnect: never; // ensure nobody calls $disconnect
 };
 
-const internalPrisma = new PrismaClient();
+const adapter = new PrismaPg({
+    connectionString: process.env.DATABASE_URL,
+});
+
+const internalPrisma = new PrismaClient({
+    adapter,
+});
 
 const prisma: ExternalPrisma = internalPrisma as ExternalPrisma;
 
