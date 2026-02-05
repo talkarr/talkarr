@@ -383,7 +383,7 @@ jobs:
           
           echo "TALKARR_LOG_LEVEL=debug" >> .env # make sure full debug logging is activated
           
-          mkdir -p config
+          mkdir -p config/logs
           chmod 777 -R config
           
           mkdir -p e2e/e2e-test-folder
