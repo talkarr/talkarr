@@ -104,7 +104,7 @@
         "react-markdown": "^10.1.0",
         "reflect-metadata": "^0.2.2",
         "sharp": "^0.34.5",
-        "simple-git": "^3.30.0",
+        "simple-git": "^3.32.3",
         "simple-identicon": "^1.2.1",
         "swagger-ui-express": "^5.0.1",
         "ts-node": "^10.9.2",
