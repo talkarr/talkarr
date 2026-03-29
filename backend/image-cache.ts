@@ -1,4 +1,4 @@
-import { fileTypeFromFile } from 'file-type';
+import { filetypemime } from 'magic-bytes.js';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -79,7 +79,9 @@ export const getCachedImageFromUrl = async ({
 
     try {
         const stats = await fs.promises.stat(cacheFilePath);
-        const mimeType = await fileTypeFromFile(cacheFilePath);
+        const cacheFile = await fs.promises.readFile(cacheFilePath);
+        const mimeTypes = filetypemime(cacheFile);
+        const mimeType = mimeTypes.length > 0 ? mimeTypes[0] : null;
 
         const now = Date.now();
         const fileAge = now - stats.mtimeMs;
@@ -93,7 +95,7 @@ export const getCachedImageFromUrl = async ({
         return {
             cachePathOnFs: cacheFilePath,
             remainingCacheDuration: cacheDuration - fileAge,
-            mimeType: mimeType?.mime || defaultMimeType,
+            mimeType: mimeType || defaultMimeType,
         };
     } catch (error) {
         log.debug(`Cached image not found for ${url}, fetching...`, { error });

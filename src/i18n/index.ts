@@ -13,8 +13,8 @@ const runsOnServer = typeof window === 'undefined';
 
 i18n.use(LanguageDetector)
     .use(
-        backend(
-            (language: string) => import(`@/translations/${language}.json`),
+        backend((language: string) =>
+            language === 'dev' ? {} : import(`@/translations/${language}.json`),
         ),
     )
     .init({
