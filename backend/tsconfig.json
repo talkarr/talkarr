@@ -2,8 +2,8 @@
     "extends": "../tsconfig.json",
     "compilerOptions": {
         "target": "es6",
-        "module": "commonjs",
-        "moduleResolution": "node",
+        "module": "esnext",
+        "moduleResolution": "bundler",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,

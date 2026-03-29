@@ -36,7 +36,7 @@
         "test:e2e-initial-setup": "playwright test --config=playwright-initial-setup.config.ts",
         "test:e2e-initial-setup:ci": "CI=true yarn run test:e2e-initial-setup",
         "test:e2e:ci": "yarn run test:e2e-initial-setup:ci && yarn run test:e2e-after-setup:ci",
-        "typecheck": "yarn run typecheck:web && yarn run typecheck:backend",
+        "typecheck": "yarn run typecheck:backend && yarn run typecheck:web",
         "typecheck:backend": "tsc --noEmit --project backend/tsconfig.json",
         "typecheck:web": "tsc --noEmit",
         "typegen": "next typegen",
