@@ -1657,7 +1657,7 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.12.0.tgz#326a7b46f6d4cfa54ae25bb888551697873069b4"
   integrity sha512-5EwMtOqvJMMa3HbmxLlF74e+3/HhwBTMcvt3nqVJgGCozO6hzIPOBlwm8mGVNR9SN2IJpxSnlxczyDjcn7qIyw==
 
-"@ryoppippi/unplugin-typia@^2.6.4":
+"@ryoppippi/unplugin-typia@^2.6.5":
   version "2.6.5"
   resolved "https://registry.yarnpkg.com/@ryoppippi/unplugin-typia/-/unplugin-typia-2.6.5.tgz#4bc600f0d3e91af1158969f6b41815540f362d32"
   integrity sha512-Lg7Rho00E6Jn00Gle/Rn6ZWhUJj9U0J0iahfBUqqiXWrLWZdjXbeMCW1+82/7qnVQaqhlgz69hbd3JWYCtYivQ==
@@ -1673,6 +1673,11 @@
     pkg-types "^2.1.0"
     type-fest "^4.37.0"
     unplugin "^2.2.2"
+
+"@samchon/openapi@^6.0.0":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@samchon/openapi/-/openapi-6.0.1.tgz#eb4c63d5c8a0fbbc6aa381d02e0b6f8edd0ed326"
+  integrity sha512-+nkznmCf/6YavoVkvWg60YoC0UbXY/oK9uMZReyrFcIcXecf+YoWmOLUg+TlgHi+h+6DPgRy6zRkZfiRd3uRnA==
 
 "@scarf/scarf@=1.4.0":
   version "1.4.0"
@@ -2214,35 +2219,6 @@
   dependencies:
     "@typescript-eslint/types" "8.54.0"
     eslint-visitor-keys "^4.2.1"
-
-"@typia/core@^12.0.1":
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/@typia/core/-/core-12.0.1.tgz#e38b0ca21fdd74b563108e840f0e0d7d0e0a0294"
-  integrity sha512-w7BZDLliZ4sJJW6WNN2cMhpLhKHghRELRZynCsfX1eFbQqsi3/lVtvpkTBSzEZXzuFJjb6VxyugB/e2gIZZeKw==
-  dependencies:
-    "@typia/interface" "^12.0.1"
-    "@typia/utils" "^12.0.1"
-
-"@typia/interface@^12.0.1":
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/@typia/interface/-/interface-12.0.1.tgz#a34480a2ce7e77e589448c7e6c83f0dd69b80ad1"
-  integrity sha512-HUlNN6Iqq3LXecVCzoSdwTYIZ4dq7eYRbUsNREPvtM10Ej1J2dKIH6zCEl9Ey0tQhcAwexdbubfLOSUQQYCD5A==
-
-"@typia/transform@^12.0.1":
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/@typia/transform/-/transform-12.0.1.tgz#0ab8939c35c3c33b9d23a4761078fcb96939089e"
-  integrity sha512-SX4VCRPHTxRY3l99iU74yn8iqZIQ0DE4939n+XYoojKlvFVmTlg/OCMxsWq3xe6Qw19Vaa8bdcXGV4tx+TAlqw==
-  dependencies:
-    "@typia/core" "^12.0.1"
-    "@typia/interface" "^12.0.1"
-    "@typia/utils" "^12.0.1"
-
-"@typia/utils@^12.0.1":
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/@typia/utils/-/utils-12.0.1.tgz#53e0d4cd51600cceeb63da16fffecc18e5bc98f8"
-  integrity sha512-JIKsRhY4jxLtl/obttkR3vGp8d8hPysY6g0PUsIEDZ9/OO85OU7q8lYhu2GkZOJN/7htyqP+95GhpSNt2uELBQ==
-  dependencies:
-    "@typia/interface" "^12.0.1"
 
 "@uidotdev/usehooks@^2.4.1":
   version "2.4.1"
@@ -9438,16 +9414,13 @@ typescript@~5.9.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.9.3.tgz#5b4f59e15310ab17a216f5d6cf53ee476ede670f"
   integrity sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==
 
-typia@^12.0.1:
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/typia/-/typia-12.0.1.tgz#faa367899e50aa53a8a4ea40cdadf99499647864"
-  integrity sha512-meL2qpo6yYFj6wC5coz7T3XpQT9+UjdHErhw46jGfmLFJUq6Za74B0/KYMDRjLxF/0Fd63oVx6X3+MUlI1ZJcQ==
+typia@^11.0.3:
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/typia/-/typia-11.0.3.tgz#3d7786d57a30ead92129920004b8177ab947997c"
+  integrity sha512-L7x7WzOCpFyNCauWl6VYJVEG9EHZi5EPNBRzxTO1luaLCd6WEDf+xrJNT+hMZ8U+0X7hCsR1EUpi29LdHhvCvA==
   dependencies:
+    "@samchon/openapi" "^6.0.0"
     "@standard-schema/spec" "^1.0.0"
-    "@typia/core" "^12.0.1"
-    "@typia/interface" "^12.0.1"
-    "@typia/transform" "^12.0.1"
-    "@typia/utils" "^12.0.1"
     commander "^10.0.0"
     comment-json "^4.2.3"
     inquirer "^8.2.5"
