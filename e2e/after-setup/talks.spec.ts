@@ -195,7 +195,9 @@ test('should be able to add a root folder', async ({
     await inputField.fill(e2eTestFolderName(testInfo.project.name));
 
     // submit the form (add-folder-button)
-    await page.click('[data-testid=add-folder-button]');
+    const button = page.locator('[data-testid=add-folder-button]');
+
+    await button.click();
 
     await expect(page.getByTestId('add-folder-loading')).toBeHidden();
 
@@ -279,7 +281,7 @@ test('should be able to search for a string', async ({
 
     // expect search-results-error to be hidden
     const error = page.getByTestId('search-results-error');
-    expect(await error.count()).toBe(0);
+    await expect(error).toHaveCount(0);
 
     // check if the search string is in the input field
     const navigationSearch_1 = page.locator('[data-testid=navigation-search]');

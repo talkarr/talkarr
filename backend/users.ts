@@ -245,12 +245,7 @@ export const userMiddleware = async (
 ): Promise<void> => {
     const user = await validateUserCookie(req);
 
-    if (user) {
-        // Attach user to request object
-        (req as any).user = user as components['schemas']['User'];
-    } else {
-        (req as any).user = null;
-    }
+    (req as any).user = user ?? null;
 
     next();
 };
