@@ -1650,11 +1650,6 @@
     type-fest "^4.37.0"
     unplugin "^2.2.2"
 
-"@samchon/openapi@^6.0.0":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@samchon/openapi/-/openapi-6.0.1.tgz#eb4c63d5c8a0fbbc6aa381d02e0b6f8edd0ed326"
-  integrity sha512-+nkznmCf/6YavoVkvWg60YoC0UbXY/oK9uMZReyrFcIcXecf+YoWmOLUg+TlgHi+h+6DPgRy6zRkZfiRd3uRnA==
-
 "@scarf/scarf@=1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@scarf/scarf/-/scarf-1.4.0.tgz#3bbb984085dbd6d982494538b523be1ce6562972"
@@ -1687,12 +1682,7 @@
     color "^5.0.2"
     text-hex "1.0.x"
 
-"@standard-schema/spec@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@standard-schema/spec/-/spec-1.0.0.tgz#f193b73dc316c4170f2e82a881da0f550d551b9c"
-  integrity sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==
-
-"@standard-schema/spec@^1.1.0":
+"@standard-schema/spec@^1.0.0", "@standard-schema/spec@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@standard-schema/spec/-/spec-1.1.0.tgz#a79b55dbaf8604812f52d140b2c9ab41bc150bb8"
   integrity sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==
@@ -2187,6 +2177,35 @@
   dependencies:
     "@typescript-eslint/types" "8.57.2"
     eslint-visitor-keys "^5.0.0"
+
+"@typia/core@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/@typia/core/-/core-12.0.1.tgz#e38b0ca21fdd74b563108e840f0e0d7d0e0a0294"
+  integrity sha512-w7BZDLliZ4sJJW6WNN2cMhpLhKHghRELRZynCsfX1eFbQqsi3/lVtvpkTBSzEZXzuFJjb6VxyugB/e2gIZZeKw==
+  dependencies:
+    "@typia/interface" "^12.0.1"
+    "@typia/utils" "^12.0.1"
+
+"@typia/interface@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/@typia/interface/-/interface-12.0.1.tgz#a34480a2ce7e77e589448c7e6c83f0dd69b80ad1"
+  integrity sha512-HUlNN6Iqq3LXecVCzoSdwTYIZ4dq7eYRbUsNREPvtM10Ej1J2dKIH6zCEl9Ey0tQhcAwexdbubfLOSUQQYCD5A==
+
+"@typia/transform@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/@typia/transform/-/transform-12.0.1.tgz#0ab8939c35c3c33b9d23a4761078fcb96939089e"
+  integrity sha512-SX4VCRPHTxRY3l99iU74yn8iqZIQ0DE4939n+XYoojKlvFVmTlg/OCMxsWq3xe6Qw19Vaa8bdcXGV4tx+TAlqw==
+  dependencies:
+    "@typia/core" "^12.0.1"
+    "@typia/interface" "^12.0.1"
+    "@typia/utils" "^12.0.1"
+
+"@typia/utils@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/@typia/utils/-/utils-12.0.1.tgz#53e0d4cd51600cceeb63da16fffecc18e5bc98f8"
+  integrity sha512-JIKsRhY4jxLtl/obttkR3vGp8d8hPysY6g0PUsIEDZ9/OO85OU7q8lYhu2GkZOJN/7htyqP+95GhpSNt2uELBQ==
+  dependencies:
+    "@typia/interface" "^12.0.1"
 
 "@uidotdev/usehooks@^2.4.1":
   version "2.4.1"
@@ -5242,10 +5261,10 @@ i18next-resources-to-backend@^1.2.1:
   dependencies:
     "@babel/runtime" "^7.23.2"
 
-i18next@^26.0.1:
-  version "26.0.1"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-26.0.1.tgz#de5df38603b96f6863933f1a0a4937b6451c5960"
-  integrity sha512-vtz5sXU4+nkCm8yEU+JJ6yYIx0mkg9e68W0G0PXpnOsmzLajNsW5o28DJMqbajxfsfq0gV3XdrBudsDQnwxfsQ==
+i18next@^26.0.3:
+  version "26.0.3"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-26.0.3.tgz#f0d9d754896a3a752a7d42faadc3c5ae3dae24e4"
+  integrity sha512-1571kXINxHKY7LksWp8wP+zP0YqHSSpl/OW0Y0owFEf2H3s8gCAffWaZivcz14rMkOvn3R/psiQxVsR9t2Nafg==
   dependencies:
     "@babel/runtime" "^7.29.2"
 
@@ -8008,10 +8027,10 @@ react-dom@19.1.1:
   dependencies:
     scheduler "^0.26.0"
 
-react-i18next@^17.0.1:
-  version "17.0.1"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-17.0.1.tgz#c3e3003943b72cd2e540caaeccb6010c03ba4e8a"
-  integrity sha512-iG65FGnFHcYyHNuT01ukffYWCOBFTWSdVD8EZd/dCVWgtjFPObcSsvYYNwcsokO/rDcTb5d6D8Acv8MrOdm6Hw==
+react-i18next@^17.0.2:
+  version "17.0.2"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-17.0.2.tgz#78968f74d9a51b5c4ccee14431f26496d8c122f8"
+  integrity sha512-shBftH2vaTWK2Bsp7FiL+cevx3xFJlvFxmsDFQSrJc+6twHkP0tv/bGa01VVWzpreUVVwU+3Hev5iFqRg65RwA==
   dependencies:
     "@babel/runtime" "^7.29.2"
     html-parse-stringify "^3.0.1"
@@ -9392,13 +9411,16 @@ typescript@~5.9.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.9.3.tgz#5b4f59e15310ab17a216f5d6cf53ee476ede670f"
   integrity sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==
 
-typia@^11.0.3:
-  version "11.0.3"
-  resolved "https://registry.yarnpkg.com/typia/-/typia-11.0.3.tgz#3d7786d57a30ead92129920004b8177ab947997c"
-  integrity sha512-L7x7WzOCpFyNCauWl6VYJVEG9EHZi5EPNBRzxTO1luaLCd6WEDf+xrJNT+hMZ8U+0X7hCsR1EUpi29LdHhvCvA==
+typia@^12.0.1:
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/typia/-/typia-12.0.1.tgz#faa367899e50aa53a8a4ea40cdadf99499647864"
+  integrity sha512-meL2qpo6yYFj6wC5coz7T3XpQT9+UjdHErhw46jGfmLFJUq6Za74B0/KYMDRjLxF/0Fd63oVx6X3+MUlI1ZJcQ==
   dependencies:
-    "@samchon/openapi" "^6.0.0"
     "@standard-schema/spec" "^1.0.0"
+    "@typia/core" "^12.0.1"
+    "@typia/interface" "^12.0.1"
+    "@typia/transform" "^12.0.1"
+    "@typia/utils" "^12.0.1"
     commander "^10.0.0"
     comment-json "^4.2.3"
     inquirer "^8.2.5"
