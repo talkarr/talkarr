@@ -121,7 +121,7 @@
     "devDependencies": {
         "@eslint/compat": "^2.0.3",
         "@eslint/eslintrc": "^3",
-        "@eslint/js": "^9.39.4",
+        "@eslint/js": "^10.0.1",
         "@microsoft/eslint-formatter-sarif": "^3.1.0",
         "@playwright/test": "^1.58.2",
         "@types/cookie-parser": "^1.4.10",
@@ -158,7 +158,7 @@
         "prisma-json-types-generator": "^4.1.1",
         "ts-jest": "^29.4.6",
         "ts-node-dev": "^2.0.0",
-        "typescript-eslint": "^8.57.2",
+        "typescript-eslint": "^8.58.0",
         "wait-on": "^9.0.4"
     },
     "engines": {
