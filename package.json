@@ -119,11 +119,11 @@
         "zustand": "^5.0.12"
     },
     "devDependencies": {
-        "@eslint/compat": "^2.0.3",
+        "@eslint/compat": "^2.0.4",
         "@eslint/eslintrc": "^3",
         "@eslint/js": "^9.39.4",
         "@microsoft/eslint-formatter-sarif": "^3.1.0",
-        "@playwright/test": "^1.59.0",
+        "@playwright/test": "^1.59.1",
         "@types/cookie-parser": "^1.4.10",
         "@types/express": "^5.0.6",
         "@types/gravatar": "^1.8.6",
@@ -149,7 +149,7 @@
         "eslint-plugin-no-relative-import-paths": "^1.6.1",
         "eslint-plugin-playwright": "^2.10.1",
         "eslint-plugin-prettier": "^5.5.5",
-        "eslint-plugin-simple-import-sort": "^12.1.1",
+        "eslint-plugin-simple-import-sort": "^13.0.0",
         "eslint-plugin-unicorn": "^64.0.0",
         "jest": "^30.3.0",
         "license-checker": "^25.0.1",
