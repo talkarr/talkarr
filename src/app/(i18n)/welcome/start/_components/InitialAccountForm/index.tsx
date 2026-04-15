@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 
-import type { FC } from 'react';
 import type React from 'react';
+import type { FC } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
