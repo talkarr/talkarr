@@ -143,17 +143,21 @@ export const createApiStore = (initialState?: PartialDeep<ApiState>) =>
 
                     if (
                         typeof oldVersion === 'string' &&
-                        typeof newVersion === 'string' &&
-                        oldVersion !== newVersion &&
-                        !doNotReload
+                        typeof newVersion === 'string'
                     ) {
-                        console.warn(
-                            `App version changed from ${oldVersion} to ${newVersion}. Reloading...`,
-                        );
-                        onVersionChange?.();
+                        if (oldVersion !== newVersion && !doNotReload) {
+                            console.warn(
+                                `App version changed from ${oldVersion ?? '<unknown>'} to ${newVersion}. Reloading...`,
+                            );
+                            onVersionChange?.();
+                        } else {
+                            console.log(
+                                `App version is still the same: ('${oldVersion ?? '<unknown>'}' === '${newVersion}') === true`,
+                            );
+                        }
                     } else {
                         console.log(
-                            `App version is still the same: ${oldVersion}==${newVersion}`,
+                            'App versions are not strings, skipping check...',
                         );
                     }
 

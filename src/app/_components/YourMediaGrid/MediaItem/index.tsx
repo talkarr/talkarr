@@ -204,7 +204,11 @@ const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
                                             imageLoaded ? initialData.title : ''
                                         }
                                         suppressHydrationWarning
-                                        onLoad={() => setImageLoaded(true)}
+                                        onLoad={() => {
+                                            if (imageLoaded) {
+                                                setImageLoaded(true);
+                                            }
+                                        }}
                                     />
                                 </Box>
                             </CardMedia>

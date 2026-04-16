@@ -12,6 +12,7 @@ import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 
@@ -105,61 +106,63 @@ const NavigationUser: FC = () => {
                     },
                 }}
             >
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        gap: 2,
-                        paddingX: 3,
-                        paddingTop: { xs: 2, lg: 3 },
-                    }}
-                >
-                    <Avatar
-                        src={
-                            user
-                                ? generateCacheUrl({
-                                      url: user.avatarUrl,
-                                      cacheKey: userAvatarCacheKey(user),
-                                  })
-                                : undefined
-                        }
-                        alt={user?.displayName || user?.email}
-                    />
+                <MenuList disablePadding>
                     <Box
                         sx={{
                             display: 'flex',
-                            flexDirection: 'column',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: 2,
+                            paddingX: 3,
+                            paddingTop: { xs: 2, lg: 3 },
                         }}
                     >
-                        <Typography variant="h6">
-                            {user?.displayName || user?.email}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            {user?.email}
-                        </Typography>
+                        <Avatar
+                            src={
+                                user
+                                    ? generateCacheUrl({
+                                          url: user.avatarUrl,
+                                          cacheKey: userAvatarCacheKey(user),
+                                      })
+                                    : undefined
+                            }
+                            alt={user?.displayName || user?.email}
+                        />
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <Typography variant="h6">
+                                {user?.displayName || user?.email}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                                {user?.email}
+                            </Typography>
+                        </Box>
                     </Box>
-                </Box>
-                <Divider sx={{ my: 2 }} />
-                <InvisibleLink href={userPreferencesLink}>
+                    <Divider sx={{ my: 2 }} />
+                    <InvisibleLink href={userPreferencesLink}>
+                        <MenuItem>
+                            <ListItemIcon>
+                                <PreferencesIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Preferences" />
+                        </MenuItem>
+                    </InvisibleLink>
                     <MenuItem>
                         <ListItemIcon>
-                            <PreferencesIcon />
+                            <LogoutIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Preferences" />
+                        <ListItemText
+                            primary={t(
+                                'components.navigation.navigationUser.logout',
+                            )}
+                            onClick={performLogout}
+                        />
                     </MenuItem>
-                </InvisibleLink>
-                <MenuItem>
-                    <ListItemIcon>
-                        <LogoutIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary={t(
-                            'components.navigation.navigationUser.logout',
-                        )}
-                        onClick={performLogout}
-                    />
-                </MenuItem>
+                </MenuList>
             </Popover>
         </>
     );
