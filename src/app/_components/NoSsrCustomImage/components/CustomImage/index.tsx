@@ -43,6 +43,7 @@ const CustomImage: FC<CustomImageProps> = ({
             img.src = src;
 
             setImageLoaded(false);
+            setImageError(false);
 
             // If img.complete is true, this means either insanely fast internet,
             // or more likely the image is cached by the browser
@@ -63,16 +64,22 @@ const CustomImage: FC<CustomImageProps> = ({
     }, [imageError, imageLoaded, imageSrc, src]);
 
     useEffect(() => {
-        const timeout = setTimeout(() => {
-            if (imageSrc !== src) {
-                setImageSrc(src);
-            }
-        }, 1000);
+        let timeout = null;
+
+        if (!imageError) {
+            timeout = setTimeout(() => {
+                if (imageSrc !== src) {
+                    setImageSrc(src);
+                }
+            }, 1000);
+        }
 
         return () => {
-            clearTimeout(timeout);
+            if (timeout !== null) {
+                clearTimeout(timeout);
+            }
         };
-    }, [src, imageSrc]);
+    }, [src, imageSrc, imageError]);
 
     return (
         // eslint-disable-next-line @next/next/no-img-element
