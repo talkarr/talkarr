@@ -53,12 +53,14 @@ const TalkWrapper: FC<TalkWrapperProps> = ({ initialData }) => {
         <>
             <TalkToolbar data={singleTalkData || initialData} />
             <Box
-                display="flex"
-                flexDirection="column"
-                gap={1}
-                width="100%"
-                pt={1}
-                height={`calc(100vh - ${appbarHeight - talkToolbarHeight}px)`}
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1,
+                    width: '100%',
+                    pt: 1,
+                    height: `calc(100vh - ${appbarHeight - talkToolbarHeight}px)`,
+                }}
             >
                 <TalkHeader data={singleTalkData || initialData} />
                 <TalkFiles data={singleTalkData || initialData} />

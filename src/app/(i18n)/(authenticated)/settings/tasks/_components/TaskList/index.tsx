@@ -45,14 +45,24 @@ const TaskList: FC<TaskListProps> = ({ initialData }) => {
     }
 
     return (
-        <Box display="flex" flexDirection="column" gap={1}>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1,
+            }}
+        >
             {tasksData.tasks.map(task => (
                 <Paper key={task.id} sx={{ p: 2, borderRadius: 3 }}>
                     <Typography variant="h5">{task.name}</Typography>
                     <Typography variant="body2" color="textSecondary">
                         {task.id}
                     </Typography>
-                    <Box mt={1}>
+                    <Box
+                        sx={{
+                            mt: 1,
+                        }}
+                    >
                         <Typography variant="body1">
                             Status: {task.status}
                             {t(

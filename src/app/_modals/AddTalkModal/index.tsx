@@ -126,24 +126,26 @@ const AddTalkModal: FC = () => {
             disableClose={loading}
         >
             <Box
-                mt={2}
-                display="flex"
-                justifyContent="center"
-                gap={2}
-                overflow="hidden"
-                height="100%"
                 sx={{
+                    mt: 2,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: 2,
+                    overflow: 'hidden',
+                    height: '100%',
                     flexDirection: 'row',
+
                     [theme.breakpoints.down('md')]: {
                         flexDirection: 'column',
                     },
                 }}
             >
                 <Box
-                    flex={1}
                     sx={{
+                        flex: 1,
                         maxWidth: '33%',
                         height: '100%',
+
                         [theme.breakpoints.down('md')]: {
                             maxWidth: '100%',
                         },
@@ -157,23 +159,26 @@ const AddTalkModal: FC = () => {
                     />
                 </Box>
                 <Box
-                    flex={1}
-                    height="100%"
                     data-testid="add-talk-modal-inner"
                     data-add-modal-slug={addTalkModal?.slug}
+                    sx={{
+                        flex: 1,
+                        height: '100%',
+                    }}
                 >
                     {addTalkModal?.description ? (
                         <Box
-                            bgcolor="background.default"
-                            p={1.2}
-                            border={1}
-                            borderColor={alpha(theme.palette.divider, 0.2)}
-                            borderRadius={3}
-                            boxShadow={2}
-                            mb={2}
                             sx={{
+                                bgcolor: 'background.default',
+                                p: 1.2,
+                                border: 1,
+                                borderColor: alpha(theme.palette.divider, 0.2),
+                                borderRadius: 3,
+                                boxShadow: 2,
+                                mb: 2,
                                 overflowY: 'auto',
                                 maxHeight: 300,
+
                                 [theme.breakpoints.down('md')]: {
                                     maxHeight: 'none',
                                 },
@@ -184,10 +189,18 @@ const AddTalkModal: FC = () => {
                             </Markdown>
                         </Box>
                     ) : null}
-                    <Box mb={4}>
+                    <Box
+                        sx={{
+                            mb: 4,
+                        }}
+                    >
                         <SearchItemBadges item={addTalkModal} disableOnClick />
                     </Box>
-                    <Box mb={2}>
+                    <Box
+                        sx={{
+                            mb: 2,
+                        }}
+                    >
                         <FormControl fullWidth>
                             <InputLabel id="root-folder-label">
                                 {t('modals.addTalkModal.selectRootFolder')}
@@ -217,7 +230,12 @@ const AddTalkModal: FC = () => {
                             </Select>
                         </FormControl>
                     </Box>
-                    <Box display="flex" justifyContent="flex-end">
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                        }}
+                    >
                         <Button
                             onClick={close}
                             disabled={loading}

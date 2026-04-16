@@ -243,10 +243,12 @@ const InformationModal: FC = () => {
                         />
                     </Grid>
                     <Box
-                        mt={2}
-                        display="flex"
-                        justifyContent="flex-end"
-                        gap={1}
+                        sx={{
+                            mt: 2,
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            gap: 1,
+                        }}
                     >
                         <Button
                             variant="outlined"

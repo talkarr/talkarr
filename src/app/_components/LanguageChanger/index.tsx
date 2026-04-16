@@ -96,12 +96,14 @@ const LanguageChanger: FC<LanguageChangerProps> = ({ anchorEl, onClose }) => {
             />
             <MenuItem onClick={openWeblate}>
                 <Box
-                    display="flex"
-                    flexDirection="row"
-                    gap={1}
-                    alignItems="center"
-                    paddingY={1}
-                    paddingX={2}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: 1,
+                        alignItems: 'center',
+                        paddingY: 1,
+                        paddingX: 2,
+                    }}
                 >
                     <Image
                         src={weblateIcon}

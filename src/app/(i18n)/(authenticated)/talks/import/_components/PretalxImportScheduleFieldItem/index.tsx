@@ -37,10 +37,12 @@ const PretalxImportScheduleFieldItem: FC<
                 headerProps={{
                     subheader: (
                         <Box
-                            display="flex"
-                            flexDirection="row"
-                            alignItems="center"
-                            gap={1}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 1,
+                            }}
                         >
                             <Typography gutterBottom={false}>
                                 {scheduleEvent.persons

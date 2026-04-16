@@ -91,7 +91,9 @@ const UserDetailsInformation: FC<UserDetailsInformationProps> = ({ user }) => {
                         secondary={user.id}
                         slotProps={{
                             secondary: {
-                                fontFamily: 'monospace',
+                                sx: {
+                                    fontFamily: 'monospace',
+                                },
                             },
                         }}
                     />

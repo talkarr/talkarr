@@ -93,11 +93,13 @@ const UserPreferencesForm: FC<UserPreferencesFormProps> = ({ initialData }) => {
     return (
         <>
             <Box
-                mb={2}
-                display="flex"
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="flex-start"
+                sx={{
+                    mb: 2,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                }}
             >
                 <Typography variant="h4">
                     {t('pages.userPreferencesPage.title')}
@@ -112,7 +114,11 @@ const UserPreferencesForm: FC<UserPreferencesFormProps> = ({ initialData }) => {
             </Box>
             <form onSubmit={handleSubmit}>
                 <Box>
-                    <Box mb={2}>
+                    <Box
+                        sx={{
+                            mb: 2,
+                        }}
+                    >
                         <Typography variant="h6">
                             {t('pages.userPreferencesPage.timezone.title')}
                         </Typography>

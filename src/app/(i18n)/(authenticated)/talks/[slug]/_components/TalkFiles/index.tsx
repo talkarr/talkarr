@@ -59,17 +59,33 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
         status === null ? null : getMediaItemStatusColor(theme)[status];
 
     return (
-        <Box paddingX={2}>
-            <Box mb={3}>
-                <Typography variant="h5" borderBottom={1} mb={1}>
+        <Box
+            sx={{
+                paddingX: 2,
+            }}
+        >
+            <Box
+                sx={{
+                    mb: 3,
+                }}
+            >
+                <Typography
+                    variant="h5"
+                    sx={{
+                        borderBottom: 1,
+                        mb: 1,
+                    }}
+                >
                     {t('pages.singleTalkPage.information')}
                 </Typography>
                 <Box
-                    display="flex"
-                    flexDirection="row"
-                    columnGap={2}
-                    rowGap={1}
-                    flexWrap="wrap"
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        columnGap: 2,
+                        rowGap: 1,
+                        flexWrap: 'wrap',
+                    }}
                 >
                     <TalkAttribute
                         name={t('talks.path')}
@@ -110,8 +126,17 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                     ) : null}
                 </Box>
             </Box>
-            <Box mb={3}>
-                <Typography variant="h5" borderBottom={1}>
+            <Box
+                sx={{
+                    mb: 3,
+                }}
+            >
+                <Typography
+                    variant="h5"
+                    sx={{
+                        borderBottom: 1,
+                    }}
+                >
                     {t('pages.singleTalkPage.videos')}
                 </Typography>
                 <List disablePadding>
@@ -135,8 +160,17 @@ const TalkFiles: FC<TalkFilesProps> = ({ data }) => {
                     ) : null}
                 </List>
             </Box>
-            <Box mb={3}>
-                <Typography variant="h5" borderBottom={1}>
+            <Box
+                sx={{
+                    mb: 3,
+                }}
+            >
+                <Typography
+                    variant="h5"
+                    sx={{
+                        borderBottom: 1,
+                    }}
+                >
                     {t('pages.singleTalkPage.otherFiles')}
                 </Typography>
                 <List disablePadding>

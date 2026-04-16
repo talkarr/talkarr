@@ -211,11 +211,13 @@ const ImportScheduleField: FC<ImportScheduleFieldProps> = ({
             {importResult === null ? (
                 <>
                     <Box
-                        mb={2}
-                        display="flex"
-                        flexDirection="row"
-                        alignItems="center"
-                        gap={3}
+                        sx={{
+                            mb: 2,
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: 3,
+                        }}
                     >
                         <IconButton
                             onClick={() => {
@@ -229,7 +231,11 @@ const ImportScheduleField: FC<ImportScheduleFieldProps> = ({
                             {t('pages.importJsonPage.schedule.title')}
                         </Typography>
                     </Box>
-                    <Typography mb={2}>
+                    <Typography
+                        sx={{
+                            mb: 2,
+                        }}
+                    >
                         <Trans i18nKey="pages.importJsonPage.schedule.hint">
                             All schedule.json files that follow{' '}
                             <a href="https://c3voc.de/wiki/schedule">
@@ -242,7 +248,11 @@ const ImportScheduleField: FC<ImportScheduleFieldProps> = ({
                             paste it here.
                         </Trans>
                     </Typography>
-                    <Box mb={2}>
+                    <Box
+                        sx={{
+                            mb: 2,
+                        }}
+                    >
                         <form
                             onSubmit={event => {
                                 event.preventDefault();
@@ -279,11 +289,13 @@ const ImportScheduleField: FC<ImportScheduleFieldProps> = ({
                         </form>
                     </Box>
                     <Box
-                        display="flex"
-                        flexDirection="row"
-                        justifyContent="flex-start"
-                        gap={2}
-                        mb={3}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            gap: 2,
+                            mb: 3,
+                        }}
                     >
                         <Button
                             variant="contained"
@@ -307,8 +319,18 @@ const ImportScheduleField: FC<ImportScheduleFieldProps> = ({
                         <Box>
                             {scheduleOverview.conference.days.map(
                                 conferenceDay => (
-                                    <Box key={conferenceDay.date} mb={3}>
-                                        <Typography variant="h3" mb={2}>
+                                    <Box
+                                        key={conferenceDay.date}
+                                        sx={{
+                                            mb: 3,
+                                        }}
+                                    >
+                                        <Typography
+                                            variant="h3"
+                                            sx={{
+                                                mb: 2,
+                                            }}
+                                        >
                                             {t(
                                                 'pages.importJsonPage.schedule.dayN',
                                                 {
@@ -316,7 +338,12 @@ const ImportScheduleField: FC<ImportScheduleFieldProps> = ({
                                                 },
                                             )}
                                         </Typography>
-                                        <Grid container gap={1}>
+                                        <Grid
+                                            container
+                                            sx={{
+                                                gap: 1,
+                                            }}
+                                        >
                                             {Object.values(conferenceDay.rooms)
                                                 .flat()
                                                 .map(scheduleEvent => (
@@ -333,15 +360,17 @@ const ImportScheduleField: FC<ImportScheduleFieldProps> = ({
                                 ),
                             )}
                             <Box
-                                display="flex"
-                                flexDirection="row"
-                                justifyContent="flex-start"
-                                gap={2}
-                                mt={3}
-                                position="sticky"
-                                bottom={0}
-                                py={2}
-                                bgcolor="background.default"
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'flex-start',
+                                    gap: 2,
+                                    mt: 3,
+                                    position: 'sticky',
+                                    bottom: 0,
+                                    py: 2,
+                                    bgcolor: 'background.default',
+                                }}
                             >
                                 <Button
                                     variant="contained"
@@ -372,10 +401,12 @@ const ImportScheduleField: FC<ImportScheduleFieldProps> = ({
             ) : (
                 <Box>
                     <Box
-                        display="flex"
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        alignItems="center"
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
                     >
                         <Typography variant="h3">
                             {t('pages.importJsonPage.importResult')}

@@ -27,18 +27,22 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
     return (
         <>
             <Box
-                display="flex"
-                flexDirection="row"
-                flexWrap="wrap"
-                gap={{ xs: 0.5, lg: 2 }}
-                mt={2}
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    gap: { xs: 0.5, lg: 2 },
+                    mt: 2,
+                }}
             >
                 {Object.entries(colors).map(([statusElement, color]) => (
                     <Box
                         key={statusElement}
-                        display="flex"
-                        alignItems="center"
-                        gap={0.5}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 0.5,
+                        }}
                     >
                         <Box
                             sx={{
@@ -60,11 +64,13 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
                 ))}
             </Box>
             <Box
-                display="flex"
-                alignItems="center"
-                gap={0.5}
-                mt={0.5}
-                sx={{ color: theme.palette.text.secondary }}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    mt: 0.5,
+                    color: theme.palette.text.secondary,
+                }}
             >
                 <Box
                     sx={{

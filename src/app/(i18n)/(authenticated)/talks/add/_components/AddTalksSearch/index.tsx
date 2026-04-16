@@ -126,7 +126,12 @@ const AddTalksSearch: FC<AddTalksSearchProps> = ({
     }, [search, setResults]);
 
     return (
-        <Box flex={1} mb={2}>
+        <Box
+            sx={{
+                flex: 1,
+                mb: 2,
+            }}
+        >
             <form
                 onSubmit={e => {
                     e.preventDefault();

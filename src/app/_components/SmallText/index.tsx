@@ -6,11 +6,16 @@ import Typography from '@mui/material/Typography';
 const SmallText: FC<TypographyProps> = ({ children, ...props }) => (
     <Typography
         variant="body1"
-        fontWeight="bold"
-        lineHeight={1.2}
-        color="text.secondary"
-        fontSize={10}
         {...props}
+        sx={[
+            {
+                fontWeight: 'bold',
+                lineHeight: 1.2,
+                color: 'text.secondary',
+                fontSize: 10,
+            },
+            ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
+        ]}
     >
         {children}
     </Typography>

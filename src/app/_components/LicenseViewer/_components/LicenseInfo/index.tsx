@@ -53,12 +53,19 @@ const LicenseInfo: FC<LicenseInfoProps> = ({ maxHeight }) => {
             }}
         >
             <Box
-                display="flex"
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="space-between"
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                }}
             >
-                <Box display="flex" flexDirection="column">
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
+                >
                     <Typography variant="h4">{license.name}</Typography>
                     <Typography variant="subtitle1" color="textSecondary">
                         {license.version}
@@ -81,8 +88,17 @@ const LicenseInfo: FC<LicenseInfoProps> = ({ maxHeight }) => {
                 </a>
             </Box>
             <Divider sx={{ mt: 2 }} />
-            <Box mt={2} mb={2}>
-                <Typography whiteSpace="pre-line">
+            <Box
+                sx={{
+                    mt: 2,
+                    mb: 2,
+                }}
+            >
+                <Typography
+                    sx={{
+                        whiteSpace: 'pre-line',
+                    }}
+                >
                     {license.licenseContent}
                 </Typography>
             </Box>

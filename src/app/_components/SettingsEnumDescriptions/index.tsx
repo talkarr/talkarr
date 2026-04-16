@@ -23,7 +23,12 @@ const SettingsEnumDescriptions: FC<SettingsEnumDescriptionsProps> = ({
     return (
         <Box>
             {Object.entries(options).map(([key, label]) => (
-                <Box key={key} mb={1}>
+                <Box
+                    key={key}
+                    sx={{
+                        mb: 1,
+                    }}
+                >
                     <Typography variant="body2">
                         {t(`enums.${translatePrefix}.${label}.label`)}
                     </Typography>

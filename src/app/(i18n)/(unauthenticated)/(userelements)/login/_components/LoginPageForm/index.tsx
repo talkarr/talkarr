@@ -82,13 +82,15 @@ const LoginPageForm: FC = () => {
 
     return (
         <Box
-            display="flex"
-            flexDirection="column"
-            gap={2}
-            width="100%"
-            minWidth={{ lg: 350 }}
-            padding={{ xs: 2, lg: 0 }}
             data-testid="login-page-form"
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                width: '100%',
+                minWidth: { lg: 350 },
+                padding: { xs: 2, lg: 0 },
+            }}
         >
             <StyledForm onSubmit={handleSubmit}>
                 <TextField

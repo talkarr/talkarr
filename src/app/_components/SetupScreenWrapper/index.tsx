@@ -23,7 +23,9 @@ const SetupScreenWrapper: FC<PropsWithChildren> = ({ children }) => {
                 height: '100vh',
             }}
         >
-            <ChangeLanguageButton position="absolute" top={16} right={16} />
+            <ChangeLanguageButton
+                sx={{ position: 'absolute', top: 16, right: 16 }}
+            />
             <Paper
                 sx={{
                     borderRadius: { xs: 0, lg: 12 },
@@ -44,36 +46,46 @@ const SetupScreenWrapper: FC<PropsWithChildren> = ({ children }) => {
                 }}
             >
                 <Box
-                    display="flex"
-                    flexDirection={{ xs: 'column', lg: 'row' }}
-                    gap={{ lg: 4 }}
-                    alignItems="center"
-                    flexWrap="wrap"
-                    width={{ xs: '100%', lg: 'auto' }}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', lg: 'row' },
+                        gap: { lg: 4 },
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        width: { xs: '100%', lg: 'auto' },
+                    }}
                 >
                     <Box
-                        flex={1}
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                        justifyContent="center"
+                        sx={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
                     >
                         <Logo height={200} width={200} />
                         <Box
-                            display={{ xs: 'none', lg: 'flex' }}
-                            flexDirection="column"
+                            sx={{
+                                display: { xs: 'none', lg: 'flex' },
+                                flexDirection: 'column',
+                            }}
                         >
                             <Typography
                                 variant="h4"
-                                fontWeight="bold"
-                                textAlign="center"
+                                sx={{
+                                    fontWeight: 'bold',
+                                    textAlign: 'center',
+                                }}
                             >
                                 {t('application.name')}
                             </Typography>
                             <Typography
                                 variant="subtitle2"
-                                fontWeight="normal"
-                                textAlign="center"
+                                sx={{
+                                    fontWeight: 'normal',
+                                    textAlign: 'center',
+                                }}
                             >
                                 {t('application.description')}
                             </Typography>
@@ -85,13 +97,15 @@ const SetupScreenWrapper: FC<PropsWithChildren> = ({ children }) => {
                         sx={{ display: { xs: 'none', lg: 'flex' } }}
                     />
                     <Box
-                        flex={1}
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                        justifyContent="center"
-                        gap={{ lg: 2 }}
-                        width={{ xs: '100%', lg: 'auto' }}
+                        sx={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: { lg: 2 },
+                            width: { xs: '100%', lg: 'auto' },
+                        }}
                     >
                         {children}
                     </Box>

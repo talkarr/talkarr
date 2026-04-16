@@ -36,8 +36,10 @@ const LogoWithText: FC<LogoWithTextProps> = ({ redirectToHome, onClick }) => {
                     <Typography
                         variant="h3"
                         component="h1"
-                        fontWeight="bold"
                         style={{ textTransform: 'none' }}
+                        sx={{
+                            fontWeight: 'bold',
+                        }}
                     >
                         {t('application.name')}
                     </Typography>
@@ -54,7 +56,13 @@ const LogoWithText: FC<LogoWithTextProps> = ({ redirectToHome, onClick }) => {
             }}
         >
             <Logo />
-            <Typography variant="h3" component="h1" fontWeight="bold">
+            <Typography
+                variant="h3"
+                component="h1"
+                sx={{
+                    fontWeight: 'bold',
+                }}
+            >
                 {t('application.name')}
             </Typography>
         </Box>

@@ -106,12 +106,14 @@ const NavigationUser: FC = () => {
                 }}
             >
                 <Box
-                    display="flex"
-                    flexDirection="row"
-                    alignItems="center"
-                    gap={2}
-                    paddingX={3}
-                    paddingTop={{ xs: 2, lg: 3 }}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 2,
+                        paddingX: 3,
+                        paddingTop: { xs: 2, lg: 3 },
+                    }}
                 >
                     <Avatar
                         src={
@@ -124,7 +126,12 @@ const NavigationUser: FC = () => {
                         }
                         alt={user?.displayName || user?.email}
                     />
-                    <Box display="flex" flexDirection="column">
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                        }}
+                    >
                         <Typography variant="h6">
                             {user?.displayName || user?.email}
                         </Typography>

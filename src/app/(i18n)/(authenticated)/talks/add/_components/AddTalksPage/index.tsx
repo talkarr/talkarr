@@ -73,13 +73,21 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
     if (!hasRootFolder) {
         return (
             <Box
-                mt={4}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                gap={2}
+                sx={{
+                    mt: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 2,
+                }}
             >
-                <Typography variant="h3" fontWeight="normal" textAlign="center">
+                <Typography
+                    variant="h3"
+                    sx={{
+                        fontWeight: 'normal',
+                        textAlign: 'center',
+                    }}
+                >
                     {t('pages.addTalksPage.rootFolderNotFound')}
                 </Typography>
                 <Link href={mediaManagementSettingsPageLink}>
@@ -105,18 +113,26 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                 ref={searchRef}
             />
             {searchActuallyEmpty && !error && !loading ? (
-                <Box mt={4}>
+                <Box
+                    sx={{
+                        mt: 4,
+                    }}
+                >
                     <Typography
                         variant="h3"
-                        fontWeight="normal"
-                        textAlign="center"
+                        sx={{
+                            fontWeight: 'normal',
+                            textAlign: 'center',
+                        }}
                     >
                         {t('pages.addTalksPage.addTalkDescription')}
                     </Typography>
                     <Typography
                         variant="subtitle1"
-                        fontWeight="normal"
-                        textAlign="center"
+                        sx={{
+                            fontWeight: 'normal',
+                            textAlign: 'center',
+                        }}
                     >
                         {randomExample ? `e.g. '${randomExample}` : ''}
                     </Typography>
@@ -127,32 +143,42 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                 !error &&
                 typeof results?.events?.length === 'undefined') ? (
                 <Box
-                    mt={2}
-                    display="flex"
-                    flexDirection="column"
-                    gap={1}
                     data-testid="search-results-loading"
+                    sx={{
+                        mt: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 1,
+                    }}
                 >
                     {Array.from({ length: 5 }).map((_, index) => (
                         <SearchItemSkeleton key={index} />
                     ))}
                 </Box>
             ) : error ? (
-                <Box mt={4}>
+                <Box
+                    sx={{
+                        mt: 4,
+                    }}
+                >
                     <Typography
                         variant="h3"
-                        fontWeight="normal"
-                        textAlign="center"
                         data-testid="rsearch-results-error"
+                        sx={{
+                            fontWeight: 'normal',
+                            textAlign: 'center',
+                        }}
                     >
                         {t('pages.addTalksPage.errorOccurred')}
                     </Typography>
                     <Typography
                         variant="subtitle1"
-                        fontWeight="normal"
-                        textAlign="center"
                         color="textDisabled"
                         data-testid="search-results-error-message"
+                        sx={{
+                            fontWeight: 'normal',
+                            textAlign: 'center',
+                        }}
                     >
                         {error}
                     </Typography>
@@ -160,11 +186,13 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
             ) : null}
             {!searchActuallyEmpty && sortedResults && !loading ? (
                 <Box
-                    mt={2}
-                    display="flex"
-                    flexDirection="column"
-                    gap={1}
                     data-testid="search-results"
+                    sx={{
+                        mt: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 1,
+                    }}
                 >
                     {sortedResults.map(event => (
                         <SearchItem
@@ -178,11 +206,17 @@ const AddTalksPage: FC<AddTalksPageProps> = ({ hasRootFolder, events }) => {
                 </Box>
             ) : null}
             {noResults ? (
-                <Box mt={4}>
+                <Box
+                    sx={{
+                        mt: 4,
+                    }}
+                >
                     <Typography
                         variant="h3"
-                        fontWeight="normal"
-                        textAlign="center"
+                        sx={{
+                            fontWeight: 'normal',
+                            textAlign: 'center',
+                        }}
                     >
                         {t('pages.addTalksPage.noSearchResults')}
                     </Typography>

@@ -12,16 +12,29 @@ const DefaultLoadingPage: FC = () => {
 
     return (
         <Box
-            position="fixed"
-            top="50%"
-            left="50%"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
+            sx={{
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}
         >
-            <Box display="flex" flexDirection="column" alignItems="center">
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
                 <CircularProgress />
-                <Typography variant="h6" mt={1}>
+                <Typography
+                    variant="h6"
+                    sx={{
+                        mt: 1,
+                    }}
+                >
                     {t('common.loading')}
                 </Typography>
             </Box>

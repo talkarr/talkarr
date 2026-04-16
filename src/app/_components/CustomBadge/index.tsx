@@ -98,18 +98,21 @@ const CustomBadge: FC<CustomBadgeProps> = ({
     return (
         <Tooltip title={disableTitle ? undefined : title} arrow>
             <StyledBox
-                borderRadius={4}
-                bgcolor={actualColor}
-                color={theme.palette.getContrastText(actualColor)}
                 badgeColor={processedColor}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                paddingLeft={imageUrl ? 0.5 : 1}
-                paddingRight={1}
-                paddingY={0.5}
-                gap={1}
-                height="fit-content"
+                sx={{
+                    borderRadius: 4,
+                    backgroundColor: actualColor,
+                    color: theme.palette.getContrastText(actualColor),
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingLeft: imageUrl ? 0.5 : 1,
+                    paddingRight: 1,
+                    paddingY: 0.5,
+                    gap: 1,
+                    height: 'fit-content',
+                    ...rest.sx,
+                }}
                 {...rest}
             >
                 {imageUrl ? (
@@ -149,12 +152,13 @@ const CustomBadge: FC<CustomBadgeProps> = ({
                 ) : null}
                 {icon ? (
                     <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        width={24}
-                        height={24}
                         sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: 24,
+                            height: 24,
+
                             '& > .MuiSvgIcon-root': {
                                 color: theme.palette.getContrastText(
                                     actualColor,
@@ -167,8 +171,10 @@ const CustomBadge: FC<CustomBadgeProps> = ({
                 ) : null}
                 <Typography
                     noWrap
-                    fontSize={FontSizeMap[size]}
                     color={theme.palette.getContrastText(actualColor)}
+                    sx={{
+                        fontSize: FontSizeMap[size],
+                    }}
                 >
                     {badgeContent}
                 </Typography>

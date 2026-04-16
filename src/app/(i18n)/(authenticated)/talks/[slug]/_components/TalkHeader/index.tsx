@@ -33,24 +33,41 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
     const timezone = useUserTimezone();
 
     return (
-        <Box paddingX={2} paddingTop={1}>
+        <Box
+            sx={{
+                paddingX: 2,
+                paddingTop: 1,
+            }}
+        >
             <Box
-                display="flex"
-                flexDirection="row"
-                justifyContent="center"
-                gap={2}
-                flexWrap="wrap"
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    gap: 2,
+                    flexWrap: 'wrap',
+                }}
             >
                 <Box
-                    flex={1}
-                    minWidth={{
-                        xs: `min(${theme.breakpoints.values.md}px, 100%)`,
-                        lg: 300,
+                    sx={{
+                        flex: 1,
+
+                        minWidth: {
+                            xs: `min(${theme.breakpoints.values.md}px, 100%)`,
+                            lg: 300,
+                        },
                     }}
                 >
                     <TalkImage data={data.db} maxWidth="100%" height="auto" />
                 </Box>
-                <Box flex={2} display="flex" flexDirection="column" gap={2}>
+                <Box
+                    sx={{
+                        flex: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                    }}
+                >
                     <Typography variant="h2">
                         {data.db.title} (
                         {moment(data.db.date)
@@ -64,14 +81,16 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                         </Typography>
                     </Box>
                     <Box
-                        display="flex"
-                        flexDirection="row"
-                        gap={1.5}
-                        flexWrap="wrap"
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: 1.5,
+                            flexWrap: 'wrap',
+                        }}
                     >
                         {data.db.conference.title ? (
                             <Box>
-                                <SmallText mb={bottomPadding}>
+                                <SmallText sx={{ mb: bottomPadding }}>
                                     {t('talks.conference')}
                                 </SmallText>
                                 <VideoMetaBadge
@@ -82,7 +101,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                             </Box>
                         ) : null}
                         <Box>
-                            <SmallText mb={bottomPadding}>
+                            <SmallText sx={{ mb: bottomPadding }}>
                                 {t('talks.date')}
                             </SmallText>
 
@@ -97,7 +116,7 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                         </Box>
                         {data.db.original_language ? (
                             <Box>
-                                <SmallText mb={bottomPadding}>
+                                <SmallText sx={{ mb: bottomPadding }}>
                                     {t('talks.language')}
                                 </SmallText>
                                 <VideoMetaBadge
@@ -112,14 +131,16 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                         ) : null}
                         {data.db.persons.length > 0 ? (
                             <Box>
-                                <SmallText mb={bottomPadding}>
+                                <SmallText sx={{ mb: bottomPadding }}>
                                     {t('talks.speakers')}
                                 </SmallText>
                                 <Box
-                                    display="flex"
-                                    flexDirection="row"
-                                    gap={1}
-                                    flexWrap="wrap"
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        gap: 1,
+                                        flexWrap: 'wrap',
+                                    }}
                                 >
                                     {data.db.persons.map((text, index) => (
                                         <VideoMetaBadge
@@ -134,14 +155,16 @@ const TalkHeader: FC<TalkHeaderProps> = ({ data }) => {
                         ) : null}
                         {data.db.tags.length > 0 ? (
                             <Box>
-                                <SmallText mb={bottomPadding}>
+                                <SmallText sx={{ mb: bottomPadding }}>
                                     {t('talks.tags')}
                                 </SmallText>
                                 <Box
-                                    display="flex"
-                                    flexDirection="row"
-                                    gap={1}
-                                    flexWrap="wrap"
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        gap: 1,
+                                        flexWrap: 'wrap',
+                                    }}
                                 >
                                     {data.db.tags.map((text, index) => (
                                         <VideoMetaBadge

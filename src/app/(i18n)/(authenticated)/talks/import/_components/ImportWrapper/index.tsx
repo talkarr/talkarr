@@ -95,12 +95,25 @@ const ImportWrapper: FC = () => {
                 <>{methodComponent}</>
             ) : (
                 <Box>
-                    <Box mb={4}>
-                        <Typography variant="h2" mb={1}>
+                    <Box
+                        sx={{
+                            mb: 4,
+                        }}
+                    >
+                        <Typography
+                            variant="h2"
+                            sx={{
+                                mb: 1,
+                            }}
+                        >
                             {t('pages.importJsonPage.title')}
                         </Typography>
                     </Box>
-                    <Box mb={2}>
+                    <Box
+                        sx={{
+                            mb: 2,
+                        }}
+                    >
                         <FormControl fullWidth>
                             <InputLabel id="root-folder-label">
                                 {t('pages.importJsonPage.selectRootFolder')}
@@ -131,7 +144,13 @@ const ImportWrapper: FC = () => {
                             </Select>
                         </FormControl>
                     </Box>
-                    <Grid container gap={2} mb={2}>
+                    <Grid
+                        container
+                        sx={{
+                            gap: 2,
+                            mb: 2,
+                        }}
+                    >
                         {importMethods.map(method => (
                             <Grid key={method}>
                                 <SelectCard

@@ -33,7 +33,11 @@ const Page: NextPage = async () => {
     return (
         <Box data-testid="security-settings">
             <Box>
-                <Box mb={2}>
+                <Box
+                    sx={{
+                        mb: 2,
+                    }}
+                >
                     <Typography variant="h4">
                         {t('pages.securitySettingsPage.title')}
                     </Typography>

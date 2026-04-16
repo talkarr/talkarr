@@ -54,7 +54,13 @@ const VerticalIconButton: FC<VerticalIconButtonProps> = ({
         }}
         tabIndex={props.tabIndex ?? 0}
     >
-        <Box display="flex" flexDirection="column" alignItems="center">
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}
+        >
             {icon}
             <Typography variant="caption">{children}</Typography>
         </Box>

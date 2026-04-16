@@ -13,22 +13,39 @@ const Page: NextPage = async () => {
 
     return (
         <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            gap={2}
-            width="100%"
-            minWidth={350}
-            padding={{ xs: 2, lg: 0 }}
             data-testid="welcome-page"
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 2,
+                width: '100%',
+                minWidth: 350,
+                padding: { xs: 2, lg: 0 },
+            }}
         >
-            <Typography variant="h3" textAlign="center">
+            <Typography
+                variant="h3"
+                sx={{
+                    textAlign: 'center',
+                }}
+            >
                 {t('pages.welcomePage.title')}
             </Typography>
-            <Typography variant="body1" textAlign="center">
+            <Typography
+                variant="body1"
+                sx={{
+                    textAlign: 'center',
+                }}
+            >
                 {t('pages.welcomePage.description')}
             </Typography>
-            <Box sx={{ width: { xs: '100%', lg: '66%' } }} mt={2}>
+            <Box
+                sx={{
+                    mt: 2,
+                    width: { xs: '100%', lg: '66%' },
+                }}
+            >
                 <Link href={welcomeStartPageLink}>
                     <Button
                         fullWidth
