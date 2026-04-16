@@ -1,0 +1,13 @@
+diff --git a/node_modules/dotenv/lib/main.js b/node_modules/dotenv/lib/main.js
+index 163e0d2..7b91ec8 100644
+--- a/node_modules/dotenv/lib/main.js
++++ b/node_modules/dotenv/lib/main.js
+@@ -306,7 +306,7 @@ function configDotenv (options) {
+       }
+     }
+ 
+-    _log(`injected env (${keysCount}) from ${shortPaths.join(',')} ${dim(`// tip: ${_getRandomTip()}`)}`)
++    _log(`injected env (${keysCount}) from ${shortPaths.join(',')}`)
+   }
+ 
+   if (lastError) {
