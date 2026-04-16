@@ -99,7 +99,7 @@
         "pretty-bytes": "^7.1.0",
         "prisma": "^7.7.0",
         "react": "19.1.2",
-        "react-dom": "19.1.1",
+        "react-dom": "19.1.2",
         "react-i18next": "^17.0.3",
         "react-markdown": "^10.1.0",
         "reflect-metadata": "^0.2.2",

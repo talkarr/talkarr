@@ -21,7 +21,7 @@ waitOn({
     });
 
 // run prisma db push
-const buf = execSync('prisma db push --skip-generate');
+const buf = execSync('prisma db push');
 console.log(buf.toString());
 
 const adapter = new PrismaPg({
