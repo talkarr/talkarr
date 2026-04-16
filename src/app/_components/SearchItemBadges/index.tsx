@@ -117,9 +117,11 @@ const SearchItemBadges: FC<SearchItemBadgesProps> = ({
         <Grid
             container
             spacing={1}
-            mb={item.subtitle ? 1 : undefined}
-            alignItems="center"
-            gridAutoRows="1fr"
+            sx={{
+                mb: item.subtitle ? 1 : undefined,
+                alignItems: 'center',
+                gridAutoRows: '1fr',
+            }}
         >
             {badges.map((badge, index) => (
                 <Grid key={`badge-${index}-${badge.type}`}>

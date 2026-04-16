@@ -37,11 +37,13 @@ const NavigationSearch: FC = () => {
     return (
         <form onSubmit={handleSearch} style={{ width: '100%' }}>
             <Box
-                display="flex"
-                alignItems="flex-end"
-                gap={1}
-                width="100%"
-                maxWidth="400px"
+                sx={{
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    gap: 1,
+                    width: '100%',
+                    maxWidth: '400px',
+                }}
             >
                 <MaterialSearchBar
                     size="small"

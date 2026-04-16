@@ -30,16 +30,22 @@ const CustomImage: FC<CustomImageProps> = ({
     onLoadStart,
 }) => {
     const [imageSrc, setImageSrc] = useState<string>(src);
+    const [imageError, setImageError] = useState<boolean>(false);
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
     useEffect(() => {
         if (src) {
             onLoadStart?.();
             const img = new Image();
+            img.onerror = () => {
+                setImageError(true);
+            };
             img.src = src;
 
             setImageLoaded(false);
 
+            // If img.complete is true, this means either insanely fast internet,
+            // or more likely the image is cached by the browser
             if (img.complete) {
                 setImageSrc(src);
                 setImageLoaded(true);
@@ -48,13 +54,13 @@ const CustomImage: FC<CustomImageProps> = ({
                 setImageSrc(blurDataURL);
             }
         }
-    }, [blurDataURL, imageSrc, src, onLoad, onLoadStart]);
+    }, [blurDataURL, src, onLoad, onLoadStart]);
 
     useEffect(() => {
-        if (imageLoaded && imageSrc !== src) {
+        if (imageLoaded && imageSrc !== src && !imageError) {
             setImageSrc(src);
         }
-    }, [imageLoaded, imageSrc, src]);
+    }, [imageError, imageLoaded, imageSrc, src]);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -87,12 +93,15 @@ const CustomImage: FC<CustomImageProps> = ({
             decoding="async"
             onLoadStart={onLoadStart}
             onLoad={event => {
-                setImageLoaded(true);
+                if (!imageLoaded) {
+                    setImageLoaded(true);
+                }
                 onLoad?.(event);
             }}
             sizes={sizes}
             onError={() => {
                 onError?.();
+                setImageError(true);
                 if (imageSrc !== blurDataURL && blurDataURL) {
                     setImageSrc(blurDataURL);
                 }

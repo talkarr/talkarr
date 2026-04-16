@@ -19,10 +19,20 @@ const Page: NextPage = async () => {
 
     return (
         <>
-            <Typography variant="h4" textAlign="center">
+            <Typography
+                variant="h4"
+                sx={{
+                    textAlign: 'center',
+                }}
+            >
                 {t('pages.welcomeStart.title')}
             </Typography>
-            <Typography variant="body2" textAlign="center">
+            <Typography
+                variant="body2"
+                sx={{
+                    textAlign: 'center',
+                }}
+            >
                 {t('pages.welcomeStart.description')}
             </Typography>
             <InitialAccountForm />

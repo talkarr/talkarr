@@ -42,11 +42,11 @@ const TalkAttribute: FC<TalkAttributeProps> = ({
             <Box>
                 <Typography
                     variant="body2"
-                    lineHeight={1.2}
                     sx={{
                         borderLeft: actualColor ? '3px solid' : undefined,
                         borderColor: actualColor,
                         paddingLeft: actualColor ? 0.5 : undefined,
+                        lineHeight: 1.2,
                     }}
                 >
                     {value}

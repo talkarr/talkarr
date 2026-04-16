@@ -150,8 +150,9 @@ const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
                 >
                     <CardActionArea sx={{ height: '100%' }}>
                         <Box
-                            height="100%"
                             sx={{
+                                height: '100%',
+
                                 ...(status === null
                                     ? {}
                                     : {
@@ -203,7 +204,11 @@ const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
                                             imageLoaded ? initialData.title : ''
                                         }
                                         suppressHydrationWarning
-                                        onLoad={() => setImageLoaded(true)}
+                                        onLoad={() => {
+                                            if (imageLoaded) {
+                                                setImageLoaded(true);
+                                            }
+                                        }}
                                     />
                                 </Box>
                             </CardMedia>
@@ -221,14 +226,14 @@ const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
                 {initialData.mapped_problems?.length ? (
                     <Box
                         sx={{
+                            bgcolor: 'common.white',
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                            boxShadow: 1,
                             borderBottomLeftRadius: 8,
                             userSelect: 'none',
                         }}
-                        bgcolor="common.white"
-                        position="absolute"
-                        top={0}
-                        right={0}
-                        boxShadow={1}
                     >
                         <Tooltip
                             title={
@@ -238,10 +243,12 @@ const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
                             placement="top"
                         >
                             <Box
-                                display="flex"
-                                alignItems="center"
-                                gap={0.5}
-                                p={0.5}
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 0.5,
+                                    p: 0.5,
+                                }}
                             >
                                 <Typography variant="caption" color="error">
                                     {t('components.mediaItem.problem')}

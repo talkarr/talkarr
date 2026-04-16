@@ -51,16 +51,20 @@ const Home: NextPage<{
                 }}
             >
                 <Box
-                    mt={4}
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    gap={2}
+                    sx={{
+                        mt: 4,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 2,
+                    }}
                 >
                     <Typography
                         variant="h3"
-                        fontWeight="normal"
-                        textAlign="center"
+                        sx={{
+                            fontWeight: 'normal',
+                            textAlign: 'center',
+                        }}
                     >
                         {t('pages.homePage.noMediaFound.title')}
                     </Typography>

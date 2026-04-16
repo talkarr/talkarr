@@ -94,11 +94,13 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
     return (
         <Container sx={{ ml: 0 }} maxWidth="md" disableGutters>
             <Box
-                mb={2}
-                display="flex"
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="flex-start"
+                sx={{
+                    mb: 2,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                }}
             >
                 <Typography variant="h4">
                     {t('pages.generalSettingsPage.title')}
@@ -112,7 +114,11 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
                 </IconButton>
             </Box>
             <form onSubmit={handleSubmit}>
-                <Box mb={2}>
+                <Box
+                    sx={{
+                        mb: 2,
+                    }}
+                >
                     <Typography variant="h6">
                         {t(
                             'pages.generalSettingsPage.components.generalSettingsForm.functionalityControl.title',
@@ -124,7 +130,11 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
                         )}
                     </Typography>
                 </Box>
-                <Box mb={4}>
+                <Box
+                    sx={{
+                        mb: 4,
+                    }}
+                >
                     <SettingsEnumItem
                         primaryText={t(
                             'pages.generalSettingsPage.components.generalSettingsForm.functionalityControl.isRecordedFlagBehavior.primaryText',
@@ -143,14 +153,22 @@ const GeneralSettingsForm: FC<GeneralSettingsFormProps> = ({ initialData }) => {
                         }}
                         translatePrefix="importIsRecordedFlagBehavior"
                     />
-                    <Box mt={1}>
+                    <Box
+                        sx={{
+                            mt: 1,
+                        }}
+                    >
                         <SettingsEnumDescriptions
                             options={ImportIsRecordedFlagBehavior}
                             translatePrefix="importIsRecordedFlagBehavior"
                         />
                     </Box>
                 </Box>
-                <Box mb={2}>
+                <Box
+                    sx={{
+                        mb: 2,
+                    }}
+                >
                     <Typography variant="h6">
                         {t(
                             'pages.generalSettingsPage.components.generalSettingsForm.externalServices.title',

@@ -143,25 +143,31 @@ const BaseModal: FC<ModalProps> = ({
             >
                 <InnerWrapper>
                     <Box
-                        height="100%"
-                        position="relative"
-                        overflow="auto"
-                        zIndex={1302}
+                        sx={{
+                            height: '100%',
+                            position: 'relative',
+                            overflow: 'auto',
+                            zIndex: 1302,
+                        }}
                     >
                         <Box
-                            mb={2}
-                            display="flex"
-                            flexDirection="row"
-                            width="100%"
-                            minHeight="fit-content"
-                            justifyContent="space-between"
+                            sx={{
+                                mb: 2,
+                                display: 'flex',
+                                flexDirection: 'row',
+                                width: '100%',
+                                minHeight: 'fit-content',
+                                justifyContent: 'space-between',
+                            }}
                         >
                             {title ? (
                                 <Typography
                                     variant="h4"
-                                    fontWeight={400}
-                                    width="100%"
-                                    mt={0.5}
+                                    sx={{
+                                        fontWeight: 400,
+                                        width: '100%',
+                                        mt: 0.5,
+                                    }}
                                 >
                                     {title}
                                 </Typography>

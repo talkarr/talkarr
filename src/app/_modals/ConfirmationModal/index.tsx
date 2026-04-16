@@ -1,5 +1,7 @@
 'use client';
 
+import type { Property } from 'csstype';
+
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +12,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Switch from '@mui/material/Switch';
-import type { TypographyProps } from '@mui/material/Typography';
 import Typography from '@mui/material/Typography';
 
 import type { ButtonProps } from '@mui/material';
@@ -31,7 +32,7 @@ export interface ConfirmationModalConfig<OptionKeys extends string = string> {
               [key in OptionKeys]: boolean;
           }) => Promise<void> | void);
     onCancel?: () => void;
-    alignMessage?: TypographyProps['textAlign'];
+    alignMessage?: Property.TextAlign;
     confirmColor?: ButtonProps['color'];
     confirmIcon?: ButtonProps['startIcon'];
     cancelColor?: ButtonProps['color'];
@@ -106,11 +107,20 @@ const ConfirmationModal: FC = () => {
             disableClose={loading}
         >
             <Box>
-                <Typography variant="body1" textAlign={alignMessage || 'left'}>
+                <Typography
+                    variant="body1"
+                    sx={{
+                        textAlign: alignMessage || 'left',
+                    }}
+                >
                     {message}
                 </Typography>
                 {options ? (
-                    <Box mt={2}>
+                    <Box
+                        sx={{
+                            mt: 2,
+                        }}
+                    >
                         <List disablePadding>
                             {Object.entries(options).map(([key, value]) => (
                                 <ListItem key={key} disableGutters>
@@ -128,7 +138,14 @@ const ConfirmationModal: FC = () => {
                         </List>
                     </Box>
                 ) : null}
-                <Box mt={2} display="flex" justifyContent="flex-end" gap={1}>
+                <Box
+                    sx={{
+                        mt: 2,
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        gap: 1,
+                    }}
+                >
                     <Button
                         onClick={handleCancel}
                         disabled={loading}

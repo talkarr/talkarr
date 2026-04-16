@@ -27,7 +27,11 @@ const VersionChangedModal: FC = () => {
             onClose={closeVersionChangedModal}
             showCloseButton={process.env.NODE_ENV !== 'production'}
         >
-            <Typography mb={2}>
+            <Typography
+                sx={{
+                    mb: 2,
+                }}
+            >
                 {t('modals.versionChangedModal.message')}
             </Typography>
             <Button

@@ -144,11 +144,13 @@ const EventFahrplanImportJsonField: FC<EventFahrplanImportJsonFieldProps> = ({
             {importResult === null ? (
                 <>
                     <Box
-                        mb={2}
-                        display="flex"
-                        flexDirection="row"
-                        alignItems="center"
-                        gap={3}
+                        sx={{
+                            mb: 2,
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: 3,
+                        }}
                     >
                         <IconButton
                             onClick={() => {
@@ -163,20 +165,22 @@ const EventFahrplanImportJsonField: FC<EventFahrplanImportJsonFieldProps> = ({
                         </Typography>
                     </Box>
                     <Box
-                        mb={3}
                         sx={{
+                            mb: 3,
+                            maxWidth: '600px',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: 2,
+                            alignItems: 'center',
+
                             backgroundColor: alpha(
                                 theme.palette.warning.main,
                                 0.33,
                             ),
+
                             borderRadius: 4,
                             padding: theme.spacing(1, 2),
                         }}
-                        maxWidth="600px"
-                        display="flex"
-                        flexDirection="row"
-                        gap={2}
-                        alignItems="center"
                     >
                         <WarningIcon sx={{ marginX: 1 }} />
                         <Typography>
@@ -194,7 +198,11 @@ const EventFahrplanImportJsonField: FC<EventFahrplanImportJsonFieldProps> = ({
                             </a>
                         </Typography>
                     </Box>
-                    <Box mb={3}>
+                    <Box
+                        sx={{
+                            mb: 3,
+                        }}
+                    >
                         <StyledTextareaAutosize
                             value={json}
                             onChange={e => setJson(e.target.value)}
@@ -213,10 +221,12 @@ const EventFahrplanImportJsonField: FC<EventFahrplanImportJsonFieldProps> = ({
                         )}
                     </Box>
                     <Box
-                        display="flex"
-                        flexDirection="row"
-                        justifyContent="flex"
-                        gap={2}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'flex',
+                            gap: 2,
+                        }}
                     >
                         <Button
                             variant="contained"
@@ -259,10 +269,12 @@ const EventFahrplanImportJsonField: FC<EventFahrplanImportJsonFieldProps> = ({
             ) : (
                 <Box>
                     <Box
-                        display="flex"
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        alignItems="center"
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
                     >
                         <Typography variant="h3">
                             {t('pages.importJsonPage.importResult')}

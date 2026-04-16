@@ -81,9 +81,13 @@ const SearchTextField: FC<CustomTextFieldProps> = ({
                 }}
             >
                 <Box
-                    sx={{ ml: 0.5, paddingX: 1, paddingY: 1 }}
-                    display="flex"
-                    alignItems="center"
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        ml: 0.5,
+                        paddingX: 1,
+                        paddingY: 1,
+                    }}
                 >
                     <SearchIcon />
                 </Box>

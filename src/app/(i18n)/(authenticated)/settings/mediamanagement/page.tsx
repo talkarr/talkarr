@@ -35,7 +35,11 @@ const Page: NextPage = async () => {
     return (
         <Box data-testid="media-management-settings">
             <Box>
-                <Box mb={2}>
+                <Box
+                    sx={{
+                        mb: 2,
+                    }}
+                >
                     <Typography variant="h4">
                         {t(
                             'pages.mediaManagementSettingsPage.rootFolders.title',
@@ -99,7 +103,11 @@ const Page: NextPage = async () => {
                         </TableBody>
                     </Table>
                 </MaterialTable>
-                <Box mt={2}>
+                <Box
+                    sx={{
+                        mt: 2,
+                    }}
+                >
                     <AddFolderButton />
                 </Box>
             </Box>

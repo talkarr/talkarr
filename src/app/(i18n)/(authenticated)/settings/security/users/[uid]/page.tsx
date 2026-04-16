@@ -63,12 +63,20 @@ const Page: NextPage<PageProps> = async ({ params }) => {
 
     return (
         <Container>
-            <Box display="flex" flexDirection="column" gap={4}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 4,
+                }}
+            >
                 <Box
-                    display="flex"
-                    flexDirection="row"
-                    gap={1}
-                    alignItems="center"
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: 1,
+                        alignItems: 'center',
+                    }}
                 >
                     <UserAvatar user={data} />
                     <Typography variant="h3">

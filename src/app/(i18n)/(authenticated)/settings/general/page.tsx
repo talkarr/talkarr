@@ -36,7 +36,11 @@ const Page: NextPage = async () => {
                     <GeneralSettingsForm initialData={initialData} />
                 ) : (
                     <>
-                        <Box mb={2}>
+                        <Box
+                            sx={{
+                                mb: 2,
+                            }}
+                        >
                             <Typography variant="h4">General</Typography>
                         </Box>
                         <Typography variant="body1">

@@ -73,12 +73,14 @@ const YourMediaPageControls: FC<YourMediaPageControlsProps> = ({
     return (
         <Container sx={{ my: 2 }}>
             <Box
-                display="flex"
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="center"
-                gap={4}
-                mb={2}
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 4,
+                    mb: 2,
+                }}
             >
                 <IconButton
                     color="primary"

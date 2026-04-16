@@ -172,7 +172,11 @@ const AddFolderModal: FC = () => {
             moreWidth
             testID="add-folder-modal"
         >
-            <Box mb={2}>
+            <Box
+                sx={{
+                    mb: 2,
+                }}
+            >
                 <form
                     onSubmit={e => {
                         e.preventDefault();
@@ -199,7 +203,11 @@ const AddFolderModal: FC = () => {
                     />
                 </form>
             </Box>
-            <Box mb={2}>
+            <Box
+                sx={{
+                    mb: 2,
+                }}
+            >
                 <StyledList disablePadding ref={listRef}>
                     {folders.length > 0 ? (
                         <ListItem disablePadding>
@@ -230,7 +238,13 @@ const AddFolderModal: FC = () => {
                     ))}
                 </StyledList>
             </Box>
-            <Box display="flex" justifyContent="flex-end" gap={1}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: 1,
+                }}
+            >
                 <Button
                     onClick={close}
                     variant="text"

@@ -13,7 +13,12 @@ export interface InfoBoxProps {
 
 const InfoBox: FC<InfoBoxProps> = ({ primaryText, secondaryText, href }) => (
     <Grid size={6}>
-        <Typography variant="h6" color="primary.light">
+        <Typography
+            variant="h6"
+            sx={{
+                color: 'primary.light',
+            }}
+        >
             {primaryText}
         </Typography>
         {href ? (

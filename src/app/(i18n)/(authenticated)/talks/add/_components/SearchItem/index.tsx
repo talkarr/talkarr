@@ -114,24 +114,45 @@ const SearchItem: FC<SearchItemProps> = ({ item, isAlreadyAdded }) => {
                         maxHeight="fit-content"
                     />
                 </CardMedia>
-                <Box display="flex" flexDirection="column" mb={1}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        mb: 1,
+                    }}
+                >
                     <CardHeader
                         title={
-                            <Box display="flex" gap={2} flexDirection="column">
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    gap: 2,
+                                    flexDirection: 'column',
+                                }}
+                            >
                                 <Box
-                                    display="flex"
-                                    gap={1}
-                                    flexWrap="wrap"
-                                    flex={1}
+                                    sx={{
+                                        display: 'flex',
+                                        gap: 1,
+                                        flexWrap: 'wrap',
+                                        flex: 1,
+                                    }}
                                 >
                                     <Typography
                                         variant="h3"
-                                        minWidth="fit-content"
+                                        sx={{
+                                            minWidth: 'fit-content',
+                                        }}
                                     >
                                         {item.title} ({year})
                                     </Typography>
                                     {isAlreadyAdded ? (
-                                        <Box display="flex" alignItems="center">
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                            }}
+                                        >
                                             <CheckCircleIcon color="primary" />
                                         </Box>
                                     ) : null}

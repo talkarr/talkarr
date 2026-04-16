@@ -127,10 +127,12 @@ const RootFolderErrorModal: FC = () => {
                         }}
                     >
                         <Box
-                            display="flex"
-                            flexDirection="row"
-                            gap={1}
-                            alignItems="center"
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                gap: 1,
+                                alignItems: 'center',
+                            }}
                         >
                             <ErrorIcon color="error" />
                             <Typography variant="h6">
@@ -147,10 +149,12 @@ const RootFolderErrorModal: FC = () => {
                             </Typography>
                         </Box>
                         <Box
-                            display="flex"
-                            flexDirection="row"
-                            justifyContent="flex-end"
-                            mt={1}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'flex-end',
+                                mt: 1,
+                            }}
                         >
                             <Button
                                 variant="contained"

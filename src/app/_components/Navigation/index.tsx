@@ -21,7 +21,7 @@ import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
 
 import { appbarHeight, drawerWidth } from '@/constants';
 import { useUiStore } from '@/providers/ui-store-provider';
@@ -69,9 +69,11 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
     return (
         <Box data-testid="navigation">
             <Box
-                display={{
-                    xs: 'none',
-                    md: 'block',
+                sx={{
+                    display: {
+                        xs: 'none',
+                        md: 'block',
+                    },
                 }}
             >
                 <Drawer
@@ -112,9 +114,11 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                 </Drawer>
             </Box>
             <Box
-                display={{
-                    xs: 'block',
-                    md: 'none',
+                sx={{
+                    display: {
+                        xs: 'block',
+                        md: 'none',
+                    },
                 }}
             >
                 <Drawer
@@ -137,24 +141,26 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                         onClick={() => setOpen(false)}
                     />
                     <Box
-                        display="flex"
-                        flexDirection="row"
-                        alignItems="center"
-                        justifyContent="center"
-                        gap={2}
-                        marginX={2}
-                        marginY={2}
-                        paddingY={1}
-                        borderRadius={4}
-                        bgcolor="background.paper"
-                        boxShadow={2}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 2,
+                            marginX: 2,
+                            marginY: 2,
+                            paddingY: 1,
+                            borderRadius: 4,
+                            bgcolor: 'background.paper',
+                            boxShadow: 2,
+                        }}
                     >
                         <Tooltip
                             title={t('components.navigation.information')}
                             arrow
                         >
                             <IconButton onClick={() => openInformationModal()}>
-                                <HelpOutlineIcon />
+                                <HelpOutlinedIcon />
                             </IconButton>
                         </Tooltip>
                         <ChangeLanguageButton />
@@ -180,7 +186,11 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                     ))}
                 </Drawer>
             </Box>
-            <Box bgcolor="background.paper">
+            <Box
+                sx={{
+                    bgcolor: 'background.paper',
+                }}
+            >
                 <AppBar
                     position="fixed"
                     sx={{
@@ -207,8 +217,10 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                         data-testid="navigation-appbar"
                     >
                         <Box
-                            display={{ xs: 'flex', md: 'none' }}
-                            alignItems="center"
+                            sx={{
+                                display: { xs: 'flex', md: 'none' },
+                                alignItems: 'center',
+                            }}
                         >
                             <IconButton
                                 color="inherit"
@@ -220,10 +232,12 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                         </Box>
                         <NavigationSearch />
                         <Box
-                            display="flex"
-                            flexDirection="row"
-                            alignItems="center"
-                            gap={1}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 1,
+                            }}
                         >
                             <Tooltip
                                 title={t('components.navigation.information')}
@@ -238,7 +252,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                                         },
                                     }}
                                 >
-                                    <HelpOutlineIcon />
+                                    <HelpOutlinedIcon />
                                 </IconButton>
                             </Tooltip>
                             <ChangeLanguageButton
@@ -251,17 +265,19 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
                     </Toolbar>
                 </AppBar>
                 <Box
-                    bgcolor="background.default"
-                    display="flex"
-                    flexDirection="column"
-                    overflow="hidden"
-                    height={`calc(100vh - ${appbarHeight}px)`}
                     sx={{
+                        bgcolor: 'background.default',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        overflow: 'hidden',
+                        height: `calc(100vh - ${appbarHeight}px)`,
+
                         // make that above only happens for everything above md
                         [theme.breakpoints.up('md')]: {
                             marginLeft: `${drawerWidth}px`,
                             width: `calc(100% - ${drawerWidth}px)`,
                         },
+
                         width: '100%',
                         marginLeft: 0,
                         marginTop: `${appbarHeight}px`,

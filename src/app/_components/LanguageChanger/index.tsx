@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 
@@ -79,41 +80,45 @@ const LanguageChanger: FC<LanguageChangerProps> = ({ anchorEl, onClose }) => {
                 },
             }}
         >
-            {mappedLanguages.map(({ language, languageName }) => (
-                <MenuItem
-                    key={`language-${language}`}
-                    onClick={() => setLanguage(language)}
-                    data-testid={`language-${language}`}
-                >
-                    <ListItemText primary={languageName} />
+            <MenuList disablePadding>
+                {mappedLanguages.map(({ language, languageName }) => (
+                    <MenuItem
+                        key={`language-${language}`}
+                        onClick={() => setLanguage(language)}
+                        data-testid={`language-${language}`}
+                    >
+                        <ListItemText primary={languageName} />
+                    </MenuItem>
+                ))}
+                <Divider
+                    sx={{
+                        borderColor: theme => theme.palette.action.disabled,
+                        marginY: '0 !important',
+                    }}
+                />
+                <MenuItem onClick={openWeblate}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: 1,
+                            alignItems: 'center',
+                            paddingY: 1,
+                            paddingX: 2,
+                        }}
+                    >
+                        <Image
+                            src={weblateIcon}
+                            alt="Weblate icon"
+                            height={36}
+                            priority
+                        />
+                        <Typography align="center" sx={{ textWrap: 'auto' }}>
+                            {t('components.languageChanger.weblateInfo')}
+                        </Typography>
+                    </Box>
                 </MenuItem>
-            ))}
-            <Divider
-                sx={{
-                    borderColor: theme => theme.palette.action.disabled,
-                    marginY: '0 !important',
-                }}
-            />
-            <MenuItem onClick={openWeblate}>
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    gap={1}
-                    alignItems="center"
-                    paddingY={1}
-                    paddingX={2}
-                >
-                    <Image
-                        src={weblateIcon}
-                        alt="Weblate icon"
-                        height={36}
-                        priority
-                    />
-                    <Typography align="center" sx={{ textWrap: 'auto' }}>
-                        {t('components.languageChanger.weblateInfo')}
-                    </Typography>
-                </Box>
-            </MenuItem>
+            </MenuList>
         </Popover>
     );
 };

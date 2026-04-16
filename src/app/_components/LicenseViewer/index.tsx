@@ -22,13 +22,21 @@ export interface LicenseViewerProps {
 }
 
 const LicenseViewer: FC<LicenseViewerProps> = ({ scrollBoxHeight }) => (
-    <Box display="flex" flexDirection="row" gap={2}>
+    <Box
+        sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 2,
+        }}
+    >
         <Box
-            flex={1}
-            overflow="auto"
-            display="flex"
-            flexDirection="column"
-            maxHeight={scrollBoxHeight}
+            sx={{
+                flex: 1,
+                overflow: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                maxHeight: scrollBoxHeight,
+            }}
         >
             {licenseList.map(license => (
                 <LicenseItem

@@ -21,10 +21,12 @@ const Page: NextPage = async () => {
 
     return (
         <Box
-            display="flex"
-            flexDirection="column"
             data-testid="settings"
-            gap={3}
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 3,
+            }}
         >
             {settings.map(item => {
                 const href =
@@ -49,7 +51,12 @@ const Page: NextPage = async () => {
                                 {t(item.title)}
                             </Typography>
                         </Link>
-                        <Typography variant="body1" mt={1}>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                mt: 1,
+                            }}
+                        >
                             {t(item.description)}
                         </Typography>
                     </Box>

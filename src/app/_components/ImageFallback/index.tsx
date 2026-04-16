@@ -31,10 +31,20 @@ const ImageFallback: FC<ImageFallbackProps> = ({ width, height }) => {
                 }),
             }}
         >
-            <Typography variant="h4" fontWeight="normal">
+            <Typography
+                variant="h4"
+                sx={{
+                    fontWeight: 'normal',
+                }}
+            >
                 {t('components.imageFallback.noImageAvailable')}
             </Typography>
-            <Typography variant="body1" fontWeight="normal">
+            <Typography
+                variant="body1"
+                sx={{
+                    fontWeight: 'normal',
+                }}
+            >
                 {t('components.imageFallback.noImageAvailableDescription')}
             </Typography>
         </Box>
