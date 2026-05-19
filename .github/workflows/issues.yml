@@ -27,7 +27,7 @@ jobs:
           contains(github.event.issue.labels.*.name, 'bug') ||
           contains(github.event.issue.type.name, 'Bug') ||
           contains(github.event.pull_request.labels.*.name, 'bug')
-        uses: actions/add-to-project@v1.0.2
+        uses: actions/add-to-project@v2.0.0
         with:
           project-url: 'https://github.com/orgs/talkarr/projects/1'
           github-token: ${{ steps.generate-token.outputs.token }}
@@ -38,7 +38,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'enhancement') ||
             contains(github.event.issue.type.name, 'Feature') ||
             contains(github.event.pull_request.labels.*.name, 'feature')
-        uses: actions/add-to-project@v1.0.2
+        uses: actions/add-to-project@v2.0.0
         with:
           project-url: 'https://github.com/orgs/talkarr/projects/2'
           github-token: ${{ steps.generate-token.outputs.token }}
