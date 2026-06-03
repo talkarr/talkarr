@@ -409,7 +409,7 @@ jobs:
           yarn test:e2e:ci
           echo "TESTING_STATUS=$?" >> $GITHUB_ENV
 
-      - uses: daun/playwright-report-summary@v3
+      - uses: daun/playwright-report-summary@v4
         continue-on-error: true
         with:
           report-file: initial-setup-results.json
@@ -417,7 +417,7 @@ jobs:
           comment-title: 'Playwright initial setup test results'
           report-tag: 'initial-setup'
 
-      - uses: daun/playwright-report-summary@v3
+      - uses: daun/playwright-report-summary@v4
         continue-on-error: true
         with:
           report-file: after-setup-results.json
