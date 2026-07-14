@@ -33,13 +33,13 @@ jobs:
       pull-requests: write
       security-events: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: 'recursive'
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
@@ -116,13 +116,13 @@ jobs:
       pull-requests: write
       security-events: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: 'recursive'
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
@@ -176,7 +176,7 @@ jobs:
               sudo apt-get install -y numfmt
           fi
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: 'recursive'
           persist-credentials: false
@@ -308,12 +308,12 @@ jobs:
       - test
       - build-linux-container
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
@@ -409,7 +409,7 @@ jobs:
           yarn test:e2e:ci
           echo "TESTING_STATUS=$?" >> $GITHUB_ENV
 
-      - uses: daun/playwright-report-summary@v3
+      - uses: daun/playwright-report-summary@v4
         continue-on-error: true
         with:
           report-file: initial-setup-results.json
@@ -417,7 +417,7 @@ jobs:
           comment-title: 'Playwright initial setup test results'
           report-tag: 'initial-setup'
 
-      - uses: daun/playwright-report-summary@v3
+      - uses: daun/playwright-report-summary@v4
         continue-on-error: true
         with:
           report-file: after-setup-results.json
@@ -487,7 +487,7 @@ jobs:
     # only for main branch or tags
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -531,7 +531,7 @@ jobs:
       - lint
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
