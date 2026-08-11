@@ -67,7 +67,7 @@ jobs:
           fi
 
       - name: Upload Frontend ESLint results
-        uses: github/codeql-action/upload-sarif@v4.37.4
+        uses: github/codeql-action/upload-sarif@v4.37.6
         with:
           sarif_file: eslint-results.sarif
           category: 'Frontend'
@@ -85,7 +85,7 @@ jobs:
           fi
 
       - name: Upload Backend ESLint results
-        uses: github/codeql-action/upload-sarif@v4.37.4
+        uses: github/codeql-action/upload-sarif@v4.37.6
         with:
           sarif_file: eslint-results-backend.sarif
           category: 'Backend'
