@@ -103,7 +103,7 @@
         "react-i18next": "^17.0.4",
         "react-markdown": "^10.1.0",
         "reflect-metadata": "^0.2.2",
-        "sharp": "^0.34.5",
+        "sharp": "^0.35.0",
         "simple-git": "^3.36.0",
         "simple-identicon": "^1.2.1",
         "swagger-ui-express": "^5.0.1",
