@@ -141,10 +141,6 @@ jobs:
           
           # wait for the database to be ready
           npx wait-on -t 3m tcp:5432
-          
-          until [ "`docker inspect -f {{.State.Health.Status}} talkarr-db-1`"=="healthy" ]; do
-            sleep 1;
-          done;  
   
           mkdir -p config
           chmod 777 -R config
