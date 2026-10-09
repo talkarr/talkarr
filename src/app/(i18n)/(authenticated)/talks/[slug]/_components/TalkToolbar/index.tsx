@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
@@ -19,7 +20,6 @@ import { useApiStore } from '@/providers/api-store-provider';
 import { useUiStore } from '@/providers/ui-store-provider';
 
 import VerticalIconButton from '@components/VerticalIconButton';
-import Link from 'next/link';
 
 export interface TalkToolbarProps {
     data: SingleTalkData;
