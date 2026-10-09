@@ -5,7 +5,6 @@ import fs_promises from 'node:fs/promises';
 import pathUtils from 'node:path';
 import sharp from 'sharp';
 
-// eslint-disable-next-line import/no-cycle
 import { addDownloadedFile, removeFileFromDatabase } from '@backend/events';
 import {
     conferenceNfoFilename,

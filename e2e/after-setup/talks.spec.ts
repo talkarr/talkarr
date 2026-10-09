@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention,playwright/no-wait-for-selector,playwright/no-wait-for-timeout */
+/* eslint-disable playwright/no-wait-for-selector,playwright/no-wait-for-timeout */
 import fs from 'node:fs';
 import pathUtils from 'node:path';
 
@@ -35,7 +35,6 @@ const e2eTestFolderName = (name: string | unknown): string => {
         throw new Error('Base directory does not exist');
     }
 
-    // eslint-disable-next-line no-bitwise
     fs.accessSync(BASE_DIR, fs.constants.R_OK | fs.constants.W_OK);
 
     if (!fs.existsSync(path)) {

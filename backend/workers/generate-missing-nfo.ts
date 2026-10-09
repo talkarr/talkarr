@@ -1,7 +1,6 @@
 import typia from 'typia';
 
 import { getFolderPathForTalk } from '@backend/fs';
-// eslint-disable-next-line import/no-cycle
 import { handleEventNfoGeneration } from '@backend/helper/nfo';
 import type { TaskFunction } from '@backend/queue';
 import queue from '@backend/queue';

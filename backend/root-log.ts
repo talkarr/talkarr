@@ -2,16 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as winston from 'winston';
 
-// eslint-disable-next-line import/no-cycle
 import { configDirectory, logLevel } from '@backend/env';
 
 import 'winston-daily-rotate-file';
-
-if (typeof window !== 'undefined') {
-    throw new TypeError(
-        'This file should not be imported in the browser. It is meant for server-side logging only.',
-    );
-}
 
 const hformat = winston.format.printf(
     ({ level, label, message, timestamp, ...metadata }) => {
@@ -59,7 +52,6 @@ const hformat = winston.format.printf(
 );
 
 const rootLog = winston.createLogger({
-    level: logLevel,
     format: winston.format.combine(
         winston.format.splat(),
         winston.format.timestamp(),
@@ -83,15 +75,11 @@ const rootLog = winston.createLogger({
                 hformat,
             ),
         }),
-        /* new winston.transports.DailyRotateFile({
-            filename: path.join(__dirname, '../logs/talkarr-%DATE%.log'),
-            datePattern: 'YYYY-MM-DD',
-            zippedArchive: true,
-            maxSize: '20m',
-            maxFiles: '7d',
-            createSymlink: true,
-            symlinkName: 'talkarr.log',
-        }), */
+    ],
+});
+
+export const initLogger = (): void => {
+    rootLog.add(
         new winston.transports.DailyRotateFile({
             filename: `${configDirectory}/logs/.machinelogs-%DATE%.json`,
             datePattern: 'YYYY-MM-DD',
@@ -108,25 +96,29 @@ const rootLog = winston.createLogger({
                 }),
             ),
         }),
-    ],
-});
+    );
 
-// make sure the logs directory exists and is writable
-const logDir = path.join(configDirectory, 'logs');
+    for (let index = 0; index < rootLog.transports.length; index++) {
+        rootLog.transports[index].level = logLevel;
+    }
 
-if (!fs.existsSync(logDir)) {
-    fs.mkdirSync(logDir);
-}
+    // make sure the logs directory exists and is writable
+    const logDir = path.join(configDirectory, 'logs');
 
-try {
-    fs.accessSync(logDir, fs.constants.W_OK);
-} catch (error) {
-    rootLog.error('Error accessing logs directory:', { error });
-    process.exit(1);
-}
+    if (!fs.existsSync(logDir)) {
+        fs.mkdirSync(logDir);
+    }
 
-rootLog.info(
-    `Logger configured with level: ${rootLog.level}. 'process.env.LOG_LEVEL=${process.env.LOG_LEVEL}' 'logLevel=${logLevel}'`,
-);
+    try {
+        fs.accessSync(logDir, fs.constants.W_OK);
+    } catch (error) {
+        rootLog.error('Error accessing logs directory:', { error });
+        process.exit(1);
+    }
+
+    rootLog.info(
+        `Logger configured with level: ${rootLog.level}. 'process.env.LOG_LEVEL=${process.env.LOG_LEVEL}' 'logLevel=${logLevel}'`,
+    );
+};
 
 export default rootLog;

@@ -50,7 +50,7 @@ export const listFoldersFromFs = async (
             try {
                 fs.accessSync(
                     pathUtils.join(startFolderPath, file.name),
-                    // eslint-disable-next-line no-bitwise
+
                     fs.constants.R_OK | fs.constants.W_OK,
                 );
             } catch (error) {

@@ -202,6 +202,7 @@ const ImportScheduleField: FC<ImportScheduleFieldProps> = ({
 
     useEffect(() => {
         if (scheduleOverview) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setScheduleLoading(false);
         }
     }, [scheduleOverview]);

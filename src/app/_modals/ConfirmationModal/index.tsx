@@ -55,6 +55,7 @@ const ConfirmationModal: FC = () => {
 
     useEffect(() => {
         if (options) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setModalState(
                 Object.fromEntries(
                     Object.keys(options).map(key => [key, false]),

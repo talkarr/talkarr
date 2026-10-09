@@ -1,25 +1,31 @@
 {
-    "extends": "../tsconfig.json",
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
-        "moduleResolution": "node",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,
         "skipLibCheck": true,
         "incremental": true,
-        "baseUrl": ".",
+        "lib": [
+            "esnext"
+        ],
+        "types": [
+            "node",
+            "jest"
+        ],
         "paths": {
             "@backend/*": [
-                "*"
+                "./*"
             ],
             "@prisma-generated/*": [
-                "generated/prisma/*"
+                "./generated/prisma/*"
             ]
         },
         "inlineSourceMap": true,
-        "inlineSources": true
+        "inlineSources": true,
+        "verbatimModuleSyntax": false,
+        "allowSyntheticDefaultImports": true
     },
     "include": [
         "**/*.ts"

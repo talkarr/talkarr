@@ -89,6 +89,7 @@ const InformationModal: FC = () => {
         }
     }, [informationModalOpen, updateInformation]);
 
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     const repoName = useMemo(() => {
         const repoUrl = process.env.NEXT_PUBLIC_REMOTE_URL; // might be https or ssh. directly extracted from git
 

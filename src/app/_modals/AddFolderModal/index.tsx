@@ -124,6 +124,7 @@ const AddFolderModal: FC = () => {
 
     useEffect(() => {
         if (!folderName && separator === '/') {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFolderName('/');
         }
     }, [folderName, separator]);
@@ -131,6 +132,7 @@ const AddFolderModal: FC = () => {
     useEffect(() => {
         // if opened and no folders, fetch root folders
         if (folders.length === 0) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             handleFetchFolders(folderName);
         }
     }, [folderName, folders.length, handleFetchFolders]);

@@ -42,6 +42,7 @@ const CustomImage: FC<CustomImageProps> = ({
             };
             img.src = src;
 
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setImageLoaded(false);
             setImageError(false);
 
@@ -59,6 +60,7 @@ const CustomImage: FC<CustomImageProps> = ({
 
     useEffect(() => {
         if (imageLoaded && imageSrc !== src && !imageError) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setImageSrc(src);
         }
     }, [imageError, imageLoaded, imageSrc, src]);

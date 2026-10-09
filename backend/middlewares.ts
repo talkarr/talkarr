@@ -10,7 +10,7 @@ import { getUserWithPasswordById, requireUser } from '@backend/users';
 const log = rootLog.child({ label: 'middlewares' });
 
 export const verifyPermissions = async (
-    req: express.Request<any, any, any, any, any>,
+    req: express.Request<unknown, unknown, unknown, unknown>,
     res: express.Response,
     permissions: Permission | Permission[],
     options?: CheckPermissionsOptions,

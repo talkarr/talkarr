@@ -28,12 +28,12 @@ type QueueEvents = keyof QueueEventHandlers;
 
 export type DoneCallback = (error?: Error | null) => void;
 
-export type TaskFunction<T = any> = (
+export type TaskFunction<T = unknown> = (
     job: DatabaseJobWithFunctions & { data: T },
     done: DoneCallback,
 ) => Promise<void>;
 
-export interface JobHandler<T = any> {
+export interface JobHandler<T = unknown> {
     handler: TaskFunction<T>;
     /**
      * @default 1
@@ -98,7 +98,7 @@ export class Queue {
         }
     }
 
-    public off(event: QueueEvents, listener: Function): void {
+    public off(event: QueueEvents, listener: () => void): void {
         if (this.listeners[event]) {
             this.listeners[event] = this.listeners[event].filter(
                 l => l !== listener,
@@ -190,7 +190,7 @@ export class Queue {
         return null;
     }
 
-    public addWorker(name: string, worker: JobHandler): void {
+    public addWorker<T>(name: string, worker: JobHandler<T>): void {
         if (this.jobHandlers[name]) {
             throw new Error(`Worker for job ${name} already exists`);
         }
@@ -232,7 +232,7 @@ export class Queue {
         if (this.listeners[event]) {
             for (const listener of this.listeners[event]) {
                 try {
-                    // @ts-ignore
+                    // @ts-expect-error: TS2566 because idk
                     listener(...args);
                 } catch (error) {
                     log.error(`Error in ${event} listener:`, { error });

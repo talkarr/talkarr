@@ -1,5 +1,5 @@
 diff --git a/node_modules/@mui/system/createTheme/shape.d.mts b/node_modules/@mui/system/createTheme/shape.d.mts
-index 8bb933f..82064f6 100644
+index 39e20e4..451f304 100644
 --- a/node_modules/@mui/system/createTheme/shape.d.mts
 +++ b/node_modules/@mui/system/createTheme/shape.d.mts
 @@ -1,5 +1,5 @@
@@ -8,9 +8,9 @@ index 8bb933f..82064f6 100644
 +  borderRadius: number;
  }
  export type ShapeOptions = Partial<Shape>;
- declare const shape: Shape;
+ declare const _default: Shape;
 diff --git a/node_modules/@mui/system/createTheme/shape.d.ts b/node_modules/@mui/system/createTheme/shape.d.ts
-index 8bb933f..82064f6 100644
+index 39e20e4..451f304 100644
 --- a/node_modules/@mui/system/createTheme/shape.d.ts
 +++ b/node_modules/@mui/system/createTheme/shape.d.ts
 @@ -1,5 +1,5 @@
@@ -19,4 +19,4 @@ index 8bb933f..82064f6 100644
 +  borderRadius: number;
  }
  export type ShapeOptions = Partial<Shape>;
- declare const shape: Shape;
+ declare const _default: Shape;

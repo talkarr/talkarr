@@ -113,6 +113,7 @@ const EventFahrplanImportJsonField: FC<EventFahrplanImportJsonFieldProps> = ({
 
     useEffect(() => {
         if (json) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setHasCheckedJson(false);
         }
     }, [json]);

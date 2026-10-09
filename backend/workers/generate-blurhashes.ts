@@ -2,7 +2,6 @@ import type { Event as DbEvent, Locks } from '@prisma-generated/client';
 
 import typia from 'typia';
 
-// eslint-disable-next-line import/no-cycle
 import {
     getConferencesWithMissingBlurhash,
     getEventsWithMissingBlurhash,

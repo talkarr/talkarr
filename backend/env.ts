@@ -3,6 +3,8 @@ import { execSync } from 'node:child_process';
 import path from 'node:path';
 import { simpleGit } from 'simple-git';
 
+import rootLog, { initLogger } from '@backend/root-log';
+
 // load .env and .env.local files. needed because this gets loaded before Next.js loads the .env files
 config({
     path: [
@@ -68,9 +70,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export const initEnv = async (): Promise<void> => {
-    // eslint-disable-next-line import/no-cycle
-    const { default: rootLog } = await import('@backend/root-log');
-
+    initLogger();
     const log = rootLog.child({ label: 'env' });
     const git = simpleGit();
 

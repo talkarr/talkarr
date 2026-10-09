@@ -28,7 +28,6 @@ const LicenseInfo: FC<LicenseInfoProps> = ({ maxHeight }) => {
         }
 
         try {
-            // eslint-disable-next-line no-new
             new URL(license.repository || '');
             return true;
         } catch {

@@ -18,7 +18,6 @@
     "jsx": "react-jsx",
     "incremental": true,
     "experimentalDecorators": true,
-    "baseUrl": "src",
     "inlineSourceMap": true,
     "inlineSources": true,
     "plugins": [
@@ -31,29 +30,30 @@
     ],
     "paths": {
       "@/*": [
-        "./*"
+        "./src/*"
       ],
       "@components/*": [
-        "app/_components/*"
+        "./src/app/_components/*"
       ],
       "@backend/*": [
-        "../backend/*"
+        "./backend/*"
       ],
       "@prisma-generated/*": [
-        "../backend/generated/prisma/*"
+        "./backend/generated/prisma/*"
       ]
     },
     "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    ".next/dev/types/**/*.ts",
   ],
   "exclude": [
     "node_modules",
-    ".next/server"
+    ".next/server",
+    "./backend"
   ]
 }

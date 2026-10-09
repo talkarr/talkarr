@@ -27,7 +27,6 @@ import type { TalkData } from '@/stores/ui-store';
 import searchItemCss from './searchitem.module.css';
 
 import SearchItemBadges from '@components/SearchItemBadges';
-// eslint-disable-next-line import/no-cycle
 import TalkImage from '@components/TalkImage';
 
 export interface SearchItemProps {

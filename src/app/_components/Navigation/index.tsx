@@ -48,6 +48,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
 
     useEffect(() => {
         // close the mobile drawer when the route changes
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setOpen(false);
     }, [pathname]);
 

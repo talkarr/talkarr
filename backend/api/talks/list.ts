@@ -72,8 +72,9 @@ const handleListEventsRequest = async (
                 status,
             });
 
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            const { file: _, ...eventWithoutFile } = event;
+            const eventWithoutFile = { ...event };
+
+            delete eventWithoutFile['file'];
 
             return {
                 ...(eventWithoutFile as unknown as ConvertDateToStringType<ExtendedDbEvent>),

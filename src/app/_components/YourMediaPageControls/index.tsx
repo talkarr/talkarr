@@ -29,6 +29,7 @@ const YourMediaPageControls: FC<YourMediaPageControlsProps> = ({
     const [isNavigating, setIsNavigating] = useState<boolean>(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsNavigating(false);
     }, [pathname, searchParams]);
 

@@ -8,7 +8,6 @@ import type {
 
 import { isBlurhashValid } from 'blurhash';
 
-// eslint-disable-next-line import/no-cycle
 import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
 
 import type { ScheduleImport } from '@backend/api/talks/import-schedule';

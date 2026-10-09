@@ -16,6 +16,7 @@ const internalPrisma = new PrismaClient({
 
 const prisma: ExternalPrisma = internalPrisma as ExternalPrisma;
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default { prisma };
 
 export { prisma };

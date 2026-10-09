@@ -134,7 +134,7 @@ export const doesTalkHaveExistingFilesOnDisk = async ({
         try {
             await fs_promises.access(
                 file,
-                // eslint-disable-next-line no-bitwise
+
                 fs_promises.constants.F_OK | fs_promises.constants.R_OK,
             );
 
@@ -209,7 +209,7 @@ export const doesEventHaveNfoFile = async ({
                     extension: 'nfo',
                 }),
             ),
-            // eslint-disable-next-line no-bitwise
+
             fs_promises.constants.F_OK | fs_promises.constants.R_OK,
         );
 
@@ -227,7 +227,7 @@ export const doesFileExist = async ({
     try {
         await fs_promises.access(
             filePath,
-            // eslint-disable-next-line no-bitwise
+
             fs_promises.constants.F_OK | fs_promises.constants.R_OK,
         );
 

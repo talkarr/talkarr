@@ -62,6 +62,7 @@ const AddTalksSearch: FC<AddTalksSearchProps> = ({
         const updatedSearch = params.get('search') || '';
 
         if (updatedSearch) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setSearch(updatedSearch);
         }
     }, [params]);

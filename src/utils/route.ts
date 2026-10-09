@@ -11,7 +11,6 @@ export const getFileRoutePath = (pathname: string, params: Params): string => {
                     ...prev,
                     ...val.reduceRight(
                         (_prev, cur) => {
-                            // eslint-disable-next-line no-param-reassign
                             _prev[`${cur}-${paramCount}`] = `[...${key}]`;
                             paramCount += 1;
                             return _prev;
@@ -21,7 +20,6 @@ export const getFileRoutePath = (pathname: string, params: Params): string => {
                 };
             }
 
-            // eslint-disable-next-line no-param-reassign
             prev[`${val}-${paramCount}`] = `[${key}]`;
             paramCount += 1;
             return prev;
@@ -42,11 +40,9 @@ export const getFileRoutePath = (pathname: string, params: Params): string => {
             }
 
             if (lookup) {
-                // eslint-disable-next-line no-param-reassign
                 prev += lookup;
                 interpolateCount += 1;
             } else {
-                // eslint-disable-next-line no-param-reassign
                 prev += cur;
             }
 

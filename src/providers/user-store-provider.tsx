@@ -3,7 +3,7 @@
 import type { PartialDeep } from 'type-fest';
 
 import type { FC } from 'react';
-import React, { createContext, useContext, useRef } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 import { useStore } from 'zustand';
 
@@ -23,14 +23,10 @@ export const UserStoreProvider: FC<UserStoreProviderProps> = ({
     children,
     apiState,
 }) => {
-    const storeRef = useRef<UserStoreApi>(null);
-
-    if (!storeRef.current) {
-        storeRef.current = createUserStore(apiState);
-    }
+    const [store] = useState<UserStoreApi>(() => createUserStore(apiState));
 
     return (
-        <UserStoreContext.Provider value={storeRef.current}>
+        <UserStoreContext.Provider value={store}>
             {children}
         </UserStoreContext.Provider>
     );

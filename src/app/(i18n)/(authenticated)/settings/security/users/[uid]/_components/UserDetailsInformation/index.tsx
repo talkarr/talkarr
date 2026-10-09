@@ -40,10 +40,7 @@ const UserDetailsInformation: FC<UserDetailsInformationProps> = ({ user }) => {
                 action={
                     <Button
                         endIcon={<EditIcon />}
-                        onClick={() =>
-                            // eslint-disable-next-line no-alert
-                            alert('Not implemented yet')
-                        }
+                        onClick={() => alert('Not implemented yet')}
                     >
                         Edit
                     </Button>

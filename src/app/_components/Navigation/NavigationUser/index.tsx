@@ -74,6 +74,7 @@ const NavigationUser: FC = () => {
 
     useEffect(() => {
         if (pathname) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             handleClose();
         }
     }, [pathname]);

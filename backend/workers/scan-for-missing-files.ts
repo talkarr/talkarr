@@ -3,7 +3,6 @@ import type { Locks } from '@prisma-generated/client';
 import pathUtils from 'node:path';
 import typia from 'typia';
 
-// eslint-disable-next-line import/no-cycle
 import { startAddTalk } from '@backend/workers/add-talk';
 import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 

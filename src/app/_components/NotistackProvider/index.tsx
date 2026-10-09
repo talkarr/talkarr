@@ -18,7 +18,7 @@ const NotistackProvider: FC<PropsWithChildren> = ({ children }) => {
                 horizontal: 'right',
             }}
             SnackbarProps={{
-                // @ts-expect-error
+                // @ts-expect-error: TS2769 because props do not support that
                 'data-testid': 'snackbar',
             }}
             action={snackbarId => (

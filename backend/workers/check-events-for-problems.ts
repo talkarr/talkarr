@@ -2,7 +2,6 @@ import type { Locks } from '@prisma-generated/client';
 
 import typia from 'typia';
 
-// eslint-disable-next-line import/no-cycle
 import {
     checkEventForProblems,
     fixBigintInExtendedDbEvent,

@@ -9,7 +9,6 @@ import {
     youtubeDl as normalYoutubeDl,
 } from 'youtube-dl-exec';
 
-// eslint-disable-next-line import/no-cycle
 import { startCheckEventsForProblems } from '@backend/workers/check-events-for-problems';
 import { startGenerateBlurhashes } from '@backend/workers/generate-blurhashes';
 import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
@@ -336,7 +335,6 @@ const addTalk: TaskFunction<AddTalkData> = async (job, actualDone) => {
                 const destination = stdout.match(/Destination: (.*)/);
 
                 if (destination) {
-                    // eslint-disable-next-line prefer-destructuring
                     path = destination[1];
                 }
             }

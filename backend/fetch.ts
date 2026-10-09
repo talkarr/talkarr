@@ -10,7 +10,7 @@ export interface FetchResponse extends Omit<Response, 'json' | 'text'> {
 export const apiCacheTime = 1000 * 60 * 5; // 5 minutes
 
 const apiFetch = async (
-    input: RequestInfo | URL,
+    input: string | Request | URL,
     init?: RequestInit,
     cacheKey?: string,
     _cacheTime?: number,

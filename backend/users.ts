@@ -245,15 +245,17 @@ export const userMiddleware = async (
 ): Promise<void> => {
     const user = await validateUserCookie(req);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (req as any).user = user ?? null;
 
     next();
 };
 
 export const requireUser = async (
-    req: express.Request<any, any, any, any>,
+    req: express.Request<unknown, unknown, unknown, unknown>,
     res: express.Response,
 ): Promise<boolean> => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!(req as any).user) {
         log.debug('User is not authenticated');
         res.status(401).json({
@@ -411,7 +413,7 @@ export const validateUserPreferences = (
 };
 
 export const normalizeUserPreferences = (
-    userPreferences: PartialDeep<UserPreferences> | Record<string, any>,
+    userPreferences: PartialDeep<UserPreferences> | Record<string, unknown>,
 ): UserPreferences => {
     const normalizedPreferences: typeof userPreferences = {
         ...userPreferences,
@@ -434,7 +436,10 @@ export const normalizeUserPreferences = (
 
         if (key in userPreferencesValidators) {
             if (
-                !userPreferencesValidators[key](key, normalizedPreferences[key])
+                !userPreferencesValidators[key](
+                    key,
+                    normalizedPreferences[key] as never,
+                )
             ) {
                 normalizedPreferences[key] = defaultUserPreferences[key];
             }

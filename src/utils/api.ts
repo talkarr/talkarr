@@ -61,35 +61,36 @@ const api =
           });
 
 export const wrapApiCall =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     <T extends (...args: any[]) => Promise<any>>(
-        fn: T,
-    ): ((...args: Parameters<T>) => Promise<Awaited<ReturnType<T>>>) =>
-    async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
-        try {
-            return await fn(...args);
-        } catch (error) {
-            if (
-                // Do not log AbortError as it is expected when aborting a request
-                (error instanceof DOMException &&
-                    error.name === 'AbortError') ||
-                error === newRequestInitiatedError
-            ) {
-                console.log(`[${tag}] API call aborted`);
-            } else {
-                console.error(`[${tag}] Error in API call:`, error);
-            }
+            fn: T,
+        ): ((...args: Parameters<T>) => Promise<Awaited<ReturnType<T>>>) =>
+        async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
+            try {
+                return await fn(...args);
+            } catch (error) {
+                if (
+                    // Do not log AbortError as it is expected when aborting a request
+                    (error instanceof DOMException &&
+                        error.name === 'AbortError') ||
+                    error === newRequestInitiatedError
+                ) {
+                    console.log(`[${tag}] API call aborted`);
+                } else {
+                    console.error(`[${tag}] Error in API call:`, error);
+                }
 
-            return {
-                success: false,
-                message:
-                    error && typeof error === 'object' && 'message' in error
-                        ? error.message
-                        : 'Unknown error',
-                isFromTryCatch: true,
-                originalError: error,
-            } as Awaited<ReturnType<T>>;
-        }
-    };
+                return {
+                    success: false,
+                    message:
+                        error && typeof error === 'object' && 'message' in error
+                            ? error.message
+                            : 'Unknown error',
+                    isFromTryCatch: true,
+                    originalError: error,
+                } as Awaited<ReturnType<T>>;
+            }
+        };
 
 api.use(apiMiddleware);
 

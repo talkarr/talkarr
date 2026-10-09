@@ -31,6 +31,7 @@ const NavigationSearch: FC = () => {
     useEffect(() => {
         const updatedSearch = params.get('search') || '';
 
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSearch(updatedSearch);
     }, [params]);
 

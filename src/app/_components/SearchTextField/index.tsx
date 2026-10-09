@@ -66,7 +66,7 @@ const SearchTextField: FC<CustomTextFieldProps> = ({
 
     const onClear = (): void => {
         if (onChange) {
-            onChange({ target: { value: '' } } as any);
+            onChange({ target: { value: '' } } as never);
         }
     };
 

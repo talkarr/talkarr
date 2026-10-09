@@ -7,7 +7,6 @@ import { useTheme } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';
-// eslint-disable-next-line import/no-cycle
 import {
     searchItemMaxImageWidth,
     searchItemMinHeight,
@@ -39,6 +38,7 @@ const TalkImage: FC<TalkImageProps> = ({
     const [imageLoading, setImageLoading] = useState<boolean>(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setShowFallback(false);
     }, [data]);
 

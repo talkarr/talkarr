@@ -1,8 +1,8 @@
 diff --git a/node_modules/@mui/material/InputBase/InputBase.d.ts b/node_modules/@mui/material/InputBase/InputBase.d.ts
-index 8ab3d00..9d847be 100644
+index 311d053..bc51b62 100644
 --- a/node_modules/@mui/material/InputBase/InputBase.d.ts
 +++ b/node_modules/@mui/material/InputBase/InputBase.d.ts
-@@ -79,7 +79,9 @@ export interface InputBaseProps extends StandardProps<React.HTMLAttributes<HTMLD
+@@ -80,7 +80,9 @@ export interface InputBaseProps extends StandardProps<React.HTMLAttributes<HTMLD
     * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input#attributes) applied to the `input` element.
     * @default {}
     */
