@@ -536,6 +536,20 @@ test('should be able to search for a string', async ({
         timeout: 60 * 1000,
     });
 
+    // expect data-testid=open-in-media to be visible
+    const openInMediaButton = page.locator('[data-testid=open-in-media]');
+
+    await expect(openInMediaButton).toBeVisible();
+
+    // expect link to have a href
+
+    expect(
+        // eslint-disable-next-line unicorn/no-await-expression-member
+        (await openInMediaButton.getAttribute('href'))?.startsWith(
+            'https://media.ccc.de/',
+        ),
+    ).toBe(true);
+
     // expect data-testid=delete-talk to be visible
     const deleteTalkButton = page.locator('[data-testid=delete-talk]');
 
