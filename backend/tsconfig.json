@@ -10,6 +10,7 @@
         "skipLibCheck": true,
         "incremental": true,
         "baseUrl": ".",
+        "rootDir": ".",
         "types": [
             "jest"
         ],
