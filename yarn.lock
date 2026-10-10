@@ -9933,7 +9933,7 @@ ts-node@^10.9.2:
     v8-compile-cache-lib "^3.0.1"
     yn "3.1.1"
 
-ts-patch@4:
+ts-patch@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/ts-patch/-/ts-patch-4.0.1.tgz#7f270d970c403232e3946b80e0b57ae83d991a54"
   integrity sha512-pzXS6vZlsBwq3U+CUiPJfCAh0MJGco1j1C8bWsLgvtzDZLGZ7II1Usjtwm09mZ8Uoma+sg6sO3BlWHd6apCUww==
@@ -10124,12 +10124,12 @@ typescript-eslint@^8.59.2:
     "@typescript-eslint/typescript-estree" "8.59.2"
     "@typescript-eslint/utils" "8.59.2"
 
-typescript@6:
+typescript@~6.0.3:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-6.0.3.tgz#90251dc007916e972786cb94d74d15b185577d21"
   integrity sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==
 
-typia@12:
+typia@^12:
   version "12.2.1"
   resolved "https://registry.yarnpkg.com/typia/-/typia-12.2.1.tgz#010ec472bd02c35fcd2e7a8c4ae2b93809d16f29"
   integrity sha512-fW+SZ3X9s/0mkx7TxU5GfCf6/5SX1iHRmFEXNQB3kDtdo5KgmCZ+ly9iUfhtsEBWldzv4nXkRBR7WXOwzlIO8w==

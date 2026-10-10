@@ -41,7 +41,7 @@
         "typegen:with-check": "if [ ! -f next-env.d.ts ]; then yarn typegen; fi",
         "prebuild": "yarn run typegen:with-check && yarn run generate",
         "pretypecheck": "yarn run typegen:with-check && yarn run generate",
-        "prepare": "ts-patch install && typia patch"
+        "prepare": "ts-patch install"
     },
     "nodemonConfig": {
         "ext": "ts,json",
@@ -106,13 +106,13 @@
         "simple-git": "^4.0.2",
         "simple-identicon": "^1.2.1",
         "swagger-ui-express": "^5.0.1",
-        "ts-patch": "4",
+        "ts-patch": "^4.0.1",
         "tsconfig-paths": "^4.2.0",
         "tsx": "^4.23.15",
         "ttsc": "^0.31.0",
         "type-fest": "^5.10.0",
-        "typescript": "6",
-        "typia": "12",
+        "typescript": "~6.0.3",
+        "typia": "^12",
         "winston": "^3.19.0",
         "winston-daily-rotate-file": "^5.0.0",
         "youtube-dl-exec": "3.1.15",

@@ -14,6 +14,11 @@
             "node",
             "jest"
         ],
+        "plugins": [
+            {
+                "transform": "typia/lib/transform"
+            }
+        ],
         "paths": {
             "@backend/*": [
                 "./*"
