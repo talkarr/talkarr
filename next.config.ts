@@ -1,13 +1,10 @@
 /* eslint-disable unicorn/no-await-expression-member */
 // noinspection ES6PreferShortImport
-
-import type { Options } from '@ryoppippi/unplugin-typia';
-
 import type { NextConfig } from 'next';
 
 import { apiBaseUrl } from './src/constants';
 
-import unTypiaNext from '@ryoppippi/unplugin-typia/next';
+import unTypiaNext from '@typia/unplugin/next';
 
 if (process.argv.includes('build')) {
     // eslint-disable-next-line unicorn/no-lonely-if
@@ -25,11 +22,6 @@ if (!['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
 console.log(`====================
 NODE_ENV: ${process.env.NODE_ENV}
 ====================`);
-
-export const unpluginTypiaOptions: Options = {
-    log: process.env.NODE_ENV === 'development',
-    cache: process.env.NODE_ENV === 'production',
-};
 
 const nextConfig = async (): Promise<NextConfig> => {
     const isInsideDocker = process.env.IS_INSIDE_DOCKER === 'true';
@@ -195,7 +187,11 @@ const nextConfig = async (): Promise<NextConfig> => {
                 ignoreBuildErrors: false,
             },
         } as NextConfig,
-        unpluginTypiaOptions,
+        // unplugin options
+        {
+            log: process.env.NODE_ENV === 'development',
+            cache: process.env.NODE_ENV === 'production',
+        },
     );
 };
 

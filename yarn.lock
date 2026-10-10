@@ -1861,23 +1861,6 @@
   resolved "https://registry.yarnpkg.com/@rtsao/scc/-/scc-1.1.0.tgz#927dd2fae9bc3361403ac2c7a00c32ddce9ad7e8"
   integrity sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==
 
-"@ryoppippi/unplugin-typia@^2.6.5":
-  version "2.6.5"
-  resolved "https://registry.yarnpkg.com/@ryoppippi/unplugin-typia/-/unplugin-typia-2.6.5.tgz#4bc600f0d3e91af1158969f6b41815540f362d32"
-  integrity sha512-Lg7Rho00E6Jn00Gle/Rn6ZWhUJj9U0J0iahfBUqqiXWrLWZdjXbeMCW1+82/7qnVQaqhlgz69hbd3JWYCtYivQ==
-  dependencies:
-    "@rollup/pluginutils" "^5.1.4"
-    bun-only "^0.0.1"
-    consola "^3.4.2"
-    defu "^6.1.4"
-    diff-match-patch-es "^1.0.1"
-    find-cache-dir "^5.0.0"
-    magic-string "^0.30.17"
-    pathe "^2.0.3"
-    pkg-types "^2.1.0"
-    type-fest "^4.37.0"
-    unplugin "^2.2.2"
-
 "@scarf/scarf@=1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@scarf/scarf/-/scarf-1.4.0.tgz#3bbb984085dbd6d982494538b523be1ce6562972"
@@ -2648,6 +2631,23 @@
     "@typia/core" "^12.2.1"
     "@typia/interface" "^12.2.1"
     "@typia/utils" "^12.2.1"
+
+"@typia/unplugin@^12":
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/@typia/unplugin/-/unplugin-12.1.1.tgz#fe180565d858875cccf44ed5ff8fecfd41c0dc7a"
+  integrity sha512-1u+4vOa5Md6mPw1Z6ijz9n5gDMrEifuGwI0Z3/lCF42Glvoc17B7Hbh0FC11tT53Snw7D96LimdZwGUl59c1+A==
+  dependencies:
+    "@rollup/pluginutils" "^5.1.4"
+    bun-only "^0.0.1"
+    consola "^3.4.2"
+    defu "^6.1.4"
+    diff-match-patch-es "^1.0.1"
+    find-cache-dir "^5.0.0"
+    magic-string "^0.30.17"
+    pathe "^2.0.3"
+    pkg-types "^2.1.0"
+    type-fest "^4.37.0"
+    unplugin "^2.2.2"
 
 "@typia/utils@^12.2.1":
   version "12.2.1"
@@ -10129,7 +10129,7 @@ typescript@~6.0.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-6.0.3.tgz#90251dc007916e972786cb94d74d15b185577d21"
   integrity sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==
 
-typia@^12:
+typia@^12.2.1:
   version "12.2.1"
   resolved "https://registry.yarnpkg.com/typia/-/typia-12.2.1.tgz#010ec472bd02c35fcd2e7a8c4ae2b93809d16f29"
   integrity sha512-fW+SZ3X9s/0mkx7TxU5GfCf6/5SX1iHRmFEXNQB3kDtdo5KgmCZ+ly9iUfhtsEBWldzv4nXkRBR7WXOwzlIO8w==
