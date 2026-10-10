@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
@@ -8,6 +9,7 @@ import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import DeleteIcon from '@mui/icons-material/Delete';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { useSnackbar } from 'notistack';
 
@@ -86,6 +88,15 @@ const TalkToolbar: FC<TalkToolbarProps> = ({ data }) => {
             >
                 Delete
             </VerticalIconButton>
+            <Link
+                href={data.talk?.frontend_link ?? ''}
+                target="_blank"
+                data-testid="open-in-media"
+            >
+                <VerticalIconButton icon={<OpenInNewIcon />}>
+                    Open in media.ccc.de
+                </VerticalIconButton>
+            </Link>
         </StyledContainer>
     );
 };
