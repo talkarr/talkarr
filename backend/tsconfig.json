@@ -10,6 +10,9 @@
         "skipLibCheck": true,
         "incremental": true,
         "baseUrl": ".",
+        "types": [
+            "jest"
+        ],
         "paths": {
             "@backend/*": [
                 "*"

@@ -6,6 +6,9 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": [
+      "jest"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -43,7 +46,8 @@
         "../backend/generated/prisma/*"
       ]
     },
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "ignoreDeprecations": "6.0"
   },
   "include": [
     "next-env.d.ts",
