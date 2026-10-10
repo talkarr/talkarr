@@ -22,7 +22,7 @@
     "incremental": true,
     "experimentalDecorators": true,
     "baseUrl": "src",
-    "rootDir": "src",
+    "rootDir": ".",
     "inlineSourceMap": true,
     "inlineSources": true,
     "plugins": [
