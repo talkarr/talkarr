@@ -41,7 +41,7 @@
         "typegen:with-check": "if [ ! -f next-env.d.ts ]; then yarn typegen; fi",
         "prebuild": "yarn run typegen:with-check && yarn run generate",
         "pretypecheck": "yarn run typegen:with-check && yarn run generate",
-        "prepare": "ts-patch install"
+        "prepare": "ts-patch install && typia patch"
     },
     "nodemonConfig": {
         "ext": "ts,json",
