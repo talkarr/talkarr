@@ -20,7 +20,7 @@ COPY generate-licenses.mjs ./
 COPY patches ./patches
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock .npmrc* ./
+COPY _temp/package.json yarn.lock .npmrc* ./
 RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn YOUTUBE_DL_SKIP_DOWNLOAD=true CI=1 yarn --frozen-lockfile --prefer-offline --build-from-source
 
 # Rebuild the source code only when needed
@@ -85,7 +85,7 @@ VOLUME ["/app/.next/cache/images"]
 USER nextjs
 
 # node_modules first
-COPY --chown=nextjs:nodejs ./package.json ./package.json
+COPY --chown=nextjs:nodejs _temp/package.json ./package.json
 COPY --from=deps /app/node_modules ./node_modules
 
 # use these for non-standalone output
@@ -96,7 +96,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/public ./public
 
-COPY --chown=nextjs:nodejs ./next.config.ts ./next.config.ts
+COPY --chown=nextjs:nodejs frontend/next.config.ts ./next.config.ts
 COPY --chown=nextjs:nodejs ./src/constants.ts ./src/constants.ts
 
 # backend.json openapi file

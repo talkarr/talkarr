@@ -41,7 +41,7 @@
         "app/_components/*"
       ],
       "@backend/*": [
-        "../backend/*"
+        "../../backend/*"
       ],
       "@prisma-generated/*": [
         "../backend/generated/prisma/*"
@@ -58,7 +58,7 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
+    "../node_modules",
     ".next/server"
   ]
 }

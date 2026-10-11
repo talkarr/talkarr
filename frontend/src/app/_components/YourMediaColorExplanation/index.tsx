@@ -20,6 +20,7 @@ const YourMediaColorExplanation: FC<YourMediaColorExplanationProps> = ({
     const { t } = useTranslation();
     const theme = useTheme();
 
+    // todo: types
     const colors = getMediaItemStatusColor(theme);
 
     const initialStatusCount = initialData.statusCount;

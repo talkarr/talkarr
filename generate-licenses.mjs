@@ -1,6 +1,7 @@
 import licenseChecker from 'license-checker';
 import fs from 'fs';
-import packageJson from './package.json' with { type: 'json' };
+// todo: import from all the packages
+import packageJson from './_temp/package.json' with { type: 'json' };
 
 const isCi = process.env.CI === 'true' || process.env.CI === '1' || process.env.CI === 'yes';
 

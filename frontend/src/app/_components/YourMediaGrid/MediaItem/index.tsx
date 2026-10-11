@@ -157,6 +157,7 @@ const MediaItem: FC<MediaItemProps> = ({ initialData, conference }) => {
                                     ? {}
                                     : {
                                           borderBottomColor:
+                                          // todo: types
                                               getMediaItemStatusColor(theme)[
                                                   status
                                               ],
