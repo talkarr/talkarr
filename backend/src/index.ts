@@ -1,0 +1,168 @@
+import { initServer } from '@backend/src/init-server';
+
+import type { NextFunction, Request, Response } from 'express';
+
+import next from 'next';
+
+import cookieParser from 'cookie-parser';
+import express from 'express';
+import fs from 'node:fs';
+import swaggerUi from 'swagger-ui-express';
+
+import '@backend/src/workers/add-talk';
+import '@backend/src/workers/generate-missing-nfo';
+import { startCheckForRootFolders } from '@backend/src/workers/check-for-root-folders';
+import { startValidateUserPreferences } from '@backend/src/workers/validate-user-preferences';
+
+import api from '@backend/src/api';
+import { initEnv, serverHost, serverPort } from '@backend/src/env';
+import { clearDownloadingFlagForAllTalks } from '@backend/src/events';
+import { releaseAllLocks } from '@backend/src/locks';
+import { isDatabaseConnected } from '@backend/src/prisma';
+import rootLog from '@backend/src/root-log';
+import { loadSettings } from '@backend/src/settings';
+
+const dev = process.env.NODE_ENV !== 'production';
+
+const log = rootLog.child({ label: 'server' });
+
+log.info('Starting server...', { dev });
+
+initServer.on('listening', async () => {
+    await initEnv();
+
+    let errorMode = false;
+
+    if (!(await isDatabaseConnected())) {
+        log.error('Database not connected, going to error mode');
+        errorMode = true;
+    }
+
+    if (errorMode) {
+        log.error(`
+******************************************************
+*                                                    *
+*   Talkarr is in error mode. Please check           *
+*   previous logs for details on what went wrong.    *
+*   After fixing the issue, please restart Talkarr.  *
+*                                                    *
+*   If you need help, please check our wiki:         *
+*   https://wiki.talkarr.app/deployment/faq/         *
+*                                                    *
+******************************************************
+        `);
+        return;
+    }
+
+    const app = next({ dev, turbopack: true });
+    const handle = app.getRequestHandler();
+
+    await loadSettings();
+
+    try {
+        const locksReleased = await releaseAllLocks();
+        log.info('Released all existing locks', {
+            locksReleased,
+        });
+    } catch {
+        log.warn('Error when trying to release existing locks');
+    }
+
+    await startValidateUserPreferences();
+
+    // mark everything as not downloading
+    await clearDownloadingFlagForAllTalks();
+
+    await startCheckForRootFolders({ isInit: true });
+
+    log.info('Preparing server...');
+
+    app.prepare()
+        .then(async () => {
+            log.info('Server prepared');
+            const server = express();
+
+            if (process.env.NODE_ENV === 'production') {
+                server.set('trust proxy', 1);
+            }
+
+            server.use(cookieParser());
+            server.use(express.json({ limit: '50mb' }));
+            server.use(express.urlencoded({ extended: true }));
+
+            server.use('/api', api);
+
+            const apiDocs = fs.readFileSync('./backend.json', 'utf8');
+            server.use(
+                '/api-docs',
+                swaggerUi.serve,
+                swaggerUi.setup(JSON.parse(apiDocs)),
+            );
+
+            server.all('*_', (req, res) => handle(req, res));
+            server.use(
+                (
+                    err: { status: number; message: string; errors: string[] },
+                    _req: Request,
+                    res: Response,
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    _next: NextFunction,
+                ) => {
+                    res.status(err.status || 500).json({
+                        message: err.message,
+                        errors: err.errors,
+                    });
+                },
+            );
+
+            log.info('Server ready, closing startup server...');
+
+            server.on('error', err => {
+                log.error('Server error', { err });
+                process.exit(1);
+            });
+
+            // close loading server
+            initServer.close(async err => {
+                if (err) {
+                    log.error('Error closing loading server', { err });
+                    process.exit(1);
+                }
+
+                log.info('Startup server closed, trying to listen now...');
+
+                if (serverHost) {
+                    server.listen(serverPort, serverHost, error => {
+                        if (error) {
+                            log.error(error);
+                            process.exit(1);
+                        }
+
+                        log.info(
+                            `Server ready on http://${serverHost}:${serverPort}/`,
+                        );
+                    });
+                } else {
+                    server.listen(serverPort, error => {
+                        if (error) {
+                            log.error(error);
+                            process.exit(1);
+                        }
+
+                        log.info(
+                            `Server ready on http://localhost:${serverPort}/`,
+                        );
+                    });
+                }
+            });
+        })
+        .catch(error => {
+            log.error('Catched Error', { stack: error.stack });
+            process.exit(1);
+        });
+});
+
+process.on('uncaughtException', err => {
+    log.error(`Uncaught Exception: ${err.stack}`, { err });
+    process.exit(1);
+});

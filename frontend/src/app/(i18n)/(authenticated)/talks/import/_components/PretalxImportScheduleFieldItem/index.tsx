@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 
-import type { ScheduleEvent } from '@backend/types/schedule';
+import type { ScheduleEvent } from '@backend/src/types/schedule';
 
 import { useUiStore } from '@/providers/ui-store-provider';
 

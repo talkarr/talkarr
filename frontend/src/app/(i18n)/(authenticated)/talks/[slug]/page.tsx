@@ -1,7 +1,7 @@
 import type { Metadata, NextPage } from 'next';
 import { notFound } from 'next/navigation';
 
-import type { SuccessData } from '@backend/types';
+import type { SuccessData } from '@backend/src/types';
 
 import { getTalk } from '@/app/_api/talks/get';
 import { talkInfo } from '@/app/_api/talks/info';

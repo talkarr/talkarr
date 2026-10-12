@@ -1,4 +1,4 @@
-import type { RequestBody } from '@backend/types';
+import type { RequestBody } from '@backend/src/types';
 
 import api, { wrapApiCall } from '@/utils/api';
 

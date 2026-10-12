@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import Box from '@mui/material/Box';
 
-import type { ExtractSuccessData } from '@backend/types';
+import type { ExtractSuccessData } from '@backend/src/types';
 
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
 

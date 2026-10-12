@@ -52,4 +52,4 @@ after-setup-report/
 .env.local
 
 # prisma
-backend/generated/prisma/
+backend/src/generated/prisma/

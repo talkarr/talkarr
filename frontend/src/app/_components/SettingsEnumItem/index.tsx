@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 
-import type { Enum } from '@backend/types';
+import type { Enum } from '@backend/src/types';
 
 export interface SettingsEnumItemProps {
     primaryText: string;

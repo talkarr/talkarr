@@ -15,7 +15,7 @@ import SaveIcon from '@mui/icons-material/SaveRounded';
 
 import { useSnackbar } from 'notistack';
 
-import { ImportIsRecordedFlagBehavior } from '@backend/types/settings';
+import { ImportIsRecordedFlagBehavior } from '@backend/src/types/settings';
 
 import {
     getGeneralSettings,

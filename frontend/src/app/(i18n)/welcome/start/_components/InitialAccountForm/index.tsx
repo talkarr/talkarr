@@ -19,7 +19,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 import { useSnackbar } from 'notistack';
 
-import { validatePassword } from '@backend/passwords';
+import { validatePassword } from '@backend/src/passwords';
 
 import { registerInitialUser } from '@/app/_api/user/register-initial';
 

@@ -4,7 +4,7 @@ import deepmerge from 'deepmerge';
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import type { SuccessData } from '@backend/types';
+import type { SuccessData } from '@backend/src/types';
 
 import type { GetAppInformationResponse } from '@/app/_api/information';
 import { getAppInformation } from '@/app/_api/information';

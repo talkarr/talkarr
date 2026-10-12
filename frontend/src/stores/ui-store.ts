@@ -5,7 +5,7 @@ import deepmerge from 'deepmerge';
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import type { SuccessData } from '@backend/types';
+import type { SuccessData } from '@backend/src/types';
 
 import type { ConfirmationModalConfig } from '@/app/_modals/ConfirmationModal';
 import type { RootFolderErrorModalData } from '@/app/_modals/RootFolderErrorModal';

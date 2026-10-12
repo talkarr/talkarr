@@ -1,0 +1,115 @@
+// Helpers for fetching data from api.media.ccc.de
+
+import { cccApiBaseUrl, conferenceCacheKey } from '@backend/src/constants';
+import apiFetch from '@backend/src/fetch';
+import rootLog from '@backend/src/root-log';
+import type { ApiConference, ApiEvent } from '@backend/src/types';
+import { hasAdminUsers } from '@backend/src/users';
+
+const log = rootLog.child({ label: 'helper' });
+
+export const getTalkFromApiByGuid = async ({
+    guid,
+    cache,
+}: {
+    guid: string;
+    cache?: {
+        cacheKey?: string;
+        cacheDuration?: number;
+    };
+}): Promise<ApiEvent | null> => {
+    const response = await apiFetch(
+        `${cccApiBaseUrl}/events/${guid}`,
+        undefined,
+        cache?.cacheKey,
+        cache?.cacheDuration,
+    );
+
+    if (!response.ok) {
+        log.error(
+            `Unable to fetch talk by guid, API returned ${response.status}`,
+        );
+        return null;
+    }
+
+    return response.json() as ApiEvent;
+};
+
+export const getConferenceFromEvent = async ({
+    event,
+}: {
+    event: ApiEvent | Pick<ApiEvent, 'conference_url'>;
+}): Promise<ApiConference | null> => {
+    if (!event.conference_url) {
+        return null;
+    }
+
+    const response = await apiFetch(event.conference_url);
+
+    if (!response.ok) {
+        log.error(
+            `Unable to fetch conference from event, API returned ${response.status}`,
+        );
+        return null;
+    }
+
+    return response.json() as ApiConference;
+};
+
+export const getConferenceFromAcronym = async ({
+    acronym,
+}: {
+    acronym: string;
+}): Promise<ApiConference | null> => {
+    const response = await apiFetch(
+        `${cccApiBaseUrl}/conferences/${acronym}`,
+        undefined,
+        `${conferenceCacheKey}-${acronym}`,
+    );
+
+    if (!response.ok) {
+        log.error(
+            `Unable to conference by acronym, API returned ${response.status}`,
+        );
+        return null;
+    }
+
+    try {
+        return response.json() as ApiConference;
+    } catch {
+        return null;
+    }
+};
+
+export const getTalkFromApiBySlug = async ({
+    slug,
+    cache,
+}: {
+    slug: string;
+    cache?: {
+        cacheKey?: string;
+        cacheDuration?: number;
+    };
+}): Promise<ApiEvent | null> => {
+    const response = await apiFetch(
+        `${cccApiBaseUrl}/events/${slug}`,
+        undefined,
+        cache?.cacheKey || `talk-${slug}`,
+        cache?.cacheDuration,
+    );
+
+    if (!response.ok) {
+        log.error(
+            `Unable to fetch talk by slug, API returned ${response.status}`,
+        );
+        return null;
+    }
+
+    return response.json() as ApiEvent;
+};
+
+export const checkIsNewInstance = async (): Promise<boolean> => {
+    const adminUserExists = await hasAdminUsers();
+
+    return !adminUserExists;
+};

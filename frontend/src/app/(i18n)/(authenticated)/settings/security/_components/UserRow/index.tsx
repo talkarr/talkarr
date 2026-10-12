@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
-import type { components } from '@backend/generated/schema';
+import type { components } from '@backend/src/generated/schema';
 
 import { specificUserSecurityPageLink } from '@/constants';
 

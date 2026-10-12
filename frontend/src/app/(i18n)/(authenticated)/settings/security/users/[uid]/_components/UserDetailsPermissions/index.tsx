@@ -15,8 +15,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import LockIcon from '@mui/icons-material/Lock';
 
-import type { components } from '@backend/generated/schema';
-import { checkPermissions, Permission } from '@backend/permissions';
+import type { components } from '@backend/src/generated/schema';
+import { checkPermissions, Permission } from '@backend/src/permissions';
 
 import UserDetailsCard from '@/app/(i18n)/(authenticated)/settings/security/users/[uid]/_components/UserDetailsCard';
 

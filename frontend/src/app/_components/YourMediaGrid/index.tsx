@@ -2,7 +2,7 @@ import type { FC } from 'react';
 
 import Grid from '@mui/material/Grid';
 
-import type { SuccessData } from '@backend/types';
+import type { SuccessData } from '@backend/src/types';
 
 import { reportBug } from '@/utils/bug';
 

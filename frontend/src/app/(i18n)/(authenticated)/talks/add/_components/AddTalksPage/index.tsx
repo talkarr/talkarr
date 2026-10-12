@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-import type { ExtractSuccessData, SuccessData } from '@backend/types';
+import type { ExtractSuccessData, SuccessData } from '@backend/src/types';
 
 import type { SearchEventsResponse } from '@/app/_api/talks/search';
 import type { AddTalksSearchRef } from '@/app/(i18n)/(authenticated)/talks/add/_components/AddTalksSearch';

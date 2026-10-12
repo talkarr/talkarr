@@ -3,7 +3,7 @@
 import type { FC } from 'react';
 import { useEffect } from 'react';
 
-import type { ExtractSuccessData } from '@backend/types';
+import type { ExtractSuccessData } from '@backend/src/types';
 
 import type { GetUserInfoResponse } from '@/app/_api/user/info';
 

@@ -17,9 +17,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import UploadIcon from '@mui/icons-material/Upload';
 
-import ScheduleParser from '@backend/helper/schedule-parser';
-import type { ExtractSuccessData } from '@backend/types';
-import type { C3VocSchedule } from '@backend/types/schedule';
+import ScheduleParser from '@backend/src/helper/schedule-parser';
+import type { ExtractSuccessData } from '@backend/src/types';
+import type { C3VocSchedule } from '@backend/src/types/schedule';
 
 import type {
     ImportScheduleBody,

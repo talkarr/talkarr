@@ -18,7 +18,7 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import UploadIcon from '@mui/icons-material/Upload';
 import WarningIcon from '@mui/icons-material/Warning';
 
-import type { ExtractSuccessData } from '@backend/types';
+import type { ExtractSuccessData } from '@backend/src/types';
 
 import type { ImportJsonResponse } from '@/app/_api/talks/import';
 import { importJson, verifyJsonImport } from '@/app/_api/talks/import';

@@ -16,7 +16,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import { useSnackbar } from 'notistack';
 import prettyBytes from 'pretty-bytes';
 
-import type { SuccessData } from '@backend/types';
+import type { SuccessData } from '@backend/src/types';
 
 import { removeFolder } from '@/app/_api/settings/mediamanagement';
 

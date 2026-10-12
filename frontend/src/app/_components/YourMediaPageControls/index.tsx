@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import PreviousPageIcon from '@mui/icons-material/ArrowBack';
 import NextPageIcon from '@mui/icons-material/ArrowForward';
 
-import type { SuccessData } from '@backend/types';
+import type { SuccessData } from '@backend/src/types';
 
 export interface YourMediaPageControlsProps {
     initialData: SuccessData<'/talks/list', 'get'>;

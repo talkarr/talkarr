@@ -1,4 +1,4 @@
-import type { paths } from '@backend/generated/schema';
+import type { paths } from '@backend/src/generated/schema';
 
 const cacheApiUrl: keyof paths = '/cache/fetch';
 

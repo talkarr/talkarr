@@ -3,7 +3,7 @@ import type { Metadata, NextPage } from 'next';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import type { SuccessData } from '@backend/types';
+import type { SuccessData } from '@backend/src/types';
 
 import { getTaskStatus } from '@/app/_api/tasks/status';
 import TaskList from '@/app/(i18n)/(authenticated)/settings/tasks/_components/TaskList';

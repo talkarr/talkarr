@@ -18,7 +18,7 @@ import SaveIcon from '@mui/icons-material/SaveRounded';
 import moment from 'moment-timezone';
 import { useSnackbar } from 'notistack';
 
-import type { UserPreferences } from '@backend/user-preferences';
+import type { UserPreferences } from '@backend/src/user-preferences';
 
 import {
     getUserPreferences,

@@ -7,8 +7,8 @@ import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import { getMediaItemStatusColor } from '@backend/talk-utils';
-import type { SuccessData } from '@backend/types';
+import { getMediaItemStatusColor } from '@backend/src/talk-utils';
+import type { SuccessData } from '@backend/src/types';
 
 export interface YourMediaColorExplanationProps {
     initialData: SuccessData<'/talks/list', 'get'>;

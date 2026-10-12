@@ -18,7 +18,7 @@ import VideoIcon from '@mui/icons-material/VideoLibrary';
 
 import prettyBytes from 'pretty-bytes';
 
-import { getMediaItemStatusColor, MediaItemStatus } from '@backend/talk-utils';
+import { getMediaItemStatusColor, MediaItemStatus } from '@backend/src/talk-utils';
 
 import TalkAttribute from '@/app/(i18n)/(authenticated)/talks/[slug]/_components/TalkAttribute';
 import type { SingleTalkData } from '@/app/(i18n)/(authenticated)/talks/[slug]/page';

@@ -4,7 +4,7 @@ import deepmerge from 'deepmerge';
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import type { components } from '@backend/generated/schema';
+import type { components } from '@backend/src/generated/schema';
 
 export type ApiUser = components['schemas']['User'];
 

@@ -15,7 +15,6 @@
         "dev:tsnd": "../node_modules/.bin/ts-node-dev --respawn --transpile-only --no-notify --project backend/tsconfig.json -r tsconfig-paths/register --watch backend --ignore-watch .next --ignore-watch src backend/index.ts",
         "generate": "yarn run generate:openapi-backend && yarn ../node_modules/.bin/prisma generate --no-hints",
         "generate:openapi-backend": "../node_modules/.bin/openapi-typescript ./backend.json --output backend/generated/schema.ts",
-        "postinstall": "../node_modules/.bin/patch-package && yarn run license-check",
         "license-check": "node ../generate-licenses.mjs",
         "lint": "yarn run lint:frontend && yarn run lint:backend && yarn run lint:e2e",
         "lint:backend": "../node_modules/.bin/eslint backend",

@@ -8,7 +8,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 
 import type { ButtonBaseProps } from '@mui/material';
 
-import type { components } from '@backend/generated/schema';
+import type { components } from '@backend/src/generated/schema';
 
 import { generateCacheUrl } from '@/utils/cache';
 

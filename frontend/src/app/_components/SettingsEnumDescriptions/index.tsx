@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import type { Enum } from '@backend/types';
+import type { Enum } from '@backend/src/types';
 
 export interface SettingsEnumDescriptionsProps {
     options: Enum<unknown>;

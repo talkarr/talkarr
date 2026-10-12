@@ -15,7 +15,7 @@ import PersonIcon from '@mui/icons-material/Person';
 
 import moment from 'moment-timezone';
 
-import type { components } from '@backend/generated/schema';
+import type { components } from '@backend/src/generated/schema';
 
 import UserDetailsCard from '@/app/(i18n)/(authenticated)/settings/security/users/[uid]/_components/UserDetailsCard';
 import UserDetailsItem from '@/app/(i18n)/(authenticated)/settings/security/users/[uid]/_components/UserDetailsItem';

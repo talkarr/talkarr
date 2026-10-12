@@ -16,7 +16,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 
 import { useSnackbar } from 'notistack';
 
-import type { SuccessData } from '@backend/types';
+import type { SuccessData } from '@backend/src/types';
 
 import { rootFolderFix } from '@/app/_api/settings/mediamanagement';
 

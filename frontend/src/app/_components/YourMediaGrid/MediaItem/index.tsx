@@ -19,8 +19,8 @@ import ProblemIcon from '@mui/icons-material/ReportProblem';
 
 import moment from 'moment-timezone';
 
-import { getMediaItemStatusColor } from '@backend/talk-utils';
-import type { SuccessData } from '@backend/types';
+import { getMediaItemStatusColor } from '@backend/src/talk-utils';
+import type { SuccessData } from '@backend/src/types';
 
 import useOnScreen from '@/hooks/use-on-screen';
 import useUserTimezone from '@/hooks/use-user-timezone';

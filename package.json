@@ -1,4 +1,9 @@
 {
     "private": true,
-    "workspaces": ["frontend", "backend", "shared"]
+    "workspaces": [
+        "frontend",
+        "backend",
+        "shared",
+        "_temp"
+    ]
 }

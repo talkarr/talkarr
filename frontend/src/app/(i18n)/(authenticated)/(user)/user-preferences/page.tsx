@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import type { SuccessData } from '@backend/types';
+import type { SuccessData } from '@backend/src/types';
 
 import { getUserInfo } from '@/app/_api/user/info';
 import UserPreferencesForm from '@/app/(i18n)/(authenticated)/(user)/user-preferences/_components/UserPreferencesForm';
