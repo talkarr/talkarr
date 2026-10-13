@@ -18,8 +18,7 @@ const pDeleteEvent = async (body: DeleteEventBody) => {
 };
 
 export type DeleteEventResponse =
-    | Awaited<ReturnType<typeof pDeleteEvent>>
-    | undefined;
+    Awaited<ReturnType<typeof pDeleteEvent>> | undefined;
 
 export const deleteEvent: (
     body: DeleteEventBody,

@@ -14,8 +14,7 @@ const pGetUserInfo = async () => {
 };
 
 export type GetUserInfoResponse =
-    | Awaited<ReturnType<typeof pGetUserInfo>>
-    | undefined;
+    Awaited<ReturnType<typeof pGetUserInfo>> | undefined;
 
 export const getUserInfo: () => Promise<GetUserInfoResponse> =
     wrapApiCall(pGetUserInfo);

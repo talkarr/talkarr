@@ -33,9 +33,7 @@ export const generateMediaItemStatus = ({
     talk,
 }: {
     talkInfo:
-        | TalkInfoData
-        | Pick<TalkInfoData, 'files' | 'is_downloading'>
-        | null;
+        TalkInfoData | Pick<TalkInfoData, 'files' | 'is_downloading'> | null;
     talk:
         | SuccessData<'/talks/list', 'get'>['events'][0]
         | Pick<SuccessData<'/talks/list', 'get'>['events'][0], 'problems'>

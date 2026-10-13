@@ -17,8 +17,7 @@ const pListUsers = async () => {
 };
 
 export type ListUsersResponse =
-    | Awaited<ReturnType<typeof pListUsers>>
-    | undefined;
+    Awaited<ReturnType<typeof pListUsers>> | undefined;
 
 export const listUsers: () => Promise<ListUsersResponse> =
     wrapApiCall(pListUsers);

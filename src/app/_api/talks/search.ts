@@ -29,8 +29,7 @@ const pSearchEvents = async (query: SearchEventsArgs) => {
 };
 
 export type SearchEventsResponse =
-    | Awaited<ReturnType<typeof pSearchEvents>>
-    | undefined;
+    Awaited<ReturnType<typeof pSearchEvents>> | undefined;
 
 export const searchEvents: (
     query: SearchEventsArgs,

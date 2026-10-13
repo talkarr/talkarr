@@ -21,8 +21,7 @@ const pTalkInfo = async (query: TalksInfoParams) => {
 };
 
 export type TalkInfoResponse =
-    | Awaited<ReturnType<typeof pTalkInfo>>
-    | undefined;
+    Awaited<ReturnType<typeof pTalkInfo>> | undefined;
 
 export const talkInfo: (query: TalksInfoParams) => Promise<TalkInfoResponse> =
     wrapApiCall(pTalkInfo);

@@ -31,8 +31,7 @@ interface CustomBadgePropsWithIcon extends CustomBadgeBaseProps {
 }
 
 export type CustomBadgeProps =
-    | CustomBadgePropsWithImageUrl
-    | CustomBadgePropsWithIcon;
+    CustomBadgePropsWithImageUrl | CustomBadgePropsWithIcon;
 
 const FontSizeMap: Record<Size, number> = {
     small: 12,

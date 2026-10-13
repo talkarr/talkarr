@@ -16,8 +16,7 @@ const pGetUserPreferences = async () => {
 };
 
 export type GetUserPreferencesResponse =
-    | Awaited<ReturnType<typeof pGetUserPreferences>>
-    | undefined;
+    Awaited<ReturnType<typeof pGetUserPreferences>> | undefined;
 
 export const getUserPreferences: () => Promise<GetUserPreferencesResponse> =
     wrapApiCall(pGetUserPreferences);
@@ -38,8 +37,7 @@ const pSetUserPreferences = async (body: SetUserPreferencesParams) => {
 };
 
 export type SetUserPreferencesResponse =
-    | Awaited<ReturnType<typeof pSetUserPreferences>>
-    | undefined;
+    Awaited<ReturnType<typeof pSetUserPreferences>> | undefined;
 
 export const setUserPreferences: (
     body: SetUserPreferencesParams,

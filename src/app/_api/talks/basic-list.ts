@@ -14,8 +14,7 @@ export const pBasicListEvents = async () => {
 };
 
 export type BasicListEventsResponse =
-    | Awaited<ReturnType<typeof pBasicListEvents>>
-    | undefined;
+    Awaited<ReturnType<typeof pBasicListEvents>> | undefined;
 
 export const basicListEvents: () => Promise<BasicListEventsResponse> =
     wrapApiCall(pBasicListEvents);

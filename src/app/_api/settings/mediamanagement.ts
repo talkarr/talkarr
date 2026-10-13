@@ -25,8 +25,7 @@ const pListFiles = async (query: MediaManagementFilesArgs) => {
 };
 
 export type ListFilesResponse =
-    | Awaited<ReturnType<typeof pListFiles>>
-    | undefined;
+    Awaited<ReturnType<typeof pListFiles>> | undefined;
 
 export const listFiles: (
     query: MediaManagementFilesArgs,
@@ -47,8 +46,7 @@ const pGetConfig = async () => {
 };
 
 export type GetConfigResponse =
-    | Awaited<ReturnType<typeof pGetConfig>>
-    | undefined;
+    Awaited<ReturnType<typeof pGetConfig>> | undefined;
 
 export const getConfig: () => Promise<GetConfigResponse> =
     wrapApiCall(pGetConfig);
@@ -73,8 +71,7 @@ const pAddFolder = async (body: MediaManagementAddFolderArgs) => {
 };
 
 export type AddFolderResponse =
-    | Awaited<ReturnType<typeof pAddFolder>>
-    | undefined;
+    Awaited<ReturnType<typeof pAddFolder>> | undefined;
 
 export const addFolder: (
     query: MediaManagementAddFolderArgs,
@@ -100,8 +97,7 @@ const pRemoveFolder = async (body: MediaManagementRemoveFolderArgs) => {
 };
 
 export type RemoveFolderResponse =
-    | Awaited<ReturnType<typeof pRemoveFolder>>
-    | undefined;
+    Awaited<ReturnType<typeof pRemoveFolder>> | undefined;
 
 export const removeFolder: (
     query: MediaManagementRemoveFolderArgs,
@@ -127,8 +123,7 @@ const pRootFolderFix = async (body: MediaManagementRootFolderFixArgs) => {
 };
 
 export type RootFolderFixResponse =
-    | Awaited<ReturnType<typeof pRootFolderFix>>
-    | undefined;
+    Awaited<ReturnType<typeof pRootFolderFix>> | undefined;
 
 export const rootFolderFix: (
     query: MediaManagementRootFolderFixArgs,

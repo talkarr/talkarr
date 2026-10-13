@@ -18,8 +18,7 @@ const pAddEvent = async (body: AddEventBody) => {
 };
 
 export type AddEventResponse =
-    | Awaited<ReturnType<typeof pAddEvent>>
-    | undefined;
+    Awaited<ReturnType<typeof pAddEvent>> | undefined;
 
 export const addEvent: (body: AddEventBody) => Promise<AddEventResponse> =
     wrapApiCall(pAddEvent);
