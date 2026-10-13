@@ -162,7 +162,7 @@
         "wait-on": "^9.5.1"
     },
     "engines": {
-        "node": ">= 22.12"
+        "node": ">= 22.15"
     },
     "resolutions": {
         "@types/react": "19.1.15",
