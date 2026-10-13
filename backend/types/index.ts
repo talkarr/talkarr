@@ -48,8 +48,7 @@ export interface ErrorResponse {
 }
 
 export type ApiResponse<P extends keyof paths, M extends keyof paths[P]> =
-    | SuccessResponse<P, M>
-    | ErrorResponse;
+    SuccessResponse<P, M> | ErrorResponse;
 
 export type ExpressResponse<
     P extends keyof paths,

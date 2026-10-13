@@ -15,12 +15,7 @@ import CustomBadge from '@components/CustomBadge';
 
 // Info: When updating this, also update the translation keys!
 export type VideoBadgeType =
-    | 'tag'
-    | 'speaker'
-    | 'conference'
-    | 'language'
-    | 'date'
-    | 'duration';
+    'tag' | 'speaker' | 'conference' | 'language' | 'date' | 'duration';
 
 export const videoBadgeTypeToString = (
     type: VideoBadgeType,

@@ -21,8 +21,7 @@ const pGetUserDetails = async (query: UserDetailsParams) => {
 };
 
 export type GetUserDetailsResponse =
-    | Awaited<ReturnType<typeof pGetUserDetails>>
-    | undefined;
+    Awaited<ReturnType<typeof pGetUserDetails>> | undefined;
 
 export const getUserDetails: (
     query: UserDetailsParams,

@@ -14,8 +14,7 @@ const pGetTaskStatus = async () => {
 };
 
 export type GetTaskStatusResponse =
-    | Awaited<ReturnType<typeof pGetTaskStatus>>
-    | undefined;
+    Awaited<ReturnType<typeof pGetTaskStatus>> | undefined;
 
 export const getTaskStatus: () => Promise<GetTaskStatusResponse> =
     wrapApiCall(pGetTaskStatus);

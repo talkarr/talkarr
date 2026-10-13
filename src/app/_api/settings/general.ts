@@ -19,8 +19,7 @@ const pGetGeneralSettings = async () => {
 };
 
 export type GetGeneralSettingsResponse =
-    | Awaited<ReturnType<typeof pGetGeneralSettings>>
-    | undefined;
+    Awaited<ReturnType<typeof pGetGeneralSettings>> | undefined;
 
 export const getGeneralSettings: () => Promise<GetGeneralSettingsResponse> =
     wrapApiCall(pGetGeneralSettings);
@@ -44,8 +43,7 @@ const pSetGeneralSettings = async (body: SetGeneralSettingsParams) => {
 };
 
 export type SetGeneralSettingsResponse =
-    | Awaited<ReturnType<typeof pSetGeneralSettings>>
-    | undefined;
+    Awaited<ReturnType<typeof pSetGeneralSettings>> | undefined;
 
 export const setGeneralSettings: (
     body: SetGeneralSettingsParams,

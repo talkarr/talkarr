@@ -20,8 +20,7 @@ const pRegisterInitialUser = async (
 };
 
 export type RegisterInitialUserResponse =
-    | Awaited<ReturnType<typeof pRegisterInitialUser>>
-    | undefined;
+    Awaited<ReturnType<typeof pRegisterInitialUser>> | undefined;
 
 export const registerInitialUser: (
     body: RegisterInitialUserBody,

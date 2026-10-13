@@ -21,8 +21,7 @@ const pListEvents = async (query: TalksListParams) => {
 };
 
 export type ListEventsResponse =
-    | Awaited<ReturnType<typeof pListEvents>>
-    | undefined;
+    Awaited<ReturnType<typeof pListEvents>> | undefined;
 
 export const listEvents: (
     query: TalksListParams,

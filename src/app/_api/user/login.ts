@@ -18,8 +18,7 @@ const pLoginUser = async (body: UserLoginBody) => {
 };
 
 export type LoginUserResponse =
-    | Awaited<ReturnType<typeof pLoginUser>>
-    | undefined;
+    Awaited<ReturnType<typeof pLoginUser>> | undefined;
 
 export const loginUser: (body: UserLoginBody) => Promise<LoginUserResponse> =
     wrapApiCall(pLoginUser);

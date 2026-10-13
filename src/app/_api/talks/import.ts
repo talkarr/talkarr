@@ -21,8 +21,7 @@ const pVerifyJsonImport = async (body: VerifyJsonImportBody) => {
 };
 
 export type VerifyJsonImportResponse =
-    | Awaited<ReturnType<typeof pVerifyJsonImport>>
-    | undefined;
+    Awaited<ReturnType<typeof pVerifyJsonImport>> | undefined;
 
 export const verifyJsonImport: (
     body: VerifyJsonImportBody,

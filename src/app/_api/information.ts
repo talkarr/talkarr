@@ -12,8 +12,7 @@ const pGetAppStatus = async () => {
 };
 
 export type GetAppStatusResponse =
-    | Awaited<ReturnType<typeof pGetAppStatus>>
-    | undefined;
+    Awaited<ReturnType<typeof pGetAppStatus>> | undefined;
 
 export const getAppStatus: () => Promise<GetAppStatusResponse> =
     wrapApiCall(pGetAppStatus);
@@ -32,8 +31,7 @@ const pGetAppInformation = async () => {
 };
 
 export type GetAppInformationResponse =
-    | Awaited<ReturnType<typeof pGetAppInformation>>
-    | undefined;
+    Awaited<ReturnType<typeof pGetAppInformation>> | undefined;
 
 export const getAppInformation: () => Promise<GetAppInformationResponse> =
     wrapApiCall(pGetAppInformation);

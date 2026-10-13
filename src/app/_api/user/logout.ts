@@ -12,8 +12,7 @@ const pLogoutUser = async () => {
 };
 
 export type LogoutUserResponse =
-    | Awaited<ReturnType<typeof pLogoutUser>>
-    | undefined;
+    Awaited<ReturnType<typeof pLogoutUser>> | undefined;
 
 export const logoutUser: () => Promise<LogoutUserResponse> =
     wrapApiCall(pLogoutUser);
