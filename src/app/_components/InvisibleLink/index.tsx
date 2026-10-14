@@ -4,12 +4,13 @@ import Link from 'next/link';
 import type { FC, HTMLAttributes } from 'react';
 import React from 'react';
 
-export type InvisibleLinkProps = LinkProps & {
-    children?: React.ReactNode | undefined;
-    style?: React.CSSProperties | undefined;
-    tabIndex?: HTMLAttributes<HTMLAnchorElement>['tabIndex'];
-    disabled?: boolean;
-};
+export type InvisibleLinkProps = LinkProps &
+    Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps> & {
+        children?: React.ReactNode | undefined;
+        style?: React.CSSProperties | undefined;
+        tabIndex?: HTMLAttributes<HTMLAnchorElement>['tabIndex'];
+        disabled?: boolean;
+    };
 
 // Link component without any styles
 const InvisibleLink: FC<InvisibleLinkProps> = ({
