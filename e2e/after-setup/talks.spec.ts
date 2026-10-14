@@ -543,12 +543,17 @@ test('should be able to search for a string', async ({
 
     // expect link to have a href
 
-    expect(
-        // eslint-disable-next-line unicorn/no-await-expression-member
-        (await openInMediaButton.getAttribute('href'))?.startsWith(
-            'https://media.ccc.de/',
-        ),
-    ).toBe(true);
+    const mediaCCCUrl = `https://media.ccc.de/v/${slug}`;
+
+    await expect(openInMediaButton).toHaveAttribute('href', mediaCCCUrl);
+
+    await openInMediaButton.click();
+
+    await expect(page).toHaveURL(mediaCCCUrl);
+
+    await page.goto(mediaItemUrl);
+
+    await page.waitForSelector('[data-testid=delete-talk]');
 
     // expect data-testid=delete-talk to be visible
     const deleteTalkButton = page.locator('[data-testid=delete-talk]');

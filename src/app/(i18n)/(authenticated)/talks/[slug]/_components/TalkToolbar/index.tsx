@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import type { FC } from 'react';
@@ -19,6 +18,7 @@ import { homePageLink } from '@/constants';
 import { useApiStore } from '@/providers/api-store-provider';
 import { useUiStore } from '@/providers/ui-store-provider';
 
+import InvisibleLink from '@components/InvisibleLink';
 import VerticalIconButton from '@components/VerticalIconButton';
 
 export interface TalkToolbarProps {
@@ -88,15 +88,19 @@ const TalkToolbar: FC<TalkToolbarProps> = ({ data }) => {
             >
                 Delete
             </VerticalIconButton>
-            <Link
-                href={data.talk?.frontend_link ?? ''}
-                target="_blank"
-                data-testid="open-in-media"
-            >
-                <VerticalIconButton icon={<OpenInNewIcon />}>
-                    Open in media.ccc.de
-                </VerticalIconButton>
-            </Link>
+            {data.talk?.frontend_link ? (
+                <InvisibleLink
+                    href={data.talk?.frontend_link ?? ''}
+                    target="_blank"
+                    data-testid="open-in-media"
+                >
+                    <VerticalIconButton icon={<OpenInNewIcon />}>
+                        Open in media.ccc.de
+                    </VerticalIconButton>
+                </InvisibleLink>
+            ) : (
+                ''
+            )}
         </StyledContainer>
     );
 };
