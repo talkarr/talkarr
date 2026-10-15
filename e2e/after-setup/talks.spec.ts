@@ -231,6 +231,7 @@ test('should be able to search for a string', async ({
     searchItemIndex,
     browserName,
     isMobile,
+    context,
 }, testInfo) => {
     const logs: { msg: string; type: string }[] = [];
 
@@ -547,11 +548,15 @@ test('should be able to search for a string', async ({
 
     await expect(openInMediaButton).toHaveAttribute('href', mediaCCCUrl);
 
+    const pagePromise = context.waitForEvent('page');
+
     await openInMediaButton.click();
 
-    await expect(page).toHaveURL(mediaCCCUrl);
+    const newPage = await pagePromise;
 
-    await page.goto(mediaItemUrl);
+    await expect(newPage).toHaveURL(mediaCCCUrl);
+
+    await newPage.close();
 
     await page.waitForSelector('[data-testid=delete-talk]');
 
