@@ -231,6 +231,7 @@ test('should be able to search for a string', async ({
     searchItemIndex,
     browserName,
     isMobile,
+    context,
 }, testInfo) => {
     const logs: { msg: string; type: string }[] = [];
 
@@ -535,6 +536,29 @@ test('should be able to search for a string', async ({
     await page.waitForURL(mediaItemUrl, {
         timeout: 60 * 1000,
     });
+
+    // expect data-testid=open-in-media to be visible
+    const openInMediaButton = page.locator('[data-testid=open-in-media]');
+
+    await expect(openInMediaButton).toBeVisible();
+
+    // expect link to have a href
+
+    const mediaCCCUrl = `https://media.ccc.de/v/${slug}`;
+
+    await expect(openInMediaButton).toHaveAttribute('href', mediaCCCUrl);
+
+    const pagePromise = context.waitForEvent('page');
+
+    await openInMediaButton.click();
+
+    const newPage = await pagePromise;
+
+    await expect(newPage).toHaveURL(mediaCCCUrl);
+
+    await newPage.close();
+
+    await page.waitForSelector('[data-testid=delete-talk]');
 
     // expect data-testid=delete-talk to be visible
     const deleteTalkButton = page.locator('[data-testid=delete-talk]');
