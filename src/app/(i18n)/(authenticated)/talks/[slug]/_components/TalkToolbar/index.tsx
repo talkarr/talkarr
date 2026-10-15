@@ -90,7 +90,7 @@ const TalkToolbar: FC<TalkToolbarProps> = ({ data }) => {
             </VerticalIconButton>
             {data.talk?.frontend_link ? (
                 <InvisibleLink
-                    href={data.talk?.frontend_link ?? ''}
+                    href={data.talk.frontend_link}
                     target="_blank"
                     data-testid="open-in-media"
                 >
