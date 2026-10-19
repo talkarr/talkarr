@@ -1,9 +1,9 @@
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import {
     getUserWithPasswordById,
     requireUser,
     sanitizeUser,
-} from '@backend/src/users';
+} from '@backend/users';
 
 const handleUserInfoRequest = async (
     req: ExpressRequest<'/user/info', 'get'>,

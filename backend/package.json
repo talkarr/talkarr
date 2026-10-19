@@ -4,6 +4,41 @@
     "private": true,
     "license": "AGPL-3.0-only",
     "dependencies": {
-        "express": "^5.2.1"
+        "@prisma/adapter-pg": "^7.7.0",
+        "@prisma/client": "^7.7.0",
+        "argon2": "^0.44.0",
+        "cookie-parser": "^1.4.7",
+        "cron-parser": "^5.5.0",
+        "dotenv": "^17.4.2",
+        "dotenv-cli": "^11.0.0",
+        "express": "^5.2.1",
+        "express-winston": "^4.2.0",
+        "gravatar": "^1.8.2",
+        "jsonwebtoken": "^9.0.3",
+        "magic-bytes.js": "^1.13.0",
+        "memory-cache": "^0.2.0",
+        "mime-types": "^3.0.2",
+        "openapi-typescript": "^7.13.0",
+        "openapi-typescript-helpers": "^0.1.0",
+        "prisma": "^7.8.0",
+        "simple-identicon": "^1.2.1",
+        "swagger-ui-express": "^5.0.1",
+        "typia": "^11.0.3",
+        "winston": "^3.19.0",
+        "winston-daily-rotate-file": "^5.0.0",
+        "youtube-dl-exec": "3.1.5"
+    },
+    "devDependencies": {
+        "@types/cookie-parser": "^1.4.10",
+        "@types/express": "^5.0.6",
+        "@types/gravatar": "^1.8.6",
+        "@types/jest": "^30.0.0",
+        "@types/jsonwebtoken": "^9.0.10",
+        "@types/memory-cache": "^0.2.6",
+        "@types/mime-types": "^3.0.1",
+        "@types/swagger-ui-express": "^4.1.8",
+        "jest": "^30.3.0",
+        "prisma-json-types-generator": "^5.0.0",
+        "ts-jest": "^29.4.9"
     }
 }

@@ -1,13 +1,13 @@
 import typia from 'typia';
 
-import { verifyPermissions } from '@backend/src/middlewares';
-import { Permission } from '@backend/src/permissions';
-import rootLog from '@backend/src/root-log';
+import { verifyPermissions } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
+import rootLog from '@backend/root-log';
 import type {
     EventFahrplanJsonImport,
     ExpressRequest,
     ExpressResponse,
-} from '@backend/src/types';
+} from '@backend/types';
 
 const verifyFahrplanJson = typia.createIs<EventFahrplanJsonImport>();
 

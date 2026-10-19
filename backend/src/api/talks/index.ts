@@ -1,18 +1,18 @@
 import express from 'express';
 
-import handleAddEventRequest from '@backend/src/api/talks/add';
-import handleBasicListEventsRequest from '@backend/src/api/talks/basic-list';
-import handleDeleteEventRequest from '@backend/src/api/talks/delete';
-import handleGetEventRequest from '@backend/src/api/talks/get';
-import handleImportFahrplanJsonRequest from '@backend/src/api/talks/import-fahrplan';
-import handleVerifyFahrplanJsonRequest from '@backend/src/api/talks/import-fahrplan-verify';
-import handleImportScheduleJsonRequest from '@backend/src/api/talks/import-schedule';
-import handleEventInfoRequest from '@backend/src/api/talks/info';
-import handleListEventsRequest from '@backend/src/api/talks/list';
-import handleScanEventsRequest from '@backend/src/api/talks/scan';
-import handleSearchEventsRequest from '@backend/src/api/talks/search';
-import handleUpdateEventRequest from '@backend/src/api/talks/update';
-import { requireUserMiddleware } from '@backend/src/users';
+import handleAddEventRequest from '@backend/api/talks/add';
+import handleBasicListEventsRequest from '@backend/api/talks/basic-list';
+import handleDeleteEventRequest from '@backend/api/talks/delete';
+import handleGetEventRequest from '@backend/api/talks/get';
+import handleImportFahrplanJsonRequest from '@backend/api/talks/import-fahrplan';
+import handleVerifyFahrplanJsonRequest from '@backend/api/talks/import-fahrplan-verify';
+import handleImportScheduleJsonRequest from '@backend/api/talks/import-schedule';
+import handleEventInfoRequest from '@backend/api/talks/info';
+import handleListEventsRequest from '@backend/api/talks/list';
+import handleScanEventsRequest from '@backend/api/talks/scan';
+import handleSearchEventsRequest from '@backend/api/talks/search';
+import handleUpdateEventRequest from '@backend/api/talks/update';
+import { requireUserMiddleware } from '@backend/users';
 
 const talkRouter = express.Router();
 

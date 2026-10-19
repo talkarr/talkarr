@@ -1,11 +1,11 @@
 import type express from 'express';
 import type { RequestHandler } from 'express-serve-static-core';
 
-import type { CheckPermissionsOptions, Permission } from '@backend/src/permissions';
-import { checkPermissions } from '@backend/src/permissions';
-import rootLog from '@backend/src/root-log';
-import type { SchemaUserWithPassword } from '@backend/src/users';
-import { getUserWithPasswordById, requireUser } from '@backend/src/users';
+import type { CheckPermissionsOptions, Permission } from '@backend/permissions';
+import { checkPermissions } from '@backend/permissions';
+import rootLog from '@backend/root-log';
+import type { SchemaUserWithPassword } from '@backend/users';
+import { getUserWithPasswordById, requireUser } from '@backend/users';
 
 const log = rootLog.child({ label: 'middlewares' });
 

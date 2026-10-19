@@ -3,7 +3,6 @@
     "workspaces": [
         "frontend",
         "backend",
-        "shared",
-        "_temp"
+        "shared"
     ]
 }

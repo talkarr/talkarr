@@ -1,11 +1,11 @@
 import express from 'express';
 
-import handleUserDetailsRequest from '@backend/src/api/user/details';
-import handleUserInfoRequest from '@backend/src/api/user/info';
-import handleLoginRequest from '@backend/src/api/user/login';
-import handleLogoutRequest from '@backend/src/api/user/logout';
-import userPreferencesRouter from '@backend/src/api/user/preferences';
-import handleRegisterInitialRequest from '@backend/src/api/user/register-initial';
+import handleUserDetailsRequest from '@backend/api/user/details';
+import handleUserInfoRequest from '@backend/api/user/info';
+import handleLoginRequest from '@backend/api/user/login';
+import handleLogoutRequest from '@backend/api/user/logout';
+import userPreferencesRouter from '@backend/api/user/preferences';
+import handleRegisterInitialRequest from '@backend/api/user/register-initial';
 
 const userRouter = express.Router();
 

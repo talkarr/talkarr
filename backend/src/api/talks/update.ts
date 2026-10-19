@@ -1,9 +1,9 @@
-import { updateTalk } from '@backend/src/events';
-import { getTalkFromApiByGuid } from '@backend/src/helper';
-import { verifyPermissions } from '@backend/src/middlewares';
-import { Permission } from '@backend/src/permissions';
-import rootLog from '@backend/src/root-log';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
+import { updateTalk } from '@backend/events';
+import { getTalkFromApiByGuid } from '@backend/helper';
+import { verifyPermissions } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
+import rootLog from '@backend/root-log';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/update' });
 

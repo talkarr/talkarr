@@ -1,13 +1,13 @@
 import type { Locks } from '@prisma-generated/client';
 
-import { importExistingFileFromFilesystem } from '@backend/src/events';
-import { isFolderMarked } from '@backend/src/fs';
-import { scanForExistingFiles } from '@backend/src/fs/scan';
-import { acquireLockAndReturn } from '@backend/src/locks';
-import type { TaskFunction } from '@backend/src/queue';
-import queue from '@backend/src/queue';
-import { listRootFolders } from '@backend/src/root-folder';
-import rootLog from '@backend/src/root-log';
+import { importExistingFileFromFilesystem } from '@backend/events';
+import { isFolderMarked } from '@backend/fs';
+import { scanForExistingFiles } from '@backend/fs/scan';
+import { acquireLockAndReturn } from '@backend/locks';
+import type { TaskFunction } from '@backend/queue';
+import queue from '@backend/queue';
+import { listRootFolders } from '@backend/root-folder';
+import rootLog from '@backend/root-log';
 
 export const taskName = 'scanAndImportExistingFiles';
 

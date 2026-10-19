@@ -9,17 +9,17 @@ import {
     setConferenceLogoBlurhash,
     setEventPosterBlurhash,
     setEventThumbBlurhash,
-} from '@backend/src/events';
-import { generateBlurhashFromUrl } from '@backend/src/helper/blurhash';
-import { acquireLockAndReturn, releaseLock } from '@backend/src/locks';
-import type { DoneCallback, TaskFunction } from '@backend/src/queue';
-import queue from '@backend/src/queue';
-import rootLog from '@backend/src/root-log';
+} from '@backend/events';
+import { generateBlurhashFromUrl } from '@backend/helper/blurhash';
+import { acquireLockAndReturn, releaseLock } from '@backend/locks';
+import type { DoneCallback, TaskFunction } from '@backend/queue';
+import queue from '@backend/queue';
+import rootLog from '@backend/root-log';
 import type {
     ConvertBigintToNumberType,
     ExtendedDbEvent,
     NormalAndConvertedDate,
-} from '@backend/src/types';
+} from '@backend/types';
 
 export const taskName = 'generateBlurhashes';
 

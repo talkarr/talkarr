@@ -2,10 +2,10 @@ import express from 'express';
 import fs from 'node:fs';
 import pathUtils from 'node:path';
 
-import { startScanAndImportExistingFiles } from '@backend/src/workers/scan-and-import-existing-files';
+import { startScanAndImportExistingFiles } from '@backend/workers/scan-and-import-existing-files';
 
-import { markRootFolder } from '@backend/src/fs';
-import type { components } from '@backend/src/generated/schema';
+import { markRootFolder } from '@backend/fs';
+import type { components } from '@backend/generated/schema';
 import {
     addRootFolder,
     AddRootFolderResponse,
@@ -14,10 +14,10 @@ import {
     listRootFolders,
     setRootFolderMarked,
     setRootFolderMarkExists,
-} from '@backend/src/root-folder';
-import rootLog from '@backend/src/root-log';
-import { getSettings } from '@backend/src/settings';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
+} from '@backend/root-folder';
+import rootLog from '@backend/root-log';
+import { getSettings } from '@backend/settings';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'settings/mediamanagement' });
 

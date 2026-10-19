@@ -1,4 +1,4 @@
-import rootLog from '@backend/src/root-log';
+import rootLog from '@backend/root-log';
 
 import { taskName as addTalk } from './add-talk';
 import {

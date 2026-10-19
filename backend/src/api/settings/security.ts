@@ -1,9 +1,9 @@
 import express from 'express';
 
-import { Permission } from '@backend/src/permissions';
-import rootLog from '@backend/src/root-log';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
-import { getUsers } from '@backend/src/users';
+import { Permission } from '@backend/permissions';
+import rootLog from '@backend/root-log';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { getUsers } from '@backend/users';
 
 const log = rootLog.child({ label: 'settings/security' });
 

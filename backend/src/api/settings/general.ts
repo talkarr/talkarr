@@ -1,10 +1,10 @@
 import express from 'express';
 import typia from 'typia';
 
-import rootLog from '@backend/src/root-log';
-import { getSettings, setSettings } from '@backend/src/settings';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
-import type { GeneralSettings } from '@backend/src/types/settings';
+import rootLog from '@backend/root-log';
+import { getSettings, setSettings } from '@backend/settings';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import type { GeneralSettings } from '@backend/types/settings';
 
 const log = rootLog.child({ label: 'settings/general' });
 

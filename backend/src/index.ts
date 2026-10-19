@@ -1,4 +1,4 @@
-import { initServer } from '@backend/src/init-server';
+import { initServer } from '@backend/init-server';
 
 import type { NextFunction, Request, Response } from 'express';
 
@@ -9,18 +9,18 @@ import express from 'express';
 import fs from 'node:fs';
 import swaggerUi from 'swagger-ui-express';
 
-import '@backend/src/workers/add-talk';
-import '@backend/src/workers/generate-missing-nfo';
-import { startCheckForRootFolders } from '@backend/src/workers/check-for-root-folders';
-import { startValidateUserPreferences } from '@backend/src/workers/validate-user-preferences';
+import '@backend/workers/add-talk';
+import '@backend/workers/generate-missing-nfo';
+import { startCheckForRootFolders } from '@backend/workers/check-for-root-folders';
+import { startValidateUserPreferences } from '@backend/workers/validate-user-preferences';
 
-import api from '@backend/src/api';
-import { initEnv, serverHost, serverPort } from '@backend/src/env';
-import { clearDownloadingFlagForAllTalks } from '@backend/src/events';
-import { releaseAllLocks } from '@backend/src/locks';
-import { isDatabaseConnected } from '@backend/src/prisma';
-import rootLog from '@backend/src/root-log';
-import { loadSettings } from '@backend/src/settings';
+import api from '@backend/api';
+import { initEnv, serverHost, serverPort } from '@backend/env';
+import { clearDownloadingFlagForAllTalks } from '@backend/events';
+import { releaseAllLocks } from '@backend/locks';
+import { isDatabaseConnected } from '@backend/prisma';
+import rootLog from '@backend/root-log';
+import { loadSettings } from '@backend/settings';
 
 const dev = process.env.NODE_ENV !== 'production';
 

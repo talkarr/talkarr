@@ -1,9 +1,9 @@
 import express from 'express';
 
-import handleExecuteTaskRequest from '@backend/src/api/tasks/execute';
-import handleTaskInfoRequest from '@backend/src/api/tasks/status';
-import { verifyPermissionsMiddleware } from '@backend/src/middlewares';
-import { Permission } from '@backend/src/permissions';
+import handleExecuteTaskRequest from '@backend/api/tasks/execute';
+import handleTaskInfoRequest from '@backend/api/tasks/status';
+import { verifyPermissionsMiddleware } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
 
 const tasksRouter = express.Router();
 

@@ -1,14 +1,14 @@
 import typia from 'typia';
 
-import { importScheduleJson } from '@backend/src/events';
-import { verifyPermissions } from '@backend/src/middlewares';
-import { Permission } from '@backend/src/permissions';
-import rootLog from '@backend/src/root-log';
+import { importScheduleJson } from '@backend/events';
+import { verifyPermissions } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
+import rootLog from '@backend/root-log';
 import type {
     ExpressRequest,
     ExpressResponse,
     RequestBody,
-} from '@backend/src/types';
+} from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/import/fahrplan' });
 

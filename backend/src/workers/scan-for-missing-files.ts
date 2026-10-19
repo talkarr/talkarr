@@ -4,10 +4,10 @@ import pathUtils from 'node:path';
 import typia from 'typia';
 
 // eslint-disable-next-line import/no-cycle
-import { startAddTalk } from '@backend/src/workers/add-talk';
-import { startGenerateMissingNfo } from '@backend/src/workers/generate-missing-nfo';
+import { startAddTalk } from '@backend/workers/add-talk';
+import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 
-import { disableDownloads } from '@backend/src/env';
+import { disableDownloads } from '@backend/env';
 import {
     addDownloadedFile,
     checkIfFileIsInDb,
@@ -16,21 +16,21 @@ import {
     isEventDownloading,
     listEvents,
     setIsDownloading,
-} from '@backend/src/events';
+} from '@backend/events';
 import {
     doesEventHaveNfoFile,
     doesTalkHaveExistingFilesOnDisk,
-} from '@backend/src/fs';
-import { handleConferenceMetadataGeneration } from '@backend/src/helper/nfo';
-import { acquireLockAndReturn, releaseLock } from '@backend/src/locks';
-import type { TaskFunction } from '@backend/src/queue';
-import queue from '@backend/src/queue';
-import rootLog from '@backend/src/root-log';
+} from '@backend/fs';
+import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
+import { acquireLockAndReturn, releaseLock } from '@backend/locks';
+import type { TaskFunction } from '@backend/queue';
+import queue from '@backend/queue';
+import rootLog from '@backend/root-log';
 import type {
     ConvertBigintToNumberType,
     ExtendedDbEvent,
     NormalAndConvertedDate,
-} from '@backend/src/types';
+} from '@backend/types';
 
 export const taskName = 'scanForMissingFiles';
 

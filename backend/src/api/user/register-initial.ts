@@ -1,9 +1,9 @@
 import { validate as validateEmail } from 'email-validator';
 
-import { validatePassword } from '@backend/src/passwords';
-import rootLog from '@backend/src/root-log';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
-import { createInitialUser, doesEmailExist } from '@backend/src/users';
+import { validatePassword } from '@backend/passwords';
+import rootLog from '@backend/root-log';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { createInitialUser, doesEmailExist } from '@backend/users';
 
 const log = rootLog.child({ label: 'user/register-initial' });
 

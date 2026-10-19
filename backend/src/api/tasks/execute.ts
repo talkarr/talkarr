@@ -1,6 +1,6 @@
-import queue from '@backend/src/queue';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
-import { isValidData, taskValidators } from '@backend/src/workers';
+import queue from '@backend/queue';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { isValidData, taskValidators } from '@backend/workers';
 
 const handleExecuteTaskRequest = async (
     req: ExpressRequest<'/tasks/execute', 'post'>,

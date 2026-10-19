@@ -1,5 +1,5 @@
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
-import { clearUserCookie, requireUser } from '@backend/src/users';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { clearUserCookie, requireUser } from '@backend/users';
 
 const handleLogoutRequest = async (
     req: ExpressRequest<'/user/logout', 'post'>,

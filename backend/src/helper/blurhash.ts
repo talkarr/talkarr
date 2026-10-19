@@ -2,7 +2,7 @@ import { encode } from 'blurhash';
 import fs from 'node:fs/promises';
 import sharp from 'sharp';
 
-import rootLog from '@backend/src/root-log';
+import rootLog from '@backend/root-log';
 
 const log = rootLog.child({ label: 'helper/blurhash' });
 

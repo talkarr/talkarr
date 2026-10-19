@@ -1,15 +1,15 @@
 import express from 'express';
 import typia from 'typia';
 
-import rootLog from '@backend/src/root-log';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
-import type { UserPreferences } from '@backend/src/user-preferences';
+import rootLog from '@backend/root-log';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import type { UserPreferences } from '@backend/user-preferences';
 import {
     getUserWithPasswordById,
     requireUser,
     updateUserPreferences,
     validateUserPreferences,
-} from '@backend/src/users';
+} from '@backend/users';
 
 const log = rootLog.child({ label: 'settings/general' });
 

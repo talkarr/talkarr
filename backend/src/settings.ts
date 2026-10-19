@@ -1,10 +1,10 @@
 import deepmerge from 'deepmerge';
 import typia from 'typia';
 
-import { prisma } from '@backend/src/prisma';
-import rootLog from '@backend/src/root-log';
-import type { Settings } from '@backend/src/types/settings';
-import { ImportIsRecordedFlagBehavior } from '@backend/src/types/settings';
+import { prisma } from '@backend/prisma';
+import rootLog from '@backend/root-log';
+import type { Settings } from '@backend/types/settings';
+import { ImportIsRecordedFlagBehavior } from '@backend/types/settings';
 
 const log = rootLog.child({ label: 'settings' });
 

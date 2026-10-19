@@ -1,4 +1,4 @@
-import type { Conference as DbConference } from '@backend/src/generated/prisma/client';
+import type { Conference as DbConference } from '@backend/generated/prisma/client';
 
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
@@ -6,22 +6,22 @@ import pathUtils from 'node:path';
 import sharp from 'sharp';
 
 // eslint-disable-next-line import/no-cycle
-import { addDownloadedFile, removeFileFromDatabase } from '@backend/src/events';
+import { addDownloadedFile, removeFileFromDatabase } from '@backend/events';
 import {
     conferenceNfoFilename,
     conferenceThumbFilename,
     defaultMimeType,
     getEventFilename,
     isVideoFile,
-} from '@backend/src/fs';
-import rootLog from '@backend/src/root-log';
+} from '@backend/fs';
+import rootLog from '@backend/root-log';
 import type {
     ApiConference,
     ApiEvent,
     ConvertBigintToNumberType,
     ExtendedDbEvent,
     NormalAndConvertedDate,
-} from '@backend/src/types';
+} from '@backend/types';
 
 const log = rootLog.child({ label: 'helper/nfo' });
 

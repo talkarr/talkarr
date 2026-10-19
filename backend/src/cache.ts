@@ -1,6 +1,6 @@
 import { Cache } from 'memory-cache';
 
-import rootLog from '@backend/src/root-log';
+import rootLog from '@backend/root-log';
 
 const log = rootLog.child({ label: 'cache' });
 

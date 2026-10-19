@@ -1,14 +1,14 @@
 import typia from 'typia';
 
-import { startScanAndImportExistingFiles } from '@backend/src/workers/scan-and-import-existing-files';
-import { startScanForMissingFiles } from '@backend/src/workers/scan-for-missing-files';
+import { startScanAndImportExistingFiles } from '@backend/workers/scan-and-import-existing-files';
+import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
 
-import { removeFileFromDatabase } from '@backend/src/events';
-import { doesFileExist } from '@backend/src/fs';
-import type { TaskFunction } from '@backend/src/queue';
-import queue from '@backend/src/queue';
-import { listFilesForRootFolder } from '@backend/src/root-folder';
-import rootLog from '@backend/src/root-log';
+import { removeFileFromDatabase } from '@backend/events';
+import { doesFileExist } from '@backend/fs';
+import type { TaskFunction } from '@backend/queue';
+import queue from '@backend/queue';
+import { listFilesForRootFolder } from '@backend/root-folder';
+import rootLog from '@backend/root-log';
 
 export const taskName = 'checkIfFilesExist';
 

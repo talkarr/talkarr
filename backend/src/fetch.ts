@@ -1,5 +1,5 @@
-import cache from '@backend/src/cache';
-import rootLog from '@backend/src/root-log';
+import cache from '@backend/cache';
+import rootLog from '@backend/root-log';
 
 const log = rootLog.child({ label: 'fetch' });
 

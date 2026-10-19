@@ -2,17 +2,17 @@ import {
     getSpecificTalkByGuid,
     getSpecificTalkBySlug,
     getTalkInfoByGuid,
-} from '@backend/src/events';
-import { getTalkFromApiByGuid } from '@backend/src/helper';
-import rootLog from '@backend/src/root-log';
-import { generateMediaItemStatus } from '@backend/src/talk-utils';
+} from '@backend/events';
+import { getTalkFromApiByGuid } from '@backend/helper';
+import rootLog from '@backend/root-log';
+import { generateMediaItemStatus } from '@backend/talk-utils';
 import type {
     ConvertDateToStringType,
     ExpressRequest,
     ExpressResponse,
     ExtendedDbEvent,
-} from '@backend/src/types';
-import { problemMap } from '@backend/src/types';
+} from '@backend/types';
+import { problemMap } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/get' });
 

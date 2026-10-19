@@ -1,23 +1,23 @@
-import type { Conference as DbConference } from '@backend/src/generated/prisma/client';
+import type { Conference as DbConference } from '@backend/generated/prisma/client';
 
 import {
     getConferencesFromEvents,
     listEvents,
     mapResultFiles,
-} from '@backend/src/events';
-import { isFolderMarked } from '@backend/src/fs';
-import rootLog from '@backend/src/root-log';
+} from '@backend/events';
+import { isFolderMarked } from '@backend/fs';
+import rootLog from '@backend/root-log';
 import {
     generateMediaItemStatus,
     generateStatusMap,
-} from '@backend/src/talk-utils';
+} from '@backend/talk-utils';
 import type {
     ConvertDateToStringType,
     ExpressRequest,
     ExpressResponse,
     ExtendedDbEvent,
-} from '@backend/src/types';
-import { problemMap } from '@backend/src/types';
+} from '@backend/types';
+import { problemMap } from '@backend/types';
 
 const log = rootLog.child({ label: 'api/talks/list' });
 

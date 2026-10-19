@@ -1,5 +1,5 @@
-import { InvalidOptionsError } from '@backend/src/types/errors';
-import type { SchemaUserWithPassword } from '@backend/src/users';
+import { InvalidOptionsError } from '@backend/types/errors';
+import type { SchemaUserWithPassword } from '@backend/users';
 
 export enum Permission {
     Admin = 'Admin',

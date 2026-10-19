@@ -9,23 +9,23 @@ import type {
 import { isBlurhashValid } from 'blurhash';
 
 // eslint-disable-next-line import/no-cycle
-import { startScanForMissingFiles } from '@backend/src/workers/scan-for-missing-files';
+import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
 
-import type { ScheduleImport } from '@backend/src/api/talks/import-schedule';
+import type { ScheduleImport } from '@backend/api/talks/import-schedule';
 import {
     deleteFilesForEvent,
     getFolderPathForTalk,
     isFolderMarked,
     isVideoFile,
-} from '@backend/src/fs';
-import type { ExistingFileWithGuessedInformation } from '@backend/src/fs/scan';
-import type { components } from '@backend/src/generated/schema';
-import { getConferenceFromEvent, getTalkFromApiBySlug } from '@backend/src/helper';
-import { serverDecodeCustomBlurhash } from '@backend/src/helper/blurhash';
-import { acquireLockOrWait, releaseLock } from '@backend/src/locks';
-import { prisma } from '@backend/src/prisma';
-import rootLog from '@backend/src/root-log';
-import { getSettings } from '@backend/src/settings';
+} from '@backend/fs';
+import type { ExistingFileWithGuessedInformation } from '@backend/fs/scan';
+import type { components } from '@backend/generated/schema';
+import { getConferenceFromEvent, getTalkFromApiBySlug } from '@backend/helper';
+import { serverDecodeCustomBlurhash } from '@backend/helper/blurhash';
+import { acquireLockOrWait, releaseLock } from '@backend/locks';
+import { prisma } from '@backend/prisma';
+import rootLog from '@backend/root-log';
+import { getSettings } from '@backend/settings';
 import type {
     ApiEvent,
     ConvertBigintToNumberType,
@@ -35,9 +35,9 @@ import type {
     ImportJsonResponse,
     NormalAndConvertedDate,
     TalkInfo,
-} from '@backend/src/types';
-import { AddTalkFailure } from '@backend/src/types';
-import { ImportIsRecordedFlagBehavior } from '@backend/src/types/settings';
+} from '@backend/types';
+import { AddTalkFailure } from '@backend/types';
+import { ImportIsRecordedFlagBehavior } from '@backend/types/settings';
 
 import { EventProblemType, Prisma } from '@prisma-generated/client';
 

@@ -6,7 +6,7 @@ import type {
     SuccessData,
     SuccessResponse,
     TypeOrPick,
-} from '@backend/src/types';
+} from '@backend/types';
 
 export enum MediaItemStatus {
     Downloaded = 'Downloaded',

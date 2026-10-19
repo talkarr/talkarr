@@ -4,7 +4,7 @@ import type {
     ScheduleDay,
     ScheduleEvent,
     ScheduleRoom,
-} from '@backend/src/types/schedule';
+} from '@backend/types/schedule';
 
 interface ScheduleOverview {
     events: ScheduleEvent[];

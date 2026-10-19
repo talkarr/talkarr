@@ -1,16 +1,16 @@
 import typia from 'typia';
 
-import { getFolderPathForTalk } from '@backend/src/fs';
+import { getFolderPathForTalk } from '@backend/fs';
 // eslint-disable-next-line import/no-cycle
-import { handleEventNfoGeneration } from '@backend/src/helper/nfo';
-import type { TaskFunction } from '@backend/src/queue';
-import queue from '@backend/src/queue';
-import rootLog from '@backend/src/root-log';
+import { handleEventNfoGeneration } from '@backend/helper/nfo';
+import type { TaskFunction } from '@backend/queue';
+import queue from '@backend/queue';
+import rootLog from '@backend/root-log';
 import type {
     ConvertBigintToNumberType,
     ExtendedDbEvent,
     NormalAndConvertedDate,
-} from '@backend/src/types';
+} from '@backend/types';
 
 export const taskName = 'generateMissingNfo';
 

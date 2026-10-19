@@ -1,12 +1,12 @@
 import { validate as validateEmail } from 'email-validator';
 
-import rootLog from '@backend/src/root-log';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
+import rootLog from '@backend/root-log';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
 import {
     getUserWithPasswordByEmail,
     setUserCookie,
     verifyPassword,
-} from '@backend/src/users';
+} from '@backend/users';
 
 const log = rootLog.child({ label: 'user/login' });
 

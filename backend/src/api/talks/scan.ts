@@ -1,9 +1,9 @@
-import { scanForExistingFiles } from '@backend/src/fs/scan';
-import type { components } from '@backend/src/generated/schema';
-import { verifyPermissions } from '@backend/src/middlewares';
-import { Permission } from '@backend/src/permissions';
-import { listRootFolders } from '@backend/src/root-folder';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
+import { scanForExistingFiles } from '@backend/fs/scan';
+import type { components } from '@backend/generated/schema';
+import { verifyPermissions } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
+import { listRootFolders } from '@backend/root-folder';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const handleScanEventsRequest = async (
     req: ExpressRequest<'/talks/scan', 'post'>,

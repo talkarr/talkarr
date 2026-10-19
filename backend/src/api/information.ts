@@ -1,6 +1,6 @@
-import { getAppVersion, getIsNightly, getYtdlpVersion } from '@backend/src/env';
-import rootLog from '@backend/src/root-log';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
+import { getAppVersion, getIsNightly, getYtdlpVersion } from '@backend/env';
+import rootLog from '@backend/root-log';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
 
 const log = rootLog.child({ label: 'informationHandler' });
 

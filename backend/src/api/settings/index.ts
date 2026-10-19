@@ -1,10 +1,10 @@
 import express from 'express';
 
-import generalRouter from '@backend/src/api/settings/general';
-import mediamanagementRouter from '@backend/src/api/settings/mediamanagement';
-import securityRouter from '@backend/src/api/settings/security';
-import { verifyPermissionsMiddleware } from '@backend/src/middlewares';
-import { Permission } from '@backend/src/permissions';
+import generalRouter from '@backend/api/settings/general';
+import mediamanagementRouter from '@backend/api/settings/mediamanagement';
+import securityRouter from '@backend/api/settings/security';
+import { verifyPermissionsMiddleware } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
 
 const settingsRouter = express.Router();
 

@@ -1,16 +1,16 @@
 import typia from 'typia';
 
-import { startCheckIfFilesExist } from '@backend/src/workers/check-if-files-exist';
+import { startCheckIfFilesExist } from '@backend/workers/check-if-files-exist';
 
-import { isFolderMarked } from '@backend/src/fs';
-import type { TaskFunction } from '@backend/src/queue';
-import queue from '@backend/src/queue';
+import { isFolderMarked } from '@backend/fs';
+import type { TaskFunction } from '@backend/queue';
+import queue from '@backend/queue';
 import {
     clearAllRootFolderHasMarks,
     listRootFolders,
     setRootFolderMarkExists,
-} from '@backend/src/root-folder';
-import rootLog from '@backend/src/root-log';
+} from '@backend/root-folder';
+import rootLog from '@backend/root-log';
 
 export const taskName = 'checkForRootFolders';
 

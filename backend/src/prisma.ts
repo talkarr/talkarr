@@ -1,4 +1,4 @@
-import '@backend/src/env';
+import '@backend/env';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma-generated/client';
 

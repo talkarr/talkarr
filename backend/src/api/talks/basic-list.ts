@@ -1,11 +1,11 @@
-import type { Event as DbEvent } from '@backend/src/generated/prisma/client';
+import type { Event as DbEvent } from '@backend/generated/prisma/client';
 
-import { simpleListTalks } from '@backend/src/events';
+import { simpleListTalks } from '@backend/events';
 import type {
     ConvertDateToStringType,
     ExpressRequest,
     ExpressResponse,
-} from '@backend/src/types';
+} from '@backend/types';
 
 const handleBasicListEventsRequest = async (
     _req: ExpressRequest<'/talks/basic-list', 'get'>,

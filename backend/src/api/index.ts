@@ -2,16 +2,16 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import expressWinston from 'express-winston';
 
-import cacheRouter from '@backend/src/api/cache';
-import informationHandler from '@backend/src/api/information';
-import settingsRouter from '@backend/src/api/settings';
-import talksRouter from '@backend/src/api/talks';
-import taskRouter from '@backend/src/api/tasks';
-import userRouter from '@backend/src/api/user';
-import { checkIsNewInstance } from '@backend/src/helper';
-import rootLog from '@backend/src/root-log';
-import type { ExpressResponse } from '@backend/src/types';
-import { userMiddleware } from '@backend/src/users';
+import cacheRouter from '@backend/api/cache';
+import informationHandler from '@backend/api/information';
+import settingsRouter from '@backend/api/settings';
+import talksRouter from '@backend/api/talks';
+import taskRouter from '@backend/api/tasks';
+import userRouter from '@backend/api/user';
+import { checkIsNewInstance } from '@backend/helper';
+import rootLog from '@backend/root-log';
+import type { ExpressResponse } from '@backend/types';
+import { userMiddleware } from '@backend/users';
 
 const log = rootLog.child({ label: 'API' });
 

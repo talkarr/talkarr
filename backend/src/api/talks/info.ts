@@ -2,11 +2,11 @@ import {
     getProblemsByGuid,
     getTalkInfoByGuid,
     getTalkInfoBySlug,
-} from '@backend/src/events';
-import rootLog from '@backend/src/root-log';
-import { generateMediaItemStatus } from '@backend/src/talk-utils';
-import type { ExpressRequest, ExpressResponse, TalkInfo } from '@backend/src/types';
-import { problemMap } from '@backend/src/types';
+} from '@backend/events';
+import rootLog from '@backend/root-log';
+import { generateMediaItemStatus } from '@backend/talk-utils';
+import type { ExpressRequest, ExpressResponse, TalkInfo } from '@backend/types';
+import { problemMap } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/info' });
 

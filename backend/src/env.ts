@@ -69,7 +69,7 @@ if (process.env.NODE_ENV === 'development') {
 
 export const initEnv = async (): Promise<void> => {
     // eslint-disable-next-line import/no-cycle
-    const { default: rootLog } = await import('@backend/src/root-log');
+    const { default: rootLog } = await import('@backend/root-log');
 
     const log = rootLog.child({ label: 'env' });
     const git = simpleGit();

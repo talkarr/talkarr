@@ -4,9 +4,9 @@ import pathUtils from 'node:path';
 import {
     getCachedImageFromUrl,
     imageCacheDirectory,
-} from '@backend/src/image-cache';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
-import { requireUserMiddleware } from '@backend/src/users';
+} from '@backend/image-cache';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { requireUserMiddleware } from '@backend/users';
 
 const cacheRouter = express.Router();
 

@@ -1,6 +1,6 @@
-import queue from '@backend/src/queue';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
-import { taskValidators } from '@backend/src/workers';
+import queue from '@backend/queue';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { taskValidators } from '@backend/workers';
 
 const handleTaskInfoRequest = async (
     _req: ExpressRequest<'/tasks/status', 'get'>,

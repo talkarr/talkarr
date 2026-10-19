@@ -10,11 +10,11 @@ import {
 } from 'youtube-dl-exec';
 
 // eslint-disable-next-line import/no-cycle
-import { startCheckEventsForProblems } from '@backend/src/workers/check-events-for-problems';
-import { startGenerateBlurhashes } from '@backend/src/workers/generate-blurhashes';
-import { startGenerateMissingNfo } from '@backend/src/workers/generate-missing-nfo';
+import { startCheckEventsForProblems } from '@backend/workers/check-events-for-problems';
+import { startGenerateBlurhashes } from '@backend/workers/generate-blurhashes';
+import { startGenerateMissingNfo } from '@backend/workers/generate-missing-nfo';
 
-import { disableDownloads } from '@backend/src/env';
+import { disableDownloads } from '@backend/env';
 import {
     addDownloadedFile,
     clearDownloadError,
@@ -24,24 +24,24 @@ import {
     setDownloadExitCode,
     setDownloadProgress,
     setIsDownloading,
-} from '@backend/src/events';
+} from '@backend/events';
 import {
     defaultMimeType,
     doesTalkHaveExistingFilesOnDisk,
     getEventFilename,
     getFolderPathForTalk,
     isVideoFile,
-} from '@backend/src/fs';
-import { handleConferenceMetadataGeneration } from '@backend/src/helper/nfo';
-import { acquireLockAndReturn, releaseLock } from '@backend/src/locks';
-import type { DoneCallback, TaskFunction } from '@backend/src/queue';
-import queue from '@backend/src/queue';
-import rootLog from '@backend/src/root-log';
+} from '@backend/fs';
+import { handleConferenceMetadataGeneration } from '@backend/helper/nfo';
+import { acquireLockAndReturn, releaseLock } from '@backend/locks';
+import type { DoneCallback, TaskFunction } from '@backend/queue';
+import queue from '@backend/queue';
+import rootLog from '@backend/root-log';
 import type {
     ConvertBigintToNumberType,
     ExtendedDbEvent,
     NormalAndConvertedDate,
-} from '@backend/src/types';
+} from '@backend/types';
 
 const youtubeDl = process.env.YTDLP_PATH_OVERRIDE
     ? createYoutubeDl(process.env.YTDLP_PATH_OVERRIDE)

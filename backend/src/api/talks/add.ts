@@ -1,12 +1,12 @@
-import { startScanForMissingFiles } from '@backend/src/workers/scan-for-missing-files';
+import { startScanForMissingFiles } from '@backend/workers/scan-for-missing-files';
 
-import { addTalk, fixBigintInExtendedDbEvent } from '@backend/src/events';
-import { getTalkFromApiByGuid } from '@backend/src/helper';
-import { verifyPermissions } from '@backend/src/middlewares';
-import { Permission } from '@backend/src/permissions';
-import rootLog from '@backend/src/root-log';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
-import { AddTalkFailure } from '@backend/src/types';
+import { addTalk, fixBigintInExtendedDbEvent } from '@backend/events';
+import { getTalkFromApiByGuid } from '@backend/helper';
+import { verifyPermissions } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
+import rootLog from '@backend/root-log';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { AddTalkFailure } from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/add' });
 

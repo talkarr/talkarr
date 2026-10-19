@@ -1,10 +1,10 @@
 import type { Locks } from '@prisma-generated/client';
 
-import { acquireLockAndReturn } from '@backend/src/locks';
-import type { TaskFunction } from '@backend/src/queue';
-import queue from '@backend/src/queue';
-import rootLog from '@backend/src/root-log';
-import { getUsers, updateUserPreferences } from '@backend/src/users';
+import { acquireLockAndReturn } from '@backend/locks';
+import type { TaskFunction } from '@backend/queue';
+import queue from '@backend/queue';
+import rootLog from '@backend/root-log';
+import { getUsers, updateUserPreferences } from '@backend/users';
 
 export const taskName = 'validateUserPreferences';
 

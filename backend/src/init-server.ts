@@ -4,8 +4,8 @@ import express from 'express';
 import fs from 'node:fs';
 import pathUtils from 'node:path';
 
-import { isDatabaseConnected } from '@backend/src/prisma';
-import rootLog from '@backend/src/root-log';
+import { isDatabaseConnected } from '@backend/prisma';
+import rootLog from '@backend/root-log';
 
 const log = rootLog.child({ label: 'loadingServer' });
 

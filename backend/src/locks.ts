@@ -1,7 +1,7 @@
 import type { Locks } from '@prisma-generated/client';
 
-import { prisma } from '@backend/src/prisma';
-import rootLog from '@backend/src/root-log';
+import { prisma } from '@backend/prisma';
+import rootLog from '@backend/root-log';
 
 import { Prisma } from '@prisma-generated/client';
 

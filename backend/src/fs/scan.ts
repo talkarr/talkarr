@@ -1,28 +1,28 @@
-import type { File } from '@backend/src/generated/prisma/client';
+import type { File } from '@backend/generated/prisma/client';
 import type { Dirent } from 'node:fs';
 
 import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'node:path';
 
-import { getEventByFilePath } from '@backend/src/events';
+import { getEventByFilePath } from '@backend/events';
 import {
     defaultMimeType,
     isVideoFile,
     validFileExtensions,
     videoFolder,
-} from '@backend/src/fs/index';
-import type { ExistingFile } from '@backend/src/fs/index';
+} from '@backend/fs/index';
+import type { ExistingFile } from '@backend/fs/index';
 import {
     getConferenceFromAcronym,
     getTalkFromApiBySlug,
-} from '@backend/src/helper';
-import rootLog from '@backend/src/root-log';
+} from '@backend/helper';
+import rootLog from '@backend/root-log';
 import type {
     ApiConference,
     ApiEvent,
     ConvertDateToStringType,
-} from '@backend/src/types';
+} from '@backend/types';
 
 const log = rootLog.child({ label: 'fs/scan' });
 

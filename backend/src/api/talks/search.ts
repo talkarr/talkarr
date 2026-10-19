@@ -1,12 +1,12 @@
-import { cccApiBaseUrl, conferenceCacheKey } from '@backend/src/constants';
-import apiFetch from '@backend/src/fetch';
-import type { components } from '@backend/src/generated/schema';
-import rootLog from '@backend/src/root-log';
+import { cccApiBaseUrl, conferenceCacheKey } from '@backend/constants';
+import apiFetch from '@backend/fetch';
+import type { components } from '@backend/generated/schema';
+import rootLog from '@backend/root-log';
 import type {
     ExpressRequest,
     ExpressResponse,
     SuccessData,
-} from '@backend/src/types';
+} from '@backend/types';
 
 const log = rootLog.child({ label: 'talks/search' });
 

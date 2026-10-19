@@ -2,14 +2,14 @@ import mime from 'mime-types';
 import fs_promises from 'node:fs/promises';
 import pathUtils from 'node:path';
 
-import cache from '@backend/src/cache';
-import { prisma } from '@backend/src/prisma';
-import rootLog from '@backend/src/root-log';
+import cache from '@backend/cache';
+import { prisma } from '@backend/prisma';
+import rootLog from '@backend/root-log';
 import type {
     ConvertBigintToNumberType,
     ExtendedDbEvent,
     NormalAndConvertedDate,
-} from '@backend/src/types';
+} from '@backend/types';
 
 // These file extensions are the ones provided by media.ccc.de.
 export const validVideoFileExtensions = ['.mp4', '.webm'];

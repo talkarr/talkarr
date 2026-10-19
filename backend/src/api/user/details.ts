@@ -1,8 +1,8 @@
-import { verifyPermissions } from '@backend/src/middlewares';
-import { Permission } from '@backend/src/permissions';
-import rootLog from '@backend/src/root-log';
-import type { ExpressRequest, ExpressResponse } from '@backend/src/types';
-import { getUserWithPasswordById, sanitizeUser } from '@backend/src/users';
+import { verifyPermissions } from '@backend/middlewares';
+import { Permission } from '@backend/permissions';
+import rootLog from '@backend/root-log';
+import type { ExpressRequest, ExpressResponse } from '@backend/types';
+import { getUserWithPasswordById, sanitizeUser } from '@backend/users';
 
 const log = rootLog.child({ label: 'user/details' });
 

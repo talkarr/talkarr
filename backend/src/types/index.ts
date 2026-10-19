@@ -12,8 +12,8 @@ import type * as core from 'express-serve-static-core';
 import type { Method } from 'openapi-typescript';
 import type { PathsWithMethod } from 'openapi-typescript-helpers';
 
-import type { components, paths } from '@backend/src/generated/schema';
-import type { SchemaUserWithPassword } from '@backend/src/users';
+import type { components, paths } from '@backend/generated/schema';
+import type { SchemaUserWithPassword } from '@backend/users';
 
 import { EventProblemType } from '@prisma-generated/client';
 

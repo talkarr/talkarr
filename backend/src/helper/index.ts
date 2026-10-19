@@ -1,10 +1,10 @@
 // Helpers for fetching data from api.media.ccc.de
 
-import { cccApiBaseUrl, conferenceCacheKey } from '@backend/src/constants';
-import apiFetch from '@backend/src/fetch';
-import rootLog from '@backend/src/root-log';
-import type { ApiConference, ApiEvent } from '@backend/src/types';
-import { hasAdminUsers } from '@backend/src/users';
+import { cccApiBaseUrl, conferenceCacheKey } from '@backend/constants';
+import apiFetch from '@backend/fetch';
+import rootLog from '@backend/root-log';
+import type { ApiConference, ApiEvent } from '@backend/types';
+import { hasAdminUsers } from '@backend/users';
 
 const log = rootLog.child({ label: 'helper' });
 

@@ -8,16 +8,16 @@ import {
     fixBigintInExtendedDbEvent,
     listEvents,
     updateEventProblems,
-} from '@backend/src/events';
-import { acquireLockAndReturn, releaseLock } from '@backend/src/locks';
-import type { TaskFunction } from '@backend/src/queue';
-import queue from '@backend/src/queue';
-import rootLog from '@backend/src/root-log';
+} from '@backend/events';
+import { acquireLockAndReturn, releaseLock } from '@backend/locks';
+import type { TaskFunction } from '@backend/queue';
+import queue from '@backend/queue';
+import rootLog from '@backend/root-log';
 import type {
     ConvertBigintToNumberType,
     ExtendedDbEvent,
     NormalAndConvertedDate,
-} from '@backend/src/types';
+} from '@backend/types';
 
 export const taskName = 'checkEventsForProblems';
 

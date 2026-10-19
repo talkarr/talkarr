@@ -2,10 +2,10 @@ import { filetypemime } from 'magic-bytes.js';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { configDirectory } from '@backend/src/env';
-import { defaultMimeType } from '@backend/src/fs';
-import rootLog from '@backend/src/root-log';
-import { libravatarDomain } from '@backend/src/users';
+import { configDirectory } from '@backend/env';
+import { defaultMimeType } from '@backend/fs';
+import rootLog from '@backend/root-log';
+import { libravatarDomain } from '@backend/users';
 
 const log = rootLog.child({ label: 'imageCache' });
 

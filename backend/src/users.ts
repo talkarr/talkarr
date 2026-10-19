@@ -10,21 +10,21 @@ import jwt from 'jsonwebtoken';
 import { generateIdenticonDataUrl } from 'simple-identicon';
 import typia from 'typia';
 
-import { serverSecret } from '@backend/src/env';
-import type { components } from '@backend/src/generated/schema';
-import { createUserPermissions, Permission } from '@backend/src/permissions';
-import { prisma } from '@backend/src/prisma';
-import rootLog from '@backend/src/root-log';
-import { getSettings } from '@backend/src/settings';
-import type { ExpressResponse } from '@backend/src/types';
+import { serverSecret } from '@backend/env';
+import type { components } from '@backend/generated/schema';
+import { createUserPermissions, Permission } from '@backend/permissions';
+import { prisma } from '@backend/prisma';
+import rootLog from '@backend/root-log';
+import { getSettings } from '@backend/settings';
+import type { ExpressResponse } from '@backend/types';
 import type {
     UserPreferences,
     UserPreferencesKey,
-} from '@backend/src/user-preferences';
+} from '@backend/user-preferences';
 import {
     defaultUserPreferences,
     userPreferencesValidators,
-} from '@backend/src/user-preferences';
+} from '@backend/user-preferences';
 
 export const jwtAlgorithm: Algorithm = 'HS512';
 export const tokenCookieName = 'talkarr_token';
