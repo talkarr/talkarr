@@ -1,6 +1,7 @@
-![GitHub License](https://img.shields.io/github/license/talkarr/talkarr?style=for-the-badge&color=%239b69ff)
-![GitHub Workflow Status for CI](https://img.shields.io/github/actions/workflow/status/talkarr/talkarr/ci.yml?style=for-the-badge&label=CI)
-![GitHub Workflow Status for Docs](https://img.shields.io/github/actions/workflow/status/talkarr/talkarr/docs.yml?style=for-the-badge&label=Docs)
+![GitHub License](https://img.shields.io/github/license/talkarr/talkarr?color=%239b69ff)
+![GitHub Workflow Status for CI](https://img.shields.io/github/actions/workflow/status/talkarr/talkarr/ci.yml?label=CI)
+![GitHub Workflow Status for Docs](https://img.shields.io/github/actions/workflow/status/talkarr/talkarr/docs.yml?label=Docs)
+![Trans rights are human rights](https://pride-badges.pony.workers.dev/static/v1?label=trans%20rights&stripeWidth=6&stripeColors=5BCEFA,F5A9B8,FFFFFF,F5A9B8,5BCEFA)
 
 <p align="center" style="padding-bottom: 16px" id="logo">
 <img src="assets/logo_with_text_no_padding.png" alt="Talkarr Logo" width="200" />
