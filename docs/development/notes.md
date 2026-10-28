@@ -40,7 +40,7 @@ You can find the documentation here: [actions/labeler](https://github.com/action
 Run the following command:
 
 ```bash
-yarn version --minor # or --patch or --major
+pnpm version --minor # or --patch or --major
 ```
 
 This will then create a commit "Publish Talkarr vX.Y.Z" and a tag "vX.Y.Z".

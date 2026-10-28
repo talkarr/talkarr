@@ -42,13 +42,13 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: 'yarn.lock'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
       - name: Install dependencies
         run: |
-          YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
-          yarn ts-patch check
+          YOUTUBE_DL_SKIP_DOWNLOAD=true pnpm install --frozen-lockfile --non-interactive --prefer-offline
+          pnpm ts-patch check
 
       - name: Test if the engine version specified is correct
         run: |
@@ -59,7 +59,7 @@ jobs:
         continue-on-error: true
         id: eslint-frontend
         run: |
-          SARIF_ESLINT_IGNORE_SUPPRESSED=true yarn lint:frontend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+          SARIF_ESLINT_IGNORE_SUPPRESSED=true pnpm lint:frontend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
           
           # if success, create an empty file
           if [ $? -eq 0 ]; then
@@ -77,7 +77,7 @@ jobs:
         continue-on-error: true
         id: eslint-backend
         run: |
-          SARIF_ESLINT_IGNORE_SUPPRESSED=true yarn lint:backend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results-backend.sarif
+          SARIF_ESLINT_IGNORE_SUPPRESSED=true pnpm lint:backend --max-warnings=0 --format @microsoft/eslint-formatter-sarif --output-file eslint-results-backend.sarif
           
           # if success, create an empty file
           if [ $? -eq 0 ]; then
@@ -100,11 +100,11 @@ jobs:
           fi
 
       - name: Run generate and check if something changed
-        run: yarn generate && git diff --exit-code
+        run: pnpm generate && git diff --exit-code
 
       - name: Run type checks
         run: |
-          yarn typecheck
+          pnpm typecheck
 
   test:
     name: Run unit tests
@@ -125,19 +125,19 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: 'yarn.lock'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
       - name: Install dependencies
-        run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
+        run: YOUTUBE_DL_SKIP_DOWNLOAD=true pnpm install --frozen-lockfile --non-interactive --prefer-offline
 
       - name: Prepare for tests
         id: prepare
         timeout-minutes: 5
         run: |
-          yarn generate
+          pnpm generate
           
-          yarn dev:db
+          pnpm dev:db
           
           # wait for the database to be ready
           npx wait-on -t 3m tcp:5432
@@ -148,17 +148,17 @@ jobs:
           echo "TALKARR_SECRET=verysecret" > .env.local
 
       - name: Run migrations
-        run: yarn prisma db push --force-reset --accept-data-loss
+        run: pnpm prisma db push --force-reset --accept-data-loss
 
       - name: Start dev server
-        run: yarn dev &
+        run: pnpm dev &
 
       - name: Wait for the app to be ready
         run: |
           npx wait-on -t 3m http://localhost:3232/api/healthz
 
       - name: Run backend tests
-        run: yarn test:backend
+        run: pnpm test:backend
 
 # Changing it from build-linux-container to build-container would break statistics, so we will keep it as is
   build-linux-container:
@@ -317,20 +317,20 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: 'yarn.lock'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
       - name: Install dependencies
-        run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
+        run: YOUTUBE_DL_SKIP_DOWNLOAD=true pnpm install --frozen-lockfile --prefer-offline
 
       - name: Generate all types
         run: |
-          yarn run generate
+          pnpm run generate
 
       - name: Install playwright dependencies
         run: |
-          yarn playwright install-deps
-          yarn playwright install
+          pnpm playwright install-deps
+          pnpm playwright install
 
       - name: Log in into GitHub Container Registry
         uses: docker/login-action@v4
@@ -406,8 +406,8 @@ jobs:
         continue-on-error: true
         if: steps.start-container.outcome == 'success'
         run: |
-          yarn ts-patch check
-          yarn test:e2e:ci
+          pnpm ts-patch check
+          pnpm test:e2e:ci
           echo "TESTING_STATUS=$?" >> $GITHUB_ENV
 
       - uses: daun/playwright-report-summary@v4

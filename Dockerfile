@@ -8,8 +8,8 @@ RUN apk add --no-cache libc6-compat ffmpeg yt-dlp \
 FROM base AS deps
 
 # https://github.com/nodejs/docker-node/issues/1335#issuecomment-1743914810
-RUN yarn config set network-timeout 500000 -g && \
-    yarn global add node-gyp
+RUN pnpm config set fetch-timeout 500000 -g && \
+    pnpm add -g node-gyp
 
 WORKDIR /app
 
@@ -20,9 +20,9 @@ COPY generate-licenses.mjs ./
 COPY patches ./patches
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock .npmrc* ./
-RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn YOUTUBE_DL_SKIP_DOWNLOAD=true CI=1 yarn --frozen-lockfile --prefer-offline --build-from-source
-
+COPY package.json pnpm-lock.yaml .npmrc* pnpm-workspace.yaml ./
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store YOUTUBE_DL_SKIP_DOWNLOAD=true CI=1 \
+    npm_config_build_from_source=true pnpm install --frozen-lockfile --prefer-offline
 # Rebuild the source code only when needed
 FROM deps AS builder
 WORKDIR /app
@@ -59,7 +59,7 @@ ENV OVERRIDE_CURRENT_VERSION=$OVERRIDE_CURRENT_VERSION
 
 ENV YTDLP_PATH_OVERRIDE=/usr/bin/yt-dlp
 
-RUN yarn build
+RUN pnpm build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -138,9 +138,9 @@ ENV YTDLP_PATH_OVERRIDE=/usr/bin/yt-dlp
 ENV PORT=3232
 
 ENV HOSTNAME="0.0.0.0"
-# CMD yarn start:prod
+# CMD pnpm start:prod
 SHELL ["/bin/bash", "-c"]
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 CMD curl --fail http://localhost:3232/api/healthz || exit 1
 
-CMD ["yarn", "start:prod"]
+CMD ["pnpm", "start:prod"]
