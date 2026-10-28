@@ -1,0 +1,11 @@
+allowBuilds:
+  '@parcel/watcher': true
+  '@prisma/engines': true
+  '@scarf/scarf': true
+  argon2: true
+  canvas: true
+  es5-ext: true
+  prisma: true
+  unrs-resolver: true
+  youtube-dl-exec: true
+fetchTimeout: 300000

@@ -5,14 +5,14 @@ on:
         - main
       paths:
       - package.json
-      - yarn.lock
+      - pnpm-lock.yaml
       - .github/workflows/dependency.yml
   push:
     branches:
       - main
     paths:
       - package.json
-      - yarn.lock
+      - pnpm-lock.yaml
       - .github/workflows/dependency.yml
 
 permissions: {}
@@ -43,17 +43,17 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: 'yarn.lock'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
       - name: Install dependencies
-        run: YOUTUBE_DL_SKIP_DOWNLOAD=true yarn install --frozen-lockfile --non-interactive --prefer-offline
+        run: YOUTUBE_DL_SKIP_DOWNLOAD=true pnpm install --frozen-lockfile --non-interactive --prefer-offline
 
       - name: Make sure all patches are up-to-date
         continue-on-error: true
         id: patch-package
         run: |
-          yarn patch-package --error-on-fail --error-on-warn
+          pnpm patch-package --error-on-fail --error-on-warn
 
       - name: If patch-package failed, add comment on PR
         if: ${{ steps.patch-package.outcome != 'success' && github.event_name == 'pull_request' }}
@@ -70,7 +70,7 @@ jobs:
             
             if (!patchPackageComment) {
               // Only create a new comment if one doesn't already exist
-              const commentBody = `:warning: **Patch package failed**\n\nPlease run \`yarn patch-package\` locally to update the patches.`;
+              const commentBody = `:warning: **Patch package failed**\n\nPlease run \`pnpm patch-package\` locally to update the patches.`;
               await github.rest.issues.createComment({
                 issue_number: prNumber,
                 owner: context.repo.owner,
@@ -107,7 +107,7 @@ jobs:
         # should run when installing packages but run it again to be sure
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          CI_FORCE_GENERATE_LICENSES=true yarn run license-check
+          CI_FORCE_GENERATE_LICENSES=true pnpm run license-check
 
       - name: Configure git repo
         if: ${{ github.event_name == 'pull_request' }}
