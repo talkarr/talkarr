@@ -89,7 +89,7 @@
         "mime-types": "^3.0.2",
         "moment": "^2.31.0",
         "moment-timezone": "^0.6.5",
-        "next": "16.4.3",
+        "next": "16.4.5",
         "notistack": "^3.0.2",
         "openapi-fetch": "^0.17.0",
         "openapi-typescript": "^7.13.0",
